@@ -5,32 +5,33 @@
 <head>
 	<title>Web map maker</title>
 	<meta charset="utf-8" />
-    <link rel="stylesheet" href="http://latimes-graphics-media.s3.amazonaws.com/styles/leaflet-extra.css" />  
-    <script src="http://latimes-graphics-media.s3.amazonaws.com/js/leaflet-0.7.2.js"></script>
-    <script src="http://latimes-graphics-media.s3.amazonaws.com/js/geocode-wpt.js"></script>
-	
-	<script src='https://api.tiles.mapbox.com/mapbox.js/v2.0.1/mapbox.js'></script>
-	<link href='https://api.tiles.mapbox.com/mapbox.js/v2.0.1/mapbox.css' rel='stylesheet' />
-	
+	<link rel="shortcut icon" type="image/x-icon" href="http://d1qqc1e9kvmdh8.cloudfront.net/img/favicon.ico">
+
+	<link rel="stylesheet" href="http://d1qqc1e9kvmdh8.cloudfront.net/js/leaflet-1.0.0-b1/leaflet.css">
+    <link rel="stylesheet" href="http://latimes-graphics-media.s3.amazonaws.com/styles/leaflet-extra.css" />
+	<link rel="stylesheet" href="styles/jquery.geocodify.css"/>
+
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="http://d1qqc1e9kvmdh8.cloudfront.net/js/underscore-1.8.3-min.js"></script>
+    <script src="http://d1qqc1e9kvmdh8.cloudfront.net/js/leaflet-1.0.0-b1/leaflet-src.js"></script>
+	<script src="js/tangram.min.js"></script>
+
+    <script src="http://latimes-graphics-media.s3.amazonaws.com/js/geocode-wpt.js"></script>
 	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
-	
 	<script type="text/javascript" src="js/jquery.geocodify.js"></script>
-	<script type="text/javascript" src="../mapbox-token.js"></script>
-	
+
 	<script src="js/html2canvas.js"></script>
 	<script src="js/base64.js"></script>
 	<script src="js/canvas2image.js"></script>
-	
-	<link rel="stylesheet" href="styles/jquery.geocodify.css"/>
-	
+
+
 	<style type="text/css" media="screen">
 	input.geocodify {
 		width:275px;
 	    font-size: inherit;
 	    line-height: inherit;
 	    padding: 2px 2px;
-	    
+
 	}
 	input:focus {
 	    border: 1px solid #2262CC;
@@ -56,17 +57,17 @@
 	.leaflet-popup-tip {
 		border-top: 20px solid #000;
 		box-shadow: none;
-		
+
 	}
 	</style>
-	
+
 	<!-- http://a.tiles.mapbox.com/v4/marker/pin-l+000.png?access_token=pk.eyJ1IjoibGF0aW1lc21hcHBpbmciLCJhIjoiRS1kbVVXUSJ9.J1a8i4qHde5LxpUMuXq9JQ -->
 </head>
 <body style="padding:15px">
 	<!-- <div id="map"></div> -->
 	<h1>Web map maker <span style="font-size:16px; font-weight:normal;">(use Safari or Chrome browsers)</span></h1>
 	<p style="font-size:20px;color:#666;">This tool is for aproximate location only. Geocoders can mislocate addresses by small distances.</p>
-	
+
 	<label for="mapPicker">1. Choose a base map</label>
 	<select id="mapPicker">
 	  <option value="latimesmapping.db744287" >Quiet World</option>
@@ -74,50 +75,47 @@
 	</select>
 	<span style="font-family:arial; font-size:12px; color:#666;"> &nbsp;State boundaries are available in U.S. only.</span>
 	<br/><br/>
-	
+
 	<label for="popupText">2. Write popup text </label>
 	<input class="geocodify" type="text" id="popupText" style="width:250px;padding: 2px 2px;" maxlength="40" placeholder="40 chars max">
 	<br/><br/>
-		
+
 	<label for="address"  >3. Search</label>
 	<input type="text" id="address"  placeholder="Enter a complete address">
 	<input type="button" onclick="findAddress()" id="addressBtn" value="GO"> <span style="font-family:arial; font-size:12px; color:#666;"> &nbsp;City names now produce popups</span><br /> <br />
-	
+
 	<label for="lat"  >... Or enter Latitude:</label>
-	<input class="geocodify" type="text" id="lat" style="width:100px; padding: 2px 2px;"  placeholder="34.052010">  
+	<input class="geocodify" type="text" id="lat" style="width:100px; padding: 2px 2px;"  placeholder="34.052010">
 	<label for="lon"  >&nbsp; Longitude:</label>
 	<input class="geocodify" type="text" id="lon" style="width:100px; padding: 2px 2px;" placeholder="-118.245796">
 	<input type="button" onclick="findLatLon()" id="latLonBtn" value="GO">
-	
+
 	<br/><br/>
-	
+
 	<label >4. Adjust your zoom (scrollwheel).</label>
 	<p style="font-family:arial; font-size:12px; color:#666;">Do not zoom in super close unless you are 100% confident of a location. </p>
 	<br/>
-	
+
 	<label >5. Move the map around so that the location is identifiable.</label>
 	<div id="minimap">
-		
+
 	</div>
-	
+
 	<br/><br/>
 
 	<div id="web_blank">
 		<p class="header">Click to <input type="button" id="colwSave" value="Create an image"/></p>
-		<div id="map_web" style="width:1300px; height:731px"></div>	 
+		<div id="map" style="width:1300px; height:731px"></div>
 	</div>
-  
-	
-	<script>
-	
-	//L.mapbox.accessToken = 'YOUR API KEY';
 
-	
+
+	<script>
+
 	document.getElementById('mapPicker').addEventListener('change',function(){
 	         changeTiles(this.value);
 	    });
-	
-	
+
+
 	/***  little hack starts here ***/
 	L.Map = L.Map.extend({
 		 openPopup: function(popup) {
@@ -129,24 +127,24 @@
 		                                  });
 		 }
 	}); /***  end of hack ***/ /***  end of hack ***/
-	
-	
-	var map_web = L.map('map_web',{attributionControl: true});
-	map_web.attributionControl.setPrefix('&copy; Los Angeles Times, &copy; Mapbox, &copy; OpenStreetMap');
-	map_web.attributionControl.removeAttribution(
-				'Mapbox' )
-	
-	
-	function changeTiles(value){
-		L.mapbox.tileLayer(value).addTo(map_web);
-	}
-	changeTiles('latimesmapping.db744287');
-	
 
-	L.control.scale().addTo(map_web);
-	
-	
-	
+
+	var map = L.map('map', {
+		attributionControl: true,
+		center: new L.LatLng(34.0425, -118.24),
+		zoom: 13
+	});
+	map.attributionControl.setPrefix('&copy; Los Angeles Times, &copy; Mapbox, &copy; OpenStreetMap, <a href="https://mapzen.com/tangram" target="_blank">Tangram</a>');
+
+	var layer = Tangram.leafletLayer({
+	    scene: 'map-styles.yaml',
+	});
+
+	layer.addTo(map);
+
+	L.control.scale().addTo(map);
+
+
 	var maxY = 34.34343606848294;
     var minY = 33.66263917576218;
     var minX = -118.685302734375;
@@ -169,15 +167,15 @@
             });
         }
     });
-	
-	var geocoder = L.mapbox.geocoder('mapbox.places-v1');
-	geocoder.query('los angeles, CA', setMap);
+
+	// var geocoder = L.mapbox.geocoder('mapbox.places-v1');
+	// geocoder.query('los angeles, CA', setMap);
 
 	function findAddress(){
 		var getInput = document.getElementById('address').value;
-		geocoder.query(getInput, showMap);	
+		// geocoder.query(getInput, showMap);
 
-    
+
 		document.getElementsByClassName('leaflet-popup').style.bottom="0px"
 	}
 
@@ -185,52 +183,48 @@
 	    // The geocoder can return an area, like a city, or a
 	    // point, like an address. Here we handle both cases,
 	    // by fitting the map bounds to an area or zooming to a point.
-    
+
 	    if (data.lbounds) {
-			map_web.fitBounds(data.lbounds);
+			map.fitBounds(data.lbounds);
 	    } else if (data.latlng) {
-			map_web.setView([data.latlng[0], data.latlng[1]], 13);			
+			map.setView([data.latlng[0], data.latlng[1]], 13);
 	    }
 	}
 
-	
+
 	function showMap(err, data) {
 	    // The geocoder can return an area, like a city, or a
 	    // point, like an address. Here we handle both cases,
 	    // by fitting the map bounds to an area or zooming to a point.
-    
+
 	    if (data.lbounds) {
-			map_web.fitBounds(data.lbounds);
+			map.fitBounds(data.lbounds);
 	    } else if (data.latlng) {
-			map_web.setView([data.latlng[0], data.latlng[1]], 13);
-			
-			
-			
-			
+			map.setView([data.latlng[0], data.latlng[1]], 13);
 	    }
-		
+
 		marker=L.marker([data.latlng[0], data.latlng[1]], {
 		    icon: L.mapbox.marker.icon({
 		        'marker-size': 'large',
 		        'marker-color': '#fff'
 		    })
 		});
-		marker.addTo(map_web);
-		
+		marker.addTo(map);
+
 		var getPopup = document.getElementById('popupText').value;
-  
+
 		marker.bindPopup(getPopup, {offset: new L.Point(0, 0)}).openPopup();//, closeOnClick: false
 	}
-	
-	
-	
+
+
+
 	function findLatLon(){
 		var getLat = document.getElementById('lat').value;
 		var getLon = document.getElementById('lon').value;
-		
-		map_web.setView([getLat, getLon], 10);
-		
-		marker=L.marker([getLat, getLon], 
+
+		map.setView([getLat, getLon], 10);
+
+		marker=L.marker([getLat, getLon],
 			{
 		    icon: L.mapbox.marker.icon({
 		        'marker-size': 'small',
@@ -238,67 +232,61 @@
 		    }
 		)
 		});
-		
-		marker.addTo(map_web);
-		
+
+		marker.addTo(map);
+
 		var getPopup = document.getElementById('popupText').value;
 		marker.bindPopup(getPopup, {offset: new L.Point(0, 0)}).openPopup();
 	}
-	
+
 	//
 	// add enter key functionality   841 n alexandria ave los angeles
-	
+
 	var go = document.getElementById("addressBtn");
 	var txt = document.getElementById("address");
 
 	txt.addEventListener("keypress", function() {
 	    if (event.keyCode == 13) go.click();
 	});
-	
 
-		
 
-	
-	
-	//<![CDATA[ 
+	//<![CDATA[
 	$(window).load(function(){
-	$(function() { 
-			
-		
-	    $("#colwSave").click(function() { 
-			var newInstructions=document.createElement('p');
-			newInstructions.id ='newInstructions'
-			newInstructions.innerHTML ='<strong>Right-click the image below to save/download.</strong>';
-			document.body.appendChild(newInstructions);
-	        html2canvas($("#map_web"), {
-				useCORS: true,
-				
-	            onrendered: function(canvas)  {
-	                theCanvas = canvas;
-					
-									
-	                document.body.appendChild(canvas);
+		$(function() {
 
-	                // Convert and download as image 
-	                // Canvas2Image.saveAsPNG(canvas);
-	                $("#img-out").append(canvas);
-					window.scrollTo(0,document.body.scrollHeight);
-	                // Clean up 
-	                //document.body.removeChild(canvas);
-	            }
-	        });
-	    });
-	}); 
 
-	});//]]>  
-	
-	
-	
-		setMaxSearchZoom = 12; 
-	
+		    $("#colwSave").click(function() {
+				var newInstructions=document.createElement('p');
+				newInstructions.id ='newInstructions'
+				newInstructions.innerHTML ='<strong>Right-click the image below to save/download.</strong>';
+				document.body.appendChild(newInstructions);
+		        html2canvas($("#map"), {
+					useCORS: true,
+
+		            onrendered: function(canvas)  {
+		                theCanvas = canvas;
+
+
+		                document.body.appendChild(canvas);
+
+		                // Convert and download as image
+		                // Canvas2Image.saveAsPNG(canvas);
+		                $("#img-out").append(canvas);
+						window.scrollTo(0,document.body.scrollHeight);
+		                // Clean up
+		                //document.body.removeChild(canvas);
+		            }
+		        });
+		    });
+		});
+	});//]]>
+
+
+
+		setMaxSearchZoom = 12;
+
 	</script>
-	
+
 
 </body>
 </html>
-	
