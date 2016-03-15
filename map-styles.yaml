@@ -20,21 +20,21 @@ layers:
         draw:
             polygons:
                 order: function() { return feature.sort_key; }
-                color: '#ddeeee'
+                color: '#f4f2ed'
 
     landuse:
         data: { source: osm }
         draw:
             polygons:
                 order: function() { return feature.sort_key; }
-                color: '#aaffaa'
+                color: '#cccccc'
 
     water:
         data: { source: osm }
         draw:
             polygons:
                 order: function() { return feature.sort_key; }
-                color: '#88bbee'
+                color: '#c3d5dd'
 
     roads:
         data: { source: osm }
@@ -43,7 +43,7 @@ layers:
         draw:
             lines:
                 order: function() { return feature.sort_key; }
-                color: gray
+                color: '#c8c8c1'
                 width: 8
                 cap: round
         highway:
@@ -52,7 +52,7 @@ layers:
             draw:
                 lines:
                     order: function() { return feature.sort_key; }
-                    color: '#cc6666'
+                    color: '#c8c8c1'
                     width: 12
                     outline:
                         color: grey
@@ -78,6 +78,7 @@ layers:
                         h = Math.max(h, .4); // min brightness: .4
                         return [h, h, h];
                     }
+
         3d-buildings:
             filter: { $zoom: { min: 15 } }
             draw:
