@@ -1,3 +1,10 @@
+quiet-la-colors:
+    areas:
+        - &background   '#efebe7'
+        - &land         '#f4f2ed'
+        - &forest       '#dee0d5'
+
+
 cameras:
     camera1:
         type: perspective
@@ -20,7 +27,7 @@ layers:
         draw:
             polygons:
                 order: function() { return feature.sort_key; }
-                color: '#f4f2ed'
+                color: *background
 
     landuse:
         data: { source: osm }
@@ -28,6 +35,11 @@ layers:
             polygons:
                 order: function() { return feature.sort_key; }
                 color: '#cccccc'
+        park:
+            filter: {kind: park}
+            draw:
+                polygons:
+                    color: *forest
 
     water:
         data: { source: osm }
