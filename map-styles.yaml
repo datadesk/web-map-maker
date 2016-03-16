@@ -1,13 +1,41 @@
+# Define colors up here, split up by feature type for convenience
 quiet-la-colors:
+    text:
+        - &text             '#757575'
     areas:
-        - &background   '#efebe7'
-        - &land         '#f4f2ed'
-        - &forest       '#dee0d5'
+        - &background       '#efebe7'
+        - &land             '#f4f2ed'
+        - &forest           '#dee0d5'
+        - &grass            ''          # lighten(@forest, 5%)
+        - &park             ''          # lighten(@forest, 3%)
+        - &hospital         '#f1e2ee'
+        - &school           '#d9d5e3'
+        - &stadium          '#d9cdc1'
+        - &beach            '#ebe2cd'
+        - &runway           '#bfbebd'
+        - &aerodrome        '#d6d6d6'
+        - &building         '#9e9e9e'   # darken(#e8e4e4,8)
+        - &water            '#c3d5dd'
+        - &residential      '#f4f2ed'   # @land * 0.98
+        - &commercial       '#f4f2ed'   # @land * 0.97
+        - &industrial       '#f4f2ed'   # @land * 0.96
+        - &military         '#f4f2ed'   # @land * 0.95
+        - &parking          '#eeeeee'
+        - &place_of_worship '#E3C5C9'
+        - &admin            '#000000'
+    borders:
+        - &county_brdr      '#8a7c7c'
+        - &california_brdr  '#827676'
+        - &mexico_brdr      '#6E6666'
+    roads:
+        - &road             '#c8c8c1'
+        - &road_text        '#757575'
+        - &rail_line        '#c8c8c1'
+        - &aeroway          '#dddddd'
 
-
-cameras:
-    camera1:
-        type: perspective
+camera:
+    type: isometric
+    axis: [0, .1] # very small building extrusion
 
 lights:
     light1:
@@ -23,11 +51,18 @@ sources:
 
 layers:
     earth:
-        data: { source: osm }
+        data: { source: osm, layer: earth }
         draw:
             polygons:
                 order: function() { return feature.sort_key; }
                 color: *background
+
+    water:
+        data: { source: osm, layer: water }
+        draw:
+            polygons:
+                order: function() { return feature.sort_key; }
+                color: *water
 
     landuse:
         data: { source: osm }
@@ -39,14 +74,7 @@ layers:
             filter: {kind: park}
             draw:
                 polygons:
-                    color: *forest
-
-    water:
-        data: { source: osm }
-        draw:
-            polygons:
-                order: function() { return feature.sort_key; }
-                color: '#c3d5dd'
+                    color: *park
 
     roads:
         data: { source: osm }
@@ -83,13 +111,7 @@ layers:
         draw:
             polygons:
                 order: function() { return feature.sort_key; }
-                color: |
-                    function () {
-                        var h = feature.height || 20;
-                        h = Math.min((h + 50)/ 255, .8); // max brightness: .8
-                        h = Math.max(h, .4); // min brightness: .4
-                        return [h, h, h];
-                    }
+                color: *building
 
         3d-buildings:
             filter: { $zoom: { min: 15 } }
