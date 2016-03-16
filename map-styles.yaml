@@ -6,8 +6,8 @@ quiet-la-colors:
         - &background       '#efebe7'
         - &land             '#f4f2ed'
         - &forest           '#dee0d5'
-        - &grass            ''          # lighten(@forest, 5%)
-        - &park             ''          # lighten(@forest, 3%)
+        - &grass            '#dee0d5'   # lighten(@forest, 5%)
+        - &park             '#dee0d5'   # lighten(@forest, 3%)
         - &hospital         '#f1e2ee'
         - &school           '#d9d5e3'
         - &stadium          '#d9cdc1'
@@ -70,11 +70,96 @@ layers:
             polygons:
                 order: function() { return feature.sort_key; }
                 color: '#cccccc'
+        arena:
+            filter: {kind: arena}
+            draw:
+                polygons:
+                    color: *stadium
+        beach:
+            filter: {kind: beach}
+            draw:
+                polygons:
+                    color: *beach
+        cemetery:
+            filter: {kind: cemetery}
+            draw:
+                polygons:
+                    color: *park
+        college:
+            filter: {kind: college}
+            draw:
+                polygons:
+                    color: *school
+        commercial:
+            filter: {kind: commercial}
+            draw:
+                polygons:
+                    color: *commercial
+        dog_park:
+            filter: {kind: dog_park}
+            draw:
+                polygons:
+                    color: *park
+        common:
+            filter: {kind: common}
+            draw:
+                polygons:
+                    color: *park
+        forest:
+            filter: {kind: forest}
+            draw:
+                polygons:
+                    color: *forest
+        garden:
+            filter: {kind: garden}
+            draw:
+                polygons:
+                    color: *park
+        golf_course:
+            filter: {kind: golf_course}
+            draw:
+                polygons:
+                    color: *park
+        grass:
+            filter: {kind: grass}
+            draw:
+                polygons:
+                    color: *grass
+        hospital:
+            filter: {kind: hospital}
+            draw:
+                polygons:
+                    color: *hospital
+        industrial:
+            filter: {kind: industrial}
+            draw:
+                polygons:
+                    color: *industrial
+        recreation_ground:
+            filter: {kind: recreation_ground}
+            draw:
+                polygons:
+                    color: *park
+        kindergarten:
+            filter: {kind: kindergarten}
+            draw:
+                polygons:
+                    color: *school
+        military:
+            filter: {kind: military}
+            draw:
+                polygons:
+                    color: *military
         park:
             filter: {kind: park}
             draw:
                 polygons:
                     color: *park
+        university:
+            filter: {kind: university}
+            draw:
+                polygons:
+                    color: *school
 
     roads:
         data: { source: osm }
