@@ -21,7 +21,8 @@ quiet-la-colors:
         - &industrial       '#f4f2ed'   # @land * 0.96
         - &military         '#f4f2ed'   # @land * 0.95
         - &parking          '#eeeeee'
-        - &place_of_worship '#E3C5C9'
+        - &pedestrian       '#eeeeee'   # @parking * 0.97
+        - &place_of_worship '#e3c5c9'
         - &admin            '#000000'
     borders:
         - &county_brdr      '#8a7c7c'
@@ -36,13 +37,6 @@ quiet-la-colors:
 camera:
     type: isometric
     axis: [0, .1] # very small building extrusion
-
-lights:
-    light1:
-        type: directional
-        direction: [0, 1, -.5]
-        diffuse: .3
-        ambient: 1
 
 sources:
     osm:
@@ -63,6 +57,18 @@ layers:
             polygons:
                 order: function() { return feature.sort_key; }
                 color: *water
+
+    boundaries:
+        data: { source: osm, layer: boundaries }
+        draw:
+            lines:
+                order: function() { return feature.sort_key; }
+        country:
+            filter: { type: country }
+            draw:
+                lines:
+                    color: *county_brdr
+                    width: 1.5px
 
     landuse:
         data: { source: osm }
@@ -155,11 +161,71 @@ layers:
             draw:
                 polygons:
                     color: *park
+        playground:
+            filter: {kind: playground}
+            draw:
+                polygons:
+                    color: *park
+        parking:
+            filter: {kind: parking}
+            draw:
+                polygons:
+                    color: *parking
+        pedestrian:
+            filter: {kind: pedestrian}
+            draw:
+                polygons:
+                    color: *pedestrian
+        pitch:
+            filter: {kind: pitch}
+            draw:
+                polygons:
+                    color: *park
+        place_of_worship:
+            filter: {kind: place_of_worship}
+            draw:
+                polygons:
+                    color: *place_of_worship
+        recreation_ground:
+            filter: {kind: recreation_ground}
+            draw:
+                polygons:
+                    color: *park
+        residential:
+            filter: {kind: residential}
+            draw:
+                polygons:
+                    color: *residential
+        school:
+            filter: {kind: school}
+            draw:
+                polygons:
+                    color: *school
+        sports_center:
+            filter: {kind: sports_center}
+            draw:
+                polygons:
+                    color: *stadium
+        swimming_pool:
+            filter: {kind: swimming_pool}
+            draw:
+                polygons:
+                    color: *water
+        stadium:
+            filter: {kind: stadium}
+            draw:
+                polygons:
+                    color: *stadium
         university:
             filter: {kind: university}
             draw:
                 polygons:
                     color: *school
+        village_green:
+            filter: {kind: village_green}
+            draw:
+                polygons:
+                    color: *park
 
     roads:
         data: { source: osm }
@@ -193,13 +259,18 @@ layers:
 
     buildings:
         data: { source: osm }
+        filter: { $zoom: { min: 13 } }
         draw:
             polygons:
                 order: function() { return feature.sort_key; }
                 color: *building
+            lines:
+                order: function() { return feature.sort_key; }
+                color: '#656565'
+                width: 1px
 
-        3d-buildings:
-            filter: { $zoom: { min: 15 } }
-            draw:
-                polygons:
-                    extrude: function () { return feature.height > 20 || $zoom >= 16; }
+        # 3d-buildings:
+        #     filter: { $zoom: { min: 15 } }
+        #     draw:
+        #         polygons:
+        #             extrude: function () { return feature.height > 20 || $zoom >= 16; }

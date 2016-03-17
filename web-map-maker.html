@@ -197,7 +197,7 @@
 	var map = L.map('map', {
 		attributionControl: true,
 		center: new L.LatLng(34.0425, -118.24),
-		zoom: 13
+		zoom: 14
 	});
 
 	map.attributionControl.setPrefix('&copy; Los Angeles Times, &copy; Mapbox, &copy; OpenStreetMap, <a href="https://mapzen.com/tangram" target="_blank">Tangram</a>');
@@ -317,12 +317,8 @@
 
 	$(window).load(function(){
 		$(function() {
-
-
 		    $("#colwSave").click(function() {
-
 		    	layer.scene.screenshot().then(function(screenshot) { window.open(screenshot.url); });
-
 		    });
 		});
 	});
