@@ -57,7 +57,6 @@
 	}
 	</style>
 
-	<!-- http://a.tiles.mapbox.com/v4/marker/pin-l+000.png?access_token=pk.eyJ1IjoibGF0aW1lc21hcHBpbmciLCJhIjoiRS1kbVVXUSJ9.J1a8i4qHde5LxpUMuXq9JQ -->
 </head>
 <body>
     <nav title="Navigation">
@@ -176,23 +175,21 @@
 
 	<script>
 
-	document.getElementById('mapPicker').addEventListener('change',function(){
-	         changeTiles(this.value);
-	    });
-
-
 	/***  little hack starts here ***/
-	L.Map = L.Map.extend({
-		 openPopup: function(popup) {
-		 //        this.closePopup();  // just comment this
-		 this._popup = popup;
+	// L.Map = L.Map.extend({
+	// 	 openPopup: function(popup) {
+	// 	 //        this.closePopup();  // just comment this
+	// 	 this._popup = popup;
 
-		 return this.addLayer(popup).fire('popupopen', {
-		                                  popup: this._popup
-		                                  });
-		 }
-	}); /***  end of hack ***/ /***  end of hack ***/
+	// 	 return this.addLayer(popup).fire('popupopen', {
+	// 	                                  popup: this._popup
+	// 	                                  });
+	// 	 }
+	// });
+	/***  end of hack ***/ /***  end of hack ***/
 
+	// jQuery map reference
+	var $map = $('#map');
 
 	var map = L.map('map', {
 		attributionControl: true,
@@ -200,7 +197,7 @@
 		zoom: 14
 	});
 
-	map.attributionControl.setPrefix('&copy; Los Angeles Times, &copy; Mapbox, &copy; OpenStreetMap, <a href="https://mapzen.com/tangram" target="_blank">Tangram</a>');
+	map.attributionControl.setPrefix('&copy; Los Angeles Times, &copy; Mapzen, &copy; OpenStreetMap, <a href="https://mapzen.com/tangram" target="_blank">Tangram</a>');
 
 	var layer = Tangram.leafletLayer({
 	    scene: 'map-styles.yaml',
@@ -209,6 +206,31 @@
 	layer.addTo(map);
 
 	L.control.scale().addTo(map);
+
+	var scene = layer.scene;
+
+	// Show selected feature on click
+    scene.container.addEventListener('click', function (event) {
+    	var pixel = {
+    		x: event.clientX - $map.offset().left,
+    		y: event.clientY - $map.offset().top + $(window).scrollTop()
+    	};
+
+		scene.getFeatureAt(pixel).then(function(selection) {
+			if (!selection) {
+				return;
+			}
+
+			var feature = selection.feature;
+			if (feature != null) {
+				if (feature.properties != null) {
+					console.log(feature.properties);
+				}
+			}
+
+		});
+
+    });
 
 
 	var maxY = 34.34343606848294;
@@ -236,7 +258,6 @@
 
 	// var geocoder = L.mapbox.geocoder('mapbox.places-v1');
 	// geocoder.query('los angeles, CA', setMap);
-
 	function findAddress(){
 		var getInput = document.getElementById('address').value;
 		// geocoder.query(getInput, showMap);
@@ -318,7 +339,7 @@
 	$(window).load(function(){
 		$(function() {
 		    $("#colwSave").click(function() {
-		    	layer.scene.screenshot().then(function(screenshot) { window.open(screenshot.url); });
+		    	scene.screenshot().then(function(screenshot) { window.open(screenshot.url); });
 		    });
 		});
 	});
