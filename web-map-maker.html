@@ -21,7 +21,7 @@
 
 	<script src="http://d1qqc1e9kvmdh8.cloudfront.net/js/underscore-1.8.3-min.js"></script>
     <script src="http://d1qqc1e9kvmdh8.cloudfront.net/js/leaflet-1.0.0-b1/leaflet-src.js"></script>
-	<script src="js/tangram.min.js"></script>
+	<script src="js/mapbox-gl-0.15.0.js"></script>
 
     <script src="http://latimes-graphics-media.s3.amazonaws.com/js/geocode-wpt.js"></script>
 	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
@@ -174,69 +174,144 @@
 
 
 	<script>
+	mapboxgl.accessToken = "pk.eyJ1IjoiZW1hbWQiLCJhIjoiODY3ZGZkMjNhOTM3YTgwNWI4YTM3ZWFmNjIyODg4YjgifQ.UY6ZTL7-z1GCZYylBOm-VQ";
 
-	/***  little hack starts here ***/
-	// L.Map = L.Map.extend({
-	// 	 openPopup: function(popup) {
-	// 	 //        this.closePopup();  // just comment this
-	// 	 this._popup = popup;
+	var palette = {
+		"background": '#efebe7',
+		"land": '#f4f2ed',
+		"forest": '#dee0d5',
+		"grass": '#e9ebe0',
+		"park": '#e4e6db',
+		"hospital": '#f1e2ee',
+		"school": '#e4e0ee',
+		"stadium": '#d9cdc1',
+		"beach": '#ebe2cd',
+		"runway": '#bfbebd',
+		"aerodrome": '#d6d6d6',
+		"building": '#e8e4e4',
+		"water": '#c3d5dd',
+		"residential": '#efede8',
+		"commercial": '#edebe6',
+		"industrial": '#eae6e4',
+		"military": '#e8e4e1',
+		"parking": '#eeeeee',
+		"pedestrian": '#e7e7e7',
+		"place_of_worship": '#e3c5c9',
+		"admin": '#000000',
 
-	// 	 return this.addLayer(popup).fire('popupopen', {
-	// 	                                  popup: this._popup
-	// 	                                  });
-	// 	 }
-	// });
-	/***  end of hack ***/ /***  end of hack ***/
+		/* borders */
+		'county_border': '#8a7c7c',
+		'california_border': '#827676',
+		'nation_border': '#6E6666',
+
+		/* roads */
+		'road': '#c8c8c1',
+		'road_text': '#757575',
+		'rail_line': '#c8c8c1',
+		'aeroway': '#dddddd',
+	}
+
+	var quietLA = {
+		"version": 8,
+	    "name": "quiet LA",
+		"sources": {
+		  "osm": {
+		    "type": "vector",
+		    "tiles": ["https://vector.mapzen.com/osm/all/{z}/{x}/{y}.mvt?api_key=vector-tiles---JwESU"]
+		  }
+		},
+		"layers": [{
+		    "id": "background",
+		    "type": "background",
+		    "paint": {
+		     	"background-color": palette.land
+		    }
+		}, {
+		    "id": "water-polygon",
+		    "source": "osm",
+		    "source-layer": "water",
+		    "type": "fill",
+		    "filter": ["==", "$type", "Polygon"],
+		    "paint": {
+		       "fill-color": palette.water
+		    }
+		}, {
+			"id": "aerodrome",
+			"type": "fill",
+			"source": "osm",
+			"source-layer": "landuse",
+			"filter": ["in", "kind", "aerodrome", "apron"],
+			"paint": {
+			  "fill-color": palette.aerodrome
+			}
+		}, {
+		    "id": "park",
+		    "type": "fill",
+		    "source": "osm",
+		    "source-layer": "landuse",
+		    "filter": ["in", "kind", "park", "forest", "garden", "grass", "farm", "meadow", "playground", "golf_course", "nature_reserve", "wetland", "wood", "cemetery"],
+		    "paint": {
+		      "fill-color": palette.park
+		    }
+		 }
+
+
+
+
+		]
+	};
 
 	// jQuery map reference
 	var $map = $('#map');
 
-	var map = L.map('map', {
-		attributionControl: true,
-		center: new L.LatLng(34.0425, -118.24),
-		zoom: 14
+	// var map = L.map('map', {
+	// 	attributionControl: true,
+	// 	center: new L.LatLng(34.0425, -118.24),
+	// 	zoom: 14
+	// });
+
+	var map = new mapboxgl.Map({
+	  container: 'map',
+	  style: quietLA,
+	  zoom: 15,
+	  minZoom: 2,
+	  center: [-118.24, 34.0425]
 	});
 
-	map.attributionControl.setPrefix('&copy; Los Angeles Times, &copy; Mapzen, &copy; OpenStreetMap, <a href="https://mapzen.com/tangram" target="_blank">Tangram</a>');
+	// map.attributionControl.setPrefix('&copy; Los Angeles Times, &copy; Mapzen, &copy; OpenStreetMap, <a href="https://mapzen.com/tangram" target="_blank">Tangram</a>');
 
-	var layer = Tangram.leafletLayer({
-	    scene: 'map-styles.yaml',
-	});
-
-	layer.addTo(map);
-
-	L.control.scale().addTo(map);
-
-	var scene = layer.scene;
-
-	// Show selected feature on click
-    scene.container.addEventListener('click', function (event) {
-    	var pixel = {
-    		x: event.clientX - $map.offset().left,
-    		y: event.clientY - $map.offset().top + $(window).scrollTop()
-    	};
-
-		scene.getFeatureAt(pixel).then(function(selection) {
-			if (!selection) {
-				return;
-			}
-
-			var feature = selection.feature;
-			if (feature != null) {
-				if (feature.properties != null) {
-					console.log(feature.properties);
-				}
-			}
-
-		});
-
-    });
+	map.addControl(new mapboxgl.Navigation());
 
 
-	var maxY = 34.34343606848294;
-    var minY = 33.66263917576218;
-    var minX = -118.685302734375;
-    var maxX = -118.10302734375;
+	// layer.addTo(map);
+
+	// L.control.scale().addTo(map);
+
+	// var scene = layer.scene;
+
+	// // Show selected feature on click
+ //    scene.container.addEventListener('click', function (event) {
+ //    	var pixel = {
+ //    		x: event.clientX - $map.offset().left,
+ //    		y: event.clientY - $map.offset().top + $(window).scrollTop()
+ //    	};
+
+	// 	scene.getFeatureAt(pixel).then(function(selection) {
+	// 		if (!selection) {
+	// 			return;
+	// 		}
+
+	// 		var feature = selection.feature;
+	// 		if (feature != null) {
+	// 			if (feature.properties != null) {
+	// 				console.log(feature.properties);
+	// 			}
+	// 		}
+
+	// 	});
+
+ //    });
+
 
     $("#address").geocodify({
         onSelect: function (result) {
