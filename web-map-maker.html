@@ -181,15 +181,18 @@
 		"aerodrome": '#d6d6d6',
 		"background": '#efebe7',
 		"beach": '#ebe2cd',
-		"building": '#e8e4e4',
+		"building": 'rgba(222,222,222,0.76)',
+		"building_outline": "rgba(0,0,0,0)",
+		"building_top": "rgba(230,230,230,1)",
+		"cemetery": "#e4e5dc",
 		"commercial": '#edebe6',
 		"forest": '#dee0d5',
 		"grass": '#e9ebe0',
-		"hospital": '#f1e2ee',
+		"hospital": '#e8e4e8',
 		"industrial": '#eae6e4',
 		"land": '#f4f2ed',
 		"military": '#e8e4e1',
-		"park": '#e4e6db',
+		"park": '#e1e3da',
 		"parking": '#eeeeee',
 		"pedestrian": '#e7e7e7',
 		"place_of_worship": '#e3c5c9',
@@ -247,6 +250,7 @@
 		     	"background-color": palette.background
 		    }
 		},
+
 		/* Landuse */
 		{
 		    "id": "water-polygon",
@@ -282,7 +286,7 @@
 			"source-layer": "landuse",
 			"filter": ["==", "kind", "cemetery"],
 			"paint": {
-			  "fill-color": palette.park
+			  "fill-color": palette.cemetery
 			}
 		}, {
 			"id": "college",
@@ -456,6 +460,7 @@
 		      "fill-color": palette.land
 		    }
 		},
+
 		/* Buildings */
 		{
 		    "id": "buildings",
@@ -463,11 +468,28 @@
 		    "source": "osm",
 		    "source-layer": "buildings",
 		    "paint": {
-			    "fill-outline-color": "#cbc8c7",
+			    "fill-outline-color": palette.building_outline,
 			    "fill-color": palette.building
 		    }
 		},
-
+		{
+			"id": "building_top",
+			"ref": "buildings",
+			"paint": {
+			    "fill-color": palette.building_top,
+			    "fill-opacity": {
+			        "base": 1,
+			        "stops": [[15,0],[16, 1]]
+			    },
+			    "fill-translate": {
+			        "stops": [
+			            [15,[0,0]],[16,[-2,-2]]],
+			        "base": 1
+			    },
+			    "fill-outline-color": "rgba(222,217,213,0)",
+			    "fill-translate-anchor": "viewport"
+			}
+		},
 		/* Roads  */
 		{
 		    "id": "highway",
