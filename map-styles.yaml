@@ -9,12 +9,12 @@ quiet-la-colors:
         - &grass            '#e9ebe0'   # lighten(@forest, 5%)
         - &park             '#e4e6db'   # lighten(@forest, 3%)
         - &hospital         '#f1e2ee'
-        - &school           '#d9d5e3'
+        - &school           '#e4e0ee'   # lighten(#D9D5E3, 5%)
         - &stadium          '#d9cdc1'
         - &beach            '#ebe2cd'
         - &runway           '#bfbebd'
         - &aerodrome        '#d6d6d6'
-        - &building         '#9e9e9e'   # darken(#e8e4e4,8)
+        - &building         '#e8e4e4'   # darken(#e8e4e4,8)
         - &water            '#c3d5dd'
         - &residential      '#efede8'   # @land * 0.98
         - &commercial       '#edebe6'   # @land * 0.97
@@ -27,7 +27,7 @@ quiet-la-colors:
     borders:
         - &county_brdr      '#8a7c7c'
         - &california_brdr  '#827676'
-        - &mexico_brdr      '#6E6666'
+        - &nation_brdr      '#6E6666'
     roads:
         - &road             '#c8c8c1'
         - &road_text        '#757575'
@@ -42,6 +42,13 @@ sources:
     osm:
         type: TopoJSON
         url:  //vector.mapzen.com/osm/all/{z}/{x}/{y}.topojson?api_key=vector-tiles---JwESU
+
+lights:
+    light1:
+        type: directional
+        direction: [.1, .5, -1]
+        diffuse: .35
+        ambient: .7
 
 layers:
     earth:
@@ -67,16 +74,39 @@ layers:
             filter: { type: country }
             draw:
                 lines:
-                    color: *county_brdr
+                    color: *nation_brdr
                     width: 1.5px
+        region:
+            filter:
+                any:
+                    - type: state
+                    - kind: [state, department, region, provincial, territorial]
+                    - admin_level: 4
+            draw:
+                lines:
+                    color: *california_brdr
+                    width: [[2, 0.75px], [3, 1px], [5, 1.5px], [9, 3.5px], [14, 5.5px], [16, 6.5px], [17, 16m]]
+        county:
+            filter:
+                type: county
+                kind: county
+            draw:
+                lines:
+                    color: *county_brdr
+                    width: [[2, 0.75px], [3, 1px], [5, 1.5px], [9, 3.5px], [14, 5.5px], [16, 6.5px], [17, 16m]]
 
     landuse:
-        data: { source: osm }
+        data: { source: osm, layer: landuse }
         draw:
             polygons:
                 interactive: true
                 order: function() { return feature.sort_key; }
                 color: '#cccccc'
+        aerodrome:
+            filter: {kind: [aerodrome, apron]}
+            draw:
+                polygons:
+                    color: *industrial
         arena:
             filter: {kind: arena}
             draw:
@@ -98,7 +128,7 @@ layers:
                 polygons:
                     color: *school
         commercial:
-            filter: {kind: commercial}
+            filter: {kind: [commercial, retail] }
             draw:
                 polygons:
                     color: *commercial
@@ -117,8 +147,13 @@ layers:
             draw:
                 polygons:
                     color: *land
+        footway:
+            filter: {kind: footway}
+            draw:
+                polygons:
+                    color: *land
         forest:
-            filter: {kind: forest}
+            filter: {kind: [forest, wood]}
             draw:
                 polygons:
                     color: *forest
@@ -133,7 +168,7 @@ layers:
                 polygons:
                     color: *park
         grass:
-            filter: {kind: grass}
+            filter: {kind: [grass, meadow]}
             draw:
                 polygons:
                     color: *grass
@@ -143,7 +178,7 @@ layers:
                 polygons:
                     color: *hospital
         industrial:
-            filter: {kind: industrial}
+            filter: {kind: [industrial, quarry, substation, wastewater_plant]}
             draw:
                 polygons:
                     color: *industrial
@@ -202,6 +237,11 @@ layers:
             draw:
                 polygons:
                     color: *industrial
+        railway:
+            filter: {kind: railway}
+            draw:
+                polygons:
+                    color: *industrial
         recreation_ground:
             filter: {kind: recreation_ground}
             draw:
@@ -223,7 +263,7 @@ layers:
                 polygons:
                     color: *land
         sports_center:
-            filter: {kind: sports_center}
+            filter: {kind: [sports_center, sports_centre] }
             draw:
                 polygons:
                     color: *stadium
@@ -242,24 +282,29 @@ layers:
             draw:
                 polygons:
                     color: *school
+        urban_area:
+            filter: {kind: "urban area"}
+            draw:
+                polygons:
+                    color: *residential
         village_green:
             filter: {kind: village_green}
             draw:
                 polygons:
                     color: *park
-        wastewater_plant:
-            filter: {kind: wastewater_plant}
-            draw:
-                polygons:
-                    color: *industrial
         wetland:
             filter: {kind: wetland}
             draw:
                 polygons:
                     color: *land
+        zoo:
+            filter: {kind: zoo}
+            draw:
+                polygons:
+                    color: *park
 
     roads:
-        data: { source: osm }
+        data: { source: osm, layer: roads }
         filter:
             not: { kind: ["path", "rail"] }
         draw:
@@ -289,19 +334,15 @@ layers:
                     width: 5
 
     buildings:
-        data: { source: osm }
+        data: { source: osm, layer: buildings }
         filter: { $zoom: { min: 13 } }
         draw:
             polygons:
                 order: function() { return feature.sort_key; }
                 color: *building
+                extrude: function () { return $zoom >= 16; }
             lines:
                 order: function() { return feature.sort_key; }
-                color: '#656565'
+                color: '#cbc8c7'
                 width: 1px
-
-        # 3d-buildings:
-        #     filter: { $zoom: { min: 15 } }
-        #     draw:
-        #         polygons:
-        #             extrude: function () { return feature.height > 20 || $zoom >= 16; }
+                extrude: function () { return $zoom >= 16; }
