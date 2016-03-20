@@ -253,7 +253,55 @@
 
 		/* Landuse */
 		{
-		    "id": "water-polygon",
+		    "id": "waterway",
+		    "source": "osm",
+		    "source-layer": "water",
+		    "type": "line",
+		    "layout": {
+		    	"line-cap": "round"
+		    },
+		    "filter": ["all", ["!=", "class", "river"], ["!=", "class", "stream"], ["!=", "class", "canal"]],
+		    "paint": {
+		       "line-color": palette.water,
+		       "line-width": {
+		           "base": 1.3,
+		           "stops": [[13, 0.5], [20, 2]]
+		       }
+		    }
+		}, {
+		    "id": "waterway_river",
+		    "source": "osm",
+		    "source-layer": "water",
+		    "type": "line",
+		    "layout": {
+		    	"line-cap": "round"
+		    },
+		    "filter": ["==", "class", "river"],
+		    "paint": {
+		       "line-color": palette.water,
+		       "line-width": {
+		           "base": 1.3,
+		           "stops": [[11, 0.5], [20, 6]]
+		       }
+		    }
+		}, {
+		    "id": "waterway_stream_canal",
+		    "source": "osm",
+		    "source-layer": "water",
+		    "type": "line",
+		    "layout": {
+		    	"line-cap": "round"
+		    },
+		    "filter": ["in", "class", "stream", "canal"],
+		    "paint": {
+		       "line-color": palette.water,
+		       "line-width": {
+		           "base": 1.3,
+		           "stops": [[13, 0.5], [20, 4]]
+		       }
+		    }
+		}, {
+		    "id": "water",
 		    "source": "osm",
 		    "source-layer": "water",
 		    "type": "fill",
@@ -262,14 +310,50 @@
 		       "fill-color": palette.water
 		    }
 		}, {
-			"id": "aerodrome",
-			"type": "fill",
-			"source": "osm",
-			"source-layer": "landuse",
-			"filter": ["in", "kind", "aerodrome", "apron"],
-			"paint": {
-			  "fill-color": palette.aerodrome
-			}
+		    "interactive": true,
+		    "minzoom": 11,
+		    "filter": ["all", ["==", "$type", "Polygon"],["==","aeroway","runway"]],
+		    "type": "fill",
+		    "source": "osm",
+		    "id": "aeroway_fill",
+		    "paint": {
+                "fill-color": "#f00",
+                "fill-opacity": 0.7
+		    },
+		    "source-layer": "roads"
+		}, {
+		    "interactive": true,
+		    "minzoom": 11,
+		    "filter": ["==","aeroway","runway"],
+		    "type": "line",
+		    "source": "osm",
+		    "id": "aeroway_runway",
+		    "layout": {
+		    	"line-cap": "square"
+		    },
+		    "paint": {
+		        "line-color": "#ddd",
+		        "line-width": {
+		            "base": 1.2,
+		            "stops": [[11, 3], [20, 16]]
+		        }
+		    },
+		    "source-layer": "roads"
+		}, {
+		    "interactive": true,
+		    "minzoom": 11,
+		    "filter": ["==","aeroway","taxiway"],
+		    "type": "line",
+		    "source": "osm",
+		    "id": "aeroway_taxiway",
+		    "paint": {
+		        "line-color": "#ddd",
+		        "line-width": {
+		            "base": 1.2,
+		            "stops": [[11, 0.5], [20, 6]]
+		        }
+		    },
+		    "source-layer": "roads"
 		}, {
 			"id": "beach",
 			"type": "fill",
@@ -464,6 +548,7 @@
 		/* Buildings */
 		{
 		    "id": "buildings",
+		    "interactive": true,
 		    "type": "fill",
 		    "source": "osm",
 		    "source-layer": "buildings",
@@ -493,6 +578,13 @@
 		/* Roads  */
 		{
 		    "id": "highway",
+		    "interactive": true,
+		    "minzoom": 5,
+		    "layout": {
+		        "line-cap": "round",
+		        "line-join": "round"
+		    },
+		    // "filter": [ "all", ["==","class","motorway"], ["==", "osm_id", 0]],
 		    "type": "line",
 		    "source": "osm",
 		    "source-layer": "roads",
@@ -500,7 +592,8 @@
 		    "paint": {
 		      	"line-color": palette.road,
 		      	"line-width": {
-		      		"stops": [[8, 0.7], [10, 0.8], [11, palette.widths.rdz11_maj]]
+		      		"base": 1.2,
+		      		"stops": [[3, 0], [6,1], [10, 1.3], [11, 1.7], [12, 2], [13, 3.3], [14, 6], [15, 8], [16, 12]]
 		      	}
 		    }
 		}, {
@@ -589,28 +682,15 @@
 
 	// var scene = layer.scene;
 
-	// // Show selected feature on click
- //    scene.container.addEventListener('click', function (event) {
- //    	var pixel = {
- //    		x: event.clientX - $map.offset().left,
- //    		y: event.clientY - $map.offset().top + $(window).scrollTop()
- //    	};
 
-	// 	scene.getFeatureAt(pixel).then(function(selection) {
-	// 		if (!selection) {
-	// 			return;
-	// 		}
+	// Show selected feature on click
+    map.on('click', function (e) {
+        map.featuresAt(e.point, {radius: 5}, function (err, features) {
+            if (err) throw err;
+            console.log(features);
+        });
+    });
 
-	// 		var feature = selection.feature;
-	// 		if (feature != null) {
-	// 			if (feature.properties != null) {
-	// 				console.log(feature.properties);
-	// 			}
-	// 		}
-
-	// 	});
-
- //    });
 
 
     $("#address").geocodify({
