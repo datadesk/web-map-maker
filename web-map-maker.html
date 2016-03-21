@@ -243,6 +243,7 @@
 		    "tiles": ["https://vector.mapzen.com/osm/all/{z}/{x}/{y}.mvt?api_key=vector-tiles---JwESU"]
 		  }
 		},
+		"glyphs": "mapbox://fonts/emamd/{fontstack}/{range}.pbf",
 		"layers": [{
 		    "id": "background",
 		    "type": "background",
@@ -254,6 +255,7 @@
 		/* Landuse */
 		{
 		    "id": "waterway",
+		    "interactive": true,
 		    "source": "osm",
 		    "source-layer": "water",
 		    "type": "line",
@@ -542,7 +544,7 @@
 		    "type": "line",
 		    "source": "osm",
 		    "source-layer": "roads",
-		    "filter": ["==", "kind", "highway"],
+		    "filter": ["==", "highway", "motorway"],
 		    "paint": {
 		      	"line-color": palette.road,
 		      	"line-width": {
@@ -551,18 +553,95 @@
 		      	}
 		    }
 		}, {
-		    "id": "road",
+		    "id": "road_motorway_link",
+		    "interactive": true,
+		    "minzoom": 5,
+		    "layout": {
+		        "line-cap": "round",
+		        "line-join": "round"
+		    },
 		    "type": "line",
 		    "source": "osm",
 		    "source-layer": "roads",
-		    "filter": ["any",["==", "kind", "minor_road"],["==", "kind", "major_road"]],
+		    "filter": ["==", "highway", "motorway_link"],
 		    "paint": {
 		      	"line-color": palette.road,
 		      	"line-width": {
-		      		"stops": [[8, 0.3], [10, 0.4], [11, palette.widths.rdz11_med]]
+		      		"base": 1.2,
+		      		"stops": [[8, 0.3], [9, 0.4], [12, 1], [14, 2], [15, 3]]
 		      	}
 		    }
 		},
+		{
+		    "id": "road_major",
+		    "interactive": true,
+		    "minzoom": 12,
+		    "type": "line",
+		    "source": "osm",
+		    "source-layer": "roads",
+		    "filter": ["==", "kind", "major_road"],
+		    "layout": {
+		        "line-cap": "round",
+		        "line-join": "round"
+		    },
+		    "paint": {
+		      	"line-color": palette.road,
+		      	"line-width": {
+		      		"stops": [[8, 0.3], [9, 0.4], [12,0.5], [13, 1], [14, 1.3], [15, 5], [16, 8]]
+		      	}
+		    }
+		}, {
+			"id": "road_minor",
+			"interactive": true,
+			"type": "line",
+			"source": "osm",
+			"source-layer": "roads",
+			"filter": ["==", "kind", "minor_road"],
+			"layout": {
+			    "line-cap": "round",
+			    "line-join": "round"
+			},
+			"paint": {
+			  	"line-color": palette.road,
+			  	"line-width": {
+			  		"stops": [[13, 0.15], [14, 0.3], [15, 0.9], [16, 1.2], [18, 2]]
+			  	}
+			}
+		}, {
+			"id": "road_service",
+			"interactive": true,
+			"type": "line",
+			"source": "osm",
+			"source-layer": "roads",
+			"filter": ["==", "highway", "service"],
+			"layout": {
+			    "line-cap": "round",
+			    "line-join": "round"
+			},
+			"paint": {
+			  	"line-color": palette.road,
+			  	"line-width": {
+			  		"stops": [[13, 0.1], [14, 0.2], [15, 0.6], [16, 0.8]]
+			  	}
+			}
+		}, {
+		    "id": "road_path",
+		    "interactive": true,
+		    "type": "line",
+		    "source": "osm",
+		    "source-layer": "roads",
+		    "filter": ["==", "kind", "path"],
+		    "paint": {
+		      	"line-color": palette.road,
+		      	"line-dasharray": [1, 1],
+		      	"line-width": {
+		      		"base": 1.2,
+		      		"stops": [[12, 0], [13, 0.1], [14, 0.6], [15, 1], [16, 2]]
+		      	}
+		    }
+		},
+
+
 		// Maybe a substyle for service = yard
 		{
 		    "id": "rail",
@@ -570,14 +649,14 @@
 		    "type": "line",
 		    "source": "osm",
 		    "source-layer": "roads",
-		    "filter": ["any", ["==", "type", "rail"], ["in", "kind", "railway", "rail"]],
+		    "filter": ["in", "kind", "railway", "rail"],
 		    "paint": {
 		      	"line-color": palette.rail_line,
 		      	"line-dasharray": {
 		      		"stops": [[14, [1,1]], [15, [1,2]]]
 		      	},
 		      	"line-width": {
-		      		"stops": [[13, 0], [14, 0.6], [15, 0.8], [16, 1.5]]
+		      		"stops": [[14, 0.4], [15, 0.75], [20, 2]]
 		      	}
 		    }
 		},
@@ -631,11 +710,12 @@
 
 		/* Borders */
 		{
-	      	"id": "country-boundary",
+	      	"id": "country_boundary",
+	      	"interactive": true,
 	      	"source": "osm",
 	      	"source-layer": "boundaries",
 	      	"type": "line",
-	      	"filter": ["==", "admin_level", "2"],
+	      	"filter": ["all", ["==", "admin_level", "2"], ["!=", "maritime_boundary", "yes"]],
 	      	"max-zoom": 4,
 	      	"layout": {
 	        	"line-cap": "round",
@@ -644,15 +724,16 @@
 	      	"paint": {
 	        	"line-color": palette.country_border,
 		      	"line-width": {
-		        	"stops": [[7, 0.5], [8, 0.6], [9, 0.7], [10, 0.8], [11, 0.9], [12, 1.0], [13, 1.1], [14, 1.2], [15, 1.3], [16, 1.4]]
+		        	"stops": [[4, 1.4], [5, 2], [12, 8]]
 		        }
 	      	}
 	    }, {
-	    	"id": "state-boundary",
+	    	"id": "state_boundary",
+	    	"interactive": true,
 	    	"source": "osm",
 	    	"source-layer": "boundaries",
 	    	"type": "line",
-	    	"filter": ["==", "admin_level", "4"],
+	    	"filter": ["all", ["==", "admin_level", "4"], ["!=", "maritime_boundary", "yes"]],
 	      	"layout": {
 	        	"line-cap": "round",
 	        	"line-join": "round"
@@ -660,10 +741,63 @@
 	      	"paint": {
 	        	"line-color": palette.state_border,
 		      	"line-width": {
-		        	"stops": [[7, 0], [8, 0.5], [9, 0.6], [10, 0.7], [11, 0.8], [12, 0.9], [13, 1.0], [14, 1.1], [15, 1.2]]
+		      		"base": 1,
+		        	"stops": [[4, 0.4], [5, 1], [12, 3]]
 		        }
 	      	}
 	    },
+
+	    // Labels
+		// {
+	 //    	"id": "water_label",
+	 //    	"interactive": true,
+	 //    	"source": "osm",
+	 //    	"layout": {
+	 //    	    "text-font": [
+	 //    	        "Open Sans Italic",
+	 //    	        "Arial Unicode MS Regular"
+	 //    	    ],
+	 //    	    "text-field": "{name_en}",
+	 //    	    "text-max-width": 5,
+	 //    	    "text-size": 12
+	 //    	},
+	 //    	"source-layer": "places",
+	 //    	"type": "symbol",
+	 //    	"filter": ["in", "kind", "sea", "ocean"],
+	 //      	"paint": {
+  //               "text-color": "#757575",
+  //               "text-halo-width": 0,
+  //               "text-halo-color": "rgba(255,255,255,0.7)"
+  //           },
+	 //    },
+	 	{
+	       "id": "city-label",
+	       "source": "osm",
+	       "source-layer": "places",
+	       "filter": ["all", ["==", "$type", "Point"], ["in", "kind", "city", "county", "district"]],
+	       "min-zoom": 10,
+	       "max-zoom": 14,
+	       "type": "symbol",
+	       "layout": {
+	         "text-field": "{name}",
+	         "text-font": [
+    	        "Open Sans Italic",
+    	        "Arial Unicode MS Regular"
+    	    ],
+	         // "text-max-size": 24,
+	         "text-max-width": 10,
+	         "text-letter-spacing": 0.1,
+	         "text-size": {
+	           "stops": [[8, 14], [12, 21]]
+	         }
+	       },
+	       "paint": {
+	         "text-color": "#757575",
+	         "text-halo-color": "rgba(255,255,255,0.7)",
+	       }
+	     },
+
+
 		]
 	};
 
