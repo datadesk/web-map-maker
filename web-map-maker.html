@@ -309,52 +309,7 @@
 		    "paint": {
 		       "fill-color": palette.water
 		    }
-		}, {
-		    "interactive": true,
-		    "minzoom": 11,
-		    "filter": ["all", ["==", "$type", "Polygon"],["==","aeroway","runway"]],
-		    "type": "fill",
-		    "source": "osm",
-		    "id": "aeroway_fill",
-		    "paint": {
-                "fill-color": "#f00",
-                "fill-opacity": 0.7
-		    },
-		    "source-layer": "roads"
-		}, {
-		    "interactive": true,
-		    "minzoom": 11,
-		    "filter": ["==","aeroway","runway"],
-		    "type": "line",
-		    "source": "osm",
-		    "id": "aeroway_runway",
-		    "layout": {
-		    	"line-cap": "square"
-		    },
-		    "paint": {
-		        "line-color": "#ddd",
-		        "line-width": {
-		            "base": 1.2,
-		            "stops": [[11, 3], [20, 16]]
-		        }
-		    },
-		    "source-layer": "roads"
-		}, {
-		    "interactive": true,
-		    "minzoom": 11,
-		    "filter": ["==","aeroway","taxiway"],
-		    "type": "line",
-		    "source": "osm",
-		    "id": "aeroway_taxiway",
-		    "paint": {
-		        "line-color": "#ddd",
-		        "line-width": {
-		            "base": 1.2,
-		            "stops": [[11, 0.5], [20, 6]]
-		        }
-		    },
-		    "source-layer": "roads"
-		}, {
+		},{
 			"id": "beach",
 			"type": "fill",
 			"source": "osm",
@@ -584,7 +539,6 @@
 		        "line-cap": "round",
 		        "line-join": "round"
 		    },
-		    // "filter": [ "all", ["==","class","motorway"], ["==", "osm_id", 0]],
 		    "type": "line",
 		    "source": "osm",
 		    "source-layer": "roads",
@@ -608,8 +562,11 @@
 		      		"stops": [[8, 0.3], [10, 0.4], [11, palette.widths.rdz11_med]]
 		      	}
 		    }
-		}, {
+		},
+		// Maybe a substyle for service = yard
+		{
 		    "id": "rail",
+		    "interactive": true,
 		    "type": "line",
 		    "source": "osm",
 		    "source-layer": "roads",
@@ -623,6 +580,53 @@
 		      		"stops": [[13, 0], [14, 0.6], [15, 0.8], [16, 1.5]]
 		      	}
 		    }
+		},
+
+		{
+		    "interactive": true,
+		    "minzoom": 11,
+		    "filter": ["all", ["==", "$type", "Polygon"],["==","aeroway","runway"]],
+		    "type": "fill",
+		    "source": "osm",
+		    "id": "aeroway_fill",
+		    "paint": {
+                "fill-color": "#f00",
+                "fill-opacity": 0.7
+		    },
+		    "source-layer": "roads"
+		}, {
+		    "interactive": true,
+		    "minzoom": 11,
+		    "filter": ["==","aeroway","runway"],
+		    "type": "line",
+		    "source": "osm",
+		    "id": "aeroway_runway",
+		    "layout": {
+		    	"line-cap": "square"
+		    },
+		    "paint": {
+		        "line-color": "#ddd",
+		        "line-width": {
+		            "base": 1.2,
+		            "stops": [[11, 3], [20, 16]]
+		        }
+		    },
+		    "source-layer": "roads"
+		}, {
+		    "interactive": true,
+		    "minzoom": 11,
+		    "filter": ["==","aeroway","taxiway"],
+		    "type": "line",
+		    "source": "osm",
+		    "id": "aeroway_taxiway",
+		    "paint": {
+		        "line-color": "#ddd",
+		        "line-width": {
+		            "base": 1.2,
+		            "stops": [[11, 0.5], [20, 6]]
+		        }
+		    },
+		    "source-layer": "roads"
 		},
 
 		/* Borders */
