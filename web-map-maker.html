@@ -243,7 +243,7 @@
 		    "tiles": ["https://vector.mapzen.com/osm/all/{z}/{x}/{y}.mvt?api_key=vector-tiles---JwESU"]
 		  }
 		},
-		"glyphs": "mapbox://fonts/emamd/{fontstack}/{range}.pbf",
+		"glyphs": "/fonts/{fontstack}/{range}.pbf",
 		"layers": [{
 		    "id": "background",
 		    "type": "background",
@@ -253,6 +253,36 @@
 		},
 
 		/* Landuse */
+		/* For some reason, a few of these look like they need to be painted first */
+		/* Especially park which causes islands not to show up. */
+		{
+		    "id": "park",
+		    "type": "fill",
+		    "source": "osm",
+		    "source-layer": "landuse",
+		    "filter": ["in", "kind",  "common", "dog_park", "garden", "golf_course", "park", "protected_area", "national_park", "nature_reserve", "playground", "pitch", "recreation_ground", "village_green", "zoo"],
+		    "paint": {
+		      "fill-color": palette.park
+		    }
+		}, {
+			"id": "cemetery",
+			"type": "fill",
+			"source": "osm",
+			"source-layer": "landuse",
+			"filter": ["==", "kind", "cemetery"],
+			"paint": {
+			  "fill-color": palette.cemetery
+			}
+		}, {
+			"id": "hospital",
+			"type": "fill",
+			"source": "osm",
+			"source-layer": "landuse",
+			"filter": ["==", "kind", "hospital"],
+			"paint": {
+			  "fill-color": palette.hospital
+			}
+		},
 		{
 		    "id": "waterway",
 		    "interactive": true,
@@ -304,6 +334,7 @@
 		    }
 		}, {
 		    "id": "water",
+		    "interactive": true,
 		    "source": "osm",
 		    "source-layer": "water",
 		    "type": "fill",
@@ -311,7 +342,17 @@
 		    "paint": {
 		       "fill-color": palette.water
 		    }
-		},{
+		}, {
+		    "id": "playa",
+		    "interactive": true,
+		    "source": "osm",
+		    "source-layer": "water",
+		    "type": "fill",
+		    "filter": ["all", ["==", "$type", "Polygon"], ["in", "kind", "playa", "Playa", "Alkaline Lake"]],
+		    "paint": {
+		       "fill-color": palette.background
+		    }
+		}, {
 			"id": "beach",
 			"type": "fill",
 			"source": "osm",
@@ -319,15 +360,6 @@
 			"filter": ["==", "kind", "beach"],
 			"paint": {
 			  "fill-color": palette.beach
-			}
-		}, {
-			"id": "cemetery",
-			"type": "fill",
-			"source": "osm",
-			"source-layer": "landuse",
-			"filter": ["==", "kind", "cemetery"],
-			"paint": {
-			  "fill-color": palette.cemetery
 			}
 		}, {
 			"id": "college",
@@ -384,15 +416,6 @@
 			  "fill-color": palette.grass
 			}
 		}, {
-			"id": "hospital",
-			"type": "fill",
-			"source": "osm",
-			"source-layer": "landuse",
-			"filter": ["==", "kind", "hospital"],
-			"paint": {
-			  "fill-color": palette.hospital
-			}
-		}, {
 			"id": "industrial",
 			"type": "fill",
 			"source": "osm",
@@ -409,15 +432,6 @@
 		    "filter": ["==", "kind",  "military"],
 		    "paint": {
 		      "fill-color": palette.military
-		    }
-		}, {
-		    "id": "park",
-		    "type": "fill",
-		    "source": "osm",
-		    "source-layer": "landuse",
-		    "filter": ["in", "kind",  "common", "dog_park", "garden", "golf_course", "park", "protected_area", "national_park", "nature_reserve", "playground", "pitch", "recreation_ground", "village_green", "zoo"],
-		    "paint": {
-		      "fill-color": palette.park
 		    }
 		}, {
 		    "id": "parking",
@@ -747,29 +761,28 @@
 	      	}
 	    },
 
-	    // Labels
-		// {
-	 //    	"id": "water_label",
-	 //    	"interactive": true,
-	 //    	"source": "osm",
-	 //    	"layout": {
-	 //    	    "text-font": [
-	 //    	        "Open Sans Italic",
-	 //    	        "Arial Unicode MS Regular"
-	 //    	    ],
-	 //    	    "text-field": "{name_en}",
-	 //    	    "text-max-width": 5,
-	 //    	    "text-size": 12
-	 //    	},
-	 //    	"source-layer": "places",
-	 //    	"type": "symbol",
-	 //    	"filter": ["in", "kind", "sea", "ocean"],
-	 //      	"paint": {
-  //               "text-color": "#757575",
-  //               "text-halo-width": 0,
-  //               "text-halo-color": "rgba(255,255,255,0.7)"
-  //           },
-	 //    },
+	    /* Labels */
+		{
+	    	"id": "water_label",
+	    	"interactive": true,
+	    	"source": "osm",
+	    	"layout": {
+	    	    "text-font": [
+		         	"benton-gothic-regular"
+	    	    ],
+	    	    "text-field": "{name_en}",
+	    	    "text-max-width": 5,
+	    	    "text-size": 12
+	    	},
+	    	"source-layer": "places",
+	    	"type": "symbol",
+	    	"filter": ["in", "kind", "sea", "ocean"],
+	      	"paint": {
+                "text-color": "#757575",
+                "text-halo-width": 0,
+                "text-halo-color": "rgba(255,255,255,0.7)"
+            },
+	    },
 	 	{
 	       "id": "city-label",
 	       "source": "osm",
@@ -781,10 +794,8 @@
 	       "layout": {
 	         "text-field": "{name}",
 	         "text-font": [
-    	        "Open Sans Italic",
-    	        "Arial Unicode MS Regular"
+	         	"benton-gothic-regular"
     	    ],
-	         // "text-max-size": 24,
 	         "text-max-width": 10,
 	         "text-letter-spacing": 0.1,
 	         "text-size": {
