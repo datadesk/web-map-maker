@@ -174,7 +174,9 @@
 
 
 	<script>
-	mapboxgl.accessToken = "pk.eyJ1IjoiZW1hbWQiLCJhIjoiODY3ZGZkMjNhOTM3YTgwNWI4YTM3ZWFmNjIyODg4YjgifQ.UY6ZTL7-z1GCZYylBOm-VQ";
+	// mapboxgl.accessToken = "pk.eyJ1IjoiZW1hbWQiLCJhIjoiODY3ZGZkMjNhOTM3YTgwNWI4YTM3ZWFmNjIyODg4YjgifQ.UY6ZTL7-z1GCZYylBOm-VQ";
+
+	mapboxgl.accessToken = "pk.eyJ1IjoibGF0aW1lc21hcHBpbmciLCJhIjoiVFFBcXJGdyJ9.uj5UiSpeHEt9gNG8ie9Wbw";
 
 	var palette = {
 		"admin": '#000000',
@@ -243,6 +245,7 @@
 		    "tiles": ["https://vector.mapzen.com/osm/all/{z}/{x}/{y}.mvt?api_key=vector-tiles---JwESU"]
 		  }
 		},
+		"sprite": "mapbox://sprites/latimesmapping/cih6hi2uq00bua0m3scl3fszx",
 		"glyphs": "/fonts/{fontstack}/{range}.pbf",
 		"layers": [{
 		    "id": "background",
@@ -768,9 +771,9 @@
 	    	"source": "osm",
 	    	"layout": {
 	    	    "text-font": [
-		         	"benton-gothic-regular"
+		         	"benton-gothic-regular-italic"
 	    	    ],
-	    	    "text-field": "{name_en}",
+	    	    "text-field": "{name}",
 	    	    "text-max-width": 5,
 	    	    "text-size": 12
 	    	},
@@ -784,30 +787,205 @@
             },
 	    },
 	 	{
-	       "id": "city-label",
-	       "source": "osm",
-	       "source-layer": "places",
-	       "filter": ["all", ["==", "$type", "Point"], ["in", "kind", "city", "county", "district"]],
-	       "min-zoom": 10,
-	       "max-zoom": 14,
-	       "type": "symbol",
-	       "layout": {
-	         "text-field": "{name}",
-	         "text-font": [
-	         	"benton-gothic-regular"
-    	    ],
-	         "text-max-width": 10,
-	         "text-letter-spacing": 0.1,
-	         "text-size": {
-	           "stops": [[8, 14], [12, 21]]
-	         }
-	       },
-	       "paint": {
-	         "text-color": "#757575",
-	         "text-halo-color": "rgba(255,255,255,0.7)",
-	       }
+	        "id": "city_label",
+	        "source": "osm",
+	        "source-layer": "places",
+	        "filter": ["all", ["==", "$type", "Point"], ["in", "kind", "city", "county", "district"]],
+	        "min-zoom": 10,
+	        "max-zoom": 14,
+	        "type": "symbol",
+	        "layout": {
+	        	"text-field": "{name}",
+	        	"text-font": [
+	         		"benton-gothic-regular"
+    	    	],
+	         	"text-max-width": 10,
+	         	"text-letter-spacing": 0.1,
+	         	"text-size": {
+	           		"stops": [[8, 14], [12, 21]]
+	         	}
+	        },
+	        "paint": {
+	         	"text-color": "#757575",
+	         	"text-halo-color": "rgba(255,255,255,0.7)",
+	        }
 	     },
-
+	     // {
+	     //     "interactive": true,
+	     //     "source": "osm",
+	     //     "id": "poi_label_4",
+	     //     "source-layer": "places",
+	     //     "minzoom": 18,
+	     //     "layout": {
+	     //         // "icon-image": "{maki}-12",
+	     //         "text-font": [
+	     //             "benton-gothic-bold",
+	     //         ],
+	     //         "text-field": "{name}",
+	     //         "text-max-width": 9,
+	     //         "text-padding": 2,
+	     //         "text-offset": [
+	     //             0,
+	     //             0.6
+	     //         ],
+	     //         "text-anchor": "top",
+	     //         "text-size": 10
+	     //     },
+	     //     "filter": ["all", ["==", "$type", "Point"], ["==", "scalerank", 2]],
+	     //     "type": "symbol",
+	     //     "paint": {
+	     //         "text-color": "#f00",
+	     //         "text-halo-color": "#efebe7",
+	     //         "text-halo-width": 1,
+	     //         "text-halo-blur": 0.5,
+	     //         "icon-opacity": 0
+	     //     },
+	     // },
+	    {
+	        "interactive": true,
+	        "layout": {
+	            "text-font": [
+	                "benton-gothic-regular",
+	            ],
+	            "text-field": "{name}",
+	            "symbol-placement": "line",
+	            "text-size": {
+	                "stops": [[13, 10], [19, 12]]
+	            },
+	            "text-offset": [0, -0.7],
+	            "symbol-spacing": 300,
+	            "text-letter-spacing": 0.1,
+	            "symbol-avoid-edges": false
+	        },
+	        "filter": ["all", ["==", "$type", "LineString"], ["in", "class", "street", "street_limited", "path", "golf", "service", "driveway"]],
+	        "type": "symbol",
+	        "source": "osm",
+	        "id": "road_label_minor",
+	        "paint": {
+	            "text-color": "#757575",
+	            "text-halo-color": "#efebe7",
+	            "text-halo-width": 1,
+	            "text-halo-blur": 0.5
+	        },
+	        "source-layer": "roads"
+	    },
+		{
+			"source": "osm",
+			"id": "road_label_main",
+            "interactive": true,
+            "source-layer": "roads",
+            "layout": {
+                "text-font": [
+                    "benton-gothic-regular"
+                ],
+                "text-field": "{name}",
+                "symbol-placement": "line",
+                "text-size": {
+                    "stops": [[13, 10], [19, 13]]
+                },
+                "text-offset": [0, -0.7],
+                "symbol-spacing": 500,
+                "text-letter-spacing": 0.1,
+                "symbol-avoid-edges": false
+            },
+            "filter": ["all", ["==", "$type", "LineString"], ["==", "kind", "minor_road"]],
+            "type": "symbol",
+            "paint": {
+                "text-color": "#757575",
+                "text-halo-color": "#efebe7",
+                "text-halo-width": 1,
+                "text-halo-blur": 0.5
+            },
+        },
+        {
+            "source": "osm",
+            "id": "road_label_major",
+            "source-layer": "roads",
+            "interactive": true,
+            "layout": {
+                "text-font": [
+                    "benton-gothic-regular",
+                ],
+                "text-field": "{name}",
+                "symbol-placement": "line",
+                "text-size": {
+                    "stops": [[13, 12], [19, 15]]
+                },
+                "text-offset": [0, -0.7],
+                "symbol-spacing": 400,
+                "text-letter-spacing": 0.1,
+                "symbol-avoid-edges": false
+            },
+            "filter": ["all", ["==", "$type", "LineString"], ["==", "kind", "major_road"]],
+            "type": "symbol",
+            "paint": {
+                "text-color": "#757575",
+                "text-halo-color": "#efebe7",
+                "text-halo-width": 1,
+                "text-halo-blur": 0.5
+            }
+        },
+        // {
+        //     "interactive": true,
+        //     "layout": {
+        //         "text-size": 11,
+        //         "icon-image": "state-other-{reflen}",
+        //         "icon-rotation-alignment": "viewport",
+        //         "symbol-spacing": 500,
+        //         "text-font": [
+        //             "benton-gothic-bold",
+        //         ],
+        //         "symbol-placement": "line",
+        //         "text-rotation-alignment": "viewport",
+        //         "icon-size": 1.1,
+        //         "text-field": "{ref}"
+        //     },
+        //     "filter": ["all", ["==", "highway", "motorway"], ["in","reflen", 1, 2, 3, 4, 5, 6],
+        //         ["!in", "shield", "us-state", "us-interstate", "us-interstate-duplex", "us-interstate-business", "us-highway-alternate", "us-highway-duplex", "us-highway-business", "us-interstate-truck", "us-highway"]],
+        //     "type": "symbol",
+        //     "source": "osm",
+        //     "id": "road_label_other_shields",
+        //     "paint": {
+        //         "text-color": "#757575"
+        //     },
+        //     "source-layer": "roads"
+        // },
+        {
+            "interactive": true,
+            "layout": {
+                "text-size": 11,
+                "text-allow-overlap": false,
+                "icon-image": "interstate-1",
+                "icon-rotation-alignment": "viewport",
+                "symbol-spacing": {
+                    "base": 1,
+                    "stops": [[0, 500], [10, 500], [22, 500]]
+                },
+                "text-font": [
+                    "benton-gothic-bold"
+                ],
+                "icon-rotate": 0,
+                "icon-allow-overlap": false,
+                "symbol-placement": {
+                    "base": 1,
+                    "stops": [[0, "point"], [10, "point"], [11, "line"], [22, "line"]]
+                },
+                "text-rotation-alignment": "viewport",
+                "icon-size": 1.1,
+                "text-field": "{ref}",
+                "icon-ignore-placement": false
+            },
+            "filter": ["all", ["==", "highway", "motorway"], ["in", "network", "US:I", "US:NHS High Priority Corridors"]],
+            "type": "symbol",
+            "source": "osm",
+            "id": "road_label_interstate_shields",
+            "paint": {
+                "text-color": "#757575",
+                "icon-opacity": 0.8,
+                "text-opacity": 1
+            },
+            "source-layer": "roads"
+        },
 
 		]
 	};
