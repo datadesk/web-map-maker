@@ -21,7 +21,8 @@
 
 	<script src="http://d1qqc1e9kvmdh8.cloudfront.net/js/underscore-1.8.3-min.js"></script>
     <script src="http://d1qqc1e9kvmdh8.cloudfront.net/js/leaflet-1.0.0-b1/leaflet-src.js"></script>
-	<script src="js/mapbox-gl-0.15.0.js"></script>
+	<script src="js/tangram.min.js"></script>
+	<script src="js/fontfaceobserver.js"></script>
 
     <script src="http://latimes-graphics-media.s3.amazonaws.com/js/geocode-wpt.js"></script>
 	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
@@ -29,6 +30,25 @@
 
 
 	<style type="text/css" media="screen">
+	@font-face {
+	    font-family: 'Benton Gothic Regular';
+	    src: url('https://s3.amazonaws.com/latimes-datadesk-template/fonts/0.5.0/benton-gothic-regular.eot');
+	    src: url('https://s3.amazonaws.com/latimes-datadesk-template/fonts/0.5.0/benton-gothic-regular.eot?#iefix') format('embedded-opentype'),
+	         url('https://s3.amazonaws.com/latimes-datadesk-template/fonts/0.5.0/benton-gothic-regular.woff') format('woff'),
+	         url('https://s3.amazonaws.com/latimes-datadesk-template/fonts/0.5.0/benton-gothic-regular.ttf') format('truetype');
+	    font-weight:normal;
+	    font-style:normal;
+	}
+	@font-face {
+	    font-family: 'Benton Gothic Bold';
+	    src: url('https://s3.amazonaws.com/latimes-datadesk-template/fonts/0.5.0/benton-gothic-bold.eot');
+	    src: url('https://s3.amazonaws.com/latimes-datadesk-template/fonts/0.5.0/benton-gothic-bold.eot?#iefix') format('embedded-opentype'),
+	         url('https://s3.amazonaws.com/latimes-datadesk-template/fonts/0.5.0/benton-gothic-bold.woff') format('woff'),
+	         url('https://s3.amazonaws.com/latimes-datadesk-template/fonts/0.5.0/benton-gothic-bold.ttf') format('truetype');
+	    font-weight:normal;
+	    font-style:normal;
+	}
+
 	#map {width:1300px; height:731px}
 	input.geocodify { width:275px; }
 	label {font:18px/27px Georgia, serif;}
@@ -174,10 +194,6 @@
 
 
 	<script>
-	// mapboxgl.accessToken = "pk.eyJ1IjoiZW1hbWQiLCJhIjoiODY3ZGZkMjNhOTM3YTgwNWI4YTM3ZWFmNjIyODg4YjgifQ.UY6ZTL7-z1GCZYylBOm-VQ";
-
-	mapboxgl.accessToken = "pk.eyJ1IjoibGF0aW1lc21hcHBpbmciLCJhIjoiVFFBcXJGdyJ9.uj5UiSpeHEt9gNG8ie9Wbw";
-
 	var palette = {
 		"admin": '#000000',
 		"aerodrome": '#d6d6d6',
@@ -992,32 +1008,38 @@
 
 	// jQuery map reference
 	var $map = $('#map');
-
-	var map = new mapboxgl.Map({
-	  container: 'map',
-	  style: quietLA,
-	  zoom: 15,
-	  minZoom: 2,
-	  center: [-118.24, 34.0425]
+	var map = L.map('map', {
+		attributionControl: true,
+		center: new L.LatLng(34.0425, -118.24),
+		zoom: 14
 	});
-
-	// map.attributionControl.setPrefix('&copy; Los Angeles Times, &copy; Mapzen, &copy; OpenStreetMap, <a href="https://mapzen.com/tangram" target="_blank">Tangram</a>');
-
-	map.addControl(new mapboxgl.Navigation());
-
-	// L.control.scale().addTo(map);
-
-	// var scene = layer.scene;
+	map.attributionControl.setPrefix('&copy; Los Angeles Times, &copy; Mapzen, &copy; OpenStreetMap, <a href="https://mapzen.com/tangram" target="_blank">Tangram</a>');
+	var layer = Tangram.leafletLayer({
+	    scene: 'map-styles.yaml',
+	});
+	layer.addTo(map);
+	L.control.scale().addTo(map);
+	var scene = layer.scene;
 
 
 	// Show selected feature on click
-    map.on('click', function (e) {
-        map.featuresAt(e.point, {radius: 5}, function (err, features) {
-            if (err) throw err;
-            console.log(features);
-        });
+    scene.container.addEventListener('click', function (event) {
+    	var pixel = {
+    		x: event.clientX - $map.offset().left,
+    		y: event.clientY - $map.offset().top + $(window).scrollTop()
+    	};
+		scene.getFeatureAt(pixel).then(function(selection) {
+			if (!selection) {
+				return;
+			}
+			var feature = selection.feature;
+			if (feature != null) {
+				if (feature.properties != null) {
+					console.log(feature.properties);
+				}
+			}
+		});
     });
-
 
 
     $("#address").geocodify({

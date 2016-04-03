@@ -7,14 +7,18 @@ quiet-la-colors:
         - &land             '#f4f2ed'
         - &forest           '#dee0d5'
         - &grass            '#e9ebe0'   # lighten(@forest, 5%)
-        - &park             '#e4e6db'   # lighten(@forest, 3%)
-        - &hospital         '#f1e2ee'
+        - &park             '#e1e3da'   # lighten(@forest, 3%)
+        - &cemetery         '#e4e5dc'
+        - &hospital         '#e8e4e8'
         - &school           '#e4e0ee'   # lighten(#D9D5E3, 5%)
         - &stadium          '#d9cdc1'
         - &beach            '#ebe2cd'
         - &runway           '#bfbebd'
         - &aerodrome        '#d6d6d6'
-        - &building         '#e8e4e4'   # darken(#e8e4e4,8)
+        - &building         'rgba(222,222,222,0.76)'
+        - &building_outline 'rgba(0,0,0,0)'
+        - &building_top     'rgba(230,230,230,1)'
+
         - &water            '#c3d5dd'
         - &residential      '#efede8'   # @land * 0.98
         - &commercial       '#edebe6'   # @land * 0.97
@@ -64,6 +68,47 @@ layers:
             polygons:
                 order: function() { return feature.sort_key; }
                 color: *water
+
+        waterway:
+            filter: { not: { kind: [river, stream, canal] } }
+            draw:
+                lines:
+                    order: function() { return feature.sort_key; }
+                    color: *water
+                    width: [[11, 0.5px], [20, 6px]]
+
+        waterway_river:
+            filter: { kind: river }
+            draw:
+                lines:
+                    order: function() { return feature.sort_key; }
+                    color: *water
+                    width: [[11, 0.5px], [20, 6px]]
+
+        waterway_stream_canal:
+            filter: { kind: [stream, canal] }
+            draw:
+                lines:
+                    order: function() { return feature.sort_key; }
+                    color: *water
+                    width: [[13, 0.5px], [20, 4px]]
+
+        playa:
+            data: { source: osm, layer: water }
+            filter: { kind: [playa, Playa, Alkaline Lake] }
+            draw:
+                polygons:
+                    order: function() { return feature.sort_key; }
+                    color: *background
+
+
+
+                # color: '#c8c8c1'
+                # width: 12
+                # outline:
+                #     color: grey
+                #     width: 1.5
+
 
     boundaries:
         data: { source: osm, layer: boundaries }
@@ -121,7 +166,7 @@ layers:
             filter: {kind: cemetery}
             draw:
                 polygons:
-                    color: *park
+                    color: *cemetery
         college:
             filter: {kind: college}
             draw:
@@ -132,16 +177,6 @@ layers:
             draw:
                 polygons:
                     color: *commercial
-        dog_park:
-            filter: {kind: dog_park}
-            draw:
-                polygons:
-                    color: *park
-        common:
-            filter: {kind: common}
-            draw:
-                polygons:
-                    color: *park
         farm:
             filter: {kind: [farm, farmland, farmyard] }
             draw:
@@ -157,18 +192,8 @@ layers:
             draw:
                 polygons:
                     color: *forest
-        garden:
-            filter: {kind: garden}
-            draw:
-                polygons:
-                    color: *park
-        golf_course:
-            filter: {kind: golf_course}
-            draw:
-                polygons:
-                    color: *park
         grass:
-            filter: {kind: [grass, meadow]}
+            filter: {kind: [grass, meadow, scrub]}
             draw:
                 polygons:
                     color: *grass
@@ -182,11 +207,6 @@ layers:
             draw:
                 polygons:
                     color: *industrial
-        recreation_ground:
-            filter: {kind: recreation_ground}
-            draw:
-                polygons:
-                    color: *park
         kindergarten:
             filter: {kind: kindergarten}
             draw:
@@ -198,17 +218,8 @@ layers:
                 polygons:
                     color: *military
         park:
-            filter: {kind: [park, protected_area, national_park] }
-            draw:
-                polygons:
-                    color: *park
-        nature_reserve:
-            filter: {kind: nature_reserve}
-            draw:
-                polygons:
-                    color: *park
-        playground:
-            filter: {kind: playground}
+            filter: {kind: [ common, dog_park, garden, golf_course, park, protected_area, national_park, nature_reserve,
+                playground, pitch, recreation_ground, village_green, zoo] }
             draw:
                 polygons:
                     color: *park
@@ -222,11 +233,6 @@ layers:
             draw:
                 polygons:
                     color: *pedestrian
-        pitch:
-            filter: {kind: pitch}
-            draw:
-                polygons:
-                    color: *park
         place_of_worship:
             filter: {kind: place_of_worship}
             draw:
@@ -242,11 +248,6 @@ layers:
             draw:
                 polygons:
                     color: *industrial
-        recreation_ground:
-            filter: {kind: recreation_ground}
-            draw:
-                polygons:
-                    color: *park
         residential:
             filter: {kind: residential}
             draw:
@@ -257,11 +258,6 @@ layers:
             draw:
                 polygons:
                     color: *school
-        scrub:
-            filter: {kind: scrub}
-            draw:
-                polygons:
-                    color: *land
         sports_center:
             filter: {kind: [sports_center, sports_centre] }
             draw:
@@ -287,21 +283,11 @@ layers:
             draw:
                 polygons:
                     color: *residential
-        village_green:
-            filter: {kind: village_green}
-            draw:
-                polygons:
-                    color: *park
         wetland:
             filter: {kind: wetland}
             draw:
                 polygons:
                     color: *land
-        zoo:
-            filter: {kind: zoo}
-            draw:
-                polygons:
-                    color: *park
 
     roads:
         data: { source: osm, layer: roads }
