@@ -66,6 +66,7 @@ layers:
         data: { source: osm, layer: water }
         draw:
             polygons:
+                interactive: true
                 order: function() { return feature.sort_key; }
                 color: *water
 
@@ -100,14 +101,6 @@ layers:
                 polygons:
                     order: function() { return feature.sort_key; }
                     color: *background
-
-
-
-                # color: '#c8c8c1'
-                # width: 12
-                # outline:
-                #     color: grey
-                #     width: 1.5
 
 
     boundaries:
@@ -292,36 +285,89 @@ layers:
     roads:
         data: { source: osm, layer: roads }
         filter:
-            not: { kind: ["path", "rail"] }
+            not: { kind: rail }
         draw:
             lines:
+                interactive: true
                 order: function() { return feature.sort_key; }
-                color: '#c8c8c1'
-                width: 8
                 cap: round
         highway:
             filter: { kind: highway }
             draw:
                 lines:
                     order: function() { return feature.sort_key; }
-                    color: &road
-                    width: [[3, 0], [6,1], [10, 1.3], [11, 1.7], [12, 2], [13, 3.3], [14, 6], [15, 8], [16, 12]]
+                    color: *road
+                    # color: '#ff0000'
+                    width: [[3, 0px], [6, 1px], [10, 1.3px], [11, 1.7px], [12, 2px], [13, 3.3px], [14, 6px], [15, 8px], [16, 12px]]
         road_motorway_link:
             filter: { highway: motorway_link }
             draw:
                 lines:
                     order: function() { return feature.sort_key; }
-                    color: &road
-                    width: [[8, 0.3], [9, 0.4], [12, 1], [14, 2], [15, 4]]
-
-        minor_road:
-            filter:
-                kind: minor_road
+                    color: *road
+                    width: [[8, 0.3px], [9, 0.4px], [12, 1px], [14, 2px], [15, 4px]]
+        major_road:
+            filter: { kind: major_road }
             draw:
                 lines:
                     order: function() { return feature.sort_key; }
-                    color: lightgrey
-                    width: 5
+                    color: *road
+                    width: [[8, 0.3px], [9, 0.4px], [12, 0.5px], [13, 1px], [14, 1.3px], [15, 5px], [16, 8px]]
+        minor_road:
+            filter: { kind: minor_road }
+            draw:
+                lines:
+                    order: function() { return feature.sort_key; }
+                    color: *road
+                    width: [[13, 0.15px], [14, 0.3px], [15, 0.9px], [16, 1.2px], [18, 2px]]
+        service_road:
+            filter: { highway: service }
+            draw:
+                lines:
+                    order: function() { return feature.sort_key; }
+                    color: *road
+                    width: [[13, 0.1px], [14, 0.2px], [15, 0.6px], [16, 0.8px]]
+        path:
+            filter: { not: {highway: footway}, kind: path }
+            draw:
+                lines:
+                    order: function() { return feature.sort_key; }
+                    color: *road
+                    width: [[12, 0px], [13, 0.1px], [14, 0.6px], [15, 1px], [16, 2px]]
+
+    # Need to add dasharray here
+    rail:
+        data: { source: osm, layer: roads }
+        filter: { kind: [ railway, rail ] }
+        draw:
+            lines:
+                order: function() { return feature.sort_key; }
+                color: *rail_line
+                dasharray: [[14, [1,1]], [15, [1,2]]]
+                width: [[14, 0.4px], [15, 0.75px], [20, 2px]]
+
+    # Airports
+    aeroways:
+        data: { source: osm, layer: roads }
+        filter: { aeroway: [runway, taxiway] }
+        aeroway_runway:
+            filter: { aeroway: runway }
+            draw:
+                polygons:
+                    order: function() { return feature.sort_key; }
+                    color: *aeroway
+                lines:
+                    order: function() { return feature.sort_key; }
+                    color: *aeroway
+                    width: [[11, 3px], [20, 16px]]
+        aeroway_taxiway:
+            filter: { aeroway: taxiway }
+            draw:
+                lines:
+                    order: function() { return feature.sort_key; }
+                    color: *aeroway
+                    width: [[11, 0.5px], [20, 6px]]
+
 
     buildings:
         data: { source: osm, layer: buildings }
@@ -337,7 +383,34 @@ layers:
                 width: 1px
                 extrude: function () { return $zoom >= 16; }
 
+    # Labels
+    labels:
+        data:
+            source: osm
+        water_label:
+            data: { source: osm, layer: places }
+            filter: { kind: [sea, ocean] }
+            draw:
+                text:
+                    text_source: name
+                    font:
+                        family: 'Benton Gothic Regular'
+                        size: 12px
+                        fill: '#757575'
+                        stroke: [255,255,255,0.7]
 
-
-
-
+        road_label_main:
+            data: { source: osm, layer: roads }
+            filter: {kind: minor_road}
+            draw:
+                text:
+                    text_source: name
+                    offset: [0px, -10px]
+                    order: function() { return feature.sort_key; }
+                    font:
+                        family: 'Benton Gothic Regular'
+                        size: [[13, 10px], [19, 13px]]
+                        fill: '#757575'
+                        stroke:
+                            color: '#efebe7'
+                            width: 1
