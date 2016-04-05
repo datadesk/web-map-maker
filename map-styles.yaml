@@ -384,33 +384,47 @@ layers:
                 extrude: function () { return $zoom >= 16; }
 
     # Labels
-    labels:
-        data:
-            source: osm
-        water_label:
-            data: { source: osm, layer: places }
-            filter: { kind: [sea, ocean] }
-            draw:
-                text:
-                    text_source: name
-                    font:
-                        family: 'Benton Gothic Regular'
-                        size: 12px
-                        fill: '#757575'
-                        stroke: [255,255,255,0.7]
+    water_label:
+        data: { source: osm, layer: places }
+        filter: { kind: [sea, ocean] }
+        draw:
+            text:
+                text_source: name
+                font:
+                    family: 'Benton Gothic Regular'
+                    size: 12px
+                    fill: '#757575'
+                    # stroke: { color: [255,255,255,0.7], width:1px }
+                    stroke: { color: '#ffffff', width:1 }
 
-        road_label_main:
-            data: { source: osm, layer: roads }
-            filter: {kind: minor_road}
-            draw:
-                text:
-                    text_source: name
-                    offset: [0px, -10px]
-                    order: function() { return feature.sort_key; }
-                    font:
-                        family: 'Benton Gothic Regular'
-                        size: [[13, 10px], [19, 13px]]
-                        fill: '#757575'
-                        stroke:
-                            color: '#efebe7'
-                            width: 1
+    road_label_major:
+        data: { source: osm, layer: roads }
+        filter: {name: true, kind: major_road}
+        draw:
+            text:
+                text_source: name
+                offset: [0px, -10px]
+                order: function() { return feature.sort_key; }
+                font:
+                    family: 'Benton Gothic Regular'
+                    size: [[13, 12px], [19, 15px]]
+                    fill: *road_text
+                    stroke: {color: '#efebe7', width: 1}
+
+    road_label_minor:
+        data: { source: osm, layer: roads }
+        filter: {name: true, kind: minor_road}
+        draw:
+            text:
+                text_source: name
+                offset: [0px, -10px]
+                order: function() { return feature.sort_key; }
+                font:
+                    family: 'Benton Gothic Regular'
+                    size: [[13, 10px], [19, 13px]]
+                    fill: *road_text
+                    stroke: {color: '#efebe7', width: 1}
+
+
+# Is there easy letter spacing adjustment?
+# Is there an easy way to do a dasharray?
