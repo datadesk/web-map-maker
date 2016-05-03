@@ -102,7 +102,6 @@ layers:
                     order: function() { return feature.sort_key; }
                     color: *background
 
-
     boundaries:
         data: { source: osm, layer: boundaries }
         draw:
@@ -368,10 +367,9 @@ layers:
                     color: *aeroway
                     width: [[11, 0.5px], [20, 6px]]
 
-
     buildings:
         data: { source: osm, layer: buildings }
-        filter: { $zoom: { min: 13 } }
+        filter: { $zoom: { min: 16 } }
         draw:
             polygons:
                 order: function() { return feature.sort_key; }
@@ -402,18 +400,19 @@ layers:
         filter: {name: true, kind: major_road}
         draw:
             text:
-                text_source: name
-                offset: [0px, -10px]
-                order: function() { return feature.sort_key; }
+                # text_source: name
+                # offset: [0px, -10px]
+                repeat_distance: 1000px
+                # order: function() { return feature.sort_key; }
                 font:
                     family: 'Benton Gothic Regular'
-                    size: [[13, 12px], [19, 15px]]
+                    size: [[13, 20px], [14, 22px], [15, 24px], [16, 26px]]
                     fill: *road_text
                     stroke: {color: '#efebe7', width: 1}
 
     road_label_minor:
         data: { source: osm, layer: roads }
-        filter: {name: true, kind: minor_road}
+        filter: {name: true, kind: minor_road, $zoom: { min: 16 }}
         draw:
             text:
                 text_source: name
@@ -421,7 +420,7 @@ layers:
                 order: function() { return feature.sort_key; }
                 font:
                     family: 'Benton Gothic Regular'
-                    size: [[13, 10px], [19, 13px]]
+                    size: 18px
                     fill: *road_text
                     stroke: {color: '#efebe7', width: 1}
 
@@ -437,9 +436,12 @@ layers:
                 order: function() { return feature.sort_key; }
                 font:
                     family: 'Benton Gothic Bold'
-                    size: 11px
+                    size: 22px
                     fill: *road_text
                     stroke: {color: '#efebe7', width: 1}
+
+
+
 
 # Is there easy letter spacing adjustment?
 # Is there an easy way to do a dasharray?
