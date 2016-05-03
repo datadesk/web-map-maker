@@ -400,10 +400,9 @@ layers:
         filter: {name: true, kind: major_road}
         draw:
             text:
-                # text_source: name
-                # offset: [0px, -10px]
-                repeat_distance: 1000px
-                # order: function() { return feature.sort_key; }
+                text_source: name
+                offset: [0px, -10px]
+                order: function() { return feature.sort_key; }
                 font:
                     family: 'Benton Gothic Regular'
                     size: [[13, 20px], [14, 22px], [15, 24px], [16, 26px]]
