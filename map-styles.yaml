@@ -37,7 +37,25 @@ quiet-la-colors:
         - &road_text        '#757575'
         - &rail_line        '#c8c8c1'
         - &aeroway          '#dddddd'
+		
+textures:
+    pois:
+        url: images/poi_icons_18@2x.png
+        filtering: mipmap
+        sprites:
+            # define sprites: [x origin, y origin, width, height]
+            airport: [870, 0, 38, 38]
+            aquarium: [732, 168, 38, 38]
+            art-gallery: [640, 168, 38, 38]
+            athletics-sports: [184, 168, 38, 38]
 
+styles:
+    icons:
+        base: points
+        texture: pois
+        interactive: true
+        blend_order: 1
+		
 camera:
     type: isometric
     axis: [0, .1] # very small building extrusion
@@ -401,7 +419,7 @@ layers:
         draw:
             text:
                 text_source: name
-                offset: [0px, -10px]
+                offset: [0px, -14px]
                 order: function() { return feature.sort_key; }
                 font:
                     family: 'Benton Gothic Regular'
@@ -431,7 +449,7 @@ layers:
                 - network: ["US:I", "US:NHS High Priority Corridors"]
         draw:
             text:
-                text_source: ref
+                text_source: ref 
                 order: function() { return feature.sort_key; }
                 font:
                     family: 'Benton Gothic Bold'
