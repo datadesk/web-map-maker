@@ -446,10 +446,25 @@ layers:
                 - network: ["US:I", "US:NHS High Priority Corridors"]
         draw:
             text:
+                priority: 1
                 text_source: |
                     function() {
-                        var names = feature.ref.split(';')[0];
-                        return names.split(' ')[1];
+                        if (feature.ref != undefined) {
+                            if (feature.ref.indexOf(';') != -1) {
+                                var names = feature.ref.split(';')
+                                if (names[0].indexOf(' ') != -1) {
+                                    return names[0].split(' ')[1];
+                                } else {
+                                    return names[0];
+                                }
+                            } else {
+                                if (feature.ref.indexOf(' ') != -1) {
+                                    return feature.ref.split(' ')[1];
+                                } else {
+                                    return feature.ref;
+                                }
+                            }
+                        }
                     }
                 order: function() { return feature.sort_key; }
                 symbol: 1
@@ -467,13 +482,27 @@ layers:
                 - network: "US:US"
         draw:
             text:
+                priority: 1
                 text_source: |
                     function() {
-                        var names = feature.ref.split(';')[0];
-                        return names.split(' ')[1];
+                        if (feature.ref != undefined) {
+                            if (feature.ref.indexOf(';') != -1) {
+                                var names = feature.ref.split(';')
+                                if (names[0].indexOf(' ') != -1) {
+                                    return names[0].split(' ')[1];
+                                } else {
+                                    return names[0];
+                                }
+                            } else {
+                                if (feature.ref.indexOf(' ') != -1) {
+                                    return feature.ref.split(' ')[1];
+                                } else {
+                                    return feature.ref;
+                                }
+                            }
+                        }
                     }
                 order: function() { return feature.sort_key; }
-                symbol: 1
                 font:
                     family: 'Benton Gothic Bold'
                     size: 22px
@@ -485,10 +514,29 @@ layers:
         filter:
             all:
                 - highway: "motorway"
-                - network: "US:CA"
+                - network: ["US:CA","US:AR"]
         draw:
             text:
-                text_source: ref
+                priority: 1                
+                text_source: |
+                    function() {
+                        if (feature.ref != undefined) {
+                            if (feature.ref.indexOf(';') != -1) {
+                                var names = feature.ref.split(';')
+                                if (names[0].indexOf(' ') != -1) {
+                                    return names[0].split(' ')[1];
+                                } else {
+                                    return names[0];
+                                }
+                            } else {
+                                if (feature.ref.indexOf(' ') != -1) {
+                                    return feature.ref.split(' ')[1];
+                                } else {
+                                    return feature.ref;
+                                }
+                            }
+                        }
+                    }
                 order: function() { return feature.sort_key; }
                 symbol: 1
                 font:
