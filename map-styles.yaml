@@ -480,6 +480,22 @@ layers:
                     fill: *road_text
                     stroke: {color: '#efebe7', width: 1}
 
+    road_label_ca_highway_shields:
+        data: { source: osm, layer: roads }
+        filter:
+            all:
+                - highway: "motorway"
+                - network: "US:CA"
+        draw:
+            text:
+                text_source: ref
+                order: function() { return feature.sort_key; }
+                symbol: 1
+                font:
+                    family: 'Benton Gothic Bold'
+                    size: 22px
+                    fill: *road_text
+                    stroke: {color: '#efebe7', width: 1}
 
 # Is there easy letter spacing adjustment?
 # Is there an easy way to do a dasharray?
