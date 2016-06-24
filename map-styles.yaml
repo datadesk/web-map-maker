@@ -459,7 +459,26 @@ layers:
                     fill: *road_text
                     stroke: {color: '#efebe7', width: 1}
 
-
+    road_label_us_highway_shields:
+        data: { source: osm, layer: roads }
+        filter:
+            all:
+                - highway: "motorway"
+                - network: "US:US"
+        draw:
+            text:
+                text_source: |
+                    function() {
+                        var names = feature.ref.split(';')[0];
+                        return names.split(' ')[1];
+                    }
+                order: function() { return feature.sort_key; }
+                symbol: 1
+                font:
+                    family: 'Benton Gothic Bold'
+                    size: 22px
+                    fill: *road_text
+                    stroke: {color: '#efebe7', width: 1}
 
 
 # Is there easy letter spacing adjustment?
