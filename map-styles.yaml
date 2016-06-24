@@ -58,7 +58,7 @@ styles:
 		
 camera:
     type: isometric
-    axis: [0, .1] # very small building extrusion
+    axis: [0, 0] # very small building extrusion
 
 sources:
     osm:
@@ -89,7 +89,7 @@ layers:
                 color: *water
 
         waterway:
-            filter: { not: { kind: [river, stream, canal] } }
+            filter: { not: { kind: [river, stream, canal, swimming_pool] } }
             draw:
                 lines:
                     order: function() { return feature.sort_key; }
@@ -118,7 +118,8 @@ layers:
             draw:
                 polygons:
                     order: function() { return feature.sort_key; }
-                    color: *background
+                    color: *water
+
 
     boundaries:
         data: { source: osm, layer: boundaries }
@@ -273,11 +274,6 @@ layers:
             draw:
                 polygons:
                     color: *stadium
-        swimming_pool:
-            filter: {kind: swimming_pool}
-            draw:
-                polygons:
-                    color: *water
         stadium:
             filter: {kind: stadium}
             draw:
@@ -388,16 +384,17 @@ layers:
     buildings:
         data: { source: osm, layer: buildings }
         filter: { $zoom: { min: 16 } }
+        # filter: function() { return feature.height >= 100; }
         draw:
             polygons:
                 order: function() { return feature.sort_key; }
                 color: *building
                 extrude: function () { return $zoom >= 16; }
-            lines:
-                order: function() { return feature.sort_key; }
-                color: '#cbc8c7'
-                width: 1px
-                extrude: function () { return $zoom >= 16; }
+            # lines:
+            #     order: function() { return feature.sort_key; }
+            #     color: '#cbc8c7'
+            #     width: 1px
+            #     extrude: function () { return $zoom >= 16; }
 
     # Labels
     water_label:
@@ -438,7 +435,7 @@ layers:
                 font:
                     family: 'Benton Gothic Regular'
                     size: 18px
-                    fill: *road_text
+                    fill: '#9C9C9C'
                     stroke: {color: '#efebe7', width: 1}
 
     road_label_interstate_shields:
@@ -449,8 +446,13 @@ layers:
                 - network: ["US:I", "US:NHS High Priority Corridors"]
         draw:
             text:
-                text_source: ref 
+                text_source: |
+                    function() {
+                        var names = feature.ref.split(';')[0];
+                        return names.split(' ')[1];
+                    }
                 order: function() { return feature.sort_key; }
+                symbol: 1
                 font:
                     family: 'Benton Gothic Bold'
                     size: 22px
