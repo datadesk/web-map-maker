@@ -9,12 +9,12 @@ quiet-la-colors:
         - &park             '#e1e3da'   # lighten(@forest, 3%)
         - &cemetery         '#e4e5dc'
         - &hospital         '#e8e4e8'
-        - &school           '#e4e0ee'   # lighten(#D9D5E3, 5%)
+        - &school           '#e9e5eb'   # lighten(#D9D5E3, 5%)
         - &stadium          '#d9cdc1'
         - &beach            '#ebe2cd'
         - &runway           '#bfbebd'
         - &aerodrome        '#d6d6d6'
-        - &building         'rgba(222,222,222,0.76)'
+        - &building         '#e6e3df'
         - &building_outline 'rgba(0,0,0,0)'
         - &building_top     'rgba(230,230,230,1)'
         - &earth2_e    '#d8d3ca'           # urban early
@@ -266,7 +266,7 @@ layers:
                 polygons:
                     color: *park
         parking:
-            filter: {kind: parking}
+            filter: {kind: parking }
             draw:
                 polygons:
                     color: *parking
@@ -423,3 +423,12 @@ layers:
                     order: function() { return feature.sort_key; }
                     color: *aeroway
                     width: [[11, 0.5px], [20, 6px]]
+
+    buildings:
+        data: { source: osm, layer: buildings }
+        filter: { $zoom: { min: 15 }}
+        draw:
+            polygons:
+                order: function() { return feature.sort_key; }
+                color: *building
+                

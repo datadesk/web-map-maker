@@ -1080,7 +1080,11 @@
             var feature = selection.feature;
             if (feature != null) {
                 if (feature.properties != null) {
-                    console.log(feature.properties);
+                    if (feature.properties.kind == 'highway'){
+                        console.log(feature.properties.ref);
+                    } else {
+                        console.log(feature.properties.name);
+                    }
                 }
             }
         });
