@@ -75,7 +75,24 @@
         border-top: 20px solid #000;
         box-shadow: none;
     }
+    #tooltip {
+        position: absolute;
+        z-index: 2014;
+        opacity:0;
+        background: white;
+        padding: 10px;
+        border-style:solid;
+        border-width:1px;
+        border-color:#D4D4D4;
+        box-shadow: 2px 2px 2px rgba(64,64,64,0.3);
+        -moz-box-shadow: 2px 2px 2px rgba(64,64,64,0.3);
+        -webkit-box-shadow: 2px 2px 2px rgba(64,64,64,0.3);
+        border-radius: 2px;
+        -moz-border-radius: 2px;
+        height: 0;
+        font-family: 'benton-gothic-regular', Arial, sans-serif;
 
+    }
     </style>
 
 </head>
@@ -194,7 +211,19 @@
     </footer>
 
 
+    <div id="tooltip">
+        <p id="iCount"></p>
+        <p id="tCount"></p>
+        <p id="vCount"></p>
+    </div>
+
     <script>
+    // Get window width
+    var windowWidth = document.documentElement.clientWidth;
+    var windowHeight = document.documentElement.clientHeight;
+
+
+
     var palette = {
         "admin": '#000000',
         "aerodrome": '#d6d6d6',
@@ -1080,10 +1109,15 @@
             var feature = selection.feature;
             if (feature != null) {
                 if (feature.properties != null) {
+                    // console.log(feature);
+
+                    $('#tooltip').css({'display':'block','opacity':1,'height':'auto'});
                     if (feature.properties.kind == 'highway'){
                         console.log(feature.properties.ref);
+                        $('#tooltip').text(feature.properties.ref);
                     } else {
                         console.log(feature.properties.name);
+                        $('#tooltip').text(feature.properties.name);
                     }
                 }
             }
@@ -1222,6 +1256,18 @@
             });
         });
     });
+
+    // Move the tooltip with the mouse
+    $(window).mousemove( function(e) {
+        if (windowWidth > 400) {
+            var tooltipHeight = $("#tooltip").height();
+            mouseY = e.pageY;
+            mouseX = e.pageX;
+            $("#tooltip").css({"top":(mouseY+10)+"px","left":(mouseX+5)+"px"});
+        }
+    });
+
+
 
     </script>
 
