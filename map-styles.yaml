@@ -1,4 +1,3 @@
-# Define colors up here, split up by feature type for convenience
 quiet-la-colors:
     text:
         - &text             '#757575'
@@ -18,6 +17,10 @@ quiet-la-colors:
         - &building         'rgba(222,222,222,0.76)'
         - &building_outline 'rgba(0,0,0,0)'
         - &building_top     'rgba(230,230,230,1)'
+        - &earth2_e    '#d8d3ca'           # urban early
+        - &earth2_e2   '#d4cfc6'           # urban early fade in
+        - &earth2_e3   '#dbd8d3'           # urban early fade in 3
+        - &earth2_ev   true                # urban early visibility
 
         - &water            '#c3d5dd'
         - &residential      '#efede8'   # @land * 0.98
@@ -31,125 +34,153 @@ quiet-la-colors:
     borders:
         - &county_brdr      '#8a7c7c'
         - &california_brdr  '#827676'
-        - &nation_brdr      '#6E6666'
+        - &nation_brdr      '#a7a8ab'
+        - &state_brdr       '#cbced1'
     roads:
         - &road             '#c8c8c1'
         - &road_text        '#757575'
         - &rail_line        '#c8c8c1'
         - &aeroway          '#dddddd'
-		
-textures:
-    pois:
-        url: images/poi_icons_18@2x.png
-        filtering: mipmap
-        sprites:
-            # define sprites: [x origin, y origin, width, height]
-            airport: [870, 0, 38, 38]
-            aquarium: [732, 168, 38, 38]
-            art-gallery: [640, 168, 38, 38]
-            athletics-sports: [184, 168, 38, 38]
-
-styles:
-    icons:
-        base: points
-        texture: pois
-        interactive: true
-        blend_order: 1
-		
-camera:
-    type: isometric
-    axis: [0, 0] # very small building extrusion
 
 sources:
+    mapzen:
+        type: TopoJSON
+        url: https://vector.mapzen.com/osm/all/{z}/{x}/{y}.topojson
     osm:
         type: TopoJSON
         url:  //vector.mapzen.com/osm/all/{z}/{x}/{y}.topojson?api_key=vector-tiles---JwESU
 
-lights:
-    light1:
-        type: directional
-        direction: [.1, .5, -1]
-        diffuse: .35
-        ambient: .7
+cameras:
+    perspective:
+        type: flat
 
 layers:
     earth:
         data: { source: osm, layer: earth }
         draw:
             polygons:
-                order: function() { return feature.sort_key; }
+                order: 0
                 color: *background
-
-    water:
+    ocean-water:
         data: { source: osm, layer: water }
+        # don't filter ocean polys because OSM ocean split tiles don't have coherent areas
+        filter: { kind: ocean }
         draw:
             polygons:
-                interactive: true
                 order: function() { return feature.sort_key; }
                 color: *water
-
-        waterway:
-            filter: { not: { kind: [river, stream, canal, swimming_pool] } }
+                join: round
+        water_boundaries-ocean:
+            filter: { boundary: yes, $zoom: { min: 10 } }
             draw:
                 lines:
                     order: function() { return feature.sort_key; }
                     color: *water
-                    width: [[11, 0.5px], [20, 6px]]
-
-        waterway_river:
-            filter: { kind: river }
-            draw:
-                lines:
-                    order: function() { return feature.sort_key; }
-                    color: *water
-                    width: [[11, 0.5px], [20, 6px]]
-
-        waterway_stream_canal:
-            filter: { kind: [stream, canal] }
-            draw:
-                lines:
-                    order: function() { return feature.sort_key; }
-                    color: *water
-                    width: [[13, 0.5px], [20, 4px]]
-
-        playa:
-            data: { source: osm, layer: water }
-            filter: { kind: [playa, Playa, Alkaline Lake] }
+                    width: [[10,1px],[12,2px]]
+                    join: round
+    water-not-ocean:
+        data: { source: osm, layer: water }
+        filter: { not: { kind: [ocean,swimming_pool] }, $zoom: { min: 1 } }
+        draw:
+            polygons:
+                order: function() { return feature.sort_key; }
+                color: *water
+        inland-water:
+            filter:
+                all:
+                    - kind: [lake, water, riverbank, reservoir, playa]
+                any:
+                    # limit show smaller landuse areas to higher zooms
+                    - { $zoom: { min: 1 },  area: { min: 40000000000 } }
+                    - { $zoom: { min: 2 },  area: { min: 20000000000 } }
+                    # some weird natural earth scale set transition
+                    - { $zoom: { min: 3 },  area: { min: 80000000000 } }
+                    - { $zoom: { min: 4 },  area: { min: 5000000000 } }
+                    - { $zoom: { min: 5 },  area: { min: 700000000 } }
+                    - { $zoom: { min: 6 },  area: { min: 500000000 } }
+                    - { $zoom: { min: 7 },  area: { min: 160000000 } }
+                    - { $zoom: { min: 8 },  area: { min: 40000000 } }
+                    - { $zoom: { min: 9 },  area: { min: 10000000 } }
+                    - { $zoom: { min: 10 }, area: { min: 8000000 } }
+                    - { $zoom: { min: 11 }, area: { min: 2000000 } }
+                    - { $zoom: { min: 12 }, area: { min: 200000 } }
+                    - { $zoom: { min: 13 }, area: { min: 100000 } }
+                    - { $zoom: { min: 14 }, area: { min: 2000 } }
+                    - { $zoom: { min: 15 } }
             draw:
                 polygons:
+                    color: *water
+        other-water-areas:
+            filter: { not: { kind: [lake, water, reservoir, playa] }, $zoom: { min: 11 }, area: { min: 100 } }
+            draw:
+                polygons:
+                    color: *water
+        playas:
+            filter: { kind: playa, $zoom: {min: 6} }
+            draw:
+                polygons:
+                    color: *water
+        water_boundaries-not-ocean:
+            filter: 
+                all:
+                    - boundary: yes
+                    - $zoom: { min: 13 }
+                any:
+                    - { $zoom: { min: 13 }, area: { min: 2000 } }
+                    - { $zoom: { min: 15 } }
+            draw:
+                lines:
                     order: function() { return feature.sort_key; }
                     color: *water
-
-
+                    width: [[13,1.0px],[16,1.5px],[18,2m]]
+                    join: round
+        river:
+            filter: { kind: [river,canal,stream,dam,ditch,drain], $zoom: { min: 13 } }
+            draw:
+                lines:
+                    order: function() { return feature.sort_key; }
+                    color: *water
+                    width: [[13,0.5px],[14,1.0px],[16,1.5px],[18,4m]]
+                    join: round
     boundaries:
         data: { source: osm, layer: boundaries }
         draw:
             lines:
+                interactive: false
                 order: function() { return feature.sort_key; }
         country:
-            filter: { type: country }
+            filter:
+                any:
+                    - type: country
+                    - kind: nation
+                    - admin_level: 2
             draw:
                 lines:
+                    interactive: false
                     color: *nation_brdr
-                    width: 1.5px
+                    width: [[1, 0.5px], [2, 1.0px], [4, 1.5px], [9, 2.5px], [14, 3.5px], [16, 4.5px], [17, 14m]]
         region:
             filter:
                 any:
                     - type: state
+                    # territorial here is probably a hack
                     - kind: [state, department, region, provincial, territorial]
                     - admin_level: 4
             draw:
                 lines:
-                    color: *california_brdr
+                    interactive: true
+                    color: *state_brdr
                     width: [[2, 0.75px], [3, 1px], [5, 1.5px], [9, 3.5px], [14, 5.5px], [16, 6.5px], [17, 16m]]
-        county:
-            filter:
-                type: county
-                kind: county
-            draw:
-                lines:
-                    color: *county_brdr
-                    width: [[2, 0.75px], [3, 1px], [5, 1.5px], [9, 3.5px], [14, 5.5px], [16, 6.5px], [17, 16m]]
+            water:
+                filter: { maritime_boundary: yes }
+                draw:
+                    lines:
+                        visible: false
+            early:
+                filter: { scalerank: [0,3,4,5,6,7,8,9,10], $zoom: { max: 8 } }
+                draw:
+                    lines:
+                        visible: false
 
     landuse:
         data: { source: osm, layer: landuse }
@@ -308,17 +339,53 @@ layers:
             filter: { kind: highway }
             draw:
                 lines:
-                    order: function() { return feature.sort_key; }
+                    #cap: [[0,butt],[15,round]]
+                    #join: round
                     color: *road
-                    # color: '#ff0000'
-                    width: [[3, 0px], [6, 1px], [10, 1.3px], [11, 1.7px], [12, 2px], [13, 3.3px], [14, 6px], [15, 8px], [16, 12px]]
-        road_motorway_link:
-            filter: { highway: motorway_link }
-            draw:
-                lines:
-                    order: function() { return feature.sort_key; }
-                    color: *road
-                    width: [[8, 0.3px], [9, 0.4px], [12, 1px], [14, 2px], [15, 4px]]
+                    width: [[8, 1px], [14, 4.0px], [15, 6.0px], [16, 6.5px], [17, 20m]]
+                    cap: round
+                    outline:
+                        color: *road
+                        width: [[9, 0.5px], [12, 1px], [16, 2px], [18, 6px]]
+            link:
+                filter: { is_link: yes } # on- and off-ramps, etc
+                draw:
+                    lines:
+                        color: *road
+                        width: [[9, 1px], [14, 2.5px], [16, 4px], [18, 9m]]
+                        cap: butt
+                        outline:
+                            color: *road
+                            width: [[13, 0px], [14, 1px], [18, 1.5px]]
+                early_link:
+                    filter: { $zoom: { max: 15 } }
+                    draw:
+                        lines:
+                            # except bridges and tunnels, their outlines should also self-sort
+                            order: 352
+                tunnel-link:
+                    filter: {is_tunnel: yes, $zoom: {min: 13} }
+                    draw:
+                        lines:
+                            color: *road
+                            outline:
+                                color: *road
+            tunnel:
+                filter: {is_tunnel: yes, $zoom: {min: 13} }
+                draw:
+                    lines:
+                        color: *road
+                        outline:
+                            color: *road
+            highway_bridge:
+                filter: {is_bridge: yes}
+                draw:
+                    lines:
+                        cap: round
+                        outline:
+                            cap: butt
+
+
         major_road:
             filter: { kind: major_road }
             draw:
@@ -327,37 +394,13 @@ layers:
                     color: *road
                     width: [[8, 0.3px], [9, 0.4px], [12, 0.5px], [13, 1px], [14, 1.3px], [15, 5px], [16, 8px]]
         minor_road:
-            filter: { kind: minor_road }
-            draw:
-                lines:
-                    order: function() { return feature.sort_key; }
-                    color: *road
-                    width: [[13, 0.15px], [14, 0.3px], [15, 0.9px], [16, 1.2px], [18, 2px]]
-        service_road:
-            filter: { highway: service }
-            draw:
-                lines:
-                    order: function() { return feature.sort_key; }
-                    color: *road
-                    width: [[13, 0.1px], [14, 0.2px], [15, 0.6px], [16, 0.8px]]
-        path:
-            filter: { not: {highway: footway}, kind: path }
-            draw:
-                lines:
-                    order: function() { return feature.sort_key; }
-                    color: *road
-                    width: [[12, 0px], [13, 0.1px], [14, 0.6px], [15, 1px], [16, 2px]]
+                filter: { kind: minor_road, not: { highway: service } }
+                draw:
+                    lines:
+                        order: function() { return feature.sort_key; }
+                        color: *road
+                        width: [[13, 0.15px], [14, 0.3px], [15, 0.9px], [16, 1.2px], [18, 2px]]
 
-    # Need to add dasharray here
-    rail:
-        data: { source: osm, layer: roads }
-        filter: { kind: [ railway, rail ] }
-        draw:
-            lines:
-                order: function() { return feature.sort_key; }
-                color: *rail_line
-                dasharray: [[14, [1,1]], [15, [1,2]]]
-                width: [[14, 0.4px], [15, 0.75px], [20, 2px]]
 
     # Airports
     aeroways:
@@ -380,171 +423,3 @@ layers:
                     order: function() { return feature.sort_key; }
                     color: *aeroway
                     width: [[11, 0.5px], [20, 6px]]
-
-    buildings:
-        data: { source: osm, layer: buildings }
-        filter: { $zoom: { min: 16 } }
-        # filter: function() { return feature.height >= 100; }
-        draw:
-            polygons:
-                order: function() { return feature.sort_key; }
-                color: *building
-                extrude: function () { return $zoom >= 16; }
-            # lines:
-            #     order: function() { return feature.sort_key; }
-            #     color: '#cbc8c7'
-            #     width: 1px
-            #     extrude: function () { return $zoom >= 16; }
-
-    # Labels
-    water_label:
-        data: { source: osm, layer: places }
-        filter: { kind: [sea, ocean] }
-        draw:
-            text:
-                text_source: name
-                font:
-                    family: 'Benton Gothic Regular'
-                    size: 12px
-                    fill: '#757575'
-                    # stroke: { color: [255,255,255,0.7], width:1px }
-                    stroke: { color: '#ffffff', width:1 }
-
-    road_label_major:
-        data: { source: osm, layer: roads }
-        filter: {name: true, kind: major_road}
-        draw:
-            text:
-                text_source: name
-                offset: [0px, -14px]
-                order: function() { return feature.sort_key; }
-                font:
-                    family: 'Benton Gothic Regular'
-                    size: [[13, 20px], [14, 22px], [15, 24px], [16, 26px]]
-                    fill: *road_text
-                    stroke: {color: '#efebe7', width: 1}
-
-    road_label_minor:
-        data: { source: osm, layer: roads }
-        filter: {name: true, kind: minor_road, $zoom: { min: 16 }}
-        draw:
-            text:
-                text_source: name
-                offset: [0px, -10px]
-                order: function() { return feature.sort_key; }
-                font:
-                    family: 'Benton Gothic Regular'
-                    size: 18px
-                    fill: '#9C9C9C'
-                    stroke: {color: '#efebe7', width: 1}
-
-    road_label_interstate_shields:
-        data: { source: osm, layer: roads }
-        filter:
-            all:
-                - highway: "motorway"
-                - network: ["US:I", "US:NHS High Priority Corridors"]
-        draw:
-            text:
-                priority: 1
-                text_source: |
-                    function() {
-                        if (feature.ref != undefined) {
-                            if (feature.ref.indexOf(';') != -1) {
-                                var names = feature.ref.split(';')
-                                if (names[0].indexOf(' ') != -1) {
-                                    return names[0].split(' ')[1];
-                                } else {
-                                    return names[0];
-                                }
-                            } else {
-                                if (feature.ref.indexOf(' ') != -1) {
-                                    return feature.ref.split(' ')[1];
-                                } else {
-                                    return feature.ref;
-                                }
-                            }
-                        }
-                    }
-                order: function() { return feature.sort_key; }
-                symbol: 1
-                font:
-                    family: 'Benton Gothic Bold'
-                    size: 22px
-                    fill: *road_text
-                    stroke: {color: '#efebe7', width: 1}
-
-    road_label_us_highway_shields:
-        data: { source: osm, layer: roads }
-        filter:
-            all:
-                - highway: "motorway"
-                - network: "US:US"
-        draw:
-            text:
-                priority: 1
-                text_source: |
-                    function() {
-                        if (feature.ref != undefined) {
-                            if (feature.ref.indexOf(';') != -1) {
-                                var names = feature.ref.split(';')
-                                if (names[0].indexOf(' ') != -1) {
-                                    return names[0].split(' ')[1];
-                                } else {
-                                    return names[0];
-                                }
-                            } else {
-                                if (feature.ref.indexOf(' ') != -1) {
-                                    return feature.ref.split(' ')[1];
-                                } else {
-                                    return feature.ref;
-                                }
-                            }
-                        }
-                    }
-                order: function() { return feature.sort_key; }
-                font:
-                    family: 'Benton Gothic Bold'
-                    size: 22px
-                    fill: *road_text
-                    stroke: {color: '#efebe7', width: 1}
-
-    road_label_ca_highway_shields:
-        data: { source: osm, layer: roads }
-        filter:
-            all:
-                - highway: "motorway"
-                - network: ["US:CA","US:AR"]
-        draw:
-            text:
-                priority: 1                
-                text_source: |
-                    function() {
-                        if (feature.ref != undefined) {
-                            if (feature.ref.indexOf(';') != -1) {
-                                var names = feature.ref.split(';')
-                                if (names[0].indexOf(' ') != -1) {
-                                    return names[0].split(' ')[1];
-                                } else {
-                                    return names[0];
-                                }
-                            } else {
-                                if (feature.ref.indexOf(' ') != -1) {
-                                    return feature.ref.split(' ')[1];
-                                } else {
-                                    return feature.ref;
-                                }
-                            }
-                        }
-                    }
-                order: function() { return feature.sort_key; }
-                symbol: 1
-                font:
-                    family: 'Benton Gothic Bold'
-                    size: 22px
-                    fill: *road_text
-                    stroke: {color: '#efebe7', width: 1}
-
-# Is there easy letter spacing adjustment?
-# Is there an easy way to do a dasharray?
-# letter halos?
