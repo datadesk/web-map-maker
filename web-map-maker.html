@@ -1024,11 +1024,14 @@
 
 
     // set init zoom
-    $("#zoom_level").text(Math.round(map.getZoom() * 10) / 10);
+    var zoomRounded = Math.floor(map.getZoom()*10) / 10;
+    $("#zoom_level").text(zoomRounded.toFixed(1));
 
     // and update it!
     map.on('zoomend', function() {
-        $("#zoom_level").text(Math.round(map.getZoom() * 10) / 10);
+        zoomRounded = Math.floor(map.getZoom()*10) / 10;
+
+        $("#zoom_level").text(zoomRounded.toFixed(1));
     });
 
 
