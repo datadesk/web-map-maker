@@ -108,41 +108,6 @@
                 </span>
 
                 <a id="tophat-logo" href="http://www.latimes.com/"></a>
-
-                <div class="tophat-links">
-                    <ul>
-                        <li>
-                            <a href="http://www.latimes.com/local">Local</a>
-                        </li>
-                        <li>
-                            <a href="http://www.latimes.com/california">California</a>
-                        </li>
-                        <li>
-                            <a href="http://www.latimes.com/sports">Sports</a>
-                        </li>
-                        <li>
-                            <a href="http://www.latimes.com/entertainment">Entertainment</a>
-                        </li>
-                        <li>
-                            <a href="http://www.latimes.com/nation">Nation</a>
-                        </li>
-                        <li>
-                            <a href="http://www.latimes.com/world">World</a>
-                        </li>
-                        <li>
-                            <a href="http://www.latimes.com/business">Business</a>
-                        </li>
-                        <li>
-                            <a href="http://www.latimes.com/opinion">Opinion</a>
-                        </li>
-                        <li>
-                            <a href="http://www.latimes.com/style">Lifestyle</a>
-                        </li>
-                        <li>
-                            <a href="http://www.latimes.com/travel">Travel</a>
-                        </li>
-                    </ul>
-                </div>
             </div>
         </div>
     </nav>
@@ -150,7 +115,7 @@
 
     <!-- CONTENT GOES HERE -->
     <div class="container" id="container">
-        <h1>Web map maker <span style="font-size:16px; font-weight:normal;">(use Safari or Chrome browsers)</span></h1>
+ <!--        <h1>Web map maker <span style="font-size:16px; font-weight:normal;">(use Safari or Chrome browsers)</span></h1>
         <p>This tool is for aproximate location only. Geocoders can mislocate addresses by small distances.</p>
 
         <label for="mapPicker">1. Choose a base map</label>
@@ -183,14 +148,14 @@
 
         <label >5. Move the map around so that the location is identifiable.</label>
         <div id="minimap"></div>
+ -->
 
         <div id="web_blank">
-            <p class="header">Click to <input type="button" class="btn" id="colwSave" value="Create an image"/></p>
+            <!-- <p class="header">Click to <input type="button" class="btn" id="colwSave" value="Create an image"/></p> -->
             <div id="map"></div>
         </div>
 
         <div id="img-out"></div>
-
     </div>
 
 
@@ -1046,10 +1011,14 @@
     map.attributionControl.setPrefix('&copy; Los Angeles Times, &copy; Mapzen, &copy; OpenStreetMap, <a href="https://mapzen.com/tangram" target="_blank">Tangram</a>');
     var layer = Tangram.leafletLayer({
         scene: 'map-styles.yaml',
+        events: {
+            click: function(selection) { console.log('Click!', selection); }
+        }
     });
     layer.addTo(map);
     L.control.scale().addTo(map);
     var scene = layer.scene;
+
 
 
     // // Show selected feature on click
@@ -1097,6 +1066,10 @@
         // }
 
 
+
+
+
+
         var pixel = {
             x: event.clientX - $map.offset().left,
             y: event.clientY - $map.offset().top + $(window).scrollTop()
@@ -1107,18 +1080,21 @@
                 return;
             }
             var feature = selection.feature;
+            // console.log(selection);
             if (feature != null) {
                 if (feature.properties != null) {
                     // console.log(feature);
 
                     $('#tooltip').css({'display':'block','opacity':1,'height':'auto'});
                     if (feature.properties.kind == 'highway'){
-                        console.log(feature.properties.ref);
+                        // console.log(feature.properties.ref);
                         $('#tooltip').text(feature.properties.ref);
                     } else {
-                        console.log(feature.properties.name);
+                        // console.log(feature.properties.name);
                         $('#tooltip').text(feature.properties.name);
                     }
+                } else {
+                    $('#tooltip').text('');
                 }
             }
         });
@@ -1241,12 +1217,12 @@
     //
     // add enter key functionality   841 n alexandria ave los angeles
 
-    var go = document.getElementById("addressBtn");
-    var txt = document.getElementById("address");
+    // var go = document.getElementById("addressBtn");
+    // var txt = document.getElementById("address");
 
-    txt.addEventListener("keypress", function() {
-        if (event.keyCode == 13) go.click();
-    });
+    // txt.addEventListener("keypress", function() {
+    //     if (event.keyCode == 13) go.click();
+    // });
 
 
     $(window).load(function(){
@@ -1267,7 +1243,12 @@
         }
     });
 
-
+var losangeles = function() {
+    $.getJSON('http://boundaries.latimes.com/1.0/boundary/los-angeles-county-2012/?format=geojson', function(data){
+        var geojson_data = data.contents;
+        scene.setDataSource('dynamic_data', { type: 'GeoJSON', data: geojson_data });
+    });
+}
 
     </script>
 
