@@ -1009,7 +1009,7 @@
     var map = L.map('map', {
         attributionControl: true,
         center: new L.LatLng(34.0425, -118.24),
-        zoom: 5
+        zoom: 14
     });
     map.attributionControl.setPrefix('&copy; Los Angeles Times, &copy; Mapzen, &copy; OpenStreetMap, <a href="https://mapzen.com/tangram" target="_blank">Tangram</a>');
     var layer = Tangram.leafletLayer({
@@ -1097,7 +1097,7 @@
             // console.log(selection);
             if (feature != null) {
                 if (feature.properties != null) {
-                    // console.log(feature);
+                    console.log(feature);
 
                     $('#tooltip').css({'display':'block','opacity':1,'height':'auto'});
                     if (feature.properties.kind == 'highway'){

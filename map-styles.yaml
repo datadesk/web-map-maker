@@ -58,6 +58,12 @@ cameras:
     perspective:
         type: flat
 
+styles:
+    dashed:
+        base: lines
+        dash: [1.25, 1.25]
+        dash_background_color: red
+
 layers:
     earth:
         data: { source: osm, layer: earth }
@@ -146,11 +152,19 @@ layers:
                     color: *water
                     width: [[13,0.5px],[14,1.0px],[16,1.5px],[18,4m]]
                     join: round
+
+    swimming-pools:
+        data: { source: osm, layer: water }
+        filter: { kind:[swimming_pool], $zoom: { min: 15 } }
+        draw:
+            polygons:
+                order: function() { return feature.sort_key; }
+                color: *water
+
     boundaries:
         data: { source: osm, layer: boundaries }
         draw:
             lines:
-                interactive: false
                 order: function() { return feature.sort_key; }
         country:
             filter:
@@ -160,7 +174,6 @@ layers:
                     - admin_level: 2
             draw:
                 lines:
-                    interactive: false
                     color: *nation_brdr
                     width: [[1, 0.5px], [2, 1.0px], [4, 1.5px], [9, 2.5px], [14, 3.5px], [16, 4.5px], [17, 14m]]
             water:
@@ -177,7 +190,6 @@ layers:
                     - admin_level: 4
             draw:
                 lines:
-                    interactive: true
                     color: *state_brdr
                     width: [[2, 0.75px], [3, 1px], [5, 1.5px], [9, 3.5px], [14, 5.5px], [16, 6.5px], [17, 16m]]
             water:
@@ -196,7 +208,6 @@ layers:
         #             - admin_level: 6
         #     draw:
         #         lines:
-        #             interactive: true
         #             color: *county_brdr
         #             width: [[1, 0.5px], [2, 0.75px], [3, 1px], [5, 1.5px], [9, 3.5px], [14, 5.5px], [16, 6.5px], [17, 16m]]
         #             order: 400
@@ -209,7 +220,6 @@ layers:
         data: { source: osm, layer: landuse }
         draw:
             polygons:
-                interactive: false
                 order: function() { return feature.sort_key; }
                 color: '#cccccc'
         aerodrome:
@@ -408,22 +418,20 @@ layers:
                         cap: round
                         outline:
                             cap: butt
-
-
         major_road:
             filter: { kind: major_road }
             draw:
                 lines:
                     order: function() { return feature.sort_key; }
                     color: *road
-                    width: [[8, 0.3px], [9, 0.4px], [12, 0.5px], [13, 1px], [14, 1.3px], [15, 2px], [16, 4px], [16, 5px]]
+                    width: [[8, 0.3px], [9, 0.4px], [12, 0.5px], [13, 1px], [14, 1.3px], [15, 2px], [16, 4m]]
         minor_road:
                 filter: { kind: minor_road, not: { highway: service } }
                 draw:
                     lines:
                         order: function() { return feature.sort_key; }
                         color: *road
-                        width: [[13, 0.15px], [14, 0.3px], [15, 0.9px], [16, 1.2px], [18, 2px]]
+                        width: [[13, 0.15px], [14, 0.3px], [15, 0.9px], [16, 2m]]
 
 
     # Airports
@@ -456,10 +464,45 @@ layers:
                 order: function() { return feature.sort_key; }
                 color: *building
 
-    my-counties:
-        data: { source: counties, layer: counties }
+    subway-light-rail:
+        data: { source: mapzen, layer: transit }
+        filter: { not: { kind: [platform] }, $zoom: { min: 11 } }
         draw:
-            polygons:
-                order: 600
-                color: *state_brdr
+            lines:
+                interactive: true
+                order: function() { return feature.sort_key || 275; }
+        railway:
+            filter: { kind: [railway,train] }
+            draw:
+                lines:
+                    color: [[14,[0.653,0.758,0.786]], [17,[0.670,0.777,0.807]]]
+                    width: [[14,0.4px],[15,0.75px],[16,1.1px],[18,2px],[19,1m]]
+        subway:
+            filter: { kind: subway }
+            draw:
+                lines:
+                    color: function() { 
+                        if(feature.colour == 'purple') { return '#BCADD0';} 
+                        else if (feature.colour == 'red') { return '#DD9894'; } 
+                        else { return feature.colour; } }
+                    width: 5px
+        light_rail:
+            filter: { kind: [light_rail,tram], $zoom: { min: 11 } }
+            draw:
+                lines:
+                    color: function() { 
+                        if(feature.colour == '#00A5DB') { return '#A4BED7';} 
+                        else if (feature.colour == 'blue') { return '#6B9CC2'; } 
+                        else if (feature.colour == '#FFD700') { return '#FADA85'; } 
+                        else if (feature.colour == 'green') { return '#759371'; } 
+                        else { return feature.colour; } }
+                    width: 5px
+
+
+    # my-counties:
+    #     data: { source: counties, layer: counties }
+    #     draw:
+    #         polygons:
+    #             order: 450
+    #             color: *state_brdr
                 
