@@ -481,22 +481,27 @@ layers:
             filter: { kind: subway }
             draw:
                 lines:
-                    color: function() { 
-                        if(feature.colour == 'purple') { return '#BCADD0';} 
-                        else if (feature.colour == 'red') { return '#DD9894'; } 
+                    color: function() {
+                        if(feature.colour == 'purple') { return '#BCADD0';}
+                        else if (feature.colour == 'red') { return '#DD9894'; }
                         else { return feature.colour; } }
-                    width: 5px
+                    offset: [0px,10px]
+                    width: [[11,3px],[15,2.5px],[18,5m]]
+                    z: function() {
+                        if(feature.colour == 'purple') { return 1;}
+                        else if (feature.colour == 'red') { return 2; } }
         light_rail:
             filter: { kind: [light_rail,tram], $zoom: { min: 11 } }
             draw:
                 lines:
                     color: function() { 
-                        if(feature.colour == '#00A5DB') { return '#A4BED7';} 
-                        else if (feature.colour == 'blue') { return '#6B9CC2'; } 
-                        else if (feature.colour == '#FFD700') { return '#FADA85'; } 
-                        else if (feature.colour == 'green') { return '#759371'; } 
+                        if(feature.colour == '#00A5DB') { return '#A4BED7';}
+                        else if (feature.colour == 'blue') { return '#6B9CC2'; }
+                        else if (feature.colour == '#FFD700') { return '#FADA85'; }
+                        else if (feature.colour == 'green') { return '#759371'; }
                         else { return feature.colour; } }
-                    width: 5px
+                    width: [[11,3px],[15,2.5px],[18,5m]]
+
 
 
     # my-counties:
