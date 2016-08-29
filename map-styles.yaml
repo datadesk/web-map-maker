@@ -49,6 +49,10 @@ sources:
     osm:
         type: TopoJSON
         url:  //vector.mapzen.com/osm/all/{z}/{x}/{y}.topojson?api_key=vector-tiles---JwESU
+    # counties:
+    #     type: GeoJSON
+    #     url: counties.geojson
+
 
 cameras:
     perspective:
@@ -80,7 +84,7 @@ layers:
                     join: round
     water-not-ocean:
         data: { source: osm, layer: water }
-        filter: { not: { kind: [ocean,swimming_pool] }, $zoom: { min: 1 } }
+        filter: { not: { kind: [ocean,swimming_pool,playa] }, $zoom: { min: 1 } }
         draw:
             polygons:
                 order: function() { return feature.sort_key; }
@@ -358,6 +362,7 @@ layers:
             filter: { kind: highway }
             draw:
                 lines:
+                    order: 400
                     #cap: [[0,butt],[15,round]]
                     #join: round
                     color: *road
@@ -450,4 +455,11 @@ layers:
             polygons:
                 order: function() { return feature.sort_key; }
                 color: *building
+
+    my-counties:
+        data: { source: counties, layer: counties }
+        draw:
+            polygons:
+                order: 600
+                color: *state_brdr
                 
