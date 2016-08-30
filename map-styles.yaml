@@ -489,6 +489,8 @@ layers:
                     z: function() {
                         if(feature.colour == 'purple') { return 1;}
                         else if (feature.colour == 'red') { return 2; } }
+                    cap: round
+
         light_rail:
             filter: { kind: [light_rail,tram], $zoom: { min: 11 } }
             draw:
@@ -500,6 +502,7 @@ layers:
                         else if (feature.colour == 'green') { return '#759371'; }
                         else { return feature.colour; } }
                     width: [[11,3px],[15,2.5px],[18,5m]]
+                    cap: round
 
 
 
