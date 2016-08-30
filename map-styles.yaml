@@ -221,7 +221,6 @@ layers:
         draw:
             polygons:
                 order: function() { return feature.sort_key; }
-                color: '#cccccc'
         aerodrome:
             filter: {kind: [aerodrome, apron]}
             draw:
