@@ -23,6 +23,7 @@
     <script src="http://d1qqc1e9kvmdh8.cloudfront.net/js/leaflet-1.0.0-b1/leaflet-src.js"></script>
     <script src="js/tangram.min.js"></script>
     <script src="js/fontfaceobserver.js"></script>
+    <script src="js/canvas2svg.js"></script>
 
     <script src="http://latimes-graphics-media.s3.amazonaws.com/js/geocode-wpt.js"></script>
     <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
@@ -156,6 +157,8 @@
             <p class='map-info'>Zoom: <span id="zoom_level"></span></p>
             <!-- <p class="header">Click to <input type="button" class="btn" id="colwSave" value="Create an image"/></p> -->
             <div id="map"></div>
+            <button class='btn gray' onclick='downloadSVG();'>Download SVG</button>
+            <button class='btn gray' onclick='downloadIMG();'>Download Image</button>
         </div>
 
         <div id="img-out"></div>
@@ -1262,6 +1265,21 @@ var losangeles = function() {
         var geojson_data = data.contents;
         scene.setDataSource('dynamic_data', { type: 'GeoJSON', data: geojson_data });
     });
+}
+
+// pulls the SVG from the canvas
+function downloadSVG() {
+
+    // var canvas = document.getElementById('map_canvas');
+    // var ctx = canvas.getContext('2d');
+
+    // var ctx = $("#map_canvas");
+    // var mySVG = ctx.getSerializedSvg(true);
+    console.log('nope');
+}
+
+function downloadIMG() {
+    scene.screenshot().then(function(screenshot) { window.open(screenshot.url); });
 }
 
     </script>
