@@ -385,11 +385,11 @@ layers:
                 draw:
                     lines:
                         color: *road
-                        width: [[9, 1px], [14, 2.5px], [16, 4px], [18, 9m]]
+                        width: [[13, 0.15px], [14, 0.3px], [15, 0.9px], [16, 2m]]
                         cap: butt
                         outline:
                             color: *road
-                            width: [[13, 0px], [14, 1px], [18, 1.5px]]
+                            width: 0px
                 early_link:
                     filter: { $zoom: { max: 15 } }
                     draw:

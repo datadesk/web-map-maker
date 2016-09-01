@@ -54,7 +54,9 @@
     input.geocodify { width:275px; }
     label {font:18px/27px Georgia, serif;}
 
-    .map-info {font-family: 'Benton Gothic Regular', Arial, sans-serif;}
+    .map-info, .map_options {font-family: 'Benton Gothic Regular', Arial, sans-serif;}
+
+    .map_options input { margin: 0 0 6px; }
 
     .footnote {font-family:arial; font-size:12px; color:#666;}
     /*.leaflet-control-zoom{display:none;}*/
@@ -156,6 +158,9 @@
         <div id="web_blank">
             <p class='map-info'>Zoom: <span id="zoom_level"></span></p>
             <!-- <p class="header">Click to <input type="button" class="btn" id="colwSave" value="Create an image"/></p> -->
+            <div class="map_options">
+                <input type="checkbox" name="transit" value="Tranist" onclick="optionChange()" checked> Transit lines
+            </div>
             <div id="map"></div>
             <button class='btn gray' onclick='downloadSVG();'>Download SVG</button>
             <button class='btn gray' onclick='downloadIMG();'>Download Image</button>
@@ -1280,6 +1285,11 @@ function downloadSVG() {
 
 function downloadIMG() {
     scene.screenshot().then(function(screenshot) { window.open(screenshot.url); });
+}
+
+function optionChange() {
+    // check options for current status and reload the map
+    console.log('optionChange()')
 }
 
     </script>
