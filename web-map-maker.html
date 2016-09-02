@@ -1190,23 +1190,23 @@
     //     });
     // });
 
-    $("#address").geocodify({
-        onSelect: function (result) {
-            console.log(result);
-        },
-        regionBias: 'US',
-        viewportBias: new google.maps.LatLngBounds(
-             new google.maps.LatLng(33.22030778968541,-118.948974609375),
-             new google.maps.LatLng(35.0120020431607,-117.44384765625)
-         ),
-        filterResults: function(results) {
-            return _.filter(results, function(addy) {
-                return _.some(addy.address_components, function(component) {
-                    return component.long_name === 'Los Angeles County';
-                });
-            });
-        }
-    });
+    // $("#address").geocodify({
+    //     onSelect: function (result) {
+    //         console.log(result);
+    //     },
+    //     regionBias: 'US',
+    //     viewportBias: new google.maps.LatLngBounds(
+    //          new google.maps.LatLng(33.22030778968541,-118.948974609375),
+    //          new google.maps.LatLng(35.0120020431607,-117.44384765625)
+    //      ),
+    //     filterResults: function(results) {
+    //         return _.filter(results, function(addy) {
+    //             return _.some(addy.address_components, function(component) {
+    //                 return component.long_name === 'Los Angeles County';
+    //             });
+    //         });
+    //     }
+    // });
 
     // // var geocoder = L.mapbox.geocoder('mapbox.places-v1');
     // // geocoder.query('los angeles, CA', setMap);
