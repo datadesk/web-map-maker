@@ -1172,7 +1172,7 @@
     // make map resizable after load
     layer.on("load",function(){
         $( function() {
-            $( "#map_holder" ).resizable();
+            $( "#map_holder" ).resizable({grid:10});
         } );
     });
 
