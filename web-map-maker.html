@@ -1436,64 +1436,20 @@ var losangeles = function() {
 // pulls the SVG from the canvas
 function downloadSVG() {
 
-    // var canvas = document.getElementById('map_canvas');
-    // var ctx = canvas.getContext('2d');
-
-    // var ctx = $("#map_canvas");
-    // var mySVG = ctx.getSerializedSvg(true);
-    console.log('nope');
-
-    // function convertImageToCanvas(image) {
-    //     var canvas = $('canvas');
-    //     canvas.width = image.width;
-    //     canvas.height = image.height;
-    //     canvas.getContext("2d").drawImage(image, 0, 0);
-
-    //     return canvas;
-    // }
-
-    // Converts canvas to an image
-    // function convertCanvasToImage(canvas) {
-    //     var image = new Image();
-    //     image.src = canvas.toDataURL("image/png");
-    //     return image;
-    // }
-
-    // var canvas = $('canvas')[0];
-    // var fullQuality = canvas.toDataURL("image/png", 1.0);
-    // // vcomposer.renderer.domElement.toDataURL("image/jpeg");
-
-    // var blob = dataURItoBlob(canvas);
-    // var burl = window.URL.createObjectURL(blob);
-    // window.open(fullQuality);
-
-    // this.download(fullQuality)
-
-    // var canvas = findFirstDescendant("map", "canvas");
-    // var fullQuality = canvas.toDataURL("image/png", 1.0);
-    // window.open(fullQuality);
-
     var canvas = findFirstDescendant("map", "canvas");
-    var img    = canvas.toDataURL("image/png");
-    document.write('<img src="'+img+'"/>');
-
-    // console.log(fullQuality)
-
-    // var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");  // here is the most important part because if you dont replace you will get a DOM 18 exception.
-
-
-    // window.location.href=image; // it will save locally
-
-
-    // console.log(canvas)
-
 
 }
 
+// fake it till you make it
+// this forces a standard size for web
+// window.devicePixelRatio = 1;
+
 function downloadIMG() {
+    window.devicePixelRatio = 1;
+
     scene.screenshot().then(function(screenshot) { 
-        console.log(screenshot);
-        window.open(screenshot.url); });
+        window.open(screenshot.url); 
+    });
 }
 
 function optionChange() {
