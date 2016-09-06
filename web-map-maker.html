@@ -136,6 +136,12 @@
         margin: 0 10px 0 0;
     }
 
+    #map_size {
+        font-family: 'Benton Gothic Regular', Arial, sans-serif;
+        float: right;
+        padding: 0 10px 0 0;
+    }
+
     .map_options {padding: 0 0 20px;}
     .map_options input { margin: 0 0 6px; }
 
@@ -255,7 +261,7 @@
                     <div id="map"></div>
                     <button class='btn' onclick='downloadSVG();'>Download SVG</button>
                     <button class='btn' onclick='downloadIMG();'>Download Image</button>
-
+                    <div id="map_size"></div>
                 </div>
             </div>
 
@@ -1170,6 +1176,9 @@
         } );
     });
 
+    // add map's size
+    var mapSize = $("#map").width() + 'x' + $("#map").height();
+    $("#map_size").text(mapSize);
 
     var geocoder = L.control.geocoder('search-JvsyzTW', {
         placeholder: 'Search for a location',
@@ -1192,16 +1201,34 @@
         $("#zoom_level").text(zoomRounded.toFixed(1));
     });
 
+// $("#map_holder").resizable({
+// minWidth: 300,
+// handles: "e",
+// resize: function (event, ui) {
+//     if(Math.abs(200 - ui.size.width) <= 15){
+//         $("#map_holder").css("width", 1300);
+//     }
+// }
+// });
+
+
     // function to fire after map's parent is resized
     $("#map_holder").resize(function(){
+        // update map's size
+        mapSize = $("#map").width() + 'x' + $("#map").height();
+        $("#map_size").text(mapSize);
+
+
+
         setTimeout(
             function(){ 
-                map.invalidateSize({
-                    pan: false
-                })
+                // add mo' map
+                map.invalidateSize({ pan: false });
             }, 400
         );
     });
+
+
 
 
     // // Show selected feature on click
@@ -1268,7 +1295,7 @@
                 if (feature.properties != null) {
                     console.log(feature);
 
-                    $('#tooltip').css({'display':'block','opacity':1,'height':'auto'});
+                    // $('#tooltip').css({'display':'block','opacity':1,'height':'auto'});
                     if (feature.properties.kind == 'highway'){
                         // console.log(feature.properties.ref);
                         $('#tooltip').text(feature.properties.ref);
