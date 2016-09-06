@@ -130,7 +130,11 @@
     input.geocodify { width:275px; }
     label {font:18px/27px Georgia, serif;}
 
-    .map-info, .map_options {font-family: 'Benton Gothic Regular', Arial, sans-serif;}
+    .map-info, .map_options label {
+        font-family: 'Benton Gothic Regular', Arial, sans-serif;
+        display: inline-block;
+        margin: 0 10px 0 0;
+    }
 
     .map_options {padding: 0 0 20px;}
     .map_options input { margin: 0 0 6px; }
@@ -238,8 +242,10 @@
             <p class='map-info'>Zoom: <span id="zoom_level"></span></p>
             <!-- <p class="header">Click to <input type="button" class="btn" id="colwSave" value="Create an image"/></p> -->
             <div class="map_options">
-                <input type="checkbox" name="transit" value="Tranist" onclick="optionChange()" checked> Transit lines
-                <input type="checkbox" name="buildings" value="Buildings" onclick="optionChange()" checked> Buildings
+                <label><input type="checkbox" name="transit" value="Tranist" onclick="optionChange()" checked> Transit lines</label>
+                <label><input type="checkbox" name="buildings" value="Buildings" onclick="optionChange()"> Buildings</label>
+                <label><input type="checkbox" name="zoom_lock" value="zoom_lock" onclick="optionChange()"> Lock zoom</label>
+                <label><input type="checkbox" name="pan_lock" value="pan_lock" onclick="optionChange()"> Lock pan</label>
             </div>
             <div id="map_area">
                 <div id="grid_holder">
@@ -1143,7 +1149,8 @@
     var map = L.map('map', {
         attributionControl: true,
         center: new L.LatLng(34.0425, -118.24),
-        zoom: 10
+        zoom: 10,
+        detectRetina: true
     });
     map.attributionControl.setPrefix('@latimesgraphics, &copy; Mapzen, &copy; OpenStreetMap, <a href="https://mapzen.com/tangram" target="_blank">Tangram</a>');
     var layer = Tangram.leafletLayer({
@@ -1261,7 +1268,7 @@
                 if (feature.properties != null) {
                     console.log(feature);
 
-                    // $('#tooltip').css({'display':'block','opacity':1,'height':'auto'});
+                    $('#tooltip').css({'display':'block','opacity':1,'height':'auto'});
                     if (feature.properties.kind == 'highway'){
                         // console.log(feature.properties.ref);
                         $('#tooltip').text(feature.properties.ref);
@@ -1435,6 +1442,52 @@ function downloadSVG() {
     // var ctx = $("#map_canvas");
     // var mySVG = ctx.getSerializedSvg(true);
     console.log('nope');
+
+    // function convertImageToCanvas(image) {
+    //     var canvas = $('canvas');
+    //     canvas.width = image.width;
+    //     canvas.height = image.height;
+    //     canvas.getContext("2d").drawImage(image, 0, 0);
+
+    //     return canvas;
+    // }
+
+    // Converts canvas to an image
+    // function convertCanvasToImage(canvas) {
+    //     var image = new Image();
+    //     image.src = canvas.toDataURL("image/png");
+    //     return image;
+    // }
+
+    // var canvas = $('canvas')[0];
+    // var fullQuality = canvas.toDataURL("image/png", 1.0);
+    // // vcomposer.renderer.domElement.toDataURL("image/jpeg");
+
+    // var blob = dataURItoBlob(canvas);
+    // var burl = window.URL.createObjectURL(blob);
+    // window.open(fullQuality);
+
+    // this.download(fullQuality)
+
+    // var canvas = findFirstDescendant("map", "canvas");
+    // var fullQuality = canvas.toDataURL("image/png", 1.0);
+    // window.open(fullQuality);
+
+    var canvas = findFirstDescendant("map", "canvas");
+    var img    = canvas.toDataURL("image/png");
+    document.write('<img src="'+img+'"/>');
+
+    // console.log(fullQuality)
+
+    // var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");  // here is the most important part because if you dont replace you will get a DOM 18 exception.
+
+
+    // window.location.href=image; // it will save locally
+
+
+    // console.log(canvas)
+
+
 }
 
 function downloadIMG() {
@@ -1445,8 +1498,45 @@ function downloadIMG() {
 
 function optionChange() {
     // check options for current status and reload the map
-    console.log('optionChange()')
+    console.log('optionChange()');
+
+    // zoom lock check
+    var zoomChecked = document.getElementsByName("zoom_lock")[0].checked;
+    if (zoomChecked) {
+        $('.leaflet-control-zoom').css('display','none');
+        map.touchZoom.disable();
+        map.doubleClickZoom.disable();
+        map.scrollWheelZoom.disable();
+        map.boxZoom.disable();
+        map.keyboard.disable();
+    } else {
+        $('.leaflet-control-zoom').css('display','block');
+        map.touchZoom.enable();
+        map.doubleClickZoom.enable();
+        map.scrollWheelZoom.enable();
+        map.boxZoom.enable();
+        map.keyboard.enable();
+    }
+
+    // pan lock check
+    var panChecked = document.getElementsByName("pan_lock")[0].checked;
+    if (panChecked) {
+        map.dragging.disable();
+    } else {
+        map.dragging.enable();
+    }
+
 }
+
+function findFirstDescendant(parent, tagname) {
+   parent = document.getElementById(parent);
+   var descendants = parent.getElementsByTagName(tagname);
+   if ( descendants.length )
+      return descendants[0];
+   return null;
+}
+
+
 
     </script>
 
