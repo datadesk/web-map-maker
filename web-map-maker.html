@@ -50,13 +50,88 @@
         font-style:normal;
     }
 
-    #map_holder {padding: 0 0 15px 0;}
-    #map {width:calc(100%-10px); height:100%; margin: 0 10px 10px 0;}
+    #container {
+        width: 98%;
+        margin: 0 auto;
+    }
+
+    /* grid city */
+    #grid_holder {
+        padding: 0;
+        overflow:hidden;
+        margin: -50px 0 0 0;
+        height: 1000px;
+        width: 1500px;
+        position: absolute;
+    }
+
+    .grid {
+        border: 1px solid #ccc;
+        border-width: 1px 0 0 1px;
+        position: absolute;
+    }
+
+    .grid div {
+        border: 1px solid #ccc;
+        border-width: 0 1px 1px 0;
+        float: left;
+    }
+
+    .grid100 {
+        margin: -50px 0 0 -50px;
+    }
+
+    .grid100 div {
+      border-color: #aaa;
+    }
+
+    .grid50 {
+      opacity: 0.5;
+      border: none;
+    }
+
+    #map_area {
+        min-height: 1000px;
+        min-width: 1500px;
+    }
+
+    #map_ruler {
+        font-family: 'Curior', monospace;
+        font-size: 12px;
+        margin: 0 0 0 50px;
+        width: 2000px;
+        height: 0;
+    }
+
+    #map_ruler span {
+        display: inline-block;
+        width: 100px;
+        text-indent: 4px;
+    }
+
+    #map_holder {
+        padding: 0;
+        width: 1310px;
+        height: 740px;
+        margin: 50px 0 0 50px;
+    }
+
+    .ui-resizable-handle {
+        z-index: 9999 !important;
+    }
+
+    #map {width:calc(100%-10px); height:100%; margin: 0 10px 10px 0;
+        box-shadow: 0px 0px 5px rgba(0,0,0,0.4);
+    }
+
+    .ui-icon-gripsmall-diagonal-se {background-position: -81px -224px; right: 10px;}
+
     input.geocodify { width:275px; }
     label {font:18px/27px Georgia, serif;}
 
     .map-info, .map_options {font-family: 'Benton Gothic Regular', Arial, sans-serif;}
 
+    .map_options {padding: 0 0 20px;}
     .map_options input { margin: 0 0 6px; }
 
     .footnote {font-family:arial; font-size:12px; color:#666;}
@@ -165,13 +240,19 @@
                 <input type="checkbox" name="transit" value="Tranist" onclick="optionChange()" checked> Transit lines
                 <input type="checkbox" name="buildings" value="Buildings" onclick="optionChange()" checked> Buildings
             </div>
-            <div id="map_holder" style="min-width:200px;height:320px;border:1px solid black;">
-                <div id="map_ruler"></div>
-                <div id="map"></div>
+            <div id="map_area">
+                <div id="grid_holder">
+                    <div id="map_ruler"></div>
+                </div>
+                <div id="map_holder">
+                    <div id="map"></div>
+                    <button class='btn' onclick='downloadSVG();'>Download SVG</button>
+                    <button class='btn' onclick='downloadIMG();'>Download Image</button>
+
+                </div>
             </div>
 
-            <button class='btn gray' onclick='downloadSVG();'>Download SVG</button>
-            <button class='btn gray' onclick='downloadIMG();'>Download Image</button>
+
         </div>
 
         <div id="img-out"></div>
@@ -211,8 +292,39 @@
     var userOptions = {}
 
     // build the map's ruler
+    function createGrid(size) {
+        var ratioW = 1600/size,
+            ratioH = 1600/size;
+                
+        var parent = $('<div />', {
+            class: 'grid', 
+            width: ratioW  * size, 
+            height: ratioH  * size
+        }).addClass('grid' + ' grid'+size).appendTo('#grid_holder');
 
+        for (var i = 0; i < ratioH; i++) {
+            for(var p = 0; p < ratioW; p++){
+                $('<div />', {
+                    width: size - 1, 
+                    height: size - 1
+                }).appendTo(parent);
+            }
+        }
+    }
 
+    for (var i = 0; i < 15; i++) {
+        var text = "<span class='px_measure'>"+i*100+"px</span>";
+        $("#map_ruler").append(text);
+    }
+
+    createGrid(50);
+    createGrid(100);
+
+    /* add commas to numbers*/
+    function commafy(num) {
+        var s = String(num).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return s;
+    }
     var palette = {
         "admin": '#000000',
         "aerodrome": '#d6d6d6',
@@ -1030,7 +1142,7 @@
     var map = L.map('map', {
         attributionControl: true,
         center: new L.LatLng(34.0425, -118.24),
-        zoom: 14
+        zoom: 10
     });
     map.attributionControl.setPrefix('@latimesgraphics, &copy; Mapzen, &copy; OpenStreetMap, <a href="https://mapzen.com/tangram" target="_blank">Tangram</a>');
     var layer = Tangram.leafletLayer({
@@ -1052,7 +1164,7 @@
 
 
     var geocoder = L.control.geocoder('search-JvsyzTW', {
-        placeholder: 'Search for  alocation',
+        placeholder: 'Search for a location',
         panToPoint: false,
         markers: false,
         expanded: true,
@@ -1148,7 +1260,7 @@
                 if (feature.properties != null) {
                     console.log(feature);
 
-                    $('#tooltip').css({'display':'block','opacity':1,'height':'auto'});
+                    // $('#tooltip').css({'display':'block','opacity':1,'height':'auto'});
                     if (feature.properties.kind == 'highway'){
                         // console.log(feature.properties.ref);
                         $('#tooltip').text(feature.properties.ref);
