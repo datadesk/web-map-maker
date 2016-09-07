@@ -423,14 +423,14 @@ layers:
                 lines:
                     order: function() { return feature.sort_key; }
                     color: *road
-                    width: [[8, 0.3px], [9, 0.4px], [12, 0.5px], [13, 1px], [14, 1.3px], [15, 2px], [16, 5m]]
+                    width: [[8, 0.3px], [9, 0.4px], [12, 0.8px], [13, 1px], [14, 1.3px], [15, 2px], [16, 6m]]
         minor_road:
                 filter: { kind: minor_road, not: { highway: service } }
                 draw:
                     lines:
                         order: function() { return feature.sort_key; }
                         color: *road
-                        width: [[13, 0.15px], [14, 0.3px], [15, 1px], [16, 2m]]
+                        width: [[12,0px], [13, 0.15px], [14, 0.3px], [15, 1px], [16, 2m]]
 
 
     # Airports

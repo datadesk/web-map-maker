@@ -245,13 +245,33 @@
 
 
         <div id="web_blank">
-            <p class='map-info'>Zoom: <span id="zoom_level"></span></p>
+
+
             <!-- <p class="header">Click to <input type="button" class="btn" id="colwSave" value="Create an image"/></p> -->
             <div class="map_options">
                 <label><input type="checkbox" name="transit" value="Tranist" onclick="optionChange()" checked> Transit lines</label>
                 <label><input type="checkbox" name="buildings" value="Buildings" onclick="optionChange()"> Buildings</label>
                 <label><input type="checkbox" name="zoom_lock" value="zoom_lock" onclick="optionChange()"> Lock zoom</label>
                 <label><input type="checkbox" name="pan_lock" value="pan_lock" onclick="optionChange()"> Lock pan</label>
+
+                <p class='map-info'>Zoom: <span id="zoom_level"></span></p>
+
+                <form class="standalone-dropdown">
+                    <fieldset>
+                        <select onchange="sizeChange(this)" id="preset_sizes">
+                            <option value="custom" selected>Custom size</option>
+                            <option value="web_large" selected>1300x730</option>
+                            <option value="web_square">800x800</option>
+                            <option value="col1">1 column</option>
+                            <option value="col2">2 column</option>
+                            <option value="col2">3 column</option>
+                            <option value="col2">4 column</option>
+                            <option value="col2">5 column</option>
+                            <option value="col2">6 column</option>
+                        </select>
+                    </fieldset>
+                </form>
+
             </div>
             <div id="map_area">
                 <div id="grid_holder">
@@ -1218,6 +1238,12 @@
         mapSize = $("#map").width() + 'x' + $("#map").height();
         $("#map_size").text(mapSize);
 
+        // change size to custom
+        if ($("#map").width() + 'x' + $("#map").height() == '1300x730') {
+            document.getElementById('preset_sizes').value = 'web_large';
+        } else {
+            document.getElementById('preset_sizes').value = 'custom';
+        }
 
 
         setTimeout(
@@ -1519,6 +1545,27 @@ function findFirstDescendant(parent, tagname) {
    return null;
 }
 
+var sizeChange = function(option) {
+    if (option.value == 'web_large') {
+        $("#map").width(1300);
+        $("#map").height(730);
+    } else if (option.value == 'web_square') {
+        $("#map").width(800);
+        $("#map").height(800);
+    }
+
+    // update map's size
+    mapSize = $("#map").width() + 'x' + $("#map").height();
+    $("#map_size").text(mapSize);
+
+    setTimeout(
+        function(){ 
+            // add mo' map
+            map.invalidateSize({ pan: false });
+        }, 400
+    );
+
+};
 
 
     </script>
