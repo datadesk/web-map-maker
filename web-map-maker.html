@@ -1586,6 +1586,13 @@ function layerChange(option) {
     }
 }
 
+// Apple's Magic Mouse is a little finicky--prevent scroll when mouse is down on map
+$("#map").mousedown(function() {
+    map.scrollWheelZoom.disable();
+});
+$("#map").mouseup(function() {
+    map.scrollWheelZoom.enable();
+});
     </script>
 
 
