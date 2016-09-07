@@ -1201,6 +1201,17 @@
     L.control.scale().addTo(map);
     var scene = quietLAlayer.scene;
 
+    // create custom icon
+    var firefoxIcon = L.icon({
+        iconUrl: 'http://joshuafrazier.info/images/firefox.svg',
+        iconSize: [38, 95], // size of the icon
+        });
+
+    // create marker object, pass custom icon as option, add to map         
+    var marker = L.marker([34.053327, -118.247351], {icon: firefoxIcon}).addTo(map);
+
+
+
     // make map resizable after load
     quietLAlayer.on("load",function(){
         $( function() {
@@ -1560,12 +1571,15 @@ function findFirstDescendant(parent, tagname) {
 // watching for anytime the size preset dropdown fires
 var sizeChange = function(option) {
     if (option.value == 'web_large') {
-        $("#map").width(1300);
-        $("#map").height(730);
+        $("#map_holder").width(1310);
+        $("#map_holder").height(730);
     } else if (option.value == 'web_square') {
-        $("#map").width(800);
-        $("#map").height(800);
+        $("#map_holder").width(810);
+        $("#map_holder").height(800);
     }
+
+    // end resizable
+    // $("#map_holder").resizable("destroy");
 
     // update map's size
     mapSize = $("#map").width() + 'x' + $("#map").height();
@@ -1575,6 +1589,7 @@ var sizeChange = function(option) {
         function(){ 
             // add mo' map
             map.invalidateSize({ pan: false });
+            // $( "#map_holder" ).resizable({grid:10});
         }, 400
     );
 
@@ -1594,7 +1609,9 @@ $("#map").mousedown(function() {
 $("#map").mouseup(function() {
     map.scrollWheelZoom.enable();
 });
-    </script>
+
+
+</script>
 
 
 </body>
