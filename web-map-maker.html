@@ -284,7 +284,8 @@
                     <form class="standalone-dropdown">
                         <fieldset>
                             <select onchange="sizeChange(this)" id="preset_sizes">
-                                <option value="custom" selected>Custom size</option>
+                                <option value="custom">Custom size</option>
+                                <option value="video">Video</option>
                                 <option value="web_large" selected>Web large</option>
                                 <option value="web_small">Web small</option>
                                 <option value="col1">1 column</option>
@@ -1307,7 +1308,9 @@
         $("#map_size").text(mapSize);
 
         // change size to custom
-        if ($("#map").width() + 'x' + $("#map").height() == '1300x730') {
+        if ($("#map").width() + 'x' + $("#map").height() == '1920x1080') {
+            document.getElementById('preset_sizes').value = 'video';
+        } else if ($("#map").width() + 'x' + $("#map").height() == '1300x730') {
             document.getElementById('preset_sizes').value = 'web_large';
         } else if ($("#map").width() + 'x' + $("#map").height() == '400x450') {
             document.getElementById('preset_sizes').value = 'web_small';
@@ -1619,8 +1622,11 @@ function findFirstDescendant(parent, tagname) {
 
 // watching for anytime the size preset dropdown fires
 var sizeChange = function(option) {
-    if (option.value == 'web_large') {
-        $("#map_holder").width(1310); // these have to be 10 over to compensate for resizable
+    if (option.value == 'video') {
+        $("#map_holder").width(1930); // these have to be 10 over to compensate for resizable
+        $("#map_holder").height(1080);        
+    } else if (option.value == 'web_large') {
+        $("#map_holder").width(1310);
         $("#map_holder").height(730);
     } else if (option.value == 'web_small') {
         $("#map_holder").width(410);
