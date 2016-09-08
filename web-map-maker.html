@@ -1301,6 +1301,7 @@
     // // Show selected feature on mouseover
 // (function() {
     scene.container.onmousemove = handleMouseMove;
+
     function handleMouseMove(event) {
         var dot, eventDoc, doc, body, pageX, pageY;
 
@@ -1321,8 +1322,6 @@
         //       (doc && doc.scrollTop  || body && body.scrollTop  || 0) -
         //       (doc && doc.clientTop  || body && body.clientTop  || 0 );
         // }
-
-
 
 
 
@@ -1497,6 +1496,7 @@
             mouseY = e.pageY;
             mouseX = e.pageX;
             $("#tooltip").css({"top":(mouseY+10)+"px","left":(mouseX+5)+"px"});
+
         }
     });
 
