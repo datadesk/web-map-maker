@@ -60,7 +60,7 @@
     #grid_holder {
         padding: 0;
         overflow:hidden;
-        margin: -25px 0 0 0;
+        margin: -30px 0 0 0;
         height: 1000px;
         width: 1500px;
         position: absolute;
@@ -78,8 +78,20 @@
         float: left;
     }
 
+    /* print column grid */
+    .grid300 {
+        border: 1px solid rgba(0,0,0,0);
+        margin: -50px 0 0 25px;
+    }
+
+    .grid300 div {
+        border-color: #4affff;
+        border-bottom: 1px solid rgba(0,0,0,0);
+        border-top: 1px solid rgba(0,0,0,0);
+    }
+
     .grid100 {
-        margin: -75px 0 0 -75px;
+        margin: -70px 0 0 -75px;
     }
 
     .grid100 div {
@@ -88,7 +100,7 @@
 
     .grid50 {
       opacity: 0.5;
-      margin: -25px 0 0 -25px;
+      margin: -20px 0 0 -25px;
       border: none;
     }
 
@@ -107,8 +119,9 @@
 
     #map_ruler span {
         display: inline-block;
-        width: 100px;
-        text-indent: 4px;
+        width: 96px;
+        margin: 0 0 0 4px;
+        line-height: 100%
     }
 
     #map_holder {
@@ -357,11 +370,17 @@
 
     for (var i = 0; i < 15; i++) {
         var text = "<span class='px_measure'>"+i*100+"px</span>";
+
+        // check if it's divisible by 300 for print column ruler
+        var text = ((i*100) % 300 === 0) ? "<span class='px_measure'>"+i/3+" col<br/>"+i*100+"px</span>" :
+                   "<span class='px_measure'>"+i*100+"px</span>";
+
         $("#map_ruler").append(text);
     }
 
     createGrid(50);
     createGrid(100);
+    createGrid(300);
 
     /* add commas to numbers*/
     function commafy(num) {
@@ -1199,15 +1218,12 @@
     L.control.scale().addTo(map);
     var scene = quietLAlayer.scene;
 
-    // create custom icon
-    var firefoxIcon = L.icon({
-        iconUrl: 'http://joshuafrazier.info/images/firefox.svg',
-        iconSize: [38, 95], // size of the icon
-        });
 
-    // create marker object, pass custom icon as option, add to map         
-    var marker = L.marker([34.053327, -118.247351], {icon: firefoxIcon}).addTo(map);
-
+    // var circle = L.circle([34.053327, -118.247351], 500, {
+    //     color: 'red',
+    //     fillColor: '#f03',
+    //     fillOpacity: 0.5
+    // }).addTo(map);
 
 
     // make map resizable after load
@@ -1622,6 +1638,41 @@ $("#map").mouseup(function() {
     map.scrollWheelZoom.enable();
 });
 
+        function gatherinfo(id){
+
+            leafletImage(id, doImage);
+
+            function doImage(err, canvas) {
+            
+                if (document.getElementById('newInstructions')) {
+                    //do nothing
+                } else {
+                    var newInstructions=document.createElement('p');
+                    newInstructions.id ='newInstructions';
+                    newInstructions.innerHTML =instructText;
+                    document.body.appendChild(newInstructions);
+                }
+                
+                var img = document.createElement('img');
+                var dimensions = id.getSize();
+                img.width = dimensions.x;
+                img.height = dimensions.y;
+                img.src = canvas.toDataURL();
+            
+                if (document.getElementById('newImg')) {
+                    document.getElementById('newImg').innerHTML ='';
+                    document.getElementById('newImg').appendChild(img);
+                } else {
+                    var newImg=document.createElement('div');
+                    newImg.id ='newImg';
+                    newImg.innerHTML ='';
+                    document.body.appendChild(newImg);
+                    document.getElementById('newImg').appendChild(img);
+                }
+                window.scrollTo(0,document.body.scrollHeight);
+            }
+        }
+            
 
 </script>
 
