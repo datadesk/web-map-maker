@@ -155,10 +155,10 @@
     input.geocodify { width:275px; }
     label {font:18px/27px Georgia, serif;}
 
-    .map-info, .map_options label {
+    .map-info, #map_options label {
         font-family: 'Benton Gothic Regular', Arial, sans-serif;
         display: inline-block;
-        margin: 0 10px 0 0;
+        margin: 5px 10px 0 0;
     }
 
     #map_size {
@@ -167,8 +167,14 @@
         padding: 0 10px 0 0;
     }
 
-    .map_options {padding: 0 0 20px;}
-    .map_options input { margin: 0 0 6px; }
+    #map_options {padding: 0 0 20px;}
+    #map_options form { margin: 0 }
+    #map_options input { margin: 0 0 6px; }
+
+    .map_option {
+        float: left;
+        margin: 0 10px 0 0;
+    }
 
     .footnote {font-family:arial; font-size:12px; color:#666;}
     /*.leaflet-control-zoom{display:none;}*/
@@ -273,37 +279,41 @@
 
 
             <!-- <p class="header">Click to <input type="button" class="btn" id="colwSave" value="Create an image"/></p> -->
-            <div class="map_options">
-                <form class="standalone-dropdown">
-                    <fieldset>
-                        <select onchange="sizeChange(this)" id="preset_sizes">
-                            <option value="custom" selected>Custom size</option>
-                            <option value="web_large" selected>Web large</option>
-                            <option value="web_small">Web small</option>
-                            <option value="col1">1 column</option>
-                            <option value="col2">2 column</option>
-                            <option value="col3">3 column</option>
-                            <option value="col4">4 column</option>
-                        </select>
-                    </fieldset>
-                </form>
+            <div id="map_options">
+                <div class="map_option">
+                    <form class="standalone-dropdown">
+                        <fieldset>
+                            <select onchange="sizeChange(this)" id="preset_sizes">
+                                <option value="custom" selected>Custom size</option>
+                                <option value="web_large" selected>Web large</option>
+                                <option value="web_small">Web small</option>
+                                <option value="col1">1 column</option>
+                                <option value="col2">2 column</option>
+                                <option value="col3">3 column</option>
+                                <option value="col4">4 column</option>
+                            </select>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="map_option">
+                    <form class="standalone-dropdown">
+                        <fieldset>
+                            <select onchange="layerChange(this)" id="layer_change">
+                                <option value="quiet_la" selected>Quiet LA</option>
+                                <option value="topo_la">Topo LA</option>
+                                <option value="betty_la">Betty LA</option>
+                                <option value="satellite">Satellite</option>
+                            </select>
+                        </fieldset>
+                    </form>
+                </div>
 
-                <form class="standalone-dropdown">
-                    <fieldset>
-                        <select onchange="layerChange(this)" id="layer_change">
-                            <option value="quiet_la" selected>Quiet LA</option>
-                            <option value="topo_la">Topo LA</option>
-                            <option value="betty_la">Betty LA</option>
-                            <option value="satellite">Satellite</option>
-                        </select>
-                    </fieldset>
-                </form>
-
-                <label><input type="checkbox" name="transit" value="Tranist" onclick="optionChange()" checked> Transit lines</label>
-                <label><input type="checkbox" name="buildings" value="Buildings" onclick="optionChange()"> Buildings</label>
-                <label><input type="checkbox" name="zoom_lock" value="zoom_lock" onclick="optionChange()"> Lock zoom</label>
-                <label><input type="checkbox" name="pan_lock" value="pan_lock" onclick="optionChange()"> Lock pan</label>
-
+                <div class="map_option">
+                    <label><input type="checkbox" name="transit" value="Tranist" onclick="optionChange()" checked> Transit lines</label>
+                    <label><input type="checkbox" name="buildings" value="Buildings" onclick="optionChange()"> Buildings</label>
+                    <label><input type="checkbox" name="zoom_lock" value="zoom_lock" onclick="optionChange()"> Lock zoom</label>
+                    <label><input type="checkbox" name="pan_lock" value="pan_lock" onclick="optionChange()"> Lock pan</label>
+                </div>
                 <p class='map-info'>Zoom: <span id="zoom_level"></span></p>
 
             </div>
