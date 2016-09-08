@@ -394,8 +394,7 @@
     }
 
     for (var i = 0; i < 1500; i+=10) {
-        // var text = "<span class='px_measure'>"+i*100+"px</span>";
-        console.log(i);
+        // checks if fits for print or web columns
         if (i % 330 === 0) {
             var text = "<span class='px_measure'>"+i/330+" col</span>";
             $("#col_ruler").append(text);
@@ -403,11 +402,6 @@
             var text = "<span class='px_measure'>"+i+"px</span>";
             $("#pixel_ruler").append(text);
         }
-
-        // check if it's divisible by 300 for print column ruler
-        // var text = ((i*10) % 330 === 0) ? "<span class='px_measure'>"+i/3+" col<br/>"+i+"px</span>" :
-                   // "<span class='px_measure'>"+i*10+"px</span>";
-
     }
 
     createGrid(50);
@@ -1237,7 +1231,8 @@
         attributionControl: true,
         center: new L.LatLng(34.0425, -118.24),
         zoom: 10,
-        detectRetina: true
+        detectRetina: true, 
+        scrollWheelZoom: 'center'
     });
     map.attributionControl.setPrefix('@latimesgraphics, &copy; Mapzen, &copy; OpenStreetMap, <a href="https://mapzen.com/tangram" target="_blank">Tangram</a>');
     var quietLAlayer = Tangram.leafletLayer({
@@ -1713,7 +1708,27 @@ $("#map").mouseup(function() {
                 window.scrollTo(0,document.body.scrollHeight);
             }
         }
-            
+        
+        function search(term) {
+            $.ajax({
+              url: "https://search.mapzen.com/v1/search?api_key=search-JvsyzTW&text="+term,
+              method: "GET",
+              dataType: "json",
+              data: {
+                "text": "London, UK",
+                "api_key": "search-EEgHGcM"
+              },
+              success: function( data, status, jqxhr ){
+                console.log( "Request received:", data );
+              },
+              error: function( jqxhr, status, error ){
+                console.log( "Something went wrong!" );
+              }
+            });
+
+        }
+
+
 
 </script>
 
