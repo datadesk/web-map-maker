@@ -79,12 +79,12 @@
     }
 
     /* print column grid */
-    .grid300 {
+    .grid330 {
         border: 1px solid rgba(0,0,0,0);
         margin: -50px 0 0 25px;
     }
 
-    .grid300 div {
+    .grid330 div {
         border-color: #4affff;
         border-bottom: 1px solid rgba(0,0,0,0);
         border-top: 1px solid rgba(0,0,0,0);
@@ -117,11 +117,22 @@
         height: 0;
     }
 
+    #map_ruler div {
+        height: 12px;
+    }
+
     #map_ruler span {
         display: inline-block;
-        width: 96px;
         margin: 0 0 0 4px;
         line-height: 100%
+    }
+
+    #col_ruler span {
+        width: 326px;
+    }
+
+    #pixel_ruler span {
+        width: 96px;
     }
 
     #map_holder {
@@ -267,8 +278,8 @@
                     <fieldset>
                         <select onchange="sizeChange(this)" id="preset_sizes">
                             <option value="custom" selected>Custom size</option>
-                            <option value="web_large" selected>1300x730</option>
-                            <option value="web_square">800x800</option>
+                            <option value="web_large" selected>Web large</option>
+                            <option value="web_small">Web small</option>
                             <option value="col1">1 column</option>
                             <option value="col2">2 column</option>
                             <option value="col3">3 column</option>
@@ -298,7 +309,10 @@
             </div>
             <div id="map_area">
                 <div id="grid_holder">
-                    <div id="map_ruler"></div>
+                    <div id="map_ruler">
+                        <div id="col_ruler"></div>
+                        <div id="pixel_ruler"></div>
+                    </div>
                 </div>
                 <div id="map_holder">
                     <div id="map"></div>
@@ -368,19 +382,26 @@
         }
     }
 
-    for (var i = 0; i < 15; i++) {
-        var text = "<span class='px_measure'>"+i*100+"px</span>";
+    for (var i = 0; i < 1500; i+=10) {
+        // var text = "<span class='px_measure'>"+i*100+"px</span>";
+        console.log(i);
+        if (i % 330 === 0) {
+            var text = "<span class='px_measure'>"+i/330+" col</span>";
+            $("#col_ruler").append(text);
+        } else if (i % 100 === 0 && i <= 1400) {
+            var text = "<span class='px_measure'>"+i+"px</span>";
+            $("#pixel_ruler").append(text);
+        }
 
         // check if it's divisible by 300 for print column ruler
-        var text = ((i*100) % 300 === 0) ? "<span class='px_measure'>"+i/3+" col<br/>"+i*100+"px</span>" :
-                   "<span class='px_measure'>"+i*100+"px</span>";
+        // var text = ((i*10) % 330 === 0) ? "<span class='px_measure'>"+i/3+" col<br/>"+i+"px</span>" :
+                   // "<span class='px_measure'>"+i*10+"px</span>";
 
-        $("#map_ruler").append(text);
     }
 
     createGrid(50);
     createGrid(100);
-    createGrid(300);
+    createGrid(330);
 
     /* add commas to numbers*/
     function commafy(num) {
@@ -1278,6 +1299,10 @@
         // change size to custom
         if ($("#map").width() + 'x' + $("#map").height() == '1300x730') {
             document.getElementById('preset_sizes').value = 'web_large';
+        } else if ($("#map").width() + 'x' + $("#map").height() == '400x450') {
+            document.getElementById('preset_sizes').value = 'web_small';
+        } else if ($("#map").width() % 330 === 0) {
+            document.getElementById('preset_sizes').value = 'col' + $("#map").width()/330;
         } else {
             document.getElementById('preset_sizes').value = 'custom';
         }
@@ -1585,22 +1610,22 @@ function findFirstDescendant(parent, tagname) {
 // watching for anytime the size preset dropdown fires
 var sizeChange = function(option) {
     if (option.value == 'web_large') {
-        $("#map_holder").width(1310);
+        $("#map_holder").width(1310); // these have to be 10 over to compensate for resizable
         $("#map_holder").height(730);
-    } else if (option.value == 'web_square') {
-        $("#map_holder").width(810);
-        $("#map_holder").height(800);
+    } else if (option.value == 'web_small') {
+        $("#map_holder").width(410);
+        $("#map_holder").height(450);
     } else if (option.value == 'col1') {
-        $("#map_holder").width(330);
+        $("#map_holder").width(340);
         $("#map_holder").height(700);
     } else if (option.value == 'col2') {
-        $("#map_holder").width(660);
+        $("#map_holder").width(670);
         $("#map_holder").height(700);
     } else if (option.value == 'col3') {
-        $("#map_holder").width(990);
+        $("#map_holder").width(1000);
         $("#map_holder").height(700);
     } else if (option.value == 'col4') {
-        $("#map_holder").width(1320);
+        $("#map_holder").width(1330);
         $("#map_holder").height(700);
     }
 
