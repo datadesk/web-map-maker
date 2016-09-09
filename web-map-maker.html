@@ -15,7 +15,6 @@
 
     <link rel="stylesheet" href="http://d1qqc1e9kvmdh8.cloudfront.net/js/leaflet-1.0.0-b1/leaflet.css">
     <!-- <link rel="stylesheet" href="http://latimes-graphics-media.s3.amazonaws.com/styles/leaflet-extra.css" /> -->
-    <link rel="stylesheet" href="styles/jquery.geocodify.css"/>
     <link rel="stylesheet" href="styles/jquery-ui.css">
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -187,7 +186,6 @@
 
     .ui-icon-gripsmall-diagonal-se {background-position: -81px -224px; right: 10px;}
 
-    input.geocodify { width:275px; }
     label {font:18px/27px Georgia, serif;}
 
     .map-info {
@@ -273,42 +271,6 @@
 
     <!-- CONTENT GOES HERE -->
     <div class="container" id="container">
- <!--        <h1>Web map maker <span style="font-size:16px; font-weight:normal;">(use Safari or Chrome browsers)</span></h1>
-        <p>This tool is for aproximate location only. Geocoders can mislocate addresses by small distances.</p>
-
-        <label for="mapPicker">1. Choose a base map</label>
-        <select id="mapPicker">
-          <option value="latimesmapping.db744287">Quiet World</option>
-          <option value="latimesmapping.e47fff09">Relief World</option>x
-        </select>
-        <span class="footnote"> &nbsp;State boundaries are available in U.S. only.</span>
-        <br/><br/>
-
-        <label for="popupText">2. Write popup text </label>
-        <input class="geocodify" type="text" id="popupText" maxlength="40" placeholder="40 chars max">
-        <br/><br/>
-
-        <label for="address">3. Search</label>
-        <input type="text" id="address"  placeholder="Enter a complete address">
-        <input type="button" onclick="findAddress()" id="addressBtn" class="btn" value="GO"> <span class="footnote"> &nbsp;City names now produce popups</span><br /> <br />
-
-        <label for="lat"  >... Or enter Latitude:</label>
-        <input class="geocodify" type="text" id="lat" placeholder="34.052010">
-        <label for="lon"  >&nbsp; Longitude:</label>
-        <input class="geocodify" type="text" id="lon" placeholder="-118.245796">
-        <input type="button" onclick="findLatLon()" id="latLonBtn" class="btn" value="GO">
-
-        <br/><br/>
-
-        <label >4. Adjust your zoom (scrollwheel).</label>
-        <p class="footnote">Do not zoom in super close unless you are 100% confident of a location. </p>
-        <br/>
-
-        <label >5. Move the map around so that the location is identifiable.</label>
-        <div id="minimap"></div>
- -->
-
-
 
         <div id="web_blank">
 
@@ -363,6 +325,7 @@
 
                 <p class='map-info'>Zoom: <span id="zoom_level"></span></p>
 
+                <div id="geocoder"></div>
             </div>
             <div id="map_area">
                 <div id="grid_holder">
@@ -1309,14 +1272,14 @@
     var mapSize = $("#map").width() + 'x' + $("#map").height();
     $("#map_size").text(mapSize);
 
-    var geocoder = L.control.geocoder('search-JvsyzTW', {
-        placeholder: 'Search for a location',
-        panToPoint: false,
-        markers: false,
-        expanded: true,
-        position: 'topright',
-        attribution: ''
-    }).addTo(map);
+    // var geocoder = L.control.geocoder('search-JvsyzTW', {
+    //     placeholder: 'Search for a location',
+    //     panToPoint: false,
+    //     markers: false,
+    //     expanded: true,
+    //     position: 'topright',
+    //     attribution: ''
+    // }).addTo(map);
 
 
     // set init zoom
@@ -1794,8 +1757,109 @@ $("#map").mouseup(function() {
 
     }
 
-  // listen for file uploader
-  document.getElementById('geo_files').addEventListener('change', handleFileSelect, false);
+    // listen for file uploader
+    document.getElementById('geo_files').addEventListener('change', handleFileSelect, false);
+
+
+
+    // handles the geocoder input 
+    // culled from the great https://github.com/louh/nyc-community-boards/blob/master/src/js/main.js
+    const SEARCH_API_KEY = 'search-JvsyzTW';
+
+// Query string parsing
+var queryparams = getQueryParams()
+
+// Add Pelias geocoding plugin
+var geocoderOptions = {
+  markers: {
+    icon: L.divIcon({ className: 'point-marker' }),
+    clickable: false,
+    keyboard: false
+  },
+  pointIcon: false,
+  polygonIcon: false,
+  expanded: true,
+  fullWidth: false,
+  panToPoint: false,
+  autocomplete: true,
+  layers: ['address'],
+  bounds: L.latLngBounds([[40.9260, -74.2212], [40.4924, -73.6911]]),
+  attribution: ''
+}
+var geocoder = new L.Control.Geocoder(SEARCH_API_KEY, geocoderOptions).addTo(map)
+document.getElementById('geocoder').appendChild(geocoder.getContainer())
+geocoder.focus()
+
+// // Custom behavior on selecting a result
+// geocoder.on('select', function (e) {
+//     console.log(e);
+//   // var label = e.feature.properties.label
+//   // var latlng = e.latlng
+
+//   // selectLocation(latlng, label)
+// });
+
+// // If geocoder is reset, also clear everything else
+// geocoder.on('reset', function (e) {
+//   clearData()
+//   clearUrl()
+//   if (districtLayer) {
+//     map.removeLayer(districtLayer)
+//   }
+
+// // Prepopulate the geocoder input if there is something in query params
+// window.setTimeout(function () {
+//   if (queryparams.query) {
+//     geocoder._input.value = queryparams.query
+//     geocoder._input.focus()
+//     // Fire an event to hide the search box, which is empty
+//     // at this point so it looks weird
+//     geocoder._input.dispatchEvent(new window.KeyboardEvent('keyup', {
+//       'cancelable': true
+//     }))
+//   }
+//   if (queryparams.lat && queryparams.lng) {
+//     queryparams.lat = window.parseFloat(queryparams.lat)
+//     queryparams.lng = window.parseFloat(queryparams.lng)
+//     const latlng = { lat: queryparams.lat, lng: queryparams.lng }
+//     geocoder.showMarker(null, latlng)
+//     displayCommunityBoard(latlng)
+//   }
+// }, 0)
+
+
+// function selectLocation (latlng, label) {
+//   store.dispatch({
+//     type: 'SET_SEARCH_QUERY',
+//     query: label
+//   })
+
+//   displayCommunityBoard(latlng)
+
+//   // Set url
+//   var querystring = '?query=' + encodeURIComponent(label) +
+//     '&lat=' + encodeURIComponent(latlng.lat) +
+//     '&lng=' + encodeURIComponent(latlng.lng)
+//   window.history.pushState({
+//     lat: latlng.lat,
+//     lng: latlng.lng,
+//     query: label
+//   }, null, querystring)
+// }
+
+// Returns empty object if no params
+function getQueryParams () {
+  const string = window.location.search.substr(1)
+  const units = string.split('&')
+  const params = {}
+
+  units.forEach(unit => {
+    const pair = unit.split('=')
+    params[pair[0]] = window.decodeURIComponent(pair[1])
+  })
+
+  return params
+}
 
 </script>
 
