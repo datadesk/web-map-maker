@@ -315,6 +315,9 @@
                     <label><input type="checkbox" name="zoom_lock" value="zoom_lock" onclick="optionChange()"> Lock zoom</label>
                     <label><input type="checkbox" name="pan_lock" value="pan_lock" onclick="optionChange()"> Lock pan</label>
                 </div>
+
+                <input type="file" id="files" name="files[]">
+
                 <p class='map-info'>Zoom: <span id="zoom_level"></span></p>
 
             </div>
@@ -1231,8 +1234,7 @@
         attributionControl: true,
         center: new L.LatLng(34.0425, -118.24),
         zoom: 10,
-        detectRetina: true, 
-        scrollWheelZoom: 'center'
+        detectRetina: true
     });
     map.attributionControl.setPrefix('@latimesgraphics, &copy; Mapzen, &copy; OpenStreetMap, <a href="https://mapzen.com/tangram" target="_blank">Tangram</a>');
     var quietLAlayer = Tangram.leafletLayer({
@@ -1601,8 +1603,10 @@ function optionChange() {
     var panChecked = document.getElementsByName("pan_lock")[0].checked;
     if (panChecked) {
         map.dragging.disable();
+        map.options.scrollWheelZoom = 'center';
     } else {
         map.dragging.enable();
+        map.options.scrollWheelZoom = '';
     }
 
 }
@@ -1674,61 +1678,156 @@ $("#map").mouseup(function() {
     map.scrollWheelZoom.enable();
 });
 
-        function gatherinfo(id){
+        // function gatherinfo(id){
 
-            leafletImage(id, doImage);
+        //     leafletImage(id, doImage);
 
-            function doImage(err, canvas) {
+        //     function doImage(err, canvas) {
             
-                if (document.getElementById('newInstructions')) {
-                    //do nothing
-                } else {
-                    var newInstructions=document.createElement('p');
-                    newInstructions.id ='newInstructions';
-                    newInstructions.innerHTML =instructText;
-                    document.body.appendChild(newInstructions);
-                }
+        //         if (document.getElementById('newInstructions')) {
+        //             //do nothing
+        //         } else {
+        //             var newInstructions=document.createElement('p');
+        //             newInstructions.id ='newInstructions';
+        //             newInstructions.innerHTML =instructText;
+        //             document.body.appendChild(newInstructions);
+        //         }
                 
-                var img = document.createElement('img');
-                var dimensions = id.getSize();
-                img.width = dimensions.x;
-                img.height = dimensions.y;
-                img.src = canvas.toDataURL();
+        //         var img = document.createElement('img');
+        //         var dimensions = id.getSize();
+        //         img.width = dimensions.x;
+        //         img.height = dimensions.y;
+        //         img.src = canvas.toDataURL();
             
-                if (document.getElementById('newImg')) {
-                    document.getElementById('newImg').innerHTML ='';
-                    document.getElementById('newImg').appendChild(img);
-                } else {
-                    var newImg=document.createElement('div');
-                    newImg.id ='newImg';
-                    newImg.innerHTML ='';
-                    document.body.appendChild(newImg);
-                    document.getElementById('newImg').appendChild(img);
-                }
-                window.scrollTo(0,document.body.scrollHeight);
-            }
-        }
+        //         if (document.getElementById('newImg')) {
+        //             document.getElementById('newImg').innerHTML ='';
+        //             document.getElementById('newImg').appendChild(img);
+        //         } else {
+        //             var newImg=document.createElement('div');
+        //             newImg.id ='newImg';
+        //             newImg.innerHTML ='';
+        //             document.body.appendChild(newImg);
+        //             document.getElementById('newImg').appendChild(img);
+        //         }
+        //         window.scrollTo(0,document.body.scrollHeight);
+        //     }
+        // }
         
-        function search(term) {
-            $.ajax({
-              url: "https://search.mapzen.com/v1/search?api_key=search-JvsyzTW&text="+term,
-              method: "GET",
-              dataType: "json",
-              data: {
-                "text": "London, UK",
-                "api_key": "search-EEgHGcM"
-              },
-              success: function( data, status, jqxhr ){
-                console.log( "Request received:", data );
-              },
-              error: function( jqxhr, status, error ){
-                console.log( "Something went wrong!" );
-              }
-            });
 
-        }
+    // function addJsonFeature(){
+    //     var getData = document.getElementById('addJson').value;
+        
+    //     var jsonData = JSON.parse(getData);
+                    
+    //     var jsonLayer1 = new L.geoJson(jsonData,{
+    //         style: function(feature) {return addStyle(feature);},
+    //         pointToLayer: function (feature, latlng) {
+    //             return L.circleMarker(latlng, pointStyle);
+    //             }
+    //     }).addTo(map_1col);
+        
+    //     var jsonLayer2 = new L.geoJson(jsonData,{
+    //         style: function(feature) {return addStyle(feature);},
+    //         pointToLayer: function (feature, latlng) {
+    //             return L.circleMarker(latlng, pointStyle);
+    //             }
+    //     }).addTo(map_2col);
+        
+        
+    //     var jsonLayer3 = new L.geoJson(jsonData,{
+    //         style: function(feature) {return addStyle(feature);},
+    //         pointToLayer: function (feature, latlng) {
+    //             return L.circleMarker(latlng, pointStyle);
+    //             }
+    //     }).addTo(map_3col);
+        
+    //     var jsonLayer4 = new L.geoJson(jsonData,{
+    //         style: function(feature) {return addStyle(feature);},
+    //         pointToLayer: function (feature, latlng) {
+    //             return L.circleMarker(latlng, pointStyle);
+    //             }
+    //     }).addTo(map_4col);
+        
+    //     var jsonLayerW = new L.geoJson(jsonData,{
+    //         style: function(feature) {return addStyle(feature);},
+    //         pointToLayer: function (feature, latlng) {
+    //             return L.circleMarker(latlng, pointStyle);
+    //             }
+    //     }).addTo(map_web);
+        
+    //     var jsonLayerWS = new L.geoJson(jsonData,{
+    //         style: function(feature) {return addStyle(feature);},
+    //         pointToLayer: function (feature, latlng) {
+    //             return L.circleMarker(latlng, pointStyle);
+    //             }
+    //     }).addTo(map_web_sm);
+        
+        
+    //     function addStyle(feature){
+    //     switch (feature.geometry.type) {
+    //         case 'MultiPolygon': return polyStyle;
+    //         case 'Polygon': return polyStyle;
+    //         case 'MultiLineString': return lineStyle;
+    //         case 'LineString': return lineStyle;
+    //         case 'Point': return pointStyle;
+    //     }}
+        
+    // }
+
+  function handleFileSelect(evt) {
+    // var files = evt.target.files; // FileList object
+
+    // console.log(files[0]);
+
+    // var reader = new FileReader();
+      // Closure to capture the file information.
+      // reader.onload = (function(theFile) {
+      //   return function(e) {
+      //     // Render thumbnail.
+      //     var span = document.createElement('span');
+      //     span.innerHTML = ['<img class="thumb" src="', e.target.result,
+      //                       '" title="', escape(theFile.name), '"/>'].join('');
+      //     document.getElementById('list').insertBefore(span, null);
+      //   };
+      // })(f);
+    var f = evt.target.files[0]; 
+
+     var r = new FileReader();
+      r.onload = function(e) { 
+          var contents = e.target.result;
+        // alert( "Got the file.n" 
+        //       +"name: " + f.name + "n"
+        //       +"type: " + f.type + "n"
+        //       +"size: " + f.size + " bytesn"
+        //       + "starts with: " + contents.substr(1, contents.indexOf("n"))
+        // );  
+      console.log(contents);
+      var parsedJSON = jQuery.parseJSON(contents)
+      // add GeoJSON to map
+        L.geoJson(parsedJSON, {
+        // style: myStyle
+        }).addTo(map);
+      }
+      r.readAsText(f);
+
+      // Read in the image file as a data URL.
+      // var test = reader.readAsText(files[0]);
+      // console.log(test);
 
 
+    // files is a FileList of File objects. List some properties.
+    // var output = [];
+    // for (var i = 0, f; f = files[i]; i++) {
+    //   output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
+    //               f.size, ' bytes, last modified: ',
+    //               f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
+    //               '</li>');
+    // }
+    // document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
+  }
+
+  // listen for file uploader
+  document.getElementById('files').addEventListener('change', handleFileSelect, false);
 
 </script>
 
