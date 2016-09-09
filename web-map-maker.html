@@ -1812,57 +1812,40 @@ $("#map").mouseup(function() {
         
     // }
 
-  function handleFileSelect(evt) {
-    // var files = evt.target.files; // FileList object
+// styles for geojson pulled from v1.0
+var lineStyle = {'color':'#cd7139','weight': 4.5,'opacity': 1, 'lineJoin':'round'};
+var polyStyle = {'color': '#000','weight': 3,'opacity': 0.65,'fillOpacity': 0, 'lineJoin':'round'};
+var pointStyle = { radius: 10.5, fillColor: '#cd7139',color: '#fff',weight: 1,opacity: 0.3,fillOpacity: 0.8};
+    
+    function addStyle(feature){
+        switch (feature.geometry.type) {
+            case 'MultiPolygon': return polyStyle;
+            case 'Polygon': return polyStyle;
+            case 'MultiLineString': return lineStyle;
+            case 'LineString': return lineStyle;
+            case 'Point': return pointStyle;
+        }
+    }
 
-    // console.log(files[0]);
+    function handleFileSelect(evt) {
+        var f = evt.target.files[0]; 
 
-    // var reader = new FileReader();
-      // Closure to capture the file information.
-      // reader.onload = (function(theFile) {
-      //   return function(e) {
-      //     // Render thumbnail.
-      //     var span = document.createElement('span');
-      //     span.innerHTML = ['<img class="thumb" src="', e.target.result,
-      //                       '" title="', escape(theFile.name), '"/>'].join('');
-      //     document.getElementById('list').insertBefore(span, null);
-      //   };
-      // })(f);
-    var f = evt.target.files[0]; 
+        var r = new FileReader();
+        r.onload = function(e) { 
+            var contents = e.target.result;
+            // turn string into json object
+            var parsedJSON = jQuery.parseJSON(contents)
+            // add GeoJSON to map
+            L.geoJson(parsedJSON, {
+                style: function(feature) {return addStyle(feature);},
+                pointToLayer: function (feature, latlng) {
+                    return L.circleMarker(latlng, pointStyle);
+                }
+            }).addTo(map);
+        }
+        r.readAsText(f);
 
-     var r = new FileReader();
-      r.onload = function(e) { 
-          var contents = e.target.result;
-        // alert( "Got the file.n" 
-        //       +"name: " + f.name + "n"
-        //       +"type: " + f.type + "n"
-        //       +"size: " + f.size + " bytesn"
-        //       + "starts with: " + contents.substr(1, contents.indexOf("n"))
-        // );  
-      console.log(contents);
-      var parsedJSON = jQuery.parseJSON(contents)
-      // add GeoJSON to map
-        L.geoJson(parsedJSON, {
-        // style: myStyle
-        }).addTo(map);
-      }
-      r.readAsText(f);
-
-      // Read in the image file as a data URL.
-      // var test = reader.readAsText(files[0]);
-      // console.log(test);
-
-
-    // files is a FileList of File objects. List some properties.
-    // var output = [];
-    // for (var i = 0, f; f = files[i]; i++) {
-    //   output.push('<li><strong>', escape(f.name), '</strong> (', f.type || 'n/a', ') - ',
-    //               f.size, ' bytes, last modified: ',
-    //               f.lastModifiedDate ? f.lastModifiedDate.toLocaleDateString() : 'n/a',
-    //               '</li>');
-    // }
-    // document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
-  }
+    }
 
   // listen for file uploader
   document.getElementById('files').addEventListener('change', handleFileSelect, false);
