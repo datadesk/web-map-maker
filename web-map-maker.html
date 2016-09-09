@@ -209,6 +209,14 @@
         margin: 0 10px 0 0;
     }
 
+/*    .leaflet-pelias-control {
+        z-index: 9999;
+    }
+
+    .leaflet-pelias-results {
+        margin-top: 50px;
+    }*/
+
     .footnote {font-family:arial; font-size:12px; color:#666;}
     /*.leaflet-control-zoom{display:none;}*/
     .header{text-transform: uppercase; font-weight:bold; font-family:Arial; font-size:12px;}
@@ -274,9 +282,10 @@
 
         <div id="web_blank">
 
-
-            <!-- <p class="header">Click to <input type="button" class="btn" id="colwSave" value="Create an image"/></p> -->
             <div id="map_options">
+                <div class="map_option">
+                    <div id="geocoder"></div>
+                </div>
                 <div class="map_option">
                     <form class="standalone-dropdown">
                         <fieldset>
@@ -294,6 +303,7 @@
                     </form>
                 </div>
                 <div class="map_option">
+
                     <form class="standalone-dropdown">
                         <fieldset>
                             <select onchange="layerChange(this)" id="layer_change">
@@ -325,7 +335,6 @@
 
                 <p class='map-info'>Zoom: <span id="zoom_level"></span></p>
 
-                <div id="geocoder"></div>
             </div>
             <div id="map_area">
                 <div id="grid_holder">
@@ -1272,14 +1281,14 @@
     var mapSize = $("#map").width() + 'x' + $("#map").height();
     $("#map_size").text(mapSize);
 
-    // var geocoder = L.control.geocoder('search-JvsyzTW', {
-    //     placeholder: 'Search for a location',
-    //     panToPoint: false,
-    //     markers: false,
-    //     expanded: true,
-    //     position: 'topright',
-    //     attribution: ''
-    // }).addTo(map);
+    var geocoder = L.control.geocoder('search-JvsyzTW', {
+        placeholder: 'Search for a location',
+        panToPoint: false,
+        markers: false,
+        expanded: false,
+        position: 'topleft',
+        attribution: ''
+    }).addTo(map);
 
 
     // set init zoom
@@ -1767,28 +1776,26 @@ $("#map").mouseup(function() {
     const SEARCH_API_KEY = 'search-JvsyzTW';
 
 // Query string parsing
-var queryparams = getQueryParams()
+// var queryparams = getQueryParams()
 
 // Add Pelias geocoding plugin
-var geocoderOptions = {
-  markers: {
-    icon: L.divIcon({ className: 'point-marker' }),
-    clickable: false,
-    keyboard: false
-  },
-  pointIcon: false,
-  polygonIcon: false,
-  expanded: true,
-  fullWidth: false,
-  panToPoint: false,
-  autocomplete: true,
-  layers: ['address'],
-  bounds: L.latLngBounds([[40.9260, -74.2212], [40.4924, -73.6911]]),
-  attribution: ''
-}
-var geocoder = new L.Control.Geocoder(SEARCH_API_KEY, geocoderOptions).addTo(map)
-document.getElementById('geocoder').appendChild(geocoder.getContainer())
-geocoder.focus()
+// var geocoderOptions = {
+//   pointIcon: false,
+//   polygonIcon: false,
+//   expanded: true,
+//   fullWidth: false,
+//   panToPoint: false,
+//   autocomplete: true,
+//   layers: ['address'],
+//   bounds: L.latLngBounds([[40.9260, -74.2212], [40.4924, -73.6911]]),
+//   attribution: ''
+// }
+
+// var geocoder = new L.Control.Geocoder(SEARCH_API_KEY, geocoderOptions).addTo(map)
+// document.getElementById('geocoder').appendChild(geocoder.getContainer())
+
+
+// geocoder.focus()
 
 // // Custom behavior on selecting a result
 // geocoder.on('select', function (e) {
@@ -1848,18 +1855,18 @@ geocoder.focus()
 // }
 
 // Returns empty object if no params
-function getQueryParams () {
-  const string = window.location.search.substr(1)
-  const units = string.split('&')
-  const params = {}
+// function getQueryParams () {
+//   const string = window.location.search.substr(1)
+//   const units = string.split('&')
+//   const params = {}
 
-  units.forEach(unit => {
-    const pair = unit.split('=')
-    params[pair[0]] = window.decodeURIComponent(pair[1])
-  })
+//   units.forEach(unit => {
+//     const pair = unit.split('=')
+//     params[pair[0]] = window.decodeURIComponent(pair[1])
+//   })
 
-  return params
-}
+//   return params
+// }
 
 </script>
 
