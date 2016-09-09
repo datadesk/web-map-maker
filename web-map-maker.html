@@ -78,22 +78,40 @@
         float: left;
     }
 
-    #map_options input[type=file] {
-        /*border: 2px solid #4591B8;
-        border-radius: 6px;
-        text-transform: none;
-        font-weight: normal;
-        padding: 5px 14px;
-        background-color: white;
-        display: inline-block;
-        cursor: pointer;
-        letter-spacing: 1px;
-        margin: 3px 1px;
-        color: #4591B8;
-        text-shadow: none;
-        font-family: Arial,sans-serif;
-        background-image: none;*/
+    #map_options #geo_files {
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
     }
+
+/*    #geo_files + label {
+        font-size: 1.25em;
+        font-weight: 700;
+        color: white;
+        background-color: black;
+        display: inline-block;
+    }*/
+
+/*    #geo_files:focus + label,
+    #geo_files + label:hover {
+        background-color: red;
+    }
+
+    #geo_files + label {
+        cursor: pointer;
+    }
+
+    #geo_files:focus + label {
+        outline: 1px dotted #000;
+        outline: -webkit-focus-ring-color auto 5px;
+    }
+*/
+
+
+
 
     /* print column grid */
     .grid330 {
@@ -172,7 +190,7 @@
     input.geocodify { width:275px; }
     label {font:18px/27px Georgia, serif;}
 
-    .map-info, #map_options label {
+    .map-info {
         font-family: 'Benton Gothic Regular', Arial, sans-serif;
         display: inline-block;
         margin: 5px 10px 0 0;
@@ -329,16 +347,19 @@
                 <div class="map_option">
                     <!-- <label><input type="checkbox" name="transit" value="Tranist" onclick="optionChange()" checked> Transit lines</label>
                     <label><input type="checkbox" name="buildings" value="Buildings" onclick="optionChange()"> Buildings</label> -->
-                    <button class="btn" onclick="showTransit()" id='transit_btn'>Transit</button>
-                    <button class="btn" onclick="showBuildings()" id='buildings_btn'>Buildings</button>
+                    <button class="btn gray" onclick="showTransit()" id='transit_btn'>Transit</button>
+                    <button class="btn gray" onclick="showBuildings()" id='buildings_btn'>Buildings</button>
 
                     <!-- <label><input type="checkbox" name="zoom_lock" value="zoom_lock" onclick="optionChange()"> Lock zoom</label>
                     <label><input type="checkbox" name="pan_lock" value="pan_lock" onclick="optionChange()"> Lock pan</label> -->
-                    <button class="btn" onclick="zoomFreeze()" id='zoom_lock'>Lock zoom</button>
-                    <button class="btn" onclick="panFreeze()" id='pan_lock'>Lock pan</button>
+                    <button class="btn gray" onclick="zoomFreeze()" id='zoom_lock'>Lock zoom</button>
+                    <button class="btn gray" onclick="panFreeze()" id='pan_lock'>Lock pan</button>
+
+                    <input type="file" id="geo_files" name="files[]">
+                    <label for="geo_files" class="btn">Upload GeoJSON</label>
                 </div>
 
-                <input type="file" id="files" name="files[]">
+
 
                 <p class='map-info'>Zoom: <span id="zoom_level"></span></p>
 
@@ -1770,7 +1791,7 @@ $("#map").mouseup(function() {
     }
 
   // listen for file uploader
-  document.getElementById('files').addEventListener('change', handleFileSelect, false);
+  document.getElementById('geo_files').addEventListener('change', handleFileSelect, false);
 
 </script>
 
