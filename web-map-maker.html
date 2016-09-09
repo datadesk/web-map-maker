@@ -310,10 +310,15 @@
                 </div>
 
                 <div class="map_option">
-                    <label><input type="checkbox" name="transit" value="Tranist" onclick="optionChange()" checked> Transit lines</label>
-                    <label><input type="checkbox" name="buildings" value="Buildings" onclick="optionChange()"> Buildings</label>
-                    <label><input type="checkbox" name="zoom_lock" value="zoom_lock" onclick="optionChange()"> Lock zoom</label>
-                    <label><input type="checkbox" name="pan_lock" value="pan_lock" onclick="optionChange()"> Lock pan</label>
+                    <!-- <label><input type="checkbox" name="transit" value="Tranist" onclick="optionChange()" checked> Transit lines</label>
+                    <label><input type="checkbox" name="buildings" value="Buildings" onclick="optionChange()"> Buildings</label> -->
+                    <button class="btn" onclick="showTransit()" id='transit_btn'>Transit</button>
+                    <button class="btn" onclick="showBuildings()" id='buildings_btn'>Buildings</button>
+
+                    <!-- <label><input type="checkbox" name="zoom_lock" value="zoom_lock" onclick="optionChange()"> Lock zoom</label>
+                    <label><input type="checkbox" name="pan_lock" value="pan_lock" onclick="optionChange()"> Lock pan</label> -->
+                    <button class="btn" onclick="zoomFreeze()" id='zoom_lock'>Lock zoom</button>
+                    <button class="btn" onclick="panFreeze()" id='pan_lock'>Lock pan</button>
                 </div>
 
                 <input type="file" id="files" name="files[]">
@@ -1577,38 +1582,71 @@ function downloadIMG() {
     });
 }
 
-function optionChange() {
-    // check options for current status and reload the map
-    console.log('optionChange()');
+// function optionChange() {
+//     // check options for current status and reload the map
+//     console.log('optionChange()');
 
-    // zoom lock check
-    var zoomChecked = document.getElementsByName("zoom_lock")[0].checked;
-    if (zoomChecked) {
-        $('.leaflet-control-zoom').css('display','none');
-        map.touchZoom.disable();
-        map.doubleClickZoom.disable();
-        map.scrollWheelZoom.disable();
-        map.boxZoom.disable();
-        map.keyboard.disable();
-    } else {
+//     // zoom lock check
+//     var zoomChecked = document.getElementsByName("zoom_lock")[0].checked;
+//     if (zoomChecked) {
+//         $('.leaflet-control-zoom').css('display','none');
+//         map.touchZoom.disable();
+//         map.doubleClickZoom.disable();
+//         map.scrollWheelZoom.disable();
+//         map.boxZoom.disable();
+//         map.keyboard.disable();
+//     } else {
+//         $('.leaflet-control-zoom').css('display','block');
+//         map.touchZoom.enable();
+//         map.doubleClickZoom.enable();
+//         map.scrollWheelZoom.enable();
+//         map.boxZoom.enable();
+//         map.keyboard.enable();
+//     }
+
+//     // pan lock check
+//     var panChecked = document.getElementsByName("pan_lock")[0].checked;
+//     if (panChecked) {
+//         map.dragging.disable();
+//         map.options.scrollWheelZoom = 'center';
+//     } else {
+//         map.dragging.enable();
+//         map.options.scrollWheelZoom = '';
+//     }
+
+// }
+
+function zoomFreeze() {
+    if ($("#zoom_lock").hasClass('active')) {
         $('.leaflet-control-zoom').css('display','block');
         map.touchZoom.enable();
         map.doubleClickZoom.enable();
         map.scrollWheelZoom.enable();
         map.boxZoom.enable();
         map.keyboard.enable();
+        $("#zoom_lock").removeClass('active');
+    } else {
+        $('.leaflet-control-zoom').css('display','none');
+        map.touchZoom.disable();
+        map.doubleClickZoom.disable();
+        map.scrollWheelZoom.disable();
+        map.boxZoom.disable();
+        map.keyboard.disable();
+        $("#zoom_lock").addClass('active');
     }
 
-    // pan lock check
-    var panChecked = document.getElementsByName("pan_lock")[0].checked;
-    if (panChecked) {
-        map.dragging.disable();
-        map.options.scrollWheelZoom = 'center';
-    } else {
+}
+
+function panFreeze() {
+    if ($("#pan_lock").hasClass('active')) {
         map.dragging.enable();
         map.options.scrollWheelZoom = '';
+        $("#pan_lock").removeClass('active');
+    } else {
+        map.dragging.disable();
+        map.options.scrollWheelZoom = 'center';
+        $("#pan_lock").addClass('active');
     }
-
 }
 
 function findFirstDescendant(parent, tagname) {
