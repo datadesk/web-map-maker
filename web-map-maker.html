@@ -350,7 +350,6 @@
                 </div>
                 <div id="map_holder">
                     <div id="map"></div>
-                    <button class='btn' onclick='downloadSVG();'>Download SVG</button>
                     <button class='btn' onclick='downloadIMG();'>Download Image</button>
                     <div id="map_size"></div>
                 </div>
@@ -1576,13 +1575,6 @@ var losangeles = function() {
         var geojson_data = data.contents;
         scene.setDataSource('dynamic_data', { type: 'GeoJSON', data: geojson_data });
     });
-}
-
-// pulls the SVG from the canvas
-function downloadSVG() {
-
-    var canvas = findFirstDescendant("map", "canvas");
-
 }
 
 
