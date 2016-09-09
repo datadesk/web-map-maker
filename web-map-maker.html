@@ -355,7 +355,7 @@
                     <button class="btn gray" onclick="zoomFreeze()" id='zoom_lock'>Lock zoom</button>
                     <button class="btn gray" onclick="panFreeze()" id='pan_lock'>Lock pan</button>
 
-                    <input type="file" id="geo_files" name="files[]">
+                    <input type="file" id="geo_files" name="files[]" multiple>
                     <label for="geo_files" class="btn gray">Upload GeoJSON</label>
                 </div>
 
@@ -1771,22 +1771,26 @@ $("#map").mouseup(function() {
     }
 
     function handleFileSelect(evt) {
-        var f = evt.target.files[0]; 
+        // add multiple files to the map
+        for (var i = 0; i <  evt.target.files.length; i++) {
+            var f = evt.target.files[i]; 
 
-        var r = new FileReader();
-        r.onload = function(e) { 
-            var contents = e.target.result;
-            // turn string into json object
-            var parsedJSON = jQuery.parseJSON(contents)
-            // add GeoJSON to map
-            L.geoJson(parsedJSON, {
-                style: function(feature) {return addStyle(feature);},
-                pointToLayer: function (feature, latlng) {
-                    return L.circleMarker(latlng, pointStyle);
-                }
-            }).addTo(map);
+            var r = new FileReader();
+            r.onload = function(e) { 
+                var contents = e.target.result;
+                // turn string into json object
+                var parsedJSON = jQuery.parseJSON(contents)
+                // add GeoJSON to map
+                L.geoJson(parsedJSON, {
+                    style: function(feature) {return addStyle(feature);},
+                    pointToLayer: function (feature, latlng) {
+                        return L.circleMarker(latlng, pointStyle);
+                    }
+                }).addTo(map);
+            }
+            r.readAsText(f);
         }
-        r.readAsText(f);
+
 
     }
 
