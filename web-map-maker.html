@@ -25,10 +25,15 @@
     <script src="js/tangram.min.js"></script>
     <script src="js/fontfaceobserver.js"></script>
     <script src="js/canvas2svg.js"></script>
+    <script src="js/canvas2image.js"></script>
+    <script src="js/html2canvas.js"></script>
     <script src="js/jquery-ui.js"></script>
     <script type="text/javascript" src="http://cookbook.latimes.com/js/leaflet-bing-layer-0.0.1.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geocoder-mapzen/1.4.1/leaflet-geocoder-mapzen.js"></script>
+
+    <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-image/v0.0.4/leaflet-image.js' type="text/javascript"></script>
+
 
     <style type="text/css" media="screen">
     @font-face {
@@ -1547,13 +1552,13 @@
     // });
 
 
-    $(window).load(function(){
-        $(function() {
-            $("#colwSave").click(function() {
-                scene.screenshot().then(function(screenshot) { window.open(screenshot.url); });
-            });
-        });
-    });
+    // $(window).load(function(){
+    //     $(function() {
+    //         $("#colwSave").click(function() {
+    //             scene.screenshot().then(function(screenshot) { window.open(screenshot.url); });
+    //         });
+    //     });
+    // });
 
     // Move the tooltip with the mouse
     $(window).mousemove( function(e) {
@@ -1580,51 +1585,105 @@ function downloadSVG() {
 
 }
 
-// fake it till you make it
-// this forces a standard size for web
-// window.devicePixelRatio = 1;
 
-function downloadIMG() {
-    window.devicePixelRatio = 1;
+    function downloadIMG() {
+        // $('.leaflet-control').hide();
 
-    scene.screenshot().then(function(screenshot) { 
-        window.open(screenshot.url); 
-    });
-}
+//     scene.screenshot().then(function(screenshot) { 
+//         window.open(screenshot.url); 
+//     });
 
-// function optionChange() {
-//     // check options for current status and reload the map
-//     console.log('optionChange()');
+    // var id = "map";
 
-//     // zoom lock check
-//     var zoomChecked = document.getElementsByName("zoom_lock")[0].checked;
-//     if (zoomChecked) {
-//         $('.leaflet-control-zoom').css('display','none');
-//         map.touchZoom.disable();
-//         map.doubleClickZoom.disable();
-//         map.scrollWheelZoom.disable();
-//         map.boxZoom.disable();
-//         map.keyboard.disable();
-//     } else {
-//         $('.leaflet-control-zoom').css('display','block');
-//         map.touchZoom.enable();
-//         map.doubleClickZoom.enable();
-//         map.scrollWheelZoom.enable();
-//         map.boxZoom.enable();
-//         map.keyboard.enable();
-//     }
+// leafletImage(map, function(err, canvas) {
+//     // now you have canvas
+//     // example thing to do with that canvas:
+//     var img = document.createElement('img');
+//     var dimensions = map.getSize();
+//     img.width = dimensions.x;
+//     img.height = dimensions.y;
+//     img.src = canvas.toDataURL();
+//     document.getElementById('img-out').innerHTML = '';
+//     document.getElementById('img-out').appendChild(img);
+// });
 
-//     // pan lock check
-//     var panChecked = document.getElementsByName("pan_lock")[0].checked;
-//     if (panChecked) {
-//         map.dragging.disable();
-//         map.options.scrollWheelZoom = 'center';
-//     } else {
-//         map.dragging.enable();
-//         map.options.scrollWheelZoom = '';
-//     }
+        // function gatherinfo(id){
 
-// }
+            // leafletImage(id, doImage);
+
+            // function doImage(err, canvas) {
+            
+            //     if (document.getElementById('newInstructions')) {
+            //         //do nothing
+            //     } else {
+            //         var newInstructions=document.createElement('p');
+            //         newInstructions.id ='newInstructions';
+            //         newInstructions.innerHTML =instructText;
+            //         document.body.appendChild(newInstructions);
+            //     }
+                
+            //     var img = document.createElement('img');
+            //     // var dimensions = id.getSize();
+            //     // img.width = dimensions.x;
+            //     // img.height = dimensions.y;
+            //     img.src = canvas.toDataURL();
+            
+            //     if (document.getElementById('newImg')) {
+            //         document.getElementById('newImg').innerHTML ='';
+            //         document.getElementById('newImg').appendChild(img);
+            //     } else {
+            //         var newImg=document.createElement('div');
+            //         newImg.id ='newImg';
+            //         newImg.innerHTML ='';
+            //         document.body.appendChild(newImg);
+            //         document.getElementById('newImg').appendChild(img);
+            //     }
+            //     window.scrollTo(0,document.body.scrollHeight);
+            // }
+        // }
+            
+
+
+    // html2canvas($("body"), {
+    //     onrendered: function(canvas) {
+    //         // canvas is the final rendered <canvas> element
+    //         var myImage = canvas.toDataURL("image/png");
+    //         window.open(myImage);
+    //     }
+    // });
+
+    //   html2canvas($("#map canvas")[0], {
+    //       onrendered: function(canvas) {
+    //           return Canvas2Image.saveAsPNG(canvas);
+    //       }
+    //   });
+
+
+        // var newInstructions=document.createElement('p');
+        // newInstructions.id ='newInstructions'
+        // newInstructions.innerHTML ='<strong>Right-click the image below to save/download.</strong>';
+        // document.body.appendChild(newInstructions);
+        // html2canvas($("#map"), {
+        //     useCORS: true,
+            
+        //     onrendered: function(canvas)  {
+        //         theCanvas = canvas;
+                                
+        //         document.body.appendChild(canvas);
+
+        //         // Convert and download as image 
+        //         // Canvas2Image.saveAsPNG(canvas);
+        //         $("#img-out").append(canvas);
+        //         window.scrollTo(0,document.body.scrollHeight);
+        //         // Clean up 
+        //         //document.body.removeChild(canvas);
+        //     }
+        // });
+    }
+
+
+
+
 
 function zoomFreeze() {
     if ($("#zoom_lock").hasClass('active')) {
@@ -1665,6 +1724,14 @@ function findFirstDescendant(parent, tagname) {
    if ( descendants.length )
       return descendants[0];
    return null;
+}
+
+function showTransit() {
+
+}
+
+function showBuildings() {
+
 }
 
 // watching for anytime the size preset dropdown fires
@@ -1711,20 +1778,20 @@ var sizeChange = function(option) {
 
 };
 
-function layerChange(option) {
-    if (option.value == 'satellite') {
-        var bingLayer = L.bingLayer("AqEQ_HqipMZe_KnMeHEJ_CEtkNG9Y34_aXaGeIya4fBtc4hTIA9KYzMfFaK5nbK5", {type: "Aerial"}).addTo(map);
-        quietLAlayer.remove();
+    function layerChange(option) {
+        if (option.value == 'satellite') {
+            var bingLayer = L.bingLayer("AqEQ_HqipMZe_KnMeHEJ_CEtkNG9Y34_aXaGeIya4fBtc4hTIA9KYzMfFaK5nbK5", {type: "Aerial"}).addTo(map);
+            quietLAlayer.remove();
+        }
     }
-}
 
-// Apple's Magic Mouse is a little finicky--prevent scroll when mouse is down on map
-$("#map").mousedown(function() {
-    map.scrollWheelZoom.disable();
-});
-$("#map").mouseup(function() {
-    map.scrollWheelZoom.enable();
-});
+    // Apple's Magic Mouse is a little finicky--prevent scroll when mouse is down on map
+    $("#map").mousedown(function() {
+        map.scrollWheelZoom.disable();
+    });
+    $("#map").mouseup(function() {
+        map.scrollWheelZoom.enable();
+    });
 
 
     // styles for geojson pulled from v1.0
@@ -1769,104 +1836,6 @@ $("#map").mouseup(function() {
     // listen for file uploader
     document.getElementById('geo_files').addEventListener('change', handleFileSelect, false);
 
-
-
-    // handles the geocoder input 
-    // culled from the great https://github.com/louh/nyc-community-boards/blob/master/src/js/main.js
-    const SEARCH_API_KEY = 'search-JvsyzTW';
-
-// Query string parsing
-// var queryparams = getQueryParams()
-
-// Add Pelias geocoding plugin
-// var geocoderOptions = {
-//   pointIcon: false,
-//   polygonIcon: false,
-//   expanded: true,
-//   fullWidth: false,
-//   panToPoint: false,
-//   autocomplete: true,
-//   layers: ['address'],
-//   bounds: L.latLngBounds([[40.9260, -74.2212], [40.4924, -73.6911]]),
-//   attribution: ''
-// }
-
-// var geocoder = new L.Control.Geocoder(SEARCH_API_KEY, geocoderOptions).addTo(map)
-// document.getElementById('geocoder').appendChild(geocoder.getContainer())
-
-
-// geocoder.focus()
-
-// // Custom behavior on selecting a result
-// geocoder.on('select', function (e) {
-//     console.log(e);
-//   // var label = e.feature.properties.label
-//   // var latlng = e.latlng
-
-//   // selectLocation(latlng, label)
-// });
-
-// // If geocoder is reset, also clear everything else
-// geocoder.on('reset', function (e) {
-//   clearData()
-//   clearUrl()
-//   if (districtLayer) {
-//     map.removeLayer(districtLayer)
-//   }
-
-// // Prepopulate the geocoder input if there is something in query params
-// window.setTimeout(function () {
-//   if (queryparams.query) {
-//     geocoder._input.value = queryparams.query
-//     geocoder._input.focus()
-//     // Fire an event to hide the search box, which is empty
-//     // at this point so it looks weird
-//     geocoder._input.dispatchEvent(new window.KeyboardEvent('keyup', {
-//       'cancelable': true
-//     }))
-//   }
-//   if (queryparams.lat && queryparams.lng) {
-//     queryparams.lat = window.parseFloat(queryparams.lat)
-//     queryparams.lng = window.parseFloat(queryparams.lng)
-//     const latlng = { lat: queryparams.lat, lng: queryparams.lng }
-//     geocoder.showMarker(null, latlng)
-//     displayCommunityBoard(latlng)
-//   }
-// }, 0)
-
-
-// function selectLocation (latlng, label) {
-//   store.dispatch({
-//     type: 'SET_SEARCH_QUERY',
-//     query: label
-//   })
-
-//   displayCommunityBoard(latlng)
-
-//   // Set url
-//   var querystring = '?query=' + encodeURIComponent(label) +
-//     '&lat=' + encodeURIComponent(latlng.lat) +
-//     '&lng=' + encodeURIComponent(latlng.lng)
-//   window.history.pushState({
-//     lat: latlng.lat,
-//     lng: latlng.lng,
-//     query: label
-//   }, null, querystring)
-// }
-
-// Returns empty object if no params
-// function getQueryParams () {
-//   const string = window.location.search.substr(1)
-//   const units = string.split('&')
-//   const params = {}
-
-//   units.forEach(unit => {
-//     const pair = unit.split('=')
-//     params[pair[0]] = window.decodeURIComponent(pair[1])
-//   })
-
-//   return params
-// }
 
 </script>
 
