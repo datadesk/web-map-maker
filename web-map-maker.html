@@ -350,13 +350,15 @@
                 </div>
                 <div id="map_holder">
                     <div id="map"></div>
-                    <button class='btn' onclick='downloadIMG();'>Download Image</button>
+                    <button class='btn' onclick='downloadIMG();' id='download_img'>Download Image</button>
                     <div id="map_size"></div>
                 </div>
             </div>
 
 
         </div>
+
+        <canvas id="canvas" width="1300" height="730"></canvas>
 
         <div id="img-out"></div>
     </div>
@@ -1570,22 +1572,18 @@
         }
     });
 
-var losangeles = function() {
-    $.getJSON('http://boundaries.latimes.com/1.0/boundary/los-angeles-county-2012/?format=geojson', function(data){
-        var geojson_data = data.contents;
-        scene.setDataSource('dynamic_data', { type: 'GeoJSON', data: geojson_data });
-    });
-}
-
 
     function downloadIMG() {
         // $('.leaflet-control').hide();
 
-//     scene.screenshot().then(function(screenshot) { 
-//         window.open(screenshot.url); 
-//     });
+    scene.screenshot().then(function(screenshot) { 
+        // $(".leaflet-layer").append("<img src='"+screenshot.url+"' />")
+        // $("#map canvas").remove();
+        buildCanvas(screenshot.url);
+        // window.open(screenshot.url); 
+    });
 
-    // var id = "map";
+//     // var id = "map";
 
 // leafletImage(map, function(err, canvas) {
 //     // now you have canvas
@@ -1599,7 +1597,43 @@ var losangeles = function() {
 //     document.getElementById('img-out').appendChild(img);
 // });
 
+    function buildCanvas(basemap) {
+
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+
+        var base = new Image();
+        base.src=basemap;
+        ctx.drawImage(base,0,0, 1300, 730);
+
+        addSVG();
+
+    }
+
+
+    function addSVG() {
+        var svgString = new XMLSerializer().serializeToString(document.querySelector('svg'));
+
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+
+        var DOMURL = self.URL || self.webkitURL || self;
+        var img = new Image();
+        var svg = new Blob([svgString], {type: "image/svg+xml;charset=utf-8"});
+        var url = DOMURL.createObjectURL(svg);
+
+        img.onload = function() {
+            ctx.drawImage(img, 0, 0, 1300, 730);
+            var png = canvas.toDataURL("image/png");
+            document.querySelector('#img-out').innerHTML = '<img src="'+png+'"/>';
+            DOMURL.revokeObjectURL(png);
+        };
+        img.src = url;
+
+    }
         // function gatherinfo(id){
+
+            // var id = map;
 
             // leafletImage(id, doImage);
 
@@ -1610,7 +1644,7 @@ var losangeles = function() {
             //     } else {
             //         var newInstructions=document.createElement('p');
             //         newInstructions.id ='newInstructions';
-            //         newInstructions.innerHTML =instructText;
+            //         newInstructions.innerHTML ='instructText';
             //         document.body.appendChild(newInstructions);
             //     }
                 
@@ -1636,7 +1670,7 @@ var losangeles = function() {
             
 
 
-    // html2canvas($("body"), {
+    // html2canvas($("#map"), {
     //     onrendered: function(canvas) {
     //         // canvas is the final rendered <canvas> element
     //         var myImage = canvas.toDataURL("image/png");

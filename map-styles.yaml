@@ -432,7 +432,6 @@ layers:
                         color: *road
                         width: [[12,0px], [13, 0.15px], [14, 0.3px], [15, 1px], [16, 2m]]
 
-
     # Airports
     aeroways:
         data: { source: osm, layer: roads }
