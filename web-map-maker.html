@@ -1623,6 +1623,7 @@
         var url = DOMURL.createObjectURL(svg);
 
         img.onload = function() {
+            // be sure to offset it
             ctx.drawImage(img, 0, 0, 1300, 730);
             var png = canvas.toDataURL("image/png");
             document.querySelector('#img-out').innerHTML = '<img src="'+png+'"/>';
