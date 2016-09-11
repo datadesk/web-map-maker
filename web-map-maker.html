@@ -1715,7 +1715,7 @@
 
 
 
-
+var frozenZoom = false;
 
 function zoomFreeze() {
     if ($("#zoom_lock").hasClass('active')) {
@@ -1726,6 +1726,7 @@ function zoomFreeze() {
         map.boxZoom.enable();
         map.keyboard.enable();
         $("#zoom_lock").removeClass('active');
+        frozenZoom = false;
     } else {
         $('.leaflet-control-zoom').css('display','none');
         map.touchZoom.disable();
@@ -1734,6 +1735,7 @@ function zoomFreeze() {
         map.boxZoom.disable();
         map.keyboard.disable();
         $("#zoom_lock").addClass('active');
+        frozenZoom = true;
     }
 
 }
@@ -1822,7 +1824,9 @@ var sizeChange = function(option) {
         map.scrollWheelZoom.disable();
     });
     $("#map").mouseup(function() {
-        map.scrollWheelZoom.enable();
+        if (!frozenZoom) {
+            map.scrollWheelZoom.enable();
+        }
     });
 
 
