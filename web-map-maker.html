@@ -55,6 +55,11 @@
         font-style:normal;
     }
 
+.leaflet-control-scale-line {
+-moz-box-sizing: content-box;
+box-sizing: content-box;
+}
+
     #container {
         width: 98%;
         margin: 0 auto;
@@ -1267,7 +1272,6 @@
     quietLAlayer.addTo(map);
     L.control.scale().addTo(map);
     var scene = quietLAlayer.scene;
-
 
     // var circle = L.circle([34.053327, -118.247351], 500, {
     //     color: 'red',
