@@ -1576,12 +1576,17 @@
     function downloadIMG() {
         // $('.leaflet-control').hide();
 
-    scene.screenshot().then(function(screenshot) { 
-        // $(".leaflet-layer").append("<img src='"+screenshot.url+"' />")
-        // $("#map canvas").remove();
-        buildCanvas(screenshot.url);
-        // window.open(screenshot.url); 
-    });
+        scene.screenshot().then(function(screenshot) {
+            // check for svg on campus
+            if ($("#map svg").length > 0) {
+                buildCanvas(screenshot.url);
+            } else {
+                window.open(screenshot.url);
+            }
+            // $(".leaflet-layer").append("<img src='"+screenshot.url+"' />")
+            // $("#map canvas").remove();
+            // window.open(screenshot.url); 
+        });
 
 //     // var id = "map";
 
