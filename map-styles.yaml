@@ -462,46 +462,74 @@ layers:
                 order: function() { return feature.sort_key; }
                 color: *building
 
-    subway-light-rail:
-        data: { source: mapzen, layer: transit }
-        filter: { not: { kind: [platform] }, $zoom: { min: 11 } }
-        draw:
-            lines:
-                interactive: true
-                order: 499
-        railway:
-            filter: { kind: [railway,train] }
-            draw:
-                lines:
-                    color: [[14,[0.653,0.758,0.786]], [17,[0.670,0.777,0.807]]]
-                    width: [[14,0.4px],[15,0.75px],[16,1.1px],[18,2px],[19,1m]]
-        subway:
-            filter: { kind: subway }
-            draw:
-                lines:
-                    color: function() {
-                        if(feature.colour == 'purple') { return '#BCADD0';}
-                        else if (feature.colour == 'red') { return '#DD9894'; }
-                        else { return feature.colour; } }
-                    offset: [0px,10px]
-                    width: [[11,3px],[15,2.5px],[18,5m]]
-                    z: function() {
-                        if(feature.colour == 'purple') { return 1;}
-                        else if (feature.colour == 'red') { return 2; } }
-                    cap: round
+    # road_label_major:
+    #     data: { source: osm, layer: roads }
+    #     filter: {name: true, kind: major_road}
+    #     draw:
+    #         text:
+    #             text_source: name
+    #             offset: [0px, -14px]
+    #             order: function() { return feature.sort_key; }
+    #             font:
+    #                 family: 'Benton Gothic Regular'
+    #                 size: [[13, 20px], [14, 22px], [15, 24px], [16, 26px]]
+    #                 fill: *road_text
+    #                 stroke: {color: '#efebe7', width: 1}
 
-        light_rail:
-            filter: { kind: [light_rail,tram], $zoom: { min: 11 } }
-            draw:
-                lines:
-                    color: function() { 
-                        if(feature.colour == '#00A5DB') { return '#A4BED7';}
-                        else if (feature.colour == 'blue') { return '#6B9CC2'; }
-                        else if (feature.colour == '#FFD700') { return '#FADA85'; }
-                        else if (feature.colour == 'green') { return '#759371'; }
-                        else { return feature.colour; } }
-                    width: [[11,3px],[15,2.5px],[18,5m]]
-                    cap: round
+    # road_label_minor:
+    #     data: { source: osm, layer: roads }
+    #     filter: {name: true, kind: minor_road, $zoom: { min: 16 }}
+    #     draw:
+    #         text:
+    #             text_source: name
+    #             offset: [0px, -10px]
+    #             order: function() { return feature.sort_key; }
+    #             font:
+    #                 family: 'Benton Gothic Regular'
+    #                 size: 18px
+    #                 fill: '#9C9C9C'
+    #                 stroke: {color: '#efebe7', width: 1}
+
+    # subway-light-rail:
+    #     data: { source: mapzen, layer: transit }
+    #     filter: { not: { kind: [platform] }, $zoom: { min: 11 } }
+    #     draw:
+    #         lines:
+    #             interactive: true
+    #             order: 499
+    #     railway:
+    #         filter: { kind: [railway,train] }
+    #         draw:
+    #             lines:
+    #                 color: [[14,[0.653,0.758,0.786]], [17,[0.670,0.777,0.807]]]
+    #                 width: [[14,0.4px],[15,0.75px],[16,1.1px],[18,2px],[19,1m]]
+    #     subway:
+    #         filter: { kind: subway }
+    #         draw:
+    #             lines:
+    #                 color: function() {
+    #                     if(feature.colour == 'purple') { return '#BCADD0';}
+    #                     else if (feature.colour == 'red') { return '#DD9894'; }
+    #                     else { return feature.colour; } }
+    #                 offset: [0px,10px]
+    #                 width: [[11,3px],[15,2.5px],[18,5m]]
+    #                 z: function() {
+    #                     if(feature.colour == 'purple') { return 1;}
+    #                     else if (feature.colour == 'red') { return 2; } }
+    #                 cap: round
+
+    #     light_rail:
+    #         filter: { kind: [light_rail,tram], $zoom: { min: 11 } }
+    #         draw:
+    #             lines:
+    #                 color: function() { 
+    #                     if(feature.colour == '#00A5DB') { return '#A4BED7';}
+    #                     else if (feature.colour == 'blue') { return '#6B9CC2'; }
+    #                     else if (feature.colour == '#FFD700') { return '#FADA85'; }
+    #                     else if (feature.colour == 'green') { return '#759371'; }
+    #                     else { return feature.colour; } }
+    #                 width: [[11,3px],[15,2.5px],[18,5m]]
+    #                 cap: round
 
 
 
