@@ -461,6 +461,11 @@ layers:
             polygons:
                 order: function() { return feature.sort_key; }
                 color: *building
+            lines:
+                order: function() { return feature.sort_key; }
+                color: "#c8c8c1"
+                width: [[16,0],[17,1m]]
+                style: lines
 
     # road_label_major:
     #     data: { source: osm, layer: roads }
