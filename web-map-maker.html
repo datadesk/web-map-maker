@@ -134,6 +134,10 @@ box-sizing: content-box;
         border-top: 1px solid rgba(0,0,0,0);
     }
 
+    .grid330 div:nth-child(odd) {
+        background: rgba(0,0,0,0.05);
+    }
+
     .grid100 {
         margin: -70px 0 0 -75px;
     }
@@ -1269,9 +1273,21 @@ box-sizing: content-box;
             click: function(selection) { console.log('Click!', selection); }
         }
     });
+    console.log(quietLAlayer);
+
     quietLAlayer.addTo(map);
     L.control.scale().addTo(map);
     var scene = quietLAlayer.scene;
+
+
+    function reloadLayer() {
+        var quietLAlayer = Tangram.leafletLayer({
+        scene: 'map-styles-print.yaml',
+        events: {
+        click: function(selection) { console.log('Click!', selection); }
+        }
+        });
+    }
 
     // var circle = L.circle([34.053327, -118.247351], 500, {
     //     color: 'red',
