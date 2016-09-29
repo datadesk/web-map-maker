@@ -322,6 +322,7 @@ box-sizing: content-box;
                         <fieldset>
                             <select onchange="layerChange(this)" id="layer_change">
                                 <option value="quiet_la" selected>Quiet LA</option>
+                                <option value="quiet_la_print">Quiet LA (print)</option>
                                 <option value="topo_la">Topo LA</option>
                                 <option value="betty_la">Betty LA</option>
                                 <option value="satellite">Satellite</option>
@@ -1316,6 +1317,9 @@ box-sizing: content-box;
         attribution: ''
     }).addTo(map);
 
+    // show and hide variables
+    var buildingsVisible;
+
 
     // set init zoom
     var zoomRounded = Math.floor(map.getZoom()*10) / 10;
@@ -1326,6 +1330,16 @@ box-sizing: content-box;
         zoomRounded = Math.floor(map.getZoom()*10) / 10;
 
         $("#zoom_level").text(zoomRounded.toFixed(1));
+
+        // buildings brought in level
+        if (zoomRounded >= 15) {
+            if (buildingsVisible != false) {
+                $("#buildings_btn").addClass("active");
+                buildingsVisible = true;
+            }
+        } else {
+            $("#buildings_btn").removeClass("active"); // no buildings at zoom
+        }
     });
 
 // $("#map_holder").resizable({
@@ -1784,7 +1798,23 @@ function showTransit() {
 
 }
 
+// shows and hides buildings and swimming pools
 function showBuildings() {
+    if (buildingsVisible) {
+        // remove buildings
+        delete scene.config.layers.buildings;
+        scene.updateConfig(); // update config
+        scene.rebuild(); // rebuild the map
+        $("#buildings_btn").removeClass("active"); // update button
+        buildingsVisible = false;
+    } else {
+        // add buildings
+        scene.config.layers.buildings = {"data":{"source":"osm","layer":"buildings"},"filter":{"$zoom":{"min":15}},"draw":{"polygons":{"order":"function() { return feature.sort_key; }","color":"#e6e3df"}}};
+        scene.updateConfig(); // update config
+        scene.rebuild(); // rebuild the map
+        $("#buildings_btn").addClass("active"); // update button
+        buildingsVisible = true;
+    }
 
 }
 
@@ -1836,6 +1866,8 @@ var sizeChange = function(option) {
         if (option.value == 'satellite') {
             var bingLayer = L.bingLayer("AqEQ_HqipMZe_KnMeHEJ_CEtkNG9Y34_aXaGeIya4fBtc4hTIA9KYzMfFaK5nbK5", {type: "Aerial"}).addTo(map);
             quietLAlayer.remove();
+        } else if (option.value == 'quiet_la_print') {
+            scene.load('map-styles-print.yaml');
         }
     }
 
