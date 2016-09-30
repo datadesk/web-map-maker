@@ -1340,6 +1340,13 @@ box-sizing: content-box;
         } else {
             $("#buildings_btn").removeClass("active"); // no buildings at zoom
         }
+
+        // transit wont show outside 11 zoom
+        if (zoomRounded < 11) {
+            $("#transit_btn").removeClass("active"); // update button
+        } else if (transitVisible) {
+            $("#transit_btn").addClass("active"); // update button
+        }
     });
 
 // $("#map_holder").resizable({
@@ -1794,8 +1801,24 @@ function findFirstDescendant(parent, tagname) {
    return null;
 }
 
-function showTransit() {
+var transitVisible = false;
 
+function showTransit() {
+    if (transitVisible) {
+        // remove transit
+        delete scene.config.layers["subway-light-rail"];
+        scene.updateConfig(); // update config
+        scene.rebuild(); // rebuild the map
+        $("#transit_btn").removeClass("active"); // update button
+        transitVisible = false;
+    } else {
+        // add transit layer
+        scene.config.layers["subway-light-rail"] = {"data":{"source":"mapzen","layer":"transit"},"filter":{"not":{"kind":["platform"]},"$zoom":{"min":11}},"draw":{"lines":{"interactive":true,"order":499}},"railway":{"filter":{"kind":["railway","train"]},"draw":{"lines":{"color":[[14,[0.653,0.758,0.786]],[17,[0.67,0.777,0.807]]],"width":[[14,"0.4px"],[15,"0.75px"],[16,"1.1px"],[18,"2px"],[19,"1m"]]}}},"subway":{"filter":{"kind":"subway"},"draw":{"lines":{"color":"function() { if(feature.colour == 'purple') { return '#BCADD0';} else if (feature.colour == 'red') { return '#DD9894'; } else { return feature.colour; } }","offset":["0px","10px"],"width":[[11,"3px"],[15,"2.5px"],[18,"5m"]],"z":"function() { if(feature.colour == 'purple') { return 1;} else if (feature.colour == 'red') { return 2; } }","cap":"round"}}},"light_rail":{"filter":{"kind":["light_rail","tram"],"$zoom":{"min":11}},"draw":{"lines":{"color":"function() { if(feature.colour == '#00A5DB') { return '#A4BED7';} else if (feature.colour == 'blue') { return '#6B9CC2'; } else if (feature.colour == '#FFD700') { return '#FADA85'; } else if (feature.colour == 'green') { return '#759371'; } else { return feature.colour; } }","width":[[11,"3px"],[15,"2.5px"],[18,"5m"]],"cap":"round"}}}};
+        scene.updateConfig(); // update config
+        scene.rebuild(); // rebuild the map
+        $("#transit_btn").addClass("active"); // update button
+        transitVisible = true;
+    }
 }
 
 // shows and hides buildings and swimming pools
@@ -1803,13 +1826,15 @@ function showBuildings() {
     if (buildingsVisible) {
         // remove buildings
         delete scene.config.layers.buildings;
+        delete scene.config.layers["swimming-pools"]; // pools
         scene.updateConfig(); // update config
         scene.rebuild(); // rebuild the map
         $("#buildings_btn").removeClass("active"); // update button
         buildingsVisible = false;
     } else {
         // add buildings
-        scene.config.layers.buildings = {"data":{"source":"osm","layer":"buildings"},"filter":{"$zoom":{"min":15}},"draw":{"polygons":{"order":"function() { return feature.sort_key; }","color":"#e6e3df"}}};
+        scene.config.layers.buildings = {"data":{"source":"osm","layer":"buildings"},"filter":{"$zoom":{"min":15}},"draw":{"polygons":{"order":"function() { return feature.sort_key; }","color":"#e6e3df"},"lines":{"order":"function() { return feature.sort_key; }","color":"#c8c8c1","width":[[17,0],[18,"1m"]],"style":"lines"}}};
+        scene.config.layers["swimming-pools"] = {"data":{"source":"osm","layer":"water"},"filter":{"kind":["swimming_pool"],"$zoom":{"min":15}},"draw":{"polygons":{"order":"function() { return feature.sort_key; }","color":"#c3d5dd"}}};
         scene.updateConfig(); // update config
         scene.rebuild(); // rebuild the map
         $("#buildings_btn").addClass("active"); // update button

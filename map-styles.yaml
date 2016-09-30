@@ -155,7 +155,7 @@ layers:
 
     swimming-pools:
         data: { source: osm, layer: water }
-        filter: { kind:[swimming_pool], $zoom: { min: 15 } }
+        filter: { kind:[swimming_pool], $zoom: { min: 17 } }
         draw:
             polygons:
                 order: function() { return feature.sort_key; }
@@ -464,7 +464,7 @@ layers:
             lines:
                 order: function() { return feature.sort_key; }
                 color: "#c8c8c1"
-                width: [[16,0],[17,1m]]
+                width: [[17,0],[18,1m]]
                 style: lines
 
     # road_label_major:
