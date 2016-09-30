@@ -694,7 +694,7 @@ layers:
                 text-blend-order:
                     priority: 14
                     visible: false
-                    text_source: function() { return feature["name:abbreviation"] || feature["name"]; }
+                    text_source: function() { return feature["name"]; }
                     font:
                         size: 30px
                         weight: 200
