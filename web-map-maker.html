@@ -341,7 +341,7 @@ box-sizing: content-box;
                     <label><input type="checkbox" name="pan_lock" value="pan_lock" onclick="optionChange()"> Lock pan</label> -->
                     <button class="btn gray" onclick="zoomFreeze()" id='zoom_lock'>Lock zoom</button>
                     <button class="btn gray" onclick="panFreeze()" id='pan_lock'>Lock pan</button>
-                    <button class="btn gray" onclick="autoLabels()" id='auto_labels_btn'>Auto labels</button>
+                    <button class="btn gray" onclick="showLabels()" id='auto_labels_btn'>Auto labels</button>
 
                     <input type="file" id="geo_files" name="files[]" multiple>
                     <label for="geo_files" class="btn gray">Upload GeoJSON</label>
@@ -1804,6 +1804,7 @@ function findFirstDescendant(parent, tagname) {
 }
 
 var transitVisible = false;
+var labelsVisible = false;
 
 function showTransit() {
     if (transitVisible) {
@@ -1825,6 +1826,62 @@ function showTransit() {
 
 // auto labels
 function showLabels() {
+    // check current status
+    if (labelsVisible) {
+        // turn all these label layers hidden
+        scene.config.layers.road_label_interstate_shields.draw.text.visible = false;
+        scene.config.layers.road_label_us_highway_shields.draw.text.visible = false;
+        scene.config.layers.road_label_major.draw.text.visible = false;
+        scene.config.layers.road_label_minor.draw.text.visible = false;
+
+        scene.config.layers.places['populated-places']['populated-places-natural-earth-z6']['z3places-1']['draw']['text-blend-order'].visible = false;
+        scene.config.layers.places['populated-places']['populated-places-natural-earth-z6']['z4places-2']['draw']['text-blend-order'].visible = false;
+        scene.config.layers.places['populated-places']['populated-places-osm-z10']['draw']['text-blend-order'].visible = false;
+        scene.config.layers.places['populated-places']['populated-places-osm-z13']['draw']['text-blend-order'].visible = false;
+
+        scene.config.layers.places['country-z2']['draw']['text-blend-order'].visible = false;
+        scene.config.layers.places['country-z3']['draw']['text-blend-order'].visible = false;
+        scene.config.layers.places['country-z4']['draw']['text-blend-order'].visible = false;
+        scene.config.layers.places['country-z5']['draw']['text-blend-order'].visible = false;
+        scene.config.layers.places['country-z6']['draw']['text-blend-order'].visible = false;
+        scene.config.layers.places['country-z7']['draw']['text-blend-order'].visible = false;
+        scene.config.layers.places['regionz5-6']['draw']['text-blend-order'].visible = false;
+        scene.config.layers.places['regionz7-9']['draw']['text-blend-order'].visible = false;
+
+
+        labelsVisible = false;
+
+        scene.updateConfig(); // update config
+        scene.rebuild(); // rebuild the map
+        $("#auto_labels_btn").removeClass("active"); // update button
+    } else {
+        // turn all these label layers visible
+        scene.config.layers.road_label_interstate_shields.draw.text.visible = true;
+        scene.config.layers.road_label_us_highway_shields.draw.text.visible = true;
+        scene.config.layers.road_label_major.draw.text.visible = true;
+        scene.config.layers.road_label_minor.draw.text.visible = true;
+
+        scene.config.layers.places['populated-places']['populated-places-natural-earth-z6']['z3places-1']['draw']['text-blend-order'].visible = true;
+        scene.config.layers.places['populated-places']['populated-places-natural-earth-z6']['z4places-2']['draw']['text-blend-order'].visible = true;
+        scene.config.layers.places['populated-places']['populated-places-osm-z10']['draw']['text-blend-order'].visible = true;
+        scene.config.layers.places['populated-places']['populated-places-osm-z13']['draw']['text-blend-order'].visible = true;
+
+        scene.config.layers.places['country-z2']['draw']['text-blend-order'].visible = true;
+        scene.config.layers.places['country-z3']['draw']['text-blend-order'].visible = true;
+        scene.config.layers.places['country-z4']['draw']['text-blend-order'].visible = true;
+        scene.config.layers.places['country-z5']['draw']['text-blend-order'].visible = true;
+        scene.config.layers.places['country-z6']['draw']['text-blend-order'].visible = true;
+        scene.config.layers.places['country-z7']['draw']['text-blend-order'].visible = true;
+        scene.config.layers.places['regionz5-6']['draw']['text-blend-order'].visible = true;
+        scene.config.layers.places['regionz7-9']['draw']['text-blend-order'].visible = true;
+
+        scene.updateConfig(); // update config
+        scene.rebuild(); // rebuild the map
+        $("#auto_labels_btn").addClass("active"); // update button
+
+        labelsVisible = true;
+    }
+
 
 }
 

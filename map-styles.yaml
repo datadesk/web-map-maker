@@ -1,3 +1,7 @@
+labels-global:
+    - &freeway_labels         false
+    - &city_labels            false
+
 quiet-la-colors:
     text:
         - &text             '#757575'
@@ -489,6 +493,7 @@ layers:
         filter: {name: true, kind: major_road, $zoom: {min: 14}}
         draw:
             text:
+                visible: false
                 text_source: name
                 offset: [0px, -14px]
                 order: function() { return feature.sort_key; }
@@ -504,6 +509,7 @@ layers:
         filter: {name: true, kind: minor_road, $zoom: { min: 17 }}
         draw:
             text:
+                visible: false
                 text_source: name
                 offset: [0px, -14px]
                 order: function() { return feature.sort_key; }
@@ -522,6 +528,7 @@ layers:
                 - network: ["US:I", "US:NHS High Priority Corridors"]
         draw:
             text:
+                visible: false
                 text_source: |
                     function() {
                         return feature.ref;
@@ -542,6 +549,7 @@ layers:
                 - network: "US:US"
         draw:
             text:
+                visible: false
                 text_source: |
                     function() {
                         return feature.ref;
@@ -573,7 +581,7 @@ layers:
             draw:
                 text-blend-order:
                     priority: 3
-                    visible: true
+                    visible: false
                     text_source: function() { return feature["name:en"] || feature["name"]; }
                     font:
                         fill: '#9C9C9C'
@@ -585,7 +593,7 @@ layers:
             draw:
                 text-blend-order:
                     priority: 3
-                    visible: true
+                    visible: false
                     text_source: function() { return feature["name:en"] || feature["name"]; }
                     font:
                         fill: '#9C9C9C'
@@ -603,7 +611,7 @@ layers:
             draw:
                 text-blend-order:
                     priority: 3
-                    visible: true
+                    visible: false
                     text_source: function() { return feature["name:en"] || feature["name"]; }
                     font:
                         fill: '#9C9C9C'
@@ -629,7 +637,7 @@ layers:
             draw:
                 text-blend-order:
                     priority: 3
-                    visible: true
+                    visible: false
                     text_source: function() { return feature["name:en"] || feature["name"]; }
                     font:
                         fill: '#9C9C9C'
@@ -647,7 +655,7 @@ layers:
             draw:
                 text-blend-order:
                     priority: 3
-                    visible: true
+                    visible: false
                     text_source: function() { return feature["name:en"] || feature["name"]; }
                     font:
                         size: 26px
@@ -665,7 +673,7 @@ layers:
             draw:
                 text-blend-order:
                     priority: 3
-                    visible: true
+                    visible: false
                     text_source: function() { return feature["name:en"] || feature["name"]; }
                     font:
                         size: 20px
@@ -682,7 +690,7 @@ layers:
             draw:
                 text-blend-order:
                     priority: 14
-                    visible: true
+                    visible: false
                     text_source: function() { return feature["name:abbreviation"] || feature["name"]; }
                     font:
                         size: 30px
@@ -694,7 +702,7 @@ layers:
             draw:
                 text-blend-order:
                     priority: 14
-                    visible: true
+                    visible: false
                     text_source: function() { if(feature["name:short"]) { return feature["name"]; } else { return ""; } }
                     font:
                         size: 30px
@@ -722,7 +730,7 @@ layers:
                     filter: { scalerank: [0] }
                     draw:
                         text-blend-order:
-                            visible: true
+                            visible: false
                             offset: [0, 3px] # half icon size
                             font:
                                 size: 20px
@@ -732,7 +740,7 @@ layers:
                     filter: { scalerank: [1,2] }
                     draw:
                         text-blend-order:
-                            visible: true
+                            visible: false
                             offset: [0, 3px] # half icon size
                             priority: 8
                             font:
@@ -751,7 +759,7 @@ layers:
                 draw:
                     text-blend-order:
                         # anchor: center
-                        visible: true
+                        visible: false
                         offset: [0, 3px] # half icon size
                         priority: 16
                         font:
@@ -770,7 +778,7 @@ layers:
                 draw:
                     text-blend-order:
                         # anchor: center
-                        visible: true
+                        visible: false
                         offset: [0, 3px] # half icon size
                         priority: 16
                         font:
