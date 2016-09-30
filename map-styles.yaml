@@ -192,8 +192,8 @@ layers:
                     - admin_level: 4
             draw:
                 lines:
-                    color: *state_brdr
-                    width: [[2, 0.75px], [3, 1px], [5, 1.5px], [9, 3.5px], [14, 5.5px], [16, 6.5px], [17, 16m]]
+                    color: *nation_brdr
+                    width: [[1, 0.25px], [2, 0.5px], [4, 1.5px], [9, 1.5px], [14, 2px], [16, 2.5px], [17, 7m]]
             water:
                 filter: { maritime_boundary: yes }
                 draw:
