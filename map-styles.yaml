@@ -165,6 +165,7 @@ layers:
         filter: { kind:[swimming_pool], $zoom: { min: 17 } }
         draw:
             polygons:
+                visible: true
                 order: function() { return feature.sort_key; }
                 color: "#d1e1e8"
 
@@ -466,9 +467,11 @@ layers:
         filter: { $zoom: { min: 15 }}
         draw:
             polygons:
+                visible: true
                 order: function() { return feature.sort_key; }
                 color: *building
             lines:
+                visible: true
                 order: function() { return feature.sort_key; }
                 color: "#c8c8c1"
                 width: [[17,0],[18,1m],[20,0.5m]]

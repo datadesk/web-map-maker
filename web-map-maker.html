@@ -1889,16 +1889,18 @@ function showLabels() {
 function showBuildings() {
     if (buildingsVisible) {
         // remove buildings
-        delete scene.config.layers.buildings;
-        delete scene.config.layers["swimming-pools"]; // pools
+        scene.config.layers.buildings.draw.lines.visible = false;
+        scene.config.layers.buildings.draw.polygons.visible = false;
+        scene.config.layers["swimming-pools"].draw.polygons.visible = false; // pools
         scene.updateConfig(); // update config
         scene.rebuild(); // rebuild the map
         $("#buildings_btn").removeClass("active"); // update button
         buildingsVisible = false;
     } else {
         // add buildings
-        scene.config.layers.buildings = {"data":{"source":"osm","layer":"buildings"},"filter":{"$zoom":{"min":15}},"draw":{"polygons":{"order":"function() { return feature.sort_key; }","color":"#e6e3df"},"lines":{"order":"function() { return feature.sort_key; }","color":"#c8c8c1","width":[[17,0],[18,"1m"]],"style":"lines"}}};
-        scene.config.layers["swimming-pools"] = {"data":{"source":"osm","layer":"water"},"filter":{"kind":["swimming_pool"],"$zoom":{"min":15}},"draw":{"polygons":{"order":"function() { return feature.sort_key; }","color":"#d1e1e8"}}};
+        scene.config.layers.buildings.draw.lines.visible = true;
+        scene.config.layers.buildings.draw.polygons.visible = true;
+        scene.config.layers["swimming-pools"].draw.polygons.visible = true; // pools
         scene.updateConfig(); // update config
         scene.rebuild(); // rebuild the map
         $("#buildings_btn").addClass("active"); // update button
