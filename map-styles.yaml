@@ -63,7 +63,9 @@ styles:
         base: lines
         dash: [1.25, 1.25]
         dash_background_color: red
-
+    text-blend-order:
+        base: text
+        blend_order: 1
 layers:
     earth:
         data: { source: osm, layer: earth }
@@ -467,81 +469,201 @@ layers:
                 width: [[17,0],[18,1m],[20,0.5m]]
                 style: lines
 
-    # road_label_major:
-    #     data: { source: osm, layer: roads }
-    #     filter: {name: true, kind: major_road}
-    #     draw:
-    #         text:
-    #             text_source: name
-    #             offset: [0px, -14px]
-    #             order: function() { return feature.sort_key; }
-    #             font:
-    #                 family: 'Benton Gothic Regular'
-    #                 size: [[13, 20px], [14, 22px], [15, 24px], [16, 26px]]
-    #                 fill: *road_text
-    #                 stroke: {color: '#efebe7', width: 1}
-
-    # road_label_minor:
-    #     data: { source: osm, layer: roads }
-    #     filter: {name: true, kind: minor_road, $zoom: { min: 16 }}
-    #     draw:
-    #         text:
-    #             text_source: name
-    #             offset: [0px, -10px]
-    #             order: function() { return feature.sort_key; }
-    #             font:
-    #                 family: 'Benton Gothic Regular'
-    #                 size: 18px
-    #                 fill: '#9C9C9C'
-    #                 stroke: {color: '#efebe7', width: 1}
-
-    # subway-light-rail:
-    #     data: { source: mapzen, layer: transit }
-    #     filter: { not: { kind: [platform] }, $zoom: { min: 11 } }
-    #     draw:
-    #         lines:
-    #             interactive: true
-    #             order: 499
-    #     railway:
-    #         filter: { kind: [railway,train] }
-    #         draw:
-    #             lines:
-    #                 color: [[14,[0.653,0.758,0.786]], [17,[0.670,0.777,0.807]]]
-    #                 width: [[14,0.4px],[15,0.75px],[16,1.1px],[18,2px],[19,1m]]
-    #     subway:
-    #         filter: { kind: subway }
-    #         draw:
-    #             lines:
-    #                 color: function() {
-    #                     if(feature.colour == 'purple') { return '#BCADD0';}
-    #                     else if (feature.colour == 'red') { return '#DD9894'; }
-    #                     else { return feature.colour; } }
-    #                 offset: [0px,10px]
-    #                 width: [[11,3px],[15,2.5px],[18,5m]]
-    #                 z: function() {
-    #                     if(feature.colour == 'purple') { return 1;}
-    #                     else if (feature.colour == 'red') { return 2; } }
-    #                 cap: round
-
-    #     light_rail:
-    #         filter: { kind: [light_rail,tram], $zoom: { min: 11 } }
-    #         draw:
-    #             lines:
-    #                 color: function() { 
-    #                     if(feature.colour == '#00A5DB') { return '#A4BED7';}
-    #                     else if (feature.colour == 'blue') { return '#6B9CC2'; }
-    #                     else if (feature.colour == '#FFD700') { return '#FADA85'; }
-    #                     else if (feature.colour == 'green') { return '#759371'; }
-    #                     else { return feature.colour; } }
-    #                 width: [[11,3px],[15,2.5px],[18,5m]]
-    #                 cap: round
+    water_label:
+        data: { source: osm, layer: places }
+        filter: { kind: [sea, ocean] }
+        draw:
+            text:
+                text_source: name
+                font:
+                    family: 'Benton Gothic Regular'
+                    size: 12px
+                    fill: '#757575'
+                    # stroke: { color: [255,255,255,0.7], width:1px }
+                    stroke: { color: '#ffffff', width:1 }
 
 
+    road_label_major:
+        data: { source: osm, layer: roads }
+        filter: {name: true, kind: major_road}
+        draw:
+            text:
+                text_source: name
+                offset: [0px, -14px]
+                order: function() { return feature.sort_key; }
+                font:
+                    family: 'Benton Gothic Regular'
+                    size: [[13, 20px], [14, 22px], [15, 24px], [16, 26px]]
+                    fill: *road_text
+                    stroke: {color: '#efebe7', width: 1}
 
-    # my-counties:
-    #     data: { source: counties, layer: counties }
-    #     draw:
-    #         polygons:
-    #             order: 450
-    #             color: *state_brdr
-                
+    road_label_minor:
+        data: { source: osm, layer: roads }
+        filter: {name: true, kind: minor_road, $zoom: { min: 16 }}
+        draw:
+            text:
+                text_source: name
+                offset: [0px, -10px]
+                order: function() { return feature.sort_key; }
+                font:
+                    family: 'Benton Gothic Regular'
+                    size: 18px
+                    fill: '#9C9C9C'
+                    stroke: {color: '#efebe7', width: 1}
+
+
+    places:
+        data: { source: osm, layer: places }
+        filter: { not: { kind: [ocean, sea] } }
+        draw:
+            text-blend-order:
+                visible: false    # labels are enabled by each layer below
+                font:
+                    family: 'Benton Gothic Regular'
+                    # weight: 500
+                    fill: '#9C9C9C'
+
+        country-z2:
+            filter:
+                all:
+                    - kind: [country]
+                    - $zoom: [2]
+                    - name: ["United States of America","Brasil","中华人民共和国","Россия","Canada","Kalaallit Nunaat","Ísland","Australia","India","日本","Guam","Indonesia","South Africa","مصر","Nigeria","Kenya"]
+            draw:
+                text-blend-order:
+                    priority: 3
+                    visible: true
+                    text_source: function() { return feature["name:en"] || feature["name"]; }
+                    font:
+                        fill: '#9C9C9C'
+                        weight: 200
+                        size: 20px
+                        stroke: { color: *background, width: 4 }          
+        country-z3:
+            filter: { name: true, population: true, kind: [country], $zoom: [3] }
+            draw:
+                text-blend-order:
+                    priority: 3
+                    visible: true
+                    text_source: function() { return feature["name:en"] || feature["name"]; }
+                    font:
+                        fill: '#9C9C9C'
+                        weight: 200
+                        size: 20px
+                        stroke: { color: *background, width: 4 }
+            early-ones:
+                # US, Brazil, China, Russia, Canada, Greenland, Iceland, Australia, India, Japan, Guam, Indonesia, South Africa, Egypt, Nigeria, Kenya
+                filter: { not: { name: ["United States of America","Brasil","中华人民共和国","España","Norge","Россия","Canada","Kalaallit Nunaat","Ísland","Australia","India","日本","Guam","Indonesia","South Africa","مصر","Nigeria","Kenya"] }, $zoom: {min: 3, max: 4} }
+                draw:
+                    text-blend-order:
+                        visible: false
+        country-z4:
+            filter: { name: true, population: true, kind: [country], $zoom: [4] }
+            draw:
+                text-blend-order:
+                    priority: 3
+                    visible: true
+                    text_source: function() { return feature["name:en"] || feature["name"]; }
+                    font:
+                        fill: '#9C9C9C'
+                        weight: 200
+                        size: 20px
+                        stroke: { color: *background, width: 4 }
+            early-ones-z4:
+                filter: { name: [Nederland,Luxembourg,Liechtenstein,San Marino,Civitatis Vaticanæ,Crna Gora,Македонија,The Gambia,Burundi,Swaziland,الإمارات العربية المتحدة,العراق,Singapore,El Salvador,Belize,Trinidad and Tobago, Saint Lucia, Montserrat,Anguilla,República Dominicana,Bahamas,British Virgin Islands,Antigua and Barbuda,Grenada,Sint Maarten,Saint Kitts and Nevis,Cayman Islands,België - Belgique - Belgien], $zoom: {min: 4, max: 5} }
+                draw:
+                    text-blend-order:
+                        visible: false
+        country-z5:
+            filter:
+                all:
+                    - name: true
+                    - population: true
+                    - kind: [country]
+                    - $zoom: [5]
+                any:
+                    - { population: { min: 5000000 } }
+                not:
+                    - name: "United States of America"
+            draw:
+                text-blend-order:
+                    priority: 3
+                    visible: true
+                    text_source: function() { return feature["name:en"] || feature["name"]; }
+                    font:
+                        fill: '#9C9C9C'
+                        weight: 600
+                        size: 20px
+                        stroke: { color: *background, width: 4 }
+            early-ones-z5:
+                filter: { name: [Luxembourg,Liechtenstein,San Marino,Civitatis Vaticanæ,El Salvador,Belize,België - Belgique - Belgien], $zoom: {min: 5, max: 6} }
+                draw:
+                    text-blend-order:
+                        visible: false
+        country-z6:
+            # South Ossetia and Abkhazia aren't countries (they are disputed areas)
+            filter: { name: true, kind: [country], $zoom: [6], not: { name: "United States of America" } }
+            draw:
+                text-blend-order:
+                    priority: 3
+                    visible: true
+                    text_source: function() { return feature["name:en"] || feature["name"]; }
+                    font:
+                        size: 20px
+                        weight: 600
+                        fill: '#9C9C9C'
+                        stroke: { color: *background, width: 4 }
+            small-ones-z6:
+                filter: { name: [Luxembourg,Liechtenstein,San Marino,Civitatis Vaticanæ,België - Belgique - Belgien,Хуссар Ирыстон,Аҧсны - Абхазия], $zoom: {min: 6, max: 7} }
+                draw:
+                    text-blend-order:
+                        visible: false
+        country-z7:
+            # South Ossetia and Abkhazia aren't countries (they are disputed areas)
+            filter: { name: true, kind: [country], $zoom: { min: 7, max: 9 }, not: { name: "United States of America" } }
+            draw:
+                text-blend-order:
+                    priority: 3
+                    visible: true
+                    text_source: function() { return feature["name:en"] || feature["name"]; }
+                    font:
+                        size: 20px
+                        weight: 600
+                        fill: '#9C9C9C'
+                        stroke: { color: *background, width: 4 }
+            small-ones-z7:
+                filter: { name: [Liechtenstein,San Marino,Civitatis Vaticanæ,Хуссар Ирыстон,Аҧсны - Абхазия], $zoom: {min: 7, max: 8} }
+                draw:
+                    text-blend-order:
+                        visible: false
+        regionz5-6:
+            filter: { name: ["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"], kind: [state], $zoom: {min: 5, max: 7} }
+            draw:
+                text-blend-order:
+                    priority: 14
+                    visible: true
+                    text_source: function() { return feature["name:abbreviation"] || feature["name"]; }
+                    font:
+                        size: 30px
+                        weight: 200
+                        fill: [0.5,0.5,0.5,0.5]
+                        stroke: { color: *background, width: 4 }
+        regionz7-9:
+            filter: { name: true, kind: [state], $zoom: {min: 7, max: 9} }
+            draw:
+                text-blend-order:
+                    priority: 14
+                    visible: true
+                    text_source: function() { if(feature["name:short"]) { return feature["name"]; } else { return ""; } }
+                    font:
+                        size: 30px
+                        weight: 200
+                        fill: [0.5,0.5,0.5,0.5]
+                        stroke: { color: *background, width: 4 }
+                        transform: uppercase
+            small-ones:
+                filter: { name: ["Delaware","New Jersey","Connecticut","Rhode Island","Massachusetts","New Hampshire","Vermont"], $zoom: {min: 7, max: 8} }
+                draw:
+                    text-blend-order:
+                        text_source: function() { return feature["name:abbreviation"] || feature["name"]; }
+                        font: { transform: uppercase }
