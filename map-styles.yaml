@@ -159,7 +159,7 @@ layers:
         draw:
             polygons:
                 order: function() { return feature.sort_key; }
-                color: *water
+                color: "#d1e1e8"
 
     boundaries:
         data: { source: osm, layer: boundaries }
