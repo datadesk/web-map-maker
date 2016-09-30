@@ -66,6 +66,11 @@ styles:
     text-blend-order:
         base: text
         blend_order: 1
+    icons:
+        base: points
+        texture: pois
+        blend_order: 1
+
 layers:
     earth:
         data: { source: osm, layer: earth }
@@ -192,7 +197,7 @@ layers:
                     - admin_level: 4
             draw:
                 lines:
-                    color: *nation_brdr
+                    color: [[6,*state_brdr],[7,*nation_brdr]]
                     width: [[1, 0.25px], [2, 0.5px], [4, 1.5px], [9, 1.5px], [14, 2px], [16, 2.5px], [17, 7m]]
             water:
                 filter: { maritime_boundary: yes }
@@ -667,3 +672,34 @@ layers:
                     text-blend-order:
                         text_source: function() { return feature["name:abbreviation"] || feature["name"]; }
                         font: { transform: uppercase }
+
+        populated-places:
+            draw:
+                text-blend-order:
+                    interactive: true
+                    anchor: bottom
+                    priority: 6
+
+            populated-places-natural-earth-z4:
+                filter: { name: true, source: naturalearthdata.com, $zoom: [4] }
+                z3places-1:
+                    filter: { scalerank: [0] }
+                    draw:
+                        text-blend-order:
+                            visible: true
+                            offset: [0, 3px] # half icon size
+                            font:
+                                size: 16px
+                                fill: '#9C9C9C'
+                                stroke: { color: *background, width: 3 }
+                z4places-2:
+                    filter: { scalerank: [1,2] }
+                    draw:
+                        text-blend-order:
+                            visible: true
+                            offset: [0, 3px] # half icon size
+                            priority: 8
+                            font:
+                                size: 16px
+                                fill: '#9C9C9C'
+                                stroke: { color: *background, width: 4 }
