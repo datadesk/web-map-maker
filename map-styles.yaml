@@ -498,7 +498,7 @@ layers:
                 order: function() { return feature.sort_key; }
                 font:
                     family: 'Benton Gothic Regular'
-                    size: [[13, 20px], [14, 22px], [15, 24px], [16, 26px]]
+                    size: [[14, 20px], [14, 22px], [15, 24px], [16, 26px]]
                     fill: *road_text
                     stroke: {color: '#efebe7', width: 1}
 
@@ -542,7 +542,7 @@ layers:
                     font:
                         fill: '#9C9C9C'
                         weight: 200
-                        size: 20px
+                        size: 26px
                         stroke: { color: *background, width: 4 }          
         country-z3:
             filter: { name: true, population: true, kind: [country], $zoom: [3] }
@@ -554,7 +554,7 @@ layers:
                     font:
                         fill: '#9C9C9C'
                         weight: 200
-                        size: 20px
+                        size: 26px
                         stroke: { color: *background, width: 4 }
             early-ones:
                 # US, Brazil, China, Russia, Canada, Greenland, Iceland, Australia, India, Japan, Guam, Indonesia, South Africa, Egypt, Nigeria, Kenya
@@ -572,7 +572,7 @@ layers:
                     font:
                         fill: '#9C9C9C'
                         weight: 200
-                        size: 20px
+                        size: 26px
                         stroke: { color: *background, width: 4 }
             early-ones-z4:
                 filter: { name: [Nederland,Luxembourg,Liechtenstein,San Marino,Civitatis Vaticanæ,Crna Gora,Македонија,The Gambia,Burundi,Swaziland,الإمارات العربية المتحدة,العراق,Singapore,El Salvador,Belize,Trinidad and Tobago, Saint Lucia, Montserrat,Anguilla,República Dominicana,Bahamas,British Virgin Islands,Antigua and Barbuda,Grenada,Sint Maarten,Saint Kitts and Nevis,Cayman Islands,België - Belgique - Belgien], $zoom: {min: 4, max: 5} }
@@ -598,7 +598,7 @@ layers:
                     font:
                         fill: '#9C9C9C'
                         weight: 600
-                        size: 20px
+                        size: 26px
                         stroke: { color: *background, width: 4 }
             early-ones-z5:
                 filter: { name: [Luxembourg,Liechtenstein,San Marino,Civitatis Vaticanæ,El Salvador,Belize,België - Belgique - Belgien], $zoom: {min: 5, max: 6} }
@@ -614,7 +614,7 @@ layers:
                     visible: true
                     text_source: function() { return feature["name:en"] || feature["name"]; }
                     font:
-                        size: 20px
+                        size: 26px
                         weight: 600
                         fill: '#9C9C9C'
                         stroke: { color: *background, width: 4 }
@@ -625,7 +625,7 @@ layers:
                         visible: false
         country-z7:
             # South Ossetia and Abkhazia aren't countries (they are disputed areas)
-            filter: { name: true, kind: [country], $zoom: { min: 7, max: 9 }, not: { name: "United States of America" } }
+            filter: { name: true, kind: [country], $zoom: { min: 7, max: 9 }, not: { name: ["United States of America", "Приднестровье"] } }
             draw:
                 text-blend-order:
                     priority: 3
@@ -677,11 +677,11 @@ layers:
             draw:
                 text-blend-order:
                     interactive: true
-                    anchor: bottom
+                    anchor: top
                     priority: 6
 
-            populated-places-natural-earth-z4:
-                filter: { name: true, source: naturalearthdata.com, $zoom: [4] }
+            populated-places-natural-earth-z6:
+                filter: { name: true, source: naturalearthdata.com, $zoom: [6] }
                 z3places-1:
                     filter: { scalerank: [0] }
                     draw:
@@ -689,7 +689,7 @@ layers:
                             visible: true
                             offset: [0, 3px] # half icon size
                             font:
-                                size: 16px
+                                size: 20px
                                 fill: '#9C9C9C'
                                 stroke: { color: *background, width: 3 }
                 z4places-2:
@@ -703,3 +703,5 @@ layers:
                                 size: 16px
                                 fill: '#9C9C9C'
                                 stroke: { color: *background, width: 4 }
+
+
