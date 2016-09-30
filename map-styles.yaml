@@ -38,7 +38,7 @@ quiet-la-colors:
         - &state_brdr       '#cbced1'
     roads:
         - &road             '#c8c8c1'
-        - &road_text        '#757575'
+        - &road_text        '#9C9C9C'
         - &rail_line        '#c8c8c1'
         - &aeroway          '#dddddd'
 
@@ -65,10 +65,6 @@ styles:
         dash_background_color: red
     text-blend-order:
         base: text
-        blend_order: 1
-    icons:
-        base: points
-        texture: pois
         blend_order: 1
 
 layers:
@@ -490,12 +486,13 @@ layers:
 
     road_label_major:
         data: { source: osm, layer: roads }
-        filter: {name: true, kind: major_road}
+        filter: {name: true, kind: major_road, $zoom: {min: 14}}
         draw:
             text:
                 text_source: name
                 offset: [0px, -14px]
                 order: function() { return feature.sort_key; }
+                repeat_distance: 600px
                 font:
                     family: 'Benton Gothic Regular'
                     size: [[14, 20px], [14, 22px], [15, 24px], [16, 26px]]
@@ -504,15 +501,16 @@ layers:
 
     road_label_minor:
         data: { source: osm, layer: roads }
-        filter: {name: true, kind: minor_road, $zoom: { min: 16 }}
+        filter: {name: true, kind: minor_road, $zoom: { min: 17 }}
         draw:
             text:
                 text_source: name
-                offset: [0px, -10px]
+                offset: [0px, -14px]
                 order: function() { return feature.sort_key; }
+                repeat_distance: 700px
                 font:
                     family: 'Benton Gothic Regular'
-                    size: 18px
+                    size: 26px
                     fill: '#9C9C9C'
                     stroke: {color: '#efebe7', width: 1}
 
@@ -681,7 +679,7 @@ layers:
                     priority: 6
 
             populated-places-natural-earth-z6:
-                filter: { name: true, source: naturalearthdata.com, $zoom: [6] }
+                filter: { name: true, source: naturalearthdata.com, $zoom: {min: 6, max: 9} }
                 z3places-1:
                     filter: { scalerank: [0] }
                     draw:
@@ -703,5 +701,41 @@ layers:
                                 size: 16px
                                 fill: '#9C9C9C'
                                 stroke: { color: *background, width: 4 }
-
-
+            populated-places-osm-z10:
+                filter:
+                    all:
+                        - source: [openstreetmap, openstreetmap.org]
+                        - name: true
+                        - population: { min: 100000 }
+                        - not: { kind: [country, county, state, island, neighbourhood, suburb, quarter] }
+                        - $zoom: {min: 9, max: 13}
+                        - kind: [city,town]
+                draw:
+                    text-blend-order:
+                        # anchor: center
+                        visible: true
+                        offset: [0, 3px] # half icon size
+                        priority: 16
+                        font:
+                            size: [[10,22px],[11,26px],[12,30px]]
+                            fill: '#9C9C9C'
+                            stroke: { color: *background, width: 4 }
+            populated-places-osm-z13:
+                filter:
+                    all:
+                        - source: [openstreetmap, openstreetmap.org]
+                        - name: true
+                        - population: { min: 100 }
+                        - not: { kind: [country, county, state, island, suburb, quarter] }
+                        - $zoom: {min: 13}
+                        - kind: [city,town,neighbourhood]
+                draw:
+                    text-blend-order:
+                        # anchor: center
+                        visible: true
+                        offset: [0, 3px] # half icon size
+                        priority: 16
+                        font:
+                            size: [[13,26px]]
+                            fill: '#9C9C9C'
+                            stroke: { color: *background, width: 4 }
