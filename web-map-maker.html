@@ -18,21 +18,25 @@
     <link rel="stylesheet" href="styles/jquery-ui.css">
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
     <script type="text/javascript" src="http://d1qqc1e9kvmdh8.cloudfront.net/bootstrap/2.3.2/js/bootstrap.min.js"></script>
 
     <script src="http://d1qqc1e9kvmdh8.cloudfront.net/js/underscore-1.8.3-min.js"></script>
-    <script src="http://d1qqc1e9kvmdh8.cloudfront.net/js/leaflet-1.0.0-b1/leaflet-src.js"></script>
+    <script src="js/leaflet.js"></script>
     <script src="js/tangram.min.js"></script>
-    <script src="js/fontfaceobserver.js"></script>
-    <script src="js/canvas2svg.js"></script>
-    <script src="js/canvas2image.js"></script>
-    <script src="js/html2canvas.js"></script>
+
+    <!-- <script src="js/fontfaceobserver.js"></script> -->
+    <!-- <script src="js/canvas2svg.js"></script> -->
+    <!-- <script src="js/canvas2image.js"></script> -->
+    <!-- <script src="js/html2canvas.js"></script> -->
+
     <script src="js/jquery-ui.js"></script>
+
     <script type="text/javascript" src="http://cookbook.latimes.com/js/leaflet-bing-layer-0.0.1.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geocoder-mapzen/1.4.1/leaflet-geocoder-mapzen.js"></script>
 
-    <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-image/v0.0.4/leaflet-image.js' type="text/javascript"></script>
+    <!-- <script src='https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-image/v0.0.4/leaflet-image.js' type="text/javascript"></script> -->
 
 
     <style type="text/css" media="screen">
@@ -1334,7 +1338,7 @@ box-sizing: content-box;
         $("#zoom_level").text(zoomRounded.toFixed(1));
 
         // buildings brought in level
-        if (zoomRounded >= 15) {
+        if (zoomRounded >= 14) {
             if (buildingsVisible != false) {
                 $("#buildings_btn").addClass("active");
                 buildingsVisible = true;
@@ -1832,8 +1836,8 @@ function showLabels() {
     // check current status
     if (labelsVisible) {
         // turn all these label layers hidden
-        scene.config.layers.road_label_interstate_shields.draw.text.visible = false;
-        scene.config.layers.road_label_us_highway_shields.draw.text.visible = false;
+        // scene.config.layers.road_label_interstate_shields.draw.text.visible = false;
+        // scene.config.layers.road_label_us_highway_shields.draw.text.visible = false;
         scene.config.layers.road_label_major.draw.text.visible = false;
         scene.config.layers.road_label_minor.draw.text.visible = false;
 
@@ -1859,8 +1863,8 @@ function showLabels() {
         $("#auto_labels_btn").removeClass("active"); // update button
     } else {
         // turn all these label layers visible
-        scene.config.layers.road_label_interstate_shields.draw.text.visible = true;
-        scene.config.layers.road_label_us_highway_shields.draw.text.visible = true;
+        // scene.config.layers.road_label_interstate_shields.draw.text.visible = true;
+        // scene.config.layers.road_label_us_highway_shields.draw.text.visible = true;
         scene.config.layers.road_label_major.draw.text.visible = true;
         scene.config.layers.road_label_minor.draw.text.visible = true;
 
@@ -1891,7 +1895,7 @@ function showLabels() {
 // shows and hides buildings and swimming pools
 function showBuildings() {
     // check zoom
-    if (map.getZoom() >= 15) {
+    if (map.getZoom() >= 14) {
         if (buildingsVisible) {
             // remove buildings
             scene.config.layers.buildings.draw.lines.visible = false;
