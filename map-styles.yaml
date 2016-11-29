@@ -472,6 +472,7 @@ layers:
                         cap: square
 
         labels:
+            visible: false
             filter:
                 $zoom: { min: 7 }
                 not: { kind: [rail, aeroway], is_tunnel: true }
@@ -548,48 +549,20 @@ layers:
                 style: lines
 
 
-    water_label:
-        data: { source: mapzen, layer: places }
-        filter: { kind: [sea, ocean] }
-        draw:
-            text:
-                text_source: name
-                font:
-                    family: 'Benton Gothic Regular'
-                    size: 12px
-                    fill: '#757575'
-                    # stroke: { color: [255,255,255,0.7], width:1px }
-                    stroke: { color: '#ffffff', width:1 }
+    # water_label:
+    #     data: { source: mapzen, layer: places }
+    #     filter: { kind: [sea, ocean] }
+    #     draw:
+    #         text:
+    #             text_source: name
+    #             font:
+    #                 family: 'Benton Gothic Regular'
+    #                 size: 12px
+    #                 fill: '#757575'
+    #                 # stroke: { color: [255,255,255,0.7], width:1px }
+    #                 stroke: { color: '#ffffff', width:1 }
 
 
-
-
-
-        # shields:
-        #     filter: { network: true, shield_text: true }
-        #     draw:
-        #         shields:
-        #             sprite: function() { return feature.network }
-        #             # sprite_default: 'US:CA'
-        #             color: white
-        #             size: 26px
-        #             repeat_group: shields
-        #             cull_from_tile: true
-        #             text:
-        #                 anchor: center
-        #                 repeat_distance: 150px
-        #                 text_source: shield_text
-        #                 font:
-        #                     family: Helvetica
-        #                     size: 11px
-        #                     fill: black
-
-        #     # thin-out shields at low-zoom
-        #     thinning:
-        #         filter: { $zoom: { max: 11 } }
-        #         draw:
-        #             shields:
-        #                 repeat_distance: 75px
     places:
         data: { source: mapzen, layer: places }
         filter: { not: { kind: [ocean, sea] } }
