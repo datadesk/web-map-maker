@@ -18,7 +18,7 @@ quiet-la-colors:
         - &beach            '#ebe2cd'
         - &runway           '#bfbebd'
         - &aerodrome        '#d6d6d6'
-        - &building         '#e6e3df'
+        - &building         '#e0ddda'
         - &building_outline 'rgba(0,0,0,0)'
         - &building_top     'rgba(230,230,230,1)'
         - &earth2_e    '#d8d3ca'           # urban early
@@ -59,6 +59,15 @@ sources:
     #     type: GeoJSON
     #     url: counties.geojson
 
+textures:
+    shields:
+        sprites:
+            # define sprites: [x origin, y origin, width, height]
+            'US:I': [17, 71, 90, 72]
+            'US:US': [510, 71, 90, 72]
+            'US:CA': [130, 71, 90, 72]
+            'US:CA:CR': [632, 71, 90, 72]
+        url: styles/images/lat-shields-solid.png
 
 cameras:
     perspective:
@@ -72,6 +81,9 @@ styles:
     text-blend-order:
         base: text
         blend_order: 1
+    shields:
+        base: points
+        texture: shields
 
 layers:
     earth:
@@ -442,27 +454,61 @@ layers:
                     lines:
                         width: [[11, 3px], [12, 5px], [13, 10px], [15, 75]]
                         cap: square
-    # Airports
-    # aeroways:
-    #     data: { source: mapzen, layer: roads }
-    #     filter: { aeroway: [runway, taxiway] }
-    #     aeroway_runway:
-    #         filter: { aeroway: runway }
-    #         draw:
-    #             polygons:
-    #                 order: function() { return feature.sort_rank; }
-    #                 color: *aeroway
-    #             lines:
-    #                 order: function() { return feature.sort_rank; }
-    #                 color: *aeroway
-    #                 width: [[11, 3px], [20, 16px]]
-    #     aeroway_taxiway:
-    #         filter: { aeroway: taxiway }
-    #         draw:
-    #             lines:
-    #                 order: function() { return feature.sort_rank; }
-    #                 color: *aeroway
-    #                 width: [[11, 0.5px], [20, 6px]]
+
+        labels:
+            filter:
+                $zoom: { min: 7 }
+                not: { kind: [rail, aeroway], is_tunnel: true }
+
+            major_road:
+                filter: { kind: major_road, $zoom: { min: 14 } }
+                draw:
+                    text:
+                        text_source: name
+                        offset: [0px, -14px]
+                        order: function() { return feature.sort_rank; }
+                        repeat_distance: 600px
+                        priority: 3
+                        font:
+                            fill: '#666'
+                            family: 'Benton Gothic Regular'
+                            size: 26px
+                            stroke: { color: *background, width: 4 }
+
+
+            minor_road:
+                filter: { kind: minor_road, $zoom: { min: 17 } }
+                draw:
+                    text:
+                        text_source: name
+                        offset: [0px, -14px]
+                        priority: 5
+                        order: function() { return feature.sort_rank; }
+                        font:
+                            fill: '#9C9C9C'
+                            stroke: { color: white, width: 4 }
+                            family: 'Benton Gothic Regular'
+                            size: 26px
+                            stroke: {color: '#efebe7', width: 1}
+
+        shields:
+            filter: { network: true, shield_text: true, $zoom: { min: 9 } }
+            draw:
+                shields:
+                    sprite: function() { return feature.network }
+                    # sprite_default: 'US:CA'
+                    color: white
+                    size: [[10,30px],[12,50px]]
+                    repeat_group: shields
+                    cull_from_tile: true
+                    text:
+                        anchor: center
+                        repeat_distance: 600px
+                        text_source: shield_text
+                        font:
+                            family: 'Benton Gothic Regular'
+                            size: 20px
+                            fill: '#9C9C9C'
 
     buildings:
         data: { source: mapzen, layer: buildings }
@@ -479,6 +525,7 @@ layers:
                 width: [[17,0],[18,0.5m],[20,0.25m]]
                 style: lines
 
+
     water_label:
         data: { source: mapzen, layer: places }
         filter: { kind: [sea, ocean] }
@@ -493,37 +540,34 @@ layers:
                     stroke: { color: '#ffffff', width:1 }
 
 
-    road_label_major:
-        data: { source: mapzen, layer: roads }
-        filter: {name: true, kind: major_road, $zoom: {min: 14}}
-        draw:
-            text:
-                visible: false
-                text_source: name
-                offset: [0px, -14px]
-                order: function() { return feature.sort_rank; }
-                repeat_distance: 600px
-                font:
-                    family: 'Benton Gothic Regular'
-                    size: 26px
-                    fill: *road_text
-                    stroke: {color: *background, width: 4}
 
-    road_label_minor:
-        data: { source: mapzen, layer: roads }
-        filter: {name: true, kind: minor_road, $zoom: { min: 17 }}
-        draw:
-            text:
-                visible: false
-                text_source: name
-                offset: [0px, -14px]
-                order: function() { return feature.sort_rank; }
-                repeat_distance: 700px
-                font:
-                    family: 'Benton Gothic Regular'
-                    size: 26px
-                    fill: '#9C9C9C'
-                    stroke: {color: '#efebe7', width: 1}
+
+
+        # shields:
+        #     filter: { network: true, shield_text: true }
+        #     draw:
+        #         shields:
+        #             sprite: function() { return feature.network }
+        #             # sprite_default: 'US:CA'
+        #             color: white
+        #             size: 26px
+        #             repeat_group: shields
+        #             cull_from_tile: true
+        #             text:
+        #                 anchor: center
+        #                 repeat_distance: 150px
+        #                 text_source: shield_text
+        #                 font:
+        #                     family: Helvetica
+        #                     size: 11px
+        #                     fill: black
+
+        #     # thin-out shields at low-zoom
+        #     thinning:
+        #         filter: { $zoom: { max: 11 } }
+        #         draw:
+        #             shields:
+        #                 repeat_distance: 75px
     places:
         data: { source: mapzen, layer: places }
         filter: { not: { kind: [ocean, sea] } }
