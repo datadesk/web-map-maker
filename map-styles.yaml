@@ -483,7 +483,7 @@ layers:
                         text_source: name
                         offset: [0px, -14px]
                         order: function() { return feature.sort_rank; }
-                        repeat_distance: 600px
+                        repeat_distance: 200px
                         priority: 3
                         font:
                             fill: '#666'
@@ -492,23 +492,23 @@ layers:
                             stroke: { color: *background, width: 4 }
 
 
-            minor_road:
-                filter: { kind: minor_road, $zoom: { min: 17 } }
-                draw:
-                    text:
-                        text_source: name
-                        offset: [0px, -14px]
-                        priority: 5
-                        order: function() { return feature.sort_rank; }
-                        font:
-                            fill: '#9C9C9C'
-                            stroke: { color: white, width: 4 }
-                            family: 'Benton Gothic Regular'
-                            size: 26px
-                            stroke: {color: '#efebe7', width: 1}
+            # minor_road:
+            #     filter: { kind: minor_road, $zoom: { min: 17 } }
+            #     draw:
+            #         text:
+            #             text_source: name
+            #             offset: [0px, -14px]
+            #             priority: 5
+            #             order: function() { return feature.sort_rank; }
+            #             font:
+            #                 fill: '#9C9C9C'
+            #                 stroke: { color: white, width: 4 }
+            #                 family: 'Benton Gothic Regular'
+            #                 size: 26px
+            #                 stroke: {color: '#efebe7', width: 1}
 
         shields:
-            filter: { network: true, shield_text: true, $zoom: { min: 9 } }
+            filter: { network: true, shield_text: true, $zoom: { min: 7 } }
             draw:
                 shields:
                     sprite: function() { return (feature.network + '_' +
@@ -525,6 +525,12 @@ layers:
                             family: 'Benton Gothic Regular'
                             size: 18px
                             fill: '#9C9C9C'
+            # thin-out shields at low-zoom
+            thinning:
+                filter: { $zoom: { max: 11 } }
+                draw:
+                    shields:
+                        repeat_distance: 75px
 
     buildings:
         data: { source: mapzen, layer: buildings }
