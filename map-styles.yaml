@@ -585,24 +585,32 @@ layers:
             filter: { kind: [railway, train]}
             draw: 
                 lines:
-                    color: [[14,[0.653,0.758,0.786]],[17,[0.67,0.777,0.807]]]
-                    width: [[14, 0.4px],[15, 0.75px],[16, 1.1px],[18, 2px],[19, 1m]]
-        subway:
-            filter: { kind: subway}
-            draw: 
-                lines:
-                    color: function() { if(feature.colour == 'purple') { return '#BCADD0';} else if (feature.colour == 'red') { return '#DD9894'; } else { return feature.colour; } }
-                offset: [0px, 10px]
-                width: [[11, 3px],[15, 2.5px],[18, 5m]]
-                z: function() { if(feature.colour == 'purple') { return 1;} else if (feature.colour == 'red') { return 2; } }
-                cap: round
+                    color: *rail_line
+                    width: 2px
+        # subway:
+        #     filter: { kind: subway}
+        #     draw: 
+        #         lines:
+        #             color: function() { if(feature.colour == 'purple') { return '#BCADD0';} else if (feature.colour == 'red') { return '#DD9894'; } else { return feature.colour; } }
+        #         offset: [0px, 10px]
+        #         width: [[11, 3px],[15, 2.5px],[18, 5m]]
+        #         z: function() { if(feature.colour == 'purple') { return 1;} else if (feature.colour == 'red') { return 2; } }
+        #         cap: round
         light_rail: 
-            filter: { kind: [light_rail,tram], $zoom: { min: 11 }}
+            filter: { kind: [light_rail,tram, subway], $zoom: { min: 11 }}
             draw:
                 lines:
-                    color: function() { if(feature.colour == '#00A5DB') { return '#A4BED7';} else if (feature.colour == 'blue') { return '#6B9CC2'; } else if (feature.colour == '#FFD700') { return '#FADA85'; } else if (feature.colour == 'green') { return '#759371'; } else { return feature.colour; } }
-                    width: [[11, 3px],[15, 2.5px ],[18, 5m]]
+                    color: function() { 
+                        if(feature.colour == '#00A5DB') { return '#A4BED7';} 
+                        else if (feature.colour == 'blue') { return '#6B9CC2'; } 
+                        else if (feature.colour == '#FFD700') { return '#FADA85'; } 
+                        else if (feature.colour == 'green') { return '#759371'; } 
+                        else if(feature.colour == 'purple') { return '#BCADD0';} 
+                        else if (feature.colour == 'red') { return '#DD9894'; }
+                        else { return feature.colour; } }
+                    width: [[11, 5px],[15, 3.5px ],[18, 5m]]
                     cap: round
+                    z: function() { if(feature.colour == 'purple') { return 1;} else if (feature.colour == 'red') { return 2; } }
 
 
     # water_label:
