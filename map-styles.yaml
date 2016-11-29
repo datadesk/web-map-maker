@@ -63,18 +63,26 @@ textures:
     shields:
         sprites:
             # define sprites: [x origin, y origin, width, height]
-            'US:I_char1': [20, 20, 100, 120]
-            'US:I_char2': [140, 20, 120, 120]
-            'US:I_char3': [280, 20, 140, 120]
-            'US:I_char4': [440, 20, 180, 120]
-            'US:I_char5': [640, 20, 220, 120]
-            'US:US_char1': [20, 160, 100, 120]
-            'US:US_char2': [140, 300, 120, 120]
-            'US:US_char3': [280, 300, 140, 120]
-            'US:US_char4': [440, 300, 180, 120]
-            'US:US_char5': [650, 300, 220, 120]
-            'US:CA_char2': [140, 160, 120, 120]
-            'US:CA:CR_char2': [140, 440, 120, 120]
+            'US:I_1char': [0, 0, 220, 220]
+            'US:I_2char': [220, 0, 220, 220]
+            'US:I_3char': [440, 0, 220, 220]
+            'US:I_4char': [660, 0, 220, 220]
+            'US:I_5char': [880, 0, 220, 220]
+            'US:US_1char': [0, 440, 220, 220]
+            'US:US_2char': [220, 440, 220, 220]
+            'US:US_3char': [440, 440, 220, 220]
+            'US:US_4char': [660, 440, 220, 220]
+            'US:US_5char': [880, 440, 220, 220]
+            'US:CA_1char': [0, 220, 220, 220]
+            'US:CA_2char': [220, 220, 220, 220]
+            'US:CA_3char': [440, 220, 220, 220]
+            'US:CA_4char': [660, 220, 220, 220]
+            'US:CA_5char': [880, 220, 220, 220]
+            'US:CA:CR_1char': [0, 660, 220, 220]
+            'US:CA:CR_2char': [220, 660, 220, 220]
+            'US:CA:CR_3char': [440, 660, 220, 220]
+            'US:CA:CR_4char': [660, 660, 220, 220]
+            'US:CA:CR_5char': [880, 660, 220, 220]
         url: images/shields.png
 
 cameras:
@@ -503,9 +511,11 @@ layers:
             filter: { network: true, shield_text: true, $zoom: { min: 9 } }
             draw:
                 shields:
-                    sprite: function() { return (feature.network + '_' + 'char' + feature.shield_text.length); }
+                    sprite: function() { return (feature.network + '_' +
+                            feature.shield_text.length +
+                            'char'); }
                     # sprite_default: 'US:CA'
-                    size: [[10,30px],[12,44px]]
+                    size: 58px
                     cull_from_tile: true
                     text:
                         anchor: center
@@ -513,7 +523,7 @@ layers:
                         text_source: shield_text
                         font:
                             family: 'Benton Gothic Regular'
-                            size: [[10,18px],[12,26px]]
+                            size: 18px
                             fill: '#9C9C9C'
 
     buildings:
