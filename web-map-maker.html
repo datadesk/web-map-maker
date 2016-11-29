@@ -1822,7 +1822,7 @@ function showTransit() {
             transitVisible = false;
         } else {
             // add transit layer
-            scene.config.layers["subway-light-rail"] = {"data":{"source":"mapzen","layer":"transit"},"filter":{"not":{"kind":["platform"]},"$zoom":{"min":11}},"draw":{"lines":{"interactive":true,"order":499}},"railway":{"filter":{"kind":["railway","train"]},"draw":{"lines":{"color":[[14,[0.653,0.758,0.786]],[17,[0.67,0.777,0.807]]],"width":[[14,"0.4px"],[15,"0.75px"],[16,"1.1px"],[18,"2px"],[19,"1m"]]}}},"subway":{"filter":{"kind":"subway"},"draw":{"lines":{"color":"function() { if(feature.colour == 'purple') { return '#BCADD0';} else if (feature.colour == 'red') { return '#DD9894'; } else { return feature.colour; } }","offset":["0px","10px"],"width":[[11,"3px"],[15,"2.5px"],[18,"5m"]],"z":"function() { if(feature.colour == 'purple') { return 1;} else if (feature.colour == 'red') { return 2; } }","cap":"round"}}},"light_rail":{"filter":{"kind":["light_rail","tram"],"$zoom":{"min":11}},"draw":{"lines":{"color":"function() { if(feature.colour == '#00A5DB') { return '#A4BED7';} else if (feature.colour == 'blue') { return '#6B9CC2'; } else if (feature.colour == '#FFD700') { return '#FADA85'; } else if (feature.colour == 'green') { return '#759371'; } else { return feature.colour; } }","width":[[11,"3px"],[15,"2.5px"],[18,"5m"]],"cap":"round"}}}};
+            
             scene.updateConfig(); // update config
             scene.rebuild(); // rebuild the map
             $("#transit_btn").addClass("active"); // update button
@@ -1836,10 +1836,9 @@ function showLabels() {
     // check current status
     if (labelsVisible) {
         // turn all these label layers hidden
-        // scene.config.layers.road_label_interstate_shields.draw.text.visible = false;
-        // scene.config.layers.road_label_us_highway_shields.draw.text.visible = false;
-        scene.config.layers.road_label_major.draw.text.visible = false;
-        scene.config.layers.road_label_minor.draw.text.visible = false;
+        scene.config.layers.roads.labels.visible = false;
+        scene.config.layers.roads.shields.visible = false;
+        scene.config.layers.roads['small-shields'].visible = false;
 
         scene.config.layers.places['populated-places']['populated-places-natural-earth-z6']['z3places-1']['draw']['text-blend-order'].visible = false;
         scene.config.layers.places['populated-places']['populated-places-natural-earth-z6']['z4places-2']['draw']['text-blend-order'].visible = false;
@@ -1863,11 +1862,9 @@ function showLabels() {
         $("#auto_labels_btn").removeClass("active"); // update button
     } else {
         // turn all these label layers visible
-        // scene.config.layers.road_label_interstate_shields.draw.text.visible = true;
-        // scene.config.layers.road_label_us_highway_shields.draw.text.visible = true;
         scene.config.layers.roads.labels.visible = true;
         scene.config.layers.roads.shields.visible = true;
-        // scene.config.layers.road_label_minor.draw.text.visible = true;
+        scene.config.layers.roads['small-shields'].visible = true;
 
         scene.config.layers.places['populated-places']['populated-places-natural-earth-z6']['z3places-1']['draw']['text-blend-order'].visible = true;
         scene.config.layers.places['populated-places']['populated-places-natural-earth-z6']['z4places-2']['draw']['text-blend-order'].visible = true;
