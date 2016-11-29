@@ -1815,14 +1815,14 @@ function showTransit() {
     if (map.getZoom() >= 11) {
         if (transitVisible) {
             // remove transit
-            delete scene.config.layers["subway-light-rail"];
+            scene.config.layers.transit.visible = false;
             scene.updateConfig(); // update config
             scene.rebuild(); // rebuild the map
             $("#transit_btn").removeClass("active"); // update button
             transitVisible = false;
         } else {
             // add transit layer
-            
+            scene.config.layers.transit.visible = true;
             scene.updateConfig(); // update config
             scene.rebuild(); // rebuild the map
             $("#transit_btn").addClass("active"); // update button

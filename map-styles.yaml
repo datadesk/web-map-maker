@@ -574,7 +574,8 @@ layers:
                 color: "#c8c8c1"
                 width: [[17,0],[18,0.5m],[20,0.25m]]
                 style: lines
-    subway-light-rail:
+    transit:
+        visible: false
         data: { source: mapzen , layer: transit }
         filter: {not:{ kind: [platform]}, $zoom: { min: 11 }}
         draw:
@@ -587,15 +588,6 @@ layers:
                 lines:
                     color: *rail_line
                     width: 2px
-        # subway:
-        #     filter: { kind: subway}
-        #     draw: 
-        #         lines:
-        #             color: function() { if(feature.colour == 'purple') { return '#BCADD0';} else if (feature.colour == 'red') { return '#DD9894'; } else { return feature.colour; } }
-        #         offset: [0px, 10px]
-        #         width: [[11, 3px],[15, 2.5px],[18, 5m]]
-        #         z: function() { if(feature.colour == 'purple') { return 1;} else if (feature.colour == 'red') { return 2; } }
-        #         cap: round
         light_rail: 
             filter: { kind: [light_rail,tram, subway], $zoom: { min: 11 }}
             draw:
