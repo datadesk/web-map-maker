@@ -493,22 +493,23 @@ layers:
                             stroke: { color: *background, width: 4 }
 
 
-            # minor_road:
-            #     filter: { kind: minor_road, $zoom: { min: 17 } }
-            #     draw:
-            #         text:
-            #             text_source: name
-            #             offset: [0px, -14px]
-            #             priority: 5
-            #             order: function() { return feature.sort_rank; }
-            #             font:
-            #                 fill: '#9C9C9C'
-            #                 stroke: { color: white, width: 4 }
-            #                 family: 'Benton Gothic Regular'
-            #                 size: 26px
-            #                 stroke: {color: '#efebe7', width: 1}
+            minor_road:
+                filter: { kind: minor_road, $zoom: { min: 17 } }
+                draw:
+                    text:
+                        text_source: name
+                        offset: [0px, -14px]
+                        priority: 5
+                        order: function() { return feature.sort_rank; }
+                        font:
+                            fill: '#666'
+                            stroke: { color: white, width: 4 }
+                            family: 'Benton Gothic Regular'
+                            size: 26px
+                            stroke: {color: *background, width: 4}
 
         shields:
+            visible: false
             filter: { network: true, shield_text: true, $zoom: { min: 7 } }
             draw:
                 shields:
