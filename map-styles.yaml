@@ -63,11 +63,19 @@ textures:
     shields:
         sprites:
             # define sprites: [x origin, y origin, width, height]
-            'US:I': [17, 71, 90, 72]
-            'US:US': [510, 71, 90, 72]
-            'US:CA': [130, 71, 90, 72]
-            'US:CA:CR': [632, 71, 90, 72]
-        url: styles/images/lat-shields-solid.png
+            'US:I_char1': [20, 20, 100, 120]
+            'US:I_char2': [140, 20, 120, 120]
+            'US:I_char3': [280, 20, 140, 120]
+            'US:I_char4': [440, 20, 180, 120]
+            'US:I_char5': [640, 20, 220, 120]
+            'US:US_char1': [20, 160, 100, 120]
+            'US:US_char2': [140, 300, 120, 120]
+            'US:US_char3': [280, 300, 140, 120]
+            'US:US_char4': [440, 300, 180, 120]
+            'US:US_char5': [650, 300, 220, 120]
+            'US:CA_char2': [140, 160, 120, 120]
+            'US:CA:CR_char2': [140, 440, 120, 120]
+        url: images/shields.png
 
 cameras:
     perspective:
@@ -495,11 +503,9 @@ layers:
             filter: { network: true, shield_text: true, $zoom: { min: 9 } }
             draw:
                 shields:
-                    sprite: function() { return feature.network }
+                    sprite: function() { return (feature.network + '_' + 'char' + feature.shield_text.length); }
                     # sprite_default: 'US:CA'
-                    color: white
-                    size: [[10,30px],[12,50px]]
-                    repeat_group: shields
+                    size: [[10,30px],[12,44px]]
                     cull_from_tile: true
                     text:
                         anchor: center
@@ -507,7 +513,7 @@ layers:
                         text_source: shield_text
                         font:
                             family: 'Benton Gothic Regular'
-                            size: 20px
+                            size: [[10,18px],[12,26px]]
                             fill: '#9C9C9C'
 
     buildings:
