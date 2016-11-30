@@ -787,6 +787,7 @@ layers:
                         font: { transform: uppercase }
 
         populated-places:
+            filter: { kind: locality }
             draw:
                 text-blend-order:
                     interactive: true
@@ -802,18 +803,18 @@ layers:
                             visible: false
                             offset: [0, 3px] # half icon size
                             font:
-                                size: 20px
+                                size: 24px
                                 fill: '#9C9C9C'
                                 stroke: { color: *background, width: 3 }
                 z4places-2:
-                    filter: { min_zoom: [1,2] }
+                    filter: { min_zoom: [1,2,3,4,5] }
                     draw:
                         text-blend-order:
                             visible: false
                             offset: [0, 3px] # half icon size
                             priority: 8
                             font:
-                                size: 16px
+                                size: 24px
                                 fill: '#9C9C9C'
                                 stroke: { color: *background, width: 4 }
             populated-places-osm-z10:
