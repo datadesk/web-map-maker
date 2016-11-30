@@ -52,6 +52,11 @@ sources:
         url: https://tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.topojson
         url_params:
                 api_key: mapzen-dFUP7Q3
+        rasters: [normals]
+    normals:
+        type: Raster
+        url: https://tile.mapzen.com/mapzen/terrain/v1/normal/{z}/{x}/{y}.png
+        max_zoom: 15
     # osm:
     #     type: TopoJSON
     #     url:  //vector.mapzen.com/osm/all/{z}/{x}/{y}.topojson?api_key=vector-tiles---JwESU
@@ -100,12 +105,58 @@ styles:
     shields:
         base: points
         texture: shields
+    terrain:
+        base: polygons
+        lighting: false
+        raster: normal
+        shaders:
+            uniforms:
+                # u_envmap: images/relief-shading-environment-map.jpg
+                u_envmap: images/draw-test9.jpg
+                u_contrast: 1.
+                u_brightness: 1.
+            blocks:
+                global: |
+                    // Simplified view-independent environment map
+                    vec4 terrainEnvmap (in sampler2D _tex, in vec3 _normal) {
+                        const vec3 eye = vec3(0.,0.,-1.);
+                        vec3 r = reflect(eye, _normal);
+                        r.z += 1.;
+                        float m = 2. * length(r);
+                        vec2 uv = r.xy / m + .5;
+                        return texture2D(_tex, uv);
+                    }
+                    const float e = 2.71828;
+                color: |
+                    // scale up normals with a function
+                    // https://www.desmos.com/calculator/bv4mzh8erz
+                    //float scale = 10./(u_map_position.z-.7) + 1.8;
+                    float scale1 = 20./(u_map_position.z) + 1.5;
+                    normal.z /= scale1; // turn terrain exaggeration up/down
+                    // fade out spheremap normals with a function
+                    // https://www.desmos.com/calculator/ptgkzcnfyc
+                    float m = 3.5 * (u_map_position.z - 0.8) * pow(e, u_map_position.z * -.29);
+                    m = clamp(m, 0., 1.5);
+                    color = terrainEnvmap(u_envmap, normal);
+                    // Apply contrast
+                    float contrast = m;
+                    color.rgb = ((color.rgb - 0.5) * max(contrast, 0.)) + 0.5;
+                    // Apply brightness
+                    float brightness = .5 - m * .5;
+                    color.rgb += brightness;
+                    color *= v_color; // apply layer color
+
 
 layers:
     earth:
         data: { source: mapzen, layer: earth }
         draw:
+            terrain:
+                visible: false
+                order: function() { return feature.sort_rank; }
+                color: [1.0,1.0,1.0]
             polygons:
+                visible: true
                 order: 0
                 color: *background
     ocean-water:
