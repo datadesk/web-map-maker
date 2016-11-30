@@ -1816,6 +1816,7 @@ function showTransit() {
         if (transitVisible) {
             // remove transit
             scene.config.layers.transit.visible = false;
+            scene.config.layers['transit-overlay-station-labels'].visible = false;
             scene.updateConfig(); // update config
             scene.rebuild(); // rebuild the map
             $("#transit_btn").removeClass("active"); // update button
@@ -1823,6 +1824,7 @@ function showTransit() {
         } else {
             // add transit layer
             scene.config.layers.transit.visible = true;
+            scene.config.layers['transit-overlay-station-labels'].visible = true;
             scene.updateConfig(); // update config
             scene.rebuild(); // rebuild the map
             $("#transit_btn").addClass("active"); // update button
