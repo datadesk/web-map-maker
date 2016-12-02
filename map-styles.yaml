@@ -105,6 +105,9 @@ styles:
     shields:
         base: points
         texture: shields
+    glass:
+        base: polygons
+        blend: multiply
     terrain:
         base: polygons
         lighting: false
