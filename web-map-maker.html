@@ -28,7 +28,7 @@
     <!-- <script src="js/fontfaceobserver.js"></script> -->
     <!-- <script src="js/canvas2svg.js"></script> -->
     <!-- <script src="js/canvas2image.js"></script> -->
-    <!-- <script src="js/html2canvas.js"></script> -->
+    <script src="js/html2canvas.js"></script>
 
     <script src="js/jquery-ui.js"></script>
 
@@ -1625,11 +1625,15 @@ box-sizing: content-box;
 
         scene.screenshot().then(function(screenshot) {
             // check for svg on campus
-            if ($("#map svg").length > 0) {
-                buildCanvas(screenshot.url);
-            } else {
-                window.open(screenshot.url);
-            }
+            // if ($("#map svg").length > 0) {
+            //     buildCanvas(screenshot.url);
+            // } else {
+            //     window.open(screenshot.url);
+            // }
+
+            var blob = screenshot.blob;
+            $('body').append('<img src="' + screenshot.url + '" />');
+            console.log(screenshot.blob);
             // $(".leaflet-layer").append("<img src='"+screenshot.url+"' />")
             // $("#map canvas").remove();
             // window.open(screenshot.url); 
@@ -2010,6 +2014,9 @@ var sizeChange = function(option) {
     function handleFileSelect(evt) {
         // add multiple files to the map
         for (var i = 0; i <  evt.target.files.length; i++) {
+
+
+
             var f = evt.target.files[i]; 
 
             var r = new FileReader();
@@ -2017,6 +2024,11 @@ var sizeChange = function(option) {
                 var contents = e.target.result;
                 // turn string into json object
                 var parsedJSON = jQuery.parseJSON(contents)
+
+                // add geojson file to the scene
+                scene.config.sources.upload1 = { type: "GeoJSON", url: parsedJSON}
+                // scene.config.layers.places['regionz5-6']['draw']['text-blend-order'].visible = true;
+
                 // add GeoJSON to map
                 L.geoJson(parsedJSON, {
                     style: function(feature) {return addStyle(feature);},
