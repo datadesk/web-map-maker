@@ -328,7 +328,7 @@ box-sizing: content-box;
                                 <option value="quiet_la" selected>Quiet LA</option>
                                 <option value="quiet_la_print">Quiet LA (print)</option>
                                 <option value="terrain_la">Terrain LA</option>
-                                <option value="betty_la">Betty LA</option>
+                                <!-- <option value="betty_la">Betty LA</option> -->
                                 <option value="satellite">Satellite</option>
                             </select>
                         </fieldset>
@@ -1974,7 +1974,7 @@ var sizeChange = function(option) {
             // scene.config.layers.transit.visible = false;
             scene.config.layers.earth.draw.polygons.visible = false;
             scene.config.layers.earth.draw.terrain.visible = true;
-            scene.config.layers.landuse.park.draw.color = false;
+            // scene.config.layers.landuse.park.draw.color = false;
             scene.updateConfig(); // update config
             scene.rebuild(); // rebuild the map
 
