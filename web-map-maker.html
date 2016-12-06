@@ -1624,16 +1624,16 @@ box-sizing: content-box;
         // $('.leaflet-control').hide();
 
         scene.screenshot().then(function(screenshot) {
-            // check for svg on campus
-            // if ($("#map svg").length > 0) {
-            //     buildCanvas(screenshot.url);
-            // } else {
-            //     window.open(screenshot.url);
-            // }
+            // check for svg on map
+            if ($("#map svg").length > 0) {
+                buildCanvas(screenshot.url);
+            } else {
+                window.open(screenshot.url);
+            }
 
-            var blob = screenshot.blob;
-            $('body').append('<img src="' + screenshot.url + '" />');
-            console.log(screenshot.blob);
+            // var blob = screenshot.blob;
+            // $('body').append('<img src="' + screenshot.url + '" />');
+            // console.log(screenshot.blob);
             // $(".leaflet-layer").append("<img src='"+screenshot.url+"' />")
             // $("#map canvas").remove();
             // window.open(screenshot.url); 
@@ -1680,7 +1680,7 @@ box-sizing: content-box;
 
         img.onload = function() {
             // be sure to offset it
-            ctx.drawImage(img, 0, 0, 1300, 730);
+            ctx.drawImage(img, 0, 0);
             var png = canvas.toDataURL("image/png");
             document.querySelector('#img-out').innerHTML = '<img src="'+png+'"/>';
             DOMURL.revokeObjectURL(png);
@@ -2021,13 +2021,26 @@ var sizeChange = function(option) {
 
             var r = new FileReader();
             r.onload = function(e) { 
+
                 var contents = e.target.result;
                 // turn string into json object
                 var parsedJSON = jQuery.parseJSON(contents)
 
-                // add geojson file to the scene
-                scene.config.sources.upload1 = { type: "GeoJSON", url: parsedJSON}
-                // scene.config.layers.places['regionz5-6']['draw']['text-blend-order'].visible = true;
+                // // add geojson file to the scene
+                // scene.config.sources['upload1'] = { type: "GeoJSON", url: parsedJSON }
+
+                // // console.log({ type: "GeoJSON", url: parsedJSON });
+                // scene.config.layers['layer1'] = { 
+                //                         data: { source: 'upload1' }, 
+                //                         draw: { lines: 
+                //                             { color: '#000', width: '2px', order: 500, visible: true, style: 'lines' }}}
+                
+
+
+
+
+                // scene.updateConfig(); // update config
+                // scene.rebuild(); // rebuild the map
 
                 // add GeoJSON to map
                 L.geoJson(parsedJSON, {

@@ -57,9 +57,9 @@ sources:
         type: Raster
         url: https://tile.mapzen.com/mapzen/terrain/v1/normal/{z}/{x}/{y}.png
         max_zoom: 15
-    # westlake:
-    #     type: GeoJSON
-    #     url: js/la_county_precinct_11082016.geojson
+    westlake:
+        type: GeoJSON
+        url: js/westlake.geojson
     # osm:
     #     type: TopoJSON
     #     url:  //vector.mapzen.com/osm/all/{z}/{x}/{y}.topojson?api_key=vector-tiles---JwESU
@@ -154,28 +154,28 @@ styles:
 
 
 layers:
-    # hood:
-    #     data: { source: westlake }
-    #     draw:
-    #         # polygons:
-    #         #     order: 500
-    #         #     # color: red
-    #         # lines:
-    #         #     visible: true
-    #         #     order: 500
-    #         #     color: "#c8c8c1"
-    #         #     width: [[17,0],[18,0.5m],[20,0.25m]]
-    #         #     style: lines
-    #         polygons:
-    #             visible: true
-    #             order: function() { return feature.sort_rank; }
-    #             color: *building
-    #         lines:
-    #             visible: true
-    #             order: 500
-    #             color: "#000"
-    #             width: 2px
-    #             style: lines
+    hood:
+        data: { source: westlake }
+        draw:
+            # polygons:
+            #     order: 500
+            #     # color: red
+            # lines:
+            #     visible: true
+            #     order: 500
+            #     color: "#c8c8c1"
+            #     width: [[17,0],[18,0.5m],[20,0.25m]]
+            #     style: lines
+            polygons:
+                visible: true
+                order: function() { return feature.sort_rank; }
+                color: *building
+            lines:
+                visible: true
+                order: 500
+                color: "#000"
+                width: 2px
+                style: lines
 
     earth:
         data: { source: mapzen, layer: earth }
