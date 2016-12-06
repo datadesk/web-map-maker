@@ -1661,6 +1661,7 @@ box-sizing: content-box;
         var base = new Image();
         base.src=basemap;
         ctx.drawImage(base,0,0, 1300, 730);
+        ctx.drawImage(base,0,0, 1300, 730);
 
         addSVG();
 
@@ -1680,12 +1681,14 @@ box-sizing: content-box;
 
         img.onload = function() {
             // be sure to offset it
-            ctx.drawImage(img, 0, 0);
+            ctx.drawImage(img, 0, 0, 1560, 876);
             var png = canvas.toDataURL("image/png");
             document.querySelector('#img-out').innerHTML = '<img src="'+png+'"/>';
             DOMURL.revokeObjectURL(png);
         };
         img.src = url;
+
+        // console.log()
 
     }
         // function gatherinfo(id){
