@@ -298,6 +298,9 @@ box-sizing: content-box;
     <!-- CONTENT GOES HERE -->
     <div class="container" id="container">
 
+        <h1>Map Maker</h1>
+        <p>Test</p>
+
         <div id="web_blank">
 
             <div id="map_options">
@@ -1624,6 +1627,10 @@ box-sizing: content-box;
         // $('.leaflet-control').hide();
 
         scene.screenshot().then(function(screenshot) {
+            // store map size
+            // store svg viewbox info (for later offsetting)
+
+
             // check for svg on map
             if ($("#map svg").length > 0) {
                 buildCanvas(screenshot.url);
@@ -1691,10 +1698,14 @@ box-sizing: content-box;
 
             ctx.drawImage(img, (+svgOffset[0]*-1)-130, (+svgOffset[1]*-1)-73, 1560, 876);
             var png = canvas.toDataURL("image/png");
-            document.querySelector('#img-out').innerHTML = '<img src="'+png+'"/>';
+            // document.querySelector('#img-out').innerHTML = '<img src="'+png+'"/>';
             DOMURL.revokeObjectURL(png);
+
+            window.open(png);
         };
         img.src = url;
+
+        // window.open(url);
 
         // console.log()
 
@@ -2008,8 +2019,8 @@ var sizeChange = function(option) {
 
 
     // styles for geojson pulled from v1.0
-    var lineStyle = {'color':'#cd7139','weight': 4.5,'opacity': 1, 'lineJoin':'round'};
-    var polyStyle = {'color': '#000','weight': 3,'opacity': 0.65,'fillOpacity': 0, 'lineJoin':'round'};
+    var lineStyle = {'color':'#cd7139','weight': 4,'opacity': 1, 'lineJoin':'round'};
+    var polyStyle = {'color': '#000','weight': 2,'opacity': 0.65,'fillOpacity': 0, 'lineJoin':'round'};
     var pointStyle = { radius: 10.5, fillColor: '#cd7139',color: '#fff',weight: 1,opacity: 0.3,fillOpacity: 0.8};
     
     function addStyle(feature){
@@ -2036,22 +2047,6 @@ var sizeChange = function(option) {
                 var contents = e.target.result;
                 // turn string into json object
                 var parsedJSON = jQuery.parseJSON(contents)
-
-                // // add geojson file to the scene
-                // scene.config.sources['upload1'] = { type: "GeoJSON", url: parsedJSON }
-
-                // // console.log({ type: "GeoJSON", url: parsedJSON });
-                // scene.config.layers['layer1'] = { 
-                //                         data: { source: 'upload1' }, 
-                //                         draw: { lines: 
-                //                             { color: '#000', width: '2px', order: 500, visible: true, style: 'lines' }}}
-                
-
-
-
-
-                // scene.updateConfig(); // update config
-                // scene.rebuild(); // rebuild the map
 
                 // add GeoJSON to map
                 L.geoJson(parsedJSON, {
