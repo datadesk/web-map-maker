@@ -426,7 +426,7 @@ layers:
             not: { kind: rail }
         draw:
             lines:
-                interactive: true
+                # interactive: true
                 order: function() { return feature.sort_rank; }
                 cap: round
         highway:
@@ -627,7 +627,7 @@ layers:
         filter: {not:{ kind: [platform]}, $zoom: { min: 11 }}
         draw:
             lines:
-                interactive: true
+                # interactive: true
                 order: 499
         railway:
             filter: { kind: [railway, train]}
@@ -837,7 +837,7 @@ layers:
             filter: { kind: locality }
             draw:
                 text-blend-order:
-                    interactive: true
+                    # interactive: true
                     anchor: top
                     priority: 6
 

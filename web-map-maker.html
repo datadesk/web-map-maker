@@ -1391,14 +1391,14 @@ box-sizing: content-box;
     var mapSize = $("#map").width() + 'x' + $("#map").height();
     $("#map_size").text(mapSize);
 
-    var geocoder = L.control.geocoder('search-JvsyzTW', {
-        placeholder: 'Search for a location',
-        panToPoint: false,
-        markers: false,
-        expanded: false,
-        position: 'topleft',
-        attribution: ''
-    }).addTo(map);
+    // var geocoder = L.control.geocoder('search-JvsyzTW', {
+    //     placeholder: 'Search for a location',
+    //     panToPoint: false,
+    //     markers: false,
+    //     expanded: false,
+    //     position: 'topleft',
+    //     attribution: ''
+    // }).addTo(map);
 
     // show and hide variables
     var buildingsVisible;
@@ -1687,7 +1687,6 @@ box-sizing: content-box;
 
         // hide map controls buttons
         $("#map").css("background","none");
-        $(".leaflet-pelias-control").hide();
         $(".leaflet-control-zoom").hide();
 
         // basemap
@@ -1740,9 +1739,7 @@ box-sizing: content-box;
                     console.log('html2canvas');
 
                     ctx.drawImage(canvas,0,0, 1300, 730);
-                    // $(".leaflet-pelias-control").show();
-                    // $(".leaflet-control-zoom").show();
-                    // $(".leaflet-control").show(); // show controls again
+                    $(".leaflet-control-zoom").show(); // show zoom again
                     $("#map").css("background","#ddd"); // bring back map's background
                 }
             });
