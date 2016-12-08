@@ -1702,7 +1702,8 @@ box-sizing: content-box;
 
     function downloadIMG() {
         // hide map controls buttons
-        $(".leaflet-control").hide();
+        $(".leaflet-pelias-control").hide();
+        $(".leaflet-control-zoom").hide();
 
         scene.screenshot().then(function(screenshot) {
 
@@ -1726,7 +1727,7 @@ box-sizing: content-box;
 
             var base = new Image();
             base.src = screenshot.url;
-            ctx.drawImage(base,0,0, 1300, 730);
+            ctx.drawImage(base,0,0, mapSize[0], mapSize[1]);
 
             // add svg elements (like geojson objects)
             var svgString = new XMLSerializer().serializeToString(document.querySelector('svg'));
@@ -1747,7 +1748,7 @@ box-sizing: content-box;
                 // console.log(svgOffset);
                 // console.log(+svgOffset[0]+130);
 
-                ctx.drawImage(img, (+svgOffset[0]*-1)-130, (+svgOffset[1]*-1)-73, 1560, 876);
+                ctx.drawImage(img, (+svgOffset[0]*-1)-130, (+svgOffset[1]*-1)-73, mapSize[0]+260, mapSize[1]+146);
                 // var png = canvas.toDataURL("image/png");
                 // document.querySelector('#img-out').innerHTML = '<img src="'+png+'"/>';
                 // DOMURL.revokeObjectURL(png);
