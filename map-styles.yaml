@@ -551,7 +551,6 @@ layers:
                         order: function() { return feature.sort_rank; }
                         font:
                             fill: '#666'
-                            stroke: { color: white, width: 4 }
                             family: 'Benton Gothic Regular'
                             size: 26px
                             stroke: {color: *background, width: 4}

@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,8 +14,10 @@
     <link rel="stylesheet" href="http://d1qqc1e9kvmdh8.cloudfront.net/js/leaflet-1.0.0-b1/leaflet.css">
     <!-- <link rel="stylesheet" href="http://latimes-graphics-media.s3.amazonaws.com/styles/leaflet-extra.css" /> -->
     <link rel="stylesheet" href="styles/jquery-ui.css">
+    <link rel="stylesheet" href="styles/bing-geocodifier.css">
 
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="js/bing-geocodifier.js"></script>
 
     <script type="text/javascript" src="http://d1qqc1e9kvmdh8.cloudfront.net/bootstrap/2.3.2/js/bootstrap.min.js"></script>
 
@@ -239,7 +239,7 @@ box-sizing: content-box;
     /*.leaflet-control-zoom{display:none;}*/
     .header{text-transform: uppercase; font-weight:bold; font-family:Arial; font-size:12px;}
     .leaflet-popup-content-wrapper{background-color:#000;}
-    .leaflet-popup-content{font:bold 34px/36px Arial; color: white;}
+    .leaflet-popup-content{font:bold 34px/36px 'Benton Gothic Bold', Arial, sans-serif; color: white;}
     .leaflet-popup .leaflet-zoom-animated{bottom:0px !important;}
     .leaflet-control-attribution {font-size: 22px !important;height:26px; color:#777; padding:4px 0 0 9px; display: none;}
     .leaflet-control-attribution a{display:none;}
@@ -250,13 +250,30 @@ box-sizing: content-box;
         height: 27px;
         margin: 0 auto;
         position: relative;
-        background-image: url('shaddow.png');
-        background-position: center bottom;
     }
-    .leaflet-popup-tip {
-        border-top: 20px solid #000;
+
+    .leaflet-popup-content-wrapper, .leaflet-popup-tip {
+        background: #000;
         box-shadow: none;
     }
+
+    .leaflet-popup-tip {
+        padding: 0;
+    }
+
+    .leaflet-popup-content-wrapper {
+        border-radius: 0;
+    }
+
+    .leaflet-container a.leaflet-popup-close-button {
+        color: #000;
+    }
+
+    .leaflet-container a.leaflet-popup-close-button:hover {
+        color: #fff;
+    }
+
+
     #tooltip {
         position: absolute;
         z-index: 2014;
@@ -275,6 +292,35 @@ box-sizing: content-box;
         font-family: 'benton-gothic-regular', Arial, sans-serif;
 
     }
+
+    #popupText {
+        width: 100%;
+        display: inline-block;
+        max-width: 325px;
+        font-size: 20px;
+        border: none;
+        border-bottom: 1px solid #ccc;
+        color: #333;
+        border-radius: 0px;
+        padding: 8px 1px;
+        margin: 0px;
+        box-shadow: none;
+        font-family: "Benton Gothic Regular", Arial, sans-serif;
+    }
+
+    #geocodifier {
+        display: inline-block;
+        min-width: 300px;
+        margin: 0 0 0 10px;
+    }
+
+    #popupText:focus {
+        outline: none;
+        box-shadow: none;
+        border-bottom: 1px solid #4591B8;
+    }
+
+
     </style>
 
 </head>
@@ -300,6 +346,11 @@ box-sizing: content-box;
 
         <h1>Map Maker</h1>
         <p>Test</p>
+        <div id="popupContainer">
+            <input id="popupText" type="text" placeholder="Popup text"> at 
+
+            <div id="geocodifier"></div>
+        </div>
 
         <div id="web_blank">
 
@@ -1274,7 +1325,8 @@ box-sizing: content-box;
         center: new L.LatLng(34.0425, -118.24),
         zoom: 10,
         detectRetina: true,
-        minZoom: 1.5
+        minZoom: 1.5,
+        closePopupOnClick: false
     });
     map.attributionControl.setPrefix('@latimesgraphics, &copy; Mapzen, &copy; OpenStreetMap, <a href="https://mapzen.com/tangram" target="_blank">Tangram</a>');
     var quietLAlayer = Tangram.leafletLayer({
@@ -1290,14 +1342,14 @@ box-sizing: content-box;
     var scene = quietLAlayer.scene;
 
 
-    function reloadLayer() {
-        var quietLAlayer = Tangram.leafletLayer({
-        scene: 'map-styles-print.yaml',
-        events: {
-        click: function(selection) { console.log('Click!', selection); }
-        }
-        });
-    }
+    // function reloadLayer() {
+    //     var quietLAlayer = Tangram.leafletLayer({
+    //     scene: 'map-styles-print.yaml',
+    //     events: {
+    //     click: function(selection) { console.log('Click!', selection); }
+    //     }
+    //     });
+    // }
 
     // var circle = L.circle([34.053327, -118.247351], 500, {
     //     color: 'red',
@@ -1661,6 +1713,10 @@ box-sizing: content-box;
 // });
 
     function buildCanvas(basemap) {
+
+        // get map's current dimensions
+        var mapWidth = $("#map canvas").width();
+        console.log(mapWidth);
 
         var canvas = document.getElementById("canvas");
         var ctx = canvas.getContext("2d");
@@ -2065,6 +2121,26 @@ var sizeChange = function(option) {
     // listen for file uploader
     document.getElementById('geo_files').addEventListener('change', handleFileSelect, false);
 
+
+    // Initialize on a div element with an ID of "geocodifier"
+    var geocoder = new BingGeocodifier('geocodifier', {
+        key: "AqEQ_HqipMZe_KnMeHEJ_CEtkNG9Y34_aXaGeIya4fBtc4hTIA9KYzMfFaK5nbK5",
+        onClick: function(item, coords) {
+            console.log(item);
+            map.panTo(item.geocodePoints[0].coordinates);
+
+            L.circleMarker(item.geocodePoints[0].coordinates,{
+                'fillOpacity': 0,
+                'opacity': 0
+            }).bindPopup('hello').addTo(map).openPopup();
+            // document.getElementById('geocodifier-output').innerHTML += 'You searched for ' + item.name + ', coordinates: ' + coords[0] + ', ' + coords[1] + '<br>';
+        }
+    });
+
+    // prevent page refresh when hitting enter
+    $("#bing-geocodifier-form").submit(function(e) {
+        e.preventDefault();
+    });
 
 </script>
 
