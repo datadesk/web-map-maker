@@ -239,6 +239,11 @@ box-sizing: content-box;
         margin-top: 50px;
     }*/
 
+    #popupContainer {
+        font-family: 'Benton Gothic Regular', Arial, sans-serif;
+        font-size: 20px;
+    }
+
     .footnote {font-family:arial; font-size:12px; color:#666;}
     /*.leaflet-control-zoom{display:none;}*/
     .header{text-transform: uppercase; font-weight:bold; font-family:Arial; font-size:12px;}
@@ -325,7 +330,7 @@ box-sizing: content-box;
         color: #333;
         border-radius: 0px;
         padding: 8px 1px;
-        margin: 0px;
+        margin: 0px 10px 0 0;
         box-shadow: none;
         font-family: "Benton Gothic Regular", Arial, sans-serif;
     }
@@ -369,9 +374,7 @@ box-sizing: content-box;
         <h1>Map Maker</h1>
         <p>Test</p>
         <div id="popupContainer">
-            <input id="popupText" type="text" placeholder="Popup text"> at 
-
-            <div id="geocodifier"></div>
+            <input id="popupText" type="text" placeholder="Popup text"><div id="geocodifier"></div>
         </div>
 
         <div id="web_blank">
@@ -2127,7 +2130,7 @@ var sizeChange = function(option) {
 
             if (userPopupText.length > 0) {
                 popupMarker = L.circleMarker(item.geocodePoints[0].coordinates,{
-                    'fillOpacity': 1,
+                    'fillOpacity': 0,
                     'opacity': 0
                 }).bindPopup(userPopupText).addTo(map).openPopup();
             }
