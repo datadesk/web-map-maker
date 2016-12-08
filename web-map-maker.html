@@ -91,10 +91,6 @@ box-sizing: content-box;
         float: left;
     }
 
-    #map {
-        background: none;
-    }
-
     #map_options #geo_files {
         width: 0.1px;
         height: 0.1px;
@@ -372,7 +368,7 @@ box-sizing: content-box;
     <div class="container" id="container">
 
         <h1>Map Maker</h1>
-        <p>Test</p>
+        <p>This tool is for aproximate location only. Geocoders can mislocate addresses by small distances.</p>
         <div id="popupContainer">
             <input id="popupText" type="text" placeholder="Popup text"><div id="geocodifier"></div>
         </div>
@@ -391,6 +387,7 @@ box-sizing: content-box;
                                 <option value="video">Video</option>
                                 <option value="web_large" selected>Web large</option>
                                 <option value="web_small">Web small</option>
+                                <option value="twitter">Twitter</option>
                                 <option value="col1">1 column</option>
                                 <option value="col2">2 column</option>
                                 <option value="col3">3 column</option>
@@ -1647,28 +1644,6 @@ box-sizing: content-box;
     // }
 
 
-
-    function findLatLon(){
-        var getLat = document.getElementById('lat').value;
-        var getLon = document.getElementById('lon').value;
-
-        map.setView([getLat, getLon], 10);
-
-        marker=L.marker([getLat, getLon],
-            {
-            icon: L.mapbox.marker.icon({
-                'marker-size': 'small',
-                'marker-color': '#fff'
-            }
-        )
-        });
-
-        marker.addTo(map);
-
-        var getPopup = document.getElementById('popupText').value;
-        marker.bindPopup(getPopup, {offset: new L.Point(0, 0)}).openPopup();
-    }
-
     //
     // add enter key functionality   841 n alexandria ave los angeles
 
@@ -1701,69 +1676,74 @@ box-sizing: content-box;
 
 
     function downloadIMG() {
+        var canvas = document.getElementById("canvas");
+        var ctx = canvas.getContext("2d");
+
+        var mapSize = [$("#map").width(),$("#map").height()];
+        var canvasSize = [$("#canvas").width(),$("#canvas").height()];
+
+        // wipe the canvas clean
+        ctx.clearRect(0, 0, canvasSize[0], canvasSize[1]);
+
         // hide map controls buttons
+        $("#map").css("background","none");
         $(".leaflet-pelias-control").hide();
         $(".leaflet-control-zoom").hide();
 
+        // basemap
         scene.screenshot().then(function(screenshot) {
 
-            var mapSize = [$("#map").width(),$("#map").height()];
             console.log(mapSize);
             // store map size
             // store svg viewbox info (for later offsetting)
-
-            // make a sandwich of canvases!!!
-
-            // // check for svg on map
-            // if ($("#map svg").length > 0) {
-            //     buildCanvas(screenshot.url);
-            // } else {
-            //     // window.open(screenshot.url);
-            // }
-
-            // basemap
-            var canvas = document.getElementById("canvas");
-            var ctx = canvas.getContext("2d");
 
             var base = new Image();
             base.src = screenshot.url;
             ctx.drawImage(base,0,0, mapSize[0], mapSize[1]);
 
+
             // add svg elements (like geojson objects)
-            var svgString = new XMLSerializer().serializeToString(document.querySelector('svg'));
+            if ($("#map svg").length > 0) {
+                console.log('svg query');
+                var svgString = new XMLSerializer().serializeToString(document.querySelector('svg'));
+                var DOMURL = self.URL || self.webkitURL || self;
+                var img = new Image();
+                var svg = new Blob([svgString], {type: "image/svg+xml;charset=utf-8"});
+                var url = DOMURL.createObjectURL(svg);
 
-            var DOMURL = self.URL || self.webkitURL || self;
-            var img = new Image();
-            var svg = new Blob([svgString], {type: "image/svg+xml;charset=utf-8"});
-            var url = DOMURL.createObjectURL(svg);
+                img.onload = function() {
+                    console.log('img.onload');
 
-            img.onload = function() {
-                // be sure to offset it
+                    // be sure to offset it
+                    var svg1 = document.querySelector('svg');
+                    var box = svg1.getAttribute('viewBox');
+                    
+                    var svgOffset = box.split(/\s+|,/);
 
+                    ctx.drawImage(img, (+svgOffset[0]*-1)-130, (+svgOffset[1]*-1)-73, mapSize[0]+260, mapSize[1]+146);
+                    // var png = canvas.toDataURL("image/png");
+                    // document.querySelector('#img-out').innerHTML = '<img src="'+png+'"/>';
+                    // DOMURL.revokeObjectURL(png);
 
-                var svg1 = document.querySelector('svg');
-                var box = svg1.getAttribute('viewBox');
-                
-                var svgOffset = box.split(/\s+|,/);
-                // console.log(svgOffset);
-                // console.log(+svgOffset[0]+130);
-
-                ctx.drawImage(img, (+svgOffset[0]*-1)-130, (+svgOffset[1]*-1)-73, mapSize[0]+260, mapSize[1]+146);
-                // var png = canvas.toDataURL("image/png");
-                // document.querySelector('#img-out').innerHTML = '<img src="'+png+'"/>';
-                // DOMURL.revokeObjectURL(png);
-
-                // window.open(png);
-            };
-            img.src = url;
+                    // window.open(png);
+                };
+                img.src = url;                
+            }
 
 
-            // any popup text layers and other html
+
+
+            // any popup text layers and other html like the source and ruler
             html2canvas($("#map"), {
 
                 onrendered: function(canvas) {
+                    console.log('html2canvas');
+
                     ctx.drawImage(canvas,0,0, 1300, 730);
-                    $(".leaflet-control").show();
+                    // $(".leaflet-pelias-control").show();
+                    // $(".leaflet-control-zoom").show();
+                    // $(".leaflet-control").show(); // show controls again
+                    $("#map").css("background","#ddd"); // bring back map's background
                 }
             });
 
@@ -1786,56 +1766,56 @@ box-sizing: content-box;
 //     document.getElementById('img-out').appendChild(img);
 // });
 
-    function buildCanvas(basemap) {
+    // function buildCanvas(basemap) {
 
-        // get map's current dimensions
-        var mapWidth = $("#map canvas").width();
-        console.log(mapWidth);
+    //     // get map's current dimensions
+    //     var mapWidth = $("#map canvas").width();
+    //     console.log(mapWidth);
 
-        var canvas = document.getElementById("canvas");
-        var ctx = canvas.getContext("2d");
+    //     var canvas = document.getElementById("canvas");
+    //     var ctx = canvas.getContext("2d");
 
-        var base = new Image();
-        base.src=basemap;
-        ctx.drawImage(base,0,0, 1300, 730);
+    //     var base = new Image();
+    //     base.src=basemap;
+    //     ctx.drawImage(base,0,0, 1300, 730);
 
-        addSVG();
+    //     addSVG();
 
-    }
-
-
-    function addSVG() {
-        var svgString = new XMLSerializer().serializeToString(document.querySelector('svg'));
-
-        var canvas = document.getElementById("canvas");
-        var ctx = canvas.getContext("2d");
-
-        var DOMURL = self.URL || self.webkitURL || self;
-        var img = new Image();
-        var svg = new Blob([svgString], {type: "image/svg+xml;charset=utf-8"});
-        var url = DOMURL.createObjectURL(svg);
-
-        img.onload = function() {
-            // be sure to offset it
+    // }
 
 
-            var svg1 = document.querySelector('svg');
-            var box = svg1.getAttribute('viewBox');
+    // function addSVG() {
+    //     var svgString = new XMLSerializer().serializeToString(document.querySelector('svg'));
+
+    //     var canvas = document.getElementById("canvas");
+    //     var ctx = canvas.getContext("2d");
+
+    //     var DOMURL = self.URL || self.webkitURL || self;
+    //     var img = new Image();
+    //     var svg = new Blob([svgString], {type: "image/svg+xml;charset=utf-8"});
+    //     var url = DOMURL.createObjectURL(svg);
+
+    //     img.onload = function() {
+    //         // be sure to offset it
+
+
+    //         var svg1 = document.querySelector('svg');
+    //         var box = svg1.getAttribute('viewBox');
             
-            var svgOffset = box.split(/\s+|,/);
-            // console.log(svgOffset);
-            // console.log(+svgOffset[0]+130);
+    //         var svgOffset = box.split(/\s+|,/);
+    //         // console.log(svgOffset);
+    //         // console.log(+svgOffset[0]+130);
 
-            ctx.drawImage(img, (+svgOffset[0]*-1)-130, (+svgOffset[1]*-1)-73, 1560, 876);
-            var png = canvas.toDataURL("image/png");
-            // document.querySelector('#img-out').innerHTML = '<img src="'+png+'"/>';
-            DOMURL.revokeObjectURL(png);
+    //         ctx.drawImage(img, (+svgOffset[0]*-1)-130, (+svgOffset[1]*-1)-73, 1560, 876);
+    //         var png = canvas.toDataURL("image/png");
+    //         // document.querySelector('#img-out').innerHTML = '<img src="'+png+'"/>';
+    //         DOMURL.revokeObjectURL(png);
 
-            window.open(png);
-        };
-        img.src = url;
+    //         window.open(png);
+    //     };
+    //     img.src = url;
 
-    }
+    // }
 
     }
 
@@ -2020,6 +2000,9 @@ var sizeChange = function(option) {
     } else if (option.value == 'col4') {
         $("#map_holder").width(1330);
         $("#map_holder").height(700);
+    } else if (option.value == 'twitter') {
+        $("#map_holder").width(800);
+        $("#map_holder").height(400);
     }
 
 
