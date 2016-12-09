@@ -402,10 +402,10 @@ box-sizing: content-box;
                         <fieldset>
                             <select onchange="layerChange(this)" id="layer_change">
                                 <option value="quiet_la" selected>Quiet LA</option>
-                                <option value="quiet_la_print">Quiet LA (print)</option>
-                                <option value="terrain_la">Terrain LA</option>
+                                <!-- <option value="quiet_la_print">Quiet LA (print)</option> -->
+                                <!-- <option value="terrain_la">Terrain LA</option> -->
                                 <!-- <option value="betty_la">Betty LA</option> -->
-                                <option value="satellite">Satellite</option>
+                                <!-- <option value="satellite">Satellite</option> -->
                             </select>
                         </fieldset>
                     </form>
@@ -414,6 +414,7 @@ box-sizing: content-box;
                 <div class="map_option">
                     <!-- <label><input type="checkbox" name="transit" value="Tranist" onclick="optionChange()" checked> Transit lines</label>
                     <label><input type="checkbox" name="buildings" value="Buildings" onclick="optionChange()"> Buildings</label> -->
+                    <button class="btn gray" onclick="showTerrain()" id='terrain_btn'>Terrain</button>
                     <button class="btn gray" onclick="showTransit()" id='transit_btn'>Transit</button>
                     <button class="btn gray" onclick="showBuildings()" id='buildings_btn'>Buildings</button>
 
@@ -528,817 +529,7 @@ box-sizing: content-box;
         var s = String(num).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         return s;
     }
-    var palette = {
-        "admin": '#000000',
-        "aerodrome": '#d6d6d6',
-        "background": '#efebe7',
-        "beach": '#ebe2cd',
-        "building": 'rgba(222,222,222,0.76)',
-        "building_outline": "rgba(0,0,0,0)",
-        "building_top": "rgba(230,230,230,1)",
-        "cemetery": "#e4e5dc",
-        "commercial": '#edebe6',
-        "forest": '#dee0d5',
-        "grass": '#e9ebe0',
-        "hospital": '#e8e4e8',
-        "industrial": '#eae6e4',
-        "land": '#f4f2ed',
-        "military": '#e8e4e1',
-        "park": '#e1e3da',
-        "parking": '#eeeeee',
-        "pedestrian": '#e7e7e7',
-        "place_of_worship": '#e3c5c9',
-        "residential": '#efede8',
-        "runway": '#bfbebd',
-        "school": '#e4e0ee',
-        "stadium": '#d9cdc1',
-        "water": '#c3d5dd',
 
-        /* borders */
-        'county_border': '#8a7c7c',
-        'country_border': '#6E6666',
-        'state_border': '#827676',
-
-        /* roads */
-        'road': '#c8c8c1',
-        'road_text': '#757575',
-        'rail_line': '#c8c8c1',
-        'aeroway': '#dddddd',
-        'widths': {
-            "rdz11_maj": 1.5,
-            "rdz12_maj": 2,
-            "rdz13_maj": 3.3,
-            "rdz14_maj": 3.4,
-            "rdz15_maj": 5,
-            "rdz16_maj": 8,
-
-            "rdz11_med": 0.4,
-            "rdz12_med": 0.5,
-            "rdz13_med": 1,
-            "rdz14_med": 1.3,
-            "rdz15_med": 2,
-            "rdz16_med": 3,
-
-            "rdz13_min": 0.15,
-            "rdz14_min": 0.3,
-            "rdz15_min": 0.9,
-            "rdz16_min": 1.2
-        }
-    };
-
-    var quietLA = {
-        "version": 8,
-        "name": "quiet LA",
-        "sources": {
-          "osm": {
-            "type": "vector",
-            "tiles": ["https://vector.mapzen.com/osm/all/{z}/{x}/{y}.mvt?api_key=vector-tiles---JwESU"]
-          }
-        },
-        "sprite": "mapbox://sprites/latimesmapping/cih6hi2uq00bua0m3scl3fszx",
-        "glyphs": "/fonts/{fontstack}/{range}.pbf",
-        "layers": [{
-            "id": "background",
-            "type": "background",
-            "paint": {
-                "background-color": palette.background
-            }
-        },
-
-        /* Landuse */
-        /* For some reason, a few of these look like they need to be painted first */
-        /* Especially park which causes islands not to show up. */
-        {
-            "id": "park",
-            "type": "fill",
-            "source": "osm",
-            "source-layer": "landuse",
-            "filter": ["in", "kind",  "common", "dog_park", "garden", "golf_course", "park", "protected_area", "national_park", "nature_reserve", "playground", "pitch", "recreation_ground", "village_green", "zoo"],
-            "paint": {
-              "fill-color": palette.park
-            }
-        }, {
-            "id": "cemetery",
-            "type": "fill",
-            "source": "osm",
-            "source-layer": "landuse",
-            "filter": ["==", "kind", "cemetery"],
-            "paint": {
-              "fill-color": palette.cemetery
-            }
-        }, {
-            "id": "hospital",
-            "type": "fill",
-            "source": "osm",
-            "source-layer": "landuse",
-            "filter": ["==", "kind", "hospital"],
-            "paint": {
-              "fill-color": palette.hospital
-            }
-        },
-        {
-            "id": "waterway",
-            "interactive": true,
-            "source": "osm",
-            "source-layer": "water",
-            "type": "line",
-            "layout": {
-                "line-cap": "round"
-            },
-            "filter": ["all", ["!=", "class", "river"], ["!=", "class", "stream"], ["!=", "class", "canal"]],
-            "paint": {
-               "line-color": palette.water,
-               "line-width": {
-                   "base": 1.3,
-                   "stops": [[13, 0.5], [20, 2]]
-               }
-            }
-        }, {
-            "id": "waterway_river",
-            "source": "osm",
-            "source-layer": "water",
-            "type": "line",
-            "layout": {
-                "line-cap": "round"
-            },
-            "filter": ["==", "class", "river"],
-            "paint": {
-               "line-color": palette.water,
-               "line-width": {
-                   "base": 1.3,
-                   "stops": [[11, 0.5], [20, 6]]
-               }
-            }
-        }, {
-            "id": "waterway_stream_canal",
-            "source": "osm",
-            "source-layer": "water",
-            "type": "line",
-            "layout": {
-                "line-cap": "round"
-            },
-            "filter": ["in", "class", "stream", "canal"],
-            "paint": {
-               "line-color": palette.water,
-               "line-width": {
-                   "base": 1.3,
-                   "stops": [[13, 0.5], [20, 4]]
-               }
-            }
-        }, {
-            "id": "water",
-            "interactive": true,
-            "source": "osm",
-            "source-layer": "water",
-            "type": "fill",
-            "filter": ["==", "$type", "Polygon"],
-            "paint": {
-               "fill-color": palette.water
-            }
-        }, {
-            "id": "playa",
-            "interactive": true,
-            "source": "osm",
-            "source-layer": "water",
-            "type": "fill",
-            "filter": ["all", ["==", "$type", "Polygon"], ["in", "kind", "playa", "Playa", "Alkaline Lake"]],
-            "paint": {
-               "fill-color": palette.background
-            }
-        }, {
-            "id": "beach",
-            "type": "fill",
-            "source": "osm",
-            "source-layer": "landuse",
-            "filter": ["==", "kind", "beach"],
-            "paint": {
-              "fill-color": palette.beach
-            }
-        }, {
-            "id": "college",
-            "type": "fill",
-            "source": "osm",
-            "source-layer": "landuse",
-            "filter": ["==", "kind", "college"],
-            "paint": {
-              "fill-color": palette.school
-            }
-        }, {
-            "id": "commercial",
-            "type": "fill",
-            "source": "osm",
-            "source-layer": "landuse",
-            "filter": ["in", "kind", "commercial", "retail"],
-            "paint": {
-              "fill-color": palette.commercial
-            }
-        }, {
-            "id": "farm",
-            "type": "fill",
-            "source": "osm",
-            "source-layer": "landuse",
-            "filter": ["in", "kind", "farm", "farmland", "farmyard"],
-            "paint": {
-              "fill-color": palette.land
-            }
-        }, {
-            "id": "footway",
-            "type": "fill",
-            "source": "osm",
-            "source-layer": "landuse",
-            "filter": ["==", "kind", "footway"],
-            "paint": {
-              "fill-color": palette.pedestrian
-            }
-        }, {
-            "id": "forest",
-            "type": "fill",
-            "source": "osm",
-            "source-layer": "landuse",
-            "filter": ["in", "kind", "forest", "wood"],
-            "paint": {
-              "fill-color": palette.forest
-            }
-        }, {
-            "id": "grass",
-            "type": "fill",
-            "source": "osm",
-            "source-layer": "landuse",
-            "filter": ["in", "kind", "grass", "meadow", "scrub"],
-            "paint": {
-              "fill-color": palette.grass
-            }
-        }, {
-            "id": "industrial",
-            "type": "fill",
-            "source": "osm",
-            "source-layer": "landuse",
-            "filter": ["in", "kind", "industrial", "quarry", "railway", "substation", "wastewater_plant"],
-            "paint": {
-              "fill-color": palette.industrial
-            }
-        }, {
-            "id": "military",
-            "type": "fill",
-            "source": "osm",
-            "source-layer": "landuse",
-            "filter": ["==", "kind",  "military"],
-            "paint": {
-              "fill-color": palette.military
-            }
-        }, {
-            "id": "parking",
-            "type": "fill",
-            "source": "osm",
-            "source-layer": "landuse",
-            "filter": ["==", "kind", "parking"],
-            "paint": {
-              "fill-color": palette.parking
-            }
-        }, {
-            "id": "pedestrian",
-            "type": "fill",
-            "source": "osm",
-            "source-layer": "landuse",
-            "filter": ["==", "kind", "pedestrian"],
-            "paint": {
-              "fill-color": palette.pedestrian
-            }
-        }, {
-            "id": "place_of_worship",
-            "type": "fill",
-            "source": "osm",
-            "source-layer": "landuse",
-            "filter": ["==", "kind", "place_of_worship"],
-            "paint": {
-              "fill-color": palette.place_of_worship
-            }
-        }, {
-            "id": "prison",
-            "type": "fill",
-            "source": "osm",
-            "source-layer": "landuse",
-            "filter": ["==", "kind", "prison"],
-            "paint": {
-              "fill-color": palette.industrial
-            }
-        }, {
-            "id": "residential",
-            "type": "fill",
-            "source": "osm",
-            "source-layer": "landuse",
-            "filter": ["in", "kind", "residential", "urban area"],
-            "paint": {
-              "fill-color": palette.residential
-            }
-        }, {
-            "id": "school",
-            "type": "fill",
-            "source": "osm",
-            "source-layer": "landuse",
-            "filter": ["in", "kind",  "kindergarten", "school"],
-            "paint": {
-              "fill-color": palette.school
-            }
-        }, {
-            "id": "sports_center",
-            "type": "fill",
-            "source": "osm",
-            "source-layer": "landuse",
-            "filter": ["in", "kind",  "sports_center", "sports_centre", "stadium"],
-            "paint": {
-              "fill-color": palette.stadium
-            }
-        }, {
-            "id": "university",
-            "type": "fill",
-            "source": "osm",
-            "source-layer": "landuse",
-            "filter": ["==", "kind", "university"],
-            "paint": {
-              "fill-color": palette.school
-            }
-        }, {
-            "id": "wetland",
-            "type": "fill",
-            "source": "osm",
-            "source-layer": "landuse",
-            "filter": ["==", "kind", "wetland"],
-            "paint": {
-              "fill-color": palette.land
-            }
-        },
-
-        /* Buildings */
-        {
-            "id": "buildings",
-            "interactive": true,
-            "type": "fill",
-            "source": "osm",
-            "source-layer": "buildings",
-            "paint": {
-                "fill-outline-color": palette.building_outline,
-                "fill-color": palette.building
-            }
-        },
-        {
-            "id": "building_top",
-            "ref": "buildings",
-            "paint": {
-                "fill-color": palette.building_top,
-                "fill-opacity": {
-                    "base": 1,
-                    "stops": [[15,0],[16, 1]]
-                },
-                "fill-translate": {
-                    "stops": [
-                        [15,[0,0]],[16,[-2,-2]]],
-                    "base": 1
-                },
-                "fill-outline-color": "rgba(222,217,213,0)",
-                "fill-translate-anchor": "viewport"
-            }
-        },
-        /* Roads  */
-        {
-            "id": "highway",
-            "interactive": true,
-            "minzoom": 5,
-            "layout": {
-                "line-cap": "round",
-                "line-join": "round"
-            },
-            "type": "line",
-            "source": "osm",
-            "source-layer": "roads",
-            "filter": ["==", "highway", "motorway"],
-            "paint": {
-                "line-color": palette.road,
-                "line-width": {
-                    "base": 1.2,
-                    "stops": [[3, 0], [6,1], [10, 1.3], [11, 1.7], [12, 2], [13, 3.3], [14, 6], [15, 8], [16, 12]]
-                }
-            }
-        }, {
-            "id": "road_motorway_link",
-            "interactive": true,
-            "minzoom": 5,
-            "layout": {
-                "line-cap": "round",
-                "line-join": "round"
-            },
-            "type": "line",
-            "source": "osm",
-            "source-layer": "roads",
-            "filter": ["==", "highway", "motorway_link"],
-            "paint": {
-                "line-color": palette.road,
-                "line-width": {
-                    "base": 1.2,
-                    "stops": [[8, 0.3], [9, 0.4], [12, 1], [14, 2], [15, 3]]
-                }
-            }
-        },
-        {
-            "id": "road_major",
-            "interactive": true,
-            "minzoom": 12,
-            "type": "line",
-            "source": "osm",
-            "source-layer": "roads",
-            "filter": ["==", "kind", "major_road"],
-            "layout": {
-                "line-cap": "round",
-                "line-join": "round"
-            },
-            "paint": {
-                "line-color": palette.road,
-                "line-width": {
-                    "stops": [[8, 0.3], [9, 0.4], [12,0.5], [13, 1], [14, 1.3], [15, 5], [16, 8]]
-                }
-            }
-        }, {
-            "id": "road_minor",
-            "interactive": true,
-            "type": "line",
-            "source": "osm",
-            "source-layer": "roads",
-            "filter": ["==", "kind", "minor_road"],
-            "layout": {
-                "line-cap": "round",
-                "line-join": "round"
-            },
-            "paint": {
-                "line-color": palette.road,
-                "line-width": {
-                    "stops": [[13, 0.15], [14, 0.3], [15, 0.9], [16, 1.2], [18, 2]]
-                }
-            }
-        }, {
-            "id": "road_service",
-            "interactive": true,
-            "type": "line",
-            "source": "osm",
-            "source-layer": "roads",
-            "filter": ["==", "highway", "service"],
-            "layout": {
-                "line-cap": "round",
-                "line-join": "round"
-            },
-            "paint": {
-                "line-color": palette.road,
-                "line-width": {
-                    "stops": [[13, 0.1], [14, 0.2], [15, 0.6], [16, 0.8]]
-                }
-            }
-        }, {
-            "id": "road_path",
-            "interactive": true,
-            "type": "line",
-            "source": "osm",
-            "source-layer": "roads",
-            "filter": ["==", "kind", "path"],
-            "paint": {
-                "line-color": palette.road,
-                "line-dasharray": [1, 1],
-                "line-width": {
-                    "base": 1.2,
-                    "stops": [[12, 0], [13, 0.1], [14, 0.6], [15, 1], [16, 2]]
-                }
-            }
-        },
-
-
-        // Maybe a substyle for service = yard
-        {
-            "id": "rail",
-            "interactive": true,
-            "type": "line",
-            "source": "osm",
-            "source-layer": "roads",
-            "filter": ["in", "kind", "railway", "rail"],
-            "paint": {
-                "line-color": palette.rail_line,
-                "line-dasharray": {
-                    "stops": [[14, [1,1]], [15, [1,2]]]
-                },
-                "line-width": {
-                    "stops": [[14, 0.4], [15, 0.75], [20, 2]]
-                }
-            }
-        },
-
-        {
-            "interactive": true,
-            "minzoom": 11,
-            "filter": ["all", ["==", "$type", "Polygon"],["==","aeroway","runway"]],
-            "type": "fill",
-            "source": "osm",
-            "id": "aeroway_fill",
-            "paint": {
-                "fill-color": "#f00",
-                "fill-opacity": 0.7
-            },
-            "source-layer": "roads"
-        }, {
-            "interactive": true,
-            "minzoom": 11,
-            "filter": ["==","aeroway","runway"],
-            "type": "line",
-            "source": "osm",
-            "id": "aeroway_runway",
-            "layout": {
-                "line-cap": "square"
-            },
-            "paint": {
-                "line-color": "#ddd",
-                "line-width": {
-                    "base": 1.2,
-                    "stops": [[11, 3], [20, 16]]
-                }
-            },
-            "source-layer": "roads"
-        }, {
-            "interactive": true,
-            "minzoom": 11,
-            "filter": ["==","aeroway","taxiway"],
-            "type": "line",
-            "source": "osm",
-            "id": "aeroway_taxiway",
-            "paint": {
-                "line-color": "#ddd",
-                "line-width": {
-                    "base": 1.2,
-                    "stops": [[11, 0.5], [20, 6]]
-                }
-            },
-            "source-layer": "roads"
-        },
-
-        /* Borders */
-        {
-            "id": "country_boundary",
-            "interactive": true,
-            "source": "osm",
-            "source-layer": "boundaries",
-            "type": "line",
-            "filter": ["all", ["==", "admin_level", "2"], ["!=", "maritime_boundary", "yes"]],
-            "max-zoom": 4,
-            "layout": {
-                "line-cap": "round",
-                "line-join": "round"
-            },
-            "paint": {
-                "line-color": palette.country_border,
-                "line-width": {
-                    "stops": [[4, 1.4], [5, 2], [12, 8]]
-                }
-            }
-        }, {
-            "id": "state_boundary",
-            "interactive": true,
-            "source": "osm",
-            "source-layer": "boundaries",
-            "type": "line",
-            "filter": ["all", ["==", "admin_level", "4"], ["!=", "maritime_boundary", "yes"]],
-            "layout": {
-                "line-cap": "round",
-                "line-join": "round"
-            },
-            "paint": {
-                "line-color": palette.state_border,
-                "line-width": {
-                    "base": 1,
-                    "stops": [[4, 0.4], [5, 1], [12, 3]]
-                }
-            }
-        },
-
-        /* Labels */
-        {
-            "id": "water_label",
-            "interactive": true,
-            "source": "osm",
-            "layout": {
-                "text-font": [
-                    "benton-gothic-regular-italic"
-                ],
-                "text-field": "{name}",
-                "text-max-width": 5,
-                "text-size": 12
-            },
-            "source-layer": "places",
-            "type": "symbol",
-            "filter": ["in", "kind", "sea", "ocean"],
-            "paint": {
-                "text-color": "#757575",
-                "text-halo-width": 0,
-                "text-halo-color": "rgba(255,255,255,0.7)"
-            },
-        },
-        {
-            "id": "city_label",
-            "source": "osm",
-            "source-layer": "places",
-            "filter": ["all", ["==", "$type", "Point"], ["in", "kind", "city", "county", "district"]],
-            "min-zoom": 10,
-            "max-zoom": 14,
-            "type": "symbol",
-            "layout": {
-                "text-field": "{name}",
-                "text-font": [
-                    "benton-gothic-regular"
-                ],
-                "text-max-width": 10,
-                "text-letter-spacing": 0.1,
-                "text-size": {
-                    "stops": [[8, 14], [12, 21]]
-                }
-            },
-            "paint": {
-                "text-color": "#757575",
-                "text-halo-color": "rgba(255,255,255,0.7)",
-            }
-         },
-         // {
-         //     "interactive": true,
-         //     "source": "osm",
-         //     "id": "poi_label_4",
-         //     "source-layer": "places",
-         //     "minzoom": 18,
-         //     "layout": {
-         //         // "icon-image": "{maki}-12",
-         //         "text-font": [
-         //             "benton-gothic-bold",
-         //         ],
-         //         "text-field": "{name}",
-         //         "text-max-width": 9,
-         //         "text-padding": 2,
-         //         "text-offset": [
-         //             0,
-         //             0.6
-         //         ],
-         //         "text-anchor": "top",
-         //         "text-size": 10
-         //     },
-         //     "filter": ["all", ["==", "$type", "Point"], ["==", "scalerank", 2]],
-         //     "type": "symbol",
-         //     "paint": {
-         //         "text-color": "#f00",
-         //         "text-halo-color": "#efebe7",
-         //         "text-halo-width": 1,
-         //         "text-halo-blur": 0.5,
-         //         "icon-opacity": 0
-         //     },
-         // },
-        {
-            "interactive": true,
-            "layout": {
-                "text-font": [
-                    "benton-gothic-regular",
-                ],
-                "text-field": "{name}",
-                "symbol-placement": "line",
-                "text-size": {
-                    "stops": [[13, 10], [19, 12]]
-                },
-                "text-offset": [0, -0.7],
-                "symbol-spacing": 300,
-                "text-letter-spacing": 0.1,
-                "symbol-avoid-edges": false
-            },
-            "filter": ["all", ["==", "$type", "LineString"], ["in", "class", "street", "street_limited", "path", "golf", "service", "driveway"]],
-            "type": "symbol",
-            "source": "osm",
-            "id": "road_label_minor",
-            "paint": {
-                "text-color": "#757575",
-                "text-halo-color": "#efebe7",
-                "text-halo-width": 1,
-                "text-halo-blur": 0.5
-            },
-            "source-layer": "roads"
-        },
-        {
-            "source": "osm",
-            "id": "road_label_main",
-            "interactive": true,
-            "source-layer": "roads",
-            "layout": {
-                "text-font": [
-                    "benton-gothic-regular"
-                ],
-                "text-field": "{name}",
-                "symbol-placement": "line",
-                "text-size": {
-                    "stops": [[13, 10], [19, 13]]
-                },
-                "text-offset": [0, -0.7],
-                "symbol-spacing": 500,
-                "text-letter-spacing": 0.1,
-                "symbol-avoid-edges": false
-            },
-            "filter": ["all", ["==", "$type", "LineString"], ["==", "kind", "minor_road"]],
-            "type": "symbol",
-            "paint": {
-                "text-color": "#757575",
-                "text-halo-color": "#efebe7",
-                "text-halo-width": 1,
-                "text-halo-blur": 0.5
-            },
-        },
-        {
-            "source": "osm",
-            "id": "road_label_major",
-            "source-layer": "roads",
-            "interactive": true,
-            "layout": {
-                "text-font": [
-                    "benton-gothic-regular",
-                ],
-                "text-field": "{name}",
-                "symbol-placement": "line",
-                "text-size": {
-                    "stops": [[13, 12], [19, 15]]
-                },
-                "text-offset": [0, -0.7],
-                "symbol-spacing": 400,
-                "text-letter-spacing": 0.1,
-                "symbol-avoid-edges": false
-            },
-            "filter": ["all", ["==", "$type", "LineString"], ["==", "kind", "major_road"]],
-            "type": "symbol",
-            "paint": {
-                "text-color": "#757575",
-                "text-halo-color": "#efebe7",
-                "text-halo-width": 1,
-                "text-halo-blur": 0.5
-            }
-        },
-        // {
-        //     "interactive": true,
-        //     "layout": {
-        //         "text-size": 11,
-        //         "icon-image": "state-other-{reflen}",
-        //         "icon-rotation-alignment": "viewport",
-        //         "symbol-spacing": 500,
-        //         "text-font": [
-        //             "benton-gothic-bold",
-        //         ],
-        //         "symbol-placement": "line",
-        //         "text-rotation-alignment": "viewport",
-        //         "icon-size": 1.1,
-        //         "text-field": "{ref}"
-        //     },
-        //     "filter": ["all", ["==", "highway", "motorway"], ["in","reflen", 1, 2, 3, 4, 5, 6],
-        //         ["!in", "shield", "us-state", "us-interstate", "us-interstate-duplex", "us-interstate-business", "us-highway-alternate", "us-highway-duplex", "us-highway-business", "us-interstate-truck", "us-highway"]],
-        //     "type": "symbol",
-        //     "source": "osm",
-        //     "id": "road_label_other_shields",
-        //     "paint": {
-        //         "text-color": "#757575"
-        //     },
-        //     "source-layer": "roads"
-        // },
-        {
-            "interactive": true,
-            "layout": {
-                "text-size": 11,
-                "text-allow-overlap": false,
-                "icon-image": "interstate-1",
-                "icon-rotation-alignment": "viewport",
-                "symbol-spacing": {
-                    "base": 1,
-                    "stops": [[0, 500], [10, 500], [22, 500]]
-                },
-                "text-font": [
-                    "benton-gothic-bold"
-                ],
-                "icon-rotate": 0,
-                "icon-allow-overlap": false,
-                "symbol-placement": {
-                    "base": 1,
-                    "stops": [[0, "point"], [10, "point"], [11, "line"], [22, "line"]]
-                },
-                "text-rotation-alignment": "viewport",
-                "icon-size": 1.1,
-                "text-field": "{ref}",
-                "icon-ignore-placement": false
-            },
-            "filter": ["all", ["==", "highway", "motorway"], ["in", "network", "US:I", "US:NHS High Priority Corridors"]],
-            "type": "symbol",
-            "source": "osm",
-            "id": "road_label_interstate_shields",
-            "paint": {
-                "text-color": "#757575",
-                "icon-opacity": 0.8,
-                "text-opacity": 1
-            },
-            "source-layer": "roads"
-        },
-
-        ]
-    };
 
     // jQuery map reference
     var $map = $('#map');
@@ -1350,6 +541,7 @@ box-sizing: content-box;
         minZoom: 1.5,
         closePopupOnClick: false
     });
+
     map.attributionControl.setPrefix('@latimesgraphics, Mapzen, OpenStreetMap');
     var quietLAlayer = Tangram.leafletLayer({
         scene: 'map-styles.yaml',
@@ -1414,15 +606,15 @@ box-sizing: content-box;
 
         $("#zoom_level").text(zoomRounded.toFixed(1));
 
-        // buildings brought in level
-        if (zoomRounded >= 14) {
-            if (buildingsVisible != false) {
-                $("#buildings_btn").addClass("active");
-                buildingsVisible = true;
-            }
-        } else {
-            $("#buildings_btn").removeClass("active"); // no buildings at zoom
-        }
+        // // buildings brought in level
+        // if (zoomRounded >= 14) {
+        //     if (buildingsVisible != false) {
+        //         $("#buildings_btn").addClass("active");
+        //         buildingsVisible = true;
+        //     }
+        // } else {
+        //     $("#buildings_btn").removeClass("active"); // no buildings at zoom
+        // }
 
         // transit wont show outside 11 zoom
         if (zoomRounded < 11) {
@@ -1865,6 +1057,85 @@ function findFirstDescendant(parent, tagname) {
 
 var transitVisible = false;
 var labelsVisible = false;
+var terrainVisible = false;
+
+function showTerrain() {
+    // store landuse parent
+    var landuse = scene.config.layers.landuse;
+
+    if (terrainVisible) {
+        // change earth to terrain
+        scene.config.layers.earth.draw.polygons.visible = true;
+        scene.config.layers.earth.draw.terrain.visible = false;
+
+        // update base landuse
+        landuse.aerodrome.draw = { 'polygons': landuse.aerodrome.draw.terrain };
+        landuse.arena.draw = { 'polygons': landuse.arena.draw.terrain };
+        landuse.cemetery.draw = { 'polygons': landuse.cemetery.draw.terrain };
+        landuse.college.draw = { 'polygons': landuse.college.draw.terrain };
+        landuse.commercial.draw = { 'polygons': landuse.commercial.draw.terrain };
+        landuse.farm.draw = { 'polygons': landuse.farm.draw.terrain };
+        landuse.footway.draw = { 'polygons': landuse.footway.draw.terrain };
+        landuse.forest.draw = { 'polygons': landuse.forest.draw.terrain };
+        landuse.grass.draw = { 'polygons': landuse.grass.draw.terrain };
+        landuse.hospital.draw = { 'polygons': landuse.hospital.draw.terrain };
+        landuse.industrial.draw = { 'polygons': landuse.industrial.draw.terrain };
+        landuse.kindergarten.draw = { 'polygons': landuse.kindergarten.draw.terrain };
+        landuse.military.draw = { 'polygons': landuse.military.draw.terrain };
+        landuse.park.draw = { 'polygons': landuse.park.draw.terrain };
+        landuse.parking.draw = { 'polygons': landuse.parking.draw.terrain };
+        landuse.pedestrian.draw = { 'polygons': landuse.pedestrian.draw.terrain };
+        landuse.place_of_worship.draw = { 'polygons': landuse.place_of_worship.draw.terrain };
+        landuse.prison.draw = { 'polygons': landuse.prison.draw.terrain };
+        landuse.railway.draw = { 'polygons': landuse.railway.draw.terrain };
+        landuse.school.draw = { 'polygons': landuse.school.draw.terrain };
+        landuse.sports_center.draw = { 'polygons': landuse.sports_center.draw.terrain };
+        landuse.stadium.draw = { 'polygons': landuse.stadium.draw.terrain };
+        landuse.urban_area.draw = { 'polygons': landuse.urban_area.draw.terrain };
+        landuse.wetland.draw = { 'polygons': landuse.wetland.draw.terrain };
+
+        scene.updateConfig(); // update config
+        scene.rebuild(); // rebuild the map
+        $("#terrain_btn").removeClass("active"); // update button
+
+        terrainVisible = false;
+    } else {
+        // change earth to terrain
+        scene.config.layers.earth.draw.polygons.visible = false;
+        scene.config.layers.earth.draw.terrain.visible = true;
+
+        // update base landuse
+        landuse.aerodrome.draw = { 'terrain': landuse.aerodrome.draw.polygons };
+        landuse.arena.draw = { 'terrain': landuse.arena.draw.polygons };
+        landuse.cemetery.draw = { 'terrain': landuse.cemetery.draw.polygons };
+        landuse.college.draw = { 'terrain': landuse.college.draw.polygons };
+        landuse.commercial.draw = { 'terrain': landuse.commercial.draw.polygons };
+        landuse.farm.draw = { 'terrain': landuse.farm.draw.polygons };
+        landuse.footway.draw = { 'terrain': landuse.footway.draw.polygons };
+        landuse.forest.draw = { 'terrain': landuse.forest.draw.polygons };
+        landuse.grass.draw = { 'terrain': landuse.grass.draw.polygons };
+        landuse.hospital.draw = { 'terrain': landuse.hospital.draw.polygons };
+        landuse.industrial.draw = { 'terrain': landuse.industrial.draw.polygons };
+        landuse.kindergarten.draw = { 'terrain': landuse.kindergarten.draw.polygons };
+        landuse.military.draw = { 'terrain': landuse.military.draw.polygons };
+        landuse.park.draw = { 'terrain': landuse.park.draw.polygons };
+        landuse.parking.draw = { 'terrain': landuse.parking.draw.polygons };
+        landuse.pedestrian.draw = { 'terrain': landuse.pedestrian.draw.polygons };
+        landuse.place_of_worship.draw = { 'terrain': landuse.place_of_worship.draw.polygons };
+        landuse.prison.draw = { 'terrain': landuse.prison.draw.polygons };
+        landuse.railway.draw = { 'terrain': landuse.railway.draw.polygons };
+        landuse.school.draw = { 'terrain': landuse.school.draw.polygons };
+        landuse.sports_center.draw = { 'terrain': landuse.sports_center.draw.polygons };
+        landuse.stadium.draw = { 'terrain': landuse.stadium.draw.polygons };
+        landuse.urban_area.draw = { 'terrain': landuse.urban_area.draw.polygons };
+        landuse.wetland.draw = { 'terrain': landuse.wetland.draw.polygons };
+
+        scene.updateConfig(); // update config
+        scene.rebuild(); // rebuild the map
+        terrainVisible = true;
+        $("#terrain_btn").addClass("active"); // update button
+    }
+}
 
 function showTransit() {
     // check zoom
@@ -2030,12 +1301,7 @@ var sizeChange = function(option) {
         } else if (option.value == 'quiet_la') {
             scene.load('map-styles.yaml');
         } else if (option.value == 'terrain_la') {
-            // scene.config.layers.transit.visible = false;
-            scene.config.layers.earth.draw.polygons.visible = false;
-            scene.config.layers.earth.draw.terrain.visible = true;
-            // scene.config.layers.landuse.park.draw.color = false;
-            scene.updateConfig(); // update config
-            scene.rebuild(); // rebuild the map
+
 
         }
     }
@@ -2134,6 +1400,15 @@ var sizeChange = function(option) {
     $("#bing-geocodifier-form").submit(function(e) {
         e.preventDefault();
     });
+
+    // scene.subscribe({
+    //     view_complete: function () {
+    //         console.log('scene view complete');
+    //         loading = false;
+    //     }
+    // });
+
+
 
 </script>
 

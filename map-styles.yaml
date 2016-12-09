@@ -8,7 +8,7 @@ quiet-la-colors:
     areas:
         - &background       '#efebe7'
         - &land             '#f4f2ed'
-        - &forest           '#dee0d5'
+        - &forest           rgb(222,224,213)
         - &grass            '#e9ebe0'   # lighten(@forest, 5%)
         - &park             '#e1e3da'   # lighten(@forest, 3%)
         - &cemetery         '#e4e5dc'
@@ -99,9 +99,6 @@ styles:
     shields:
         base: points
         texture: shields
-    glass:
-        base: polygons
-        blend: multiply
     terrain:
         base: polygons
         lighting: false
@@ -109,7 +106,7 @@ styles:
         shaders:
             uniforms:
                 # u_envmap: images/relief-shading-environment-map.jpg
-                u_envmap: images/draw-test9.jpg
+                u_envmap: images/draw-test9-light.jpg
                 u_contrast: 1.
                 u_brightness: 1.
             blocks:
@@ -150,8 +147,8 @@ layers:
         draw:
             terrain:
                 visible: false
-                order: function() { return feature.sort_rank; }
-                color: [1.0,1.0,1.0]
+                order: 0
+                color: *background
             polygons:
                 visible: true
                 order: 0
@@ -293,77 +290,92 @@ layers:
             draw:
                 polygons:
                     color: *industrial
+                    order: 1
         arena:
             filter: {kind: arena}
             draw:
                 polygons:
                     color: *stadium
+                    order: 1
         beach:
             filter: {kind: beach}
             draw:
                 polygons:
                     color: *beach
+                    order: 1
         cemetery:
             filter: {kind: cemetery}
             draw:
                 polygons:
+                    order: 1
                     color: *cemetery
         college:
             filter: {kind: college}
             draw:
                 polygons:
                     color: *school
+                    order: 1
         commercial:
             filter: {kind: [commercial, retail] }
             draw:
                 polygons:
+                    order: 1
                     color: *commercial
         farm:
             filter: {kind: [farm, farmland, farmyard] }
             draw:
                 polygons:
                     color: *land
+                    order: 1
         footway:
             filter: {kind: footway}
             draw:
                 polygons:
                     color: *land
+                    order: 1
         forest:
             filter: {kind: [forest, wood, natural_forest, natural_wood]}
             draw:
                 polygons:
                     color: *forest
+                    order: 1
         grass:
             filter: {kind: [grass, meadow, scrub]}
             draw:
                 polygons:
+                    order: 1
                     color: *grass
         hospital:
             filter: {kind: hospital}
             draw:
                 polygons:
                     color: *hospital
+                    order: 1
         industrial:
             filter: {kind: [industrial, quarry, substation, wastewater_plant]}
             draw:
                 polygons:
                     color: *industrial
+                    order: 1
         kindergarten:
             filter: {kind: kindergarten}
             draw:
                 polygons:
                     color: *school
+                    order: 1
         military:
             filter: {kind: military}
             draw:
                 polygons:
                     color: *military
+                    order: 1
         park:
             filter: {kind: [ common, dog_park, garden, golf_course, park, protected_area, national_park, natural_park, nature_reserve,
                 playground, pitch, recreation_ground, village_green, zoo] }
             draw:
                 polygons:
                     color: *park
+                    order: 1
         parking:
             filter: {kind: parking }
             draw:
@@ -389,11 +401,6 @@ layers:
             draw:
                 polygons:
                     color: *industrial
-        residential:
-            filter: {kind: residential}
-            draw:
-                polygons:
-                    color: *residential
         school:
             filter: {kind: [school, university]}
             draw:
