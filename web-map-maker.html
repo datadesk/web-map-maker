@@ -916,7 +916,9 @@ box-sizing: content-box;
                     
                     var svgOffset = box.split(/\s+|,/);
 
-                    ctx.drawImage(img, (+svgOffset[0]*-1)-130, (+svgOffset[1]*-1)-73, mapSize[0]+260, mapSize[1]+146);
+                    var svgSize = [$("#map svg").width(),$("#map svg").height()];
+
+                    ctx.drawImage(img, (+svgOffset[0]*-1)-((svgSize[0]-mapSize[0])/2), (+svgOffset[1]*-1)-((svgSize[1]-mapSize[1])/2), svgSize[0], svgSize[1]);
                     // var png = canvas.toDataURL("image/png");
                     // document.querySelector('#img-out').innerHTML = '<img src="'+png+'"/>';
                     // DOMURL.revokeObjectURL(png);
