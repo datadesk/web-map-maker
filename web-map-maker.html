@@ -243,6 +243,9 @@ box-sizing: content-box;
     .footnote {font-family:arial; font-size:12px; color:#666;}
     /*.leaflet-control-zoom{display:none;}*/
     .header{text-transform: uppercase; font-weight:bold; font-family:Arial; font-size:12px;}
+    .leaflet-popup {
+        margin-bottom: 26px;
+    }
     .leaflet-popup-content-wrapper{background-color:#000;}
     .leaflet-popup-content{
         font:bold 34px/36px 'Benton Gothic Bold', Arial, sans-serif; 
@@ -262,7 +265,7 @@ box-sizing: content-box;
     .leaflet-popup-tip-container {
         width: 20px;
         height: 27px;
-        margin: 0 calc(50% - 18px);
+        margin: 0 0 0 -18px
         position: relative;
     }
 
@@ -937,6 +940,11 @@ box-sizing: content-box;
                     ctx.drawImage(canvas,0,0, mapSize[0], mapSize[1]);
                     $(".leaflet-control-zoom").show(); // show zoom again
                     $("#map").css("background","#ddd"); // bring back map's background
+
+                    var canvas = document.getElementById("canvas");
+                    var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+                    window.location.href=image;
+
                 }
             });
 
