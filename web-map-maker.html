@@ -1340,20 +1340,8 @@ var sizeChange = function(option) {
 
         } else if (option.value == 'quiet_la') {
             scene.load('map-styles.yaml');
-            // check for building selection
-
-            if (buildingsVisible) {
-                // add buildings
-                scene.config.layers.buildings.draw.lines.visible = true;
-                scene.config.layers.buildings.draw.polygons.visible = true;
-                scene.config.layers["swimming-pools"].draw.polygons.visible = true; // pools
-                scene.updateConfig(); // update config
-                scene.rebuild(); // rebuild the map
-            }
-
-
-        } else if (option.value == 'terrain_la') {
-
+            buildingsVisible = false;
+            $("#buildings_btn").removeClass("active"); // update button
 
         }
     }
