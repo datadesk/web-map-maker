@@ -571,7 +571,7 @@ layers:
                             feature.shield_text.length +
                             'char'); }
                     # sprite_default: 'US:CA'
-                    size: 58px
+                    size: 80px
                     cull_from_tile: true
                     text:
                         anchor: center
@@ -579,7 +579,7 @@ layers:
                         text_source: shield_text
                         font:
                             family: 'Benton Gothic Regular'
-                            size: 18px
+                            size: 22px
                             fill: '#9C9C9C'
             # thin-out shields at low-zoom
             # thinning:
@@ -592,12 +592,12 @@ layers:
             filter: { network: true, shield_text: true, $zoom: { min: 11 } }
             draw:
                 shields:
-                    repeat_distance: 75px
+                    repeat_distance: 300px
                     sprite: function() { return (feature.network + '_' +
                             feature.shield_text.length +
                             'char'); }
                     # sprite_default: 'US:CA'
-                    size: 58px
+                    size: 80px
                     cull_from_tile: true
                     text:
                         anchor: center
@@ -605,14 +605,14 @@ layers:
                         text_source: shield_text
                         font:
                             family: 'Benton Gothic Regular'
-                            size: 18px
+                            size: 22px
                             fill: '#9C9C9C'
             # thin-out shields at low-zoom
             thinning:
                 filter: { $zoom: { max: 11 } }
                 draw:
                     shields:
-                        repeat_distance: 75px
+                        repeat_distance: 600px
 
     buildings:
         data: { source: mapzen, layer: buildings }
