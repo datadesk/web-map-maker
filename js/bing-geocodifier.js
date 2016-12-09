@@ -248,6 +248,17 @@ BingGeocodifier.prototype.getGeocodeData = function(e) {
                 map.panTo(coords);
                 $(".geocodify-dropdown").addClass("hidden");
 
+                // add popup text if it exists
+                // check for popup text
+                var userPopupText = $("#popupText").val();
+
+                if (userPopupText.length > 0) {
+                    popupMarker = L.circleMarker(coords,{
+                        'fillOpacity': 0,
+                        'opacity': 0
+                    }).bindPopup(userPopupText).addTo(map).openPopup();
+                }
+
             } else {
                 // if not coordiantes
                 var toGeocode = this.textInput.value,
@@ -266,7 +277,6 @@ BingGeocodifier.prototype.getGeocodeData = function(e) {
 
     }
 };
-
 
 BingGeocodifier.prototype.hideSearchDropDown = function() {
     this.dropdown.innerHTML = "";
