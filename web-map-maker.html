@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="http://d1qqc1e9kvmdh8.cloudfront.net/css/ngux-tophat-responsive-0.4.5.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geocoder-mapzen/1.4.1/leaflet-geocoder-mapzen.css">
 
-    <link rel="stylesheet" href="http://d1qqc1e9kvmdh8.cloudfront.net/js/leaflet-1.0.0-b1/leaflet.css">
+    <link rel="stylesheet" href="styles/leaflet.css">
     <!-- <link rel="stylesheet" href="http://latimes-graphics-media.s3.amazonaws.com/styles/leaflet-extra.css" /> -->
     <link rel="stylesheet" href="styles/jquery-ui.css">
     <link rel="stylesheet" href="styles/bing-geocodifier.css">
@@ -430,18 +430,12 @@ box-sizing: content-box;
                 </div>
 
                 <div class="map_option">
-                    <!-- <label><input type="checkbox" name="transit" value="Tranist" onclick="optionChange()" checked> Transit lines</label>
-                    <label><input type="checkbox" name="buildings" value="Buildings" onclick="optionChange()"> Buildings</label> -->
                     <button class="btn gray" onclick="showTerrain()" id='terrain_btn'>Terrain</button>
                     <button class="btn gray" onclick="showTransit()" id='transit_btn'>Transit</button>
                     <button class="btn gray" onclick="showBuildings()" id='buildings_btn'>Buildings</button>
-
-                    <!-- <label><input type="checkbox" name="zoom_lock" value="zoom_lock" onclick="optionChange()"> Lock zoom</label>
-                    <label><input type="checkbox" name="pan_lock" value="pan_lock" onclick="optionChange()"> Lock pan</label> -->
                     <button class="btn gray" onclick="zoomFreeze()" id='zoom_lock'>Lock zoom</button>
                     <button class="btn gray" onclick="panFreeze()" id='pan_lock'>Lock pan</button>
                     <button class="btn gray" onclick="showLabels()" id='auto_labels_btn'>Auto labels</button>
-
                     <input type="file" id="geo_files" name="files[]" multiple>
                     <label for="geo_files" class="btn gray">Upload GeoJSON</label>
                 </div>
@@ -570,24 +564,8 @@ box-sizing: content-box;
     console.log(quietLAlayer);
 
     quietLAlayer.addTo(map);
-    L.control.scale().addTo(map);
+    // L.control.scale().addTo(map);
     var scene = quietLAlayer.scene;
-
-
-    // function reloadLayer() {
-    //     var quietLAlayer = Tangram.leafletLayer({
-    //     scene: 'map-styles-print.yaml',
-    //     events: {
-    //     click: function(selection) { console.log('Click!', selection); }
-    //     }
-    //     });
-    // }
-
-    // var circle = L.circle([34.053327, -118.247351], 500, {
-    //     color: 'red',
-    //     fillColor: '#f03',
-    //     fillOpacity: 0.5
-    // }).addTo(map);
 
 
     // make map resizable after load
@@ -892,10 +870,17 @@ box-sizing: content-box;
         var ctx = canvas.getContext("2d");
 
         var mapSize = [$("#map").width(),$("#map").height()];
+
+        // update the canvas' size
+        $("#canvas").attr("width",mapSize[0]);
+        $("#canvas").attr("height",mapSize[1]);
+
         var canvasSize = [$("#canvas").width(),$("#canvas").height()];
 
         // wipe the canvas clean
         ctx.clearRect(0, 0, canvasSize[0], canvasSize[1]);
+
+
 
         // hide map controls buttons
         $("#map").css("background","none");
@@ -941,16 +926,13 @@ box-sizing: content-box;
                 img.src = url;                
             }
 
-
-
-
             // any popup text layers and other html like the source and ruler
             html2canvas($("#map"), {
 
                 onrendered: function(canvas) {
                     console.log('html2canvas');
 
-                    ctx.drawImage(canvas,0,0, 1300, 730);
+                    ctx.drawImage(canvas,0,0, mapSize[0], mapSize[1]);
                     $(".leaflet-control-zoom").show(); // show zoom again
                     $("#map").css("background","#ddd"); // bring back map's background
                 }
