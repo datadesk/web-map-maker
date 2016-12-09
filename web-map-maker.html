@@ -343,6 +343,24 @@ box-sizing: content-box;
         border-bottom: 1px solid #4591B8;
     }
 
+    #warning_msg {
+        color: red;
+        display: inline-block;
+        margin: 0 0 0 20px;
+        animation: blink-animation 5s steps(7, start) infinite;
+        -webkit-animation: blink-animation 5s steps(7, start) infinite;
+    }
+
+    @keyframes blink-animation {
+        to {
+            visibility: hidden;
+        }
+    }
+    @-webkit-keyframes blink-animation {
+        to {
+            visibility: hidden;
+        }
+    }
 
     </style>
 
@@ -430,7 +448,7 @@ box-sizing: content-box;
 
 
 
-                <p class='map-info'>Zoom: <span id="zoom_level"></span></p>
+                <p class='map-info'>Zoom: <span id="zoom_level"></span> <span id="warning_msg"></span></p>
 
             </div>
             <div id="map_area">
@@ -603,6 +621,13 @@ box-sizing: content-box;
     // and update it!
     map.on('zoomend', function() {
         zoomRounded = Math.floor(map.getZoom()*10) / 10;
+
+        // warning for too close of a zoom
+        if (zoomRounded >= 16) {
+            $("#warning_msg").text("WARNING: The map is zoomed in very close. Are major roads or freeways visible for reference?")
+        } else {
+            $("#warning_msg").text("");
+        }
 
         $("#zoom_level").text(zoomRounded.toFixed(1));
 
@@ -1217,7 +1242,7 @@ function showLabels() {
 // shows and hides buildings and swimming pools
 function showBuildings() {
     // check zoom
-    // if (map.getZoom() >= 14) {
+    if (map.getZoom() >= 14) {
         if (buildingsVisible) {
             // remove buildings
             scene.config.layers.buildings.draw.lines.visible = false;
@@ -1237,7 +1262,7 @@ function showBuildings() {
             $("#buildings_btn").addClass("active"); // update button
             buildingsVisible = true;
         }
-    // }
+    }
 } // showBuildings()
 
 // watching for anytime the size preset dropdown fires
@@ -1295,6 +1320,14 @@ var sizeChange = function(option) {
             // swap to print color
             scene.config.layers.roads.highway.draw.lines.color = '#a7a9ac';
             scene.config.layers.roads.highway.link.draw.lines.color = '#a7a9ac';
+            scene.config.layers.roads.highway.link['tunnel-link'].draw.lines.color = '#a7a9ac';
+            scene.config.layers.roads.highway.link['tunnel-link'].draw.lines.outline.color = '#a7a9ac';
+            scene.config.layers.roads.highway.tunnel.draw.lines.color = '#a7a9ac';
+            scene.config.layers.roads.highway.tunnel.draw.lines.outline.color = '#a7a9ac';
+            scene.config.layers.roads.highway.tunnel.draw.lines.color = '#a7a9ac';
+
+
+
             scene.config.layers.roads.highway.draw.lines.outline.color = '#a7a9ac';
             scene.config.layers.roads.major_road.draw.lines.color = '#a7a9ac';
             scene.config.layers.roads.minor_road.draw.lines.color = '#a7a9ac';
@@ -1307,6 +1340,18 @@ var sizeChange = function(option) {
 
         } else if (option.value == 'quiet_la') {
             scene.load('map-styles.yaml');
+            // check for building selection
+
+            if (buildingsVisible) {
+                // add buildings
+                scene.config.layers.buildings.draw.lines.visible = true;
+                scene.config.layers.buildings.draw.polygons.visible = true;
+                scene.config.layers["swimming-pools"].draw.polygons.visible = true; // pools
+                scene.updateConfig(); // update config
+                scene.rebuild(); // rebuild the map
+            }
+
+
         } else if (option.value == 'terrain_la') {
 
 
