@@ -402,7 +402,7 @@ box-sizing: content-box;
                         <fieldset>
                             <select onchange="layerChange(this)" id="layer_change">
                                 <option value="quiet_la" selected>Quiet LA</option>
-                                <!-- <option value="quiet_la_print">Quiet LA (print)</option> -->
+                                <option value="quiet_la_print">Quiet LA (print)</option>
                                 <!-- <option value="terrain_la">Terrain LA</option> -->
                                 <!-- <option value="betty_la">Betty LA</option> -->
                                 <!-- <option value="satellite">Satellite</option> -->
@@ -606,15 +606,10 @@ box-sizing: content-box;
 
         $("#zoom_level").text(zoomRounded.toFixed(1));
 
-        // // buildings brought in level
-        // if (zoomRounded >= 14) {
-        //     if (buildingsVisible != false) {
-        //         $("#buildings_btn").addClass("active");
-        //         buildingsVisible = true;
-        //     }
-        // } else {
-        //     $("#buildings_btn").removeClass("active"); // no buildings at zoom
-        // }
+        // buildings out under 14 zoom
+        if (zoomRounded < 14) {
+            $("#buildings_btn").removeClass("active"); // no buildings at zoom
+        }
 
         // transit wont show outside 11 zoom
         if (zoomRounded < 11) {
@@ -1222,7 +1217,7 @@ function showLabels() {
 // shows and hides buildings and swimming pools
 function showBuildings() {
     // check zoom
-    if (map.getZoom() >= 14) {
+    // if (map.getZoom() >= 14) {
         if (buildingsVisible) {
             // remove buildings
             scene.config.layers.buildings.draw.lines.visible = false;
@@ -1242,7 +1237,7 @@ function showBuildings() {
             $("#buildings_btn").addClass("active"); // update button
             buildingsVisible = true;
         }
-    }
+    // }
 } // showBuildings()
 
 // watching for anytime the size preset dropdown fires
@@ -1297,7 +1292,19 @@ var sizeChange = function(option) {
             var bingLayer = L.bingLayer("AqEQ_HqipMZe_KnMeHEJ_CEtkNG9Y34_aXaGeIya4fBtc4hTIA9KYzMfFaK5nbK5", {type: "Aerial"}).addTo(map);
             quietLAlayer.remove();
         } else if (option.value == 'quiet_la_print') {
-            scene.load('map-styles-print.yaml');
+            // swap to print color
+            scene.config.layers.roads.highway.draw.lines.color = '#a7a9ac';
+            scene.config.layers.roads.highway.link.draw.lines.color = '#a7a9ac';
+            scene.config.layers.roads.highway.draw.lines.outline.color = '#a7a9ac';
+            scene.config.layers.roads.major_road.draw.lines.color = '#a7a9ac';
+            scene.config.layers.roads.minor_road.draw.lines.color = '#a7a9ac';
+            scene.config.layers.roads.service.draw.lines.color = '#a7a9ac';
+
+
+
+            scene.updateConfig(); // update config
+            scene.rebuild(); // rebuild the map
+
         } else if (option.value == 'quiet_la') {
             scene.load('map-styles.yaml');
         } else if (option.value == 'terrain_la') {

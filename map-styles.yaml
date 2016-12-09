@@ -619,11 +619,11 @@ layers:
         filter: { $zoom: { min: 14 }}
         draw:
             polygons:
-                visible: true
+                visible: false
                 order: function() { return feature.sort_rank; }
                 color: *building
             lines:
-                visible: true
+                visible: false
                 order: function() { return feature.sort_rank; }
                 color: "#c8c8c1"
                 width: [[17,0],[18,0.5m],[20,0.25m]]
