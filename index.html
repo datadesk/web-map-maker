@@ -341,6 +341,11 @@ box-sizing: content-box;
         border-bottom: 1px solid #4591B8;
     }
 
+    #map_loader {
+        width: 20px;
+        margin: 0 0 0 10px;
+    }
+
     #warning_msg {
         color: red;
         display: inline-block;
@@ -455,8 +460,10 @@ box-sizing: content-box;
                     </div>
                 </div>
                 <div id="map_holder">
+
                     <div id="map"></div>
-                    <button class='btn' onclick='downloadIMG();' id='download_img'>Download Image</button>
+                    
+                    <button class='btn gray' onclick='downloadIMG();' id='download_img'>Image loading...<img src="images/preloader.gif" alt="Preloader" id="map_loader" /></button>
                     <div id="map_size"></div>
                 </div>
             </div>
@@ -600,6 +607,7 @@ box-sizing: content-box;
 
     // and update it!
     map.on('zoomend', function() {
+
         zoomRounded = Math.floor(map.getZoom()*10) / 10;
 
         // warning for too close of a zoom
@@ -969,8 +977,9 @@ var terrainVisible = false;
 function showTerrain() {
     // store landuse parent
     var landuse = scene.config.layers.landuse;
-
+    mapLoading();
     if (terrainVisible) {
+
         // change earth to terrain
         scene.config.layers.earth.draw.polygons.visible = true;
         scene.config.layers.earth.draw.terrain.visible = false;
@@ -1007,6 +1016,7 @@ function showTerrain() {
 
         terrainVisible = false;
     } else {
+
         // change earth to terrain
         scene.config.layers.earth.draw.polygons.visible = false;
         scene.config.layers.earth.draw.terrain.visible = true;
@@ -1140,6 +1150,7 @@ function showBuildings() {
             $("#buildings_btn").removeClass("active"); // update button
             buildingsVisible = false;
         } else {
+            mapLoading();
             // add buildings
             scene.config.layers.buildings.draw.lines.visible = true;
             scene.config.layers.buildings.draw.polygons.visible = true;
@@ -1328,12 +1339,34 @@ var sizeChange = function(option) {
         e.preventDefault();
     });
 
-    // scene.subscribe({
-    //     view_complete: function () {
-    //         console.log('scene view complete');
-    //         loading = false;
-    //     }
-    // });
+
+    // show that map is still loading
+    function mapLoading() {
+        if (scene.tile_manager.isLoadingVisibleTiles()) {
+            $("#download_img").html('Image loading...<img src="images/preloader.gif" alt="Preloader" id="map_loader" />');
+            $("#download_img").addClass("gray");
+        }
+    }
+
+    scene.subscribe({
+        move: function () {
+            mapLoading();
+        }
+    });
+
+    scene.subscribe({
+        view_complete: function () {
+            console.log('scene view complete');
+            $("#download_img").html("Download image");
+            $("#download_img").removeClass("gray");
+        },     
+        error: function (e) {
+            console.log('scene error:', e);
+        },
+        warning: function (e) {
+            console.log('scene warning:', e);
+        }
+    });
 
 
 
