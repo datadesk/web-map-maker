@@ -1178,6 +1178,9 @@ var sizeChange = function(option) {
         $("#print_btn").addClass("active");
         $("#web_btn").removeClass("active");
 
+        // hide attribution
+        $(".leaflet-control-attribution").hide();
+
     }
 
     function showWeb() {
@@ -1186,6 +1189,11 @@ var sizeChange = function(option) {
         // update buttons
         $("#print_btn").removeClass("active");
         $("#web_btn").addClass("active");
+
+        // bring back attribution
+        $(".leaflet-control-attribution").show();
+
+
     }
 
     // Apple's Magic Mouse is a little finicky--prevent scroll when mouse is down on map
