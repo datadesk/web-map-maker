@@ -425,107 +425,124 @@
 
 
     function downloadIMG() {
-        var canvas = document.getElementById("canvas");
-        var ctx = canvas.getContext("2d");
+        if (!mapLoadAction) {
 
-        var mapSize = [$("#map").width(),$("#map").height()];
+            var canvas = document.getElementById("canvas");
+            var ctx = canvas.getContext("2d");
 
-        // update the canvas' size
-        $("#canvas").attr("width",mapSize[0]);
-        $("#canvas").attr("height",mapSize[1]);
+            var mapSize = [$("#map").width(),$("#map").height()];
 
-        var canvasSize = [$("#canvas").width(),$("#canvas").height()];
+            // update the canvas' size
+            $("#canvas").attr("width",mapSize[0]);
+            $("#canvas").attr("height",mapSize[1]);
 
-        // wipe the canvas clean
-        ctx.clearRect(0, 0, canvasSize[0], canvasSize[1]);
+            var canvasSize = [$("#canvas").width(),$("#canvas").height()];
 
-
-
-        // hide map controls buttons
-        $("#map").css("background","none");
-        $(".leaflet-control-zoom").hide();
-
-        // basemap
-        scene.screenshot().then(function(screenshot) {
-
-            console.log(mapSize);
-            // store map size
-            // store svg viewbox info (for later offsetting)
-
-            var base = new Image();
-            base.src = screenshot.url;
-            ctx.drawImage(base,0,0, mapSize[0], mapSize[1]);
+            // wipe the canvas clean
+            ctx.clearRect(0, 0, canvasSize[0], canvasSize[1]);
 
 
-            // add svg elements (like geojson objects)
-            if ($("#map svg").length > 0) {
-                console.log('svg query');
 
-                var svgString = new XMLSerializer().serializeToString(document.querySelector('svg'));
-                var DOMURL = self.URL || self.webkitURL || self;
-                var img = new Image();
-                var svg = new Blob([svgString], {type: "image/svg+xml;charset=utf-8"});
-                var url = DOMURL.createObjectURL(svg);
+            // hide map controls buttons
+            $("#map").css("background","none");
+            $(".leaflet-control-zoom").hide();
 
-                img.onload = function() {
-                    console.log('img.onload');
+            // basemap
+            scene.screenshot().then(function(screenshot) {
 
-                    // be sure to offset it
-                    var svg1 = document.querySelector('svg');
-                    var box = svg1.getAttribute('viewBox');
-                    
-                    var svgOffset = box.split(/\s+|,/);
+                console.log(mapSize);
+                // store map size
+                // store svg viewbox info (for later offsetting)
 
-                    var svgSize = [$("#map svg").width(),$("#map svg").height()];
+                var base = new Image();
+                base.src = screenshot.url;
+                ctx.drawImage(base,0,0, mapSize[0], mapSize[1]);
 
-                    ctx.drawImage(img, (+svgOffset[0]*-1)-((svgSize[0]-mapSize[0])/2), (+svgOffset[1]*-1)-((svgSize[1]-mapSize[1])/2), svgSize[0], svgSize[1]);
-                };
-                img.src = url;
-            }
 
-            // any popup text layers and other html like the source and ruler
-            html2canvas($("#map"), {
+                // add svg elements (like geojson objects)
+                if ($("#map svg").length > 0) {
+                    console.log('svg query');
 
-                onrendered: function(canvas) {
-                    console.log('html2canvas');
+                    var svgString = new XMLSerializer().serializeToString(document.querySelector('svg'));
+                    var DOMURL = self.URL || self.webkitURL || self;
+                    var img = new Image();
+                    var svg = new Blob([svgString], {type: "image/svg+xml;charset=utf-8"});
+                    var url = DOMURL.createObjectURL(svg);
 
-                    ctx.drawImage(canvas,0,0, mapSize[0], mapSize[1]);
-                    $(".leaflet-control-zoom").show(); // show zoom again
-                    $("#map").css("background","#ddd"); // bring back map's background
+                    img.onload = function() {
+                        console.log('img.onload');
 
-                    // create an off-screen anchor tag
-                    var lnk = document.createElement('a'),
-                        e;
+                        // be sure to offset it
+                        var svg1 = document.querySelector('svg');
+                        var box = svg1.getAttribute('viewBox');
+                        
+                        var svgOffset = box.split(/\s+|,/);
 
-                    lnk.download = 'image.png';
+                        var svgSize = [$("#map svg").width(),$("#map svg").height()];
 
-                    // compress down canvas
-                    var canvas = document.getElementById("canvas");
-                    var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-
-                    lnk.href = image;
-                    // window.location.href=image;
-                    if (document.createEvent) {
-
-                        e = document.createEvent("MouseEvents");
-                        e.initMouseEvent("click", true, true, window,
-                                         0, 0, 0, 0, 0, false, false, false,
-                                         false, 0, null);
-
-                        lnk.dispatchEvent(e);
-
-                    } else if (lnk.fireEvent) {
-                        lnk.fireEvent("onclick");
-                    }
+                        ctx.drawImage(img, (+svgOffset[0]*-1)-((svgSize[0]-mapSize[0])/2), (+svgOffset[1]*-1)-((svgSize[1]-mapSize[1])/2), svgSize[0], svgSize[1]);
+                    };
+                    img.src = url;
                 }
+
+                // any popup text layers and other html like the source and ruler
+                html2canvas($("#map"), {
+
+                    onrendered: function(canvas) {
+                        console.log('html2canvas');
+
+                        ctx.drawImage(canvas,0,0, mapSize[0], mapSize[1]);
+                        $(".leaflet-control-zoom").show(); // show zoom again
+                        $("#map").css("background","#ddd"); // bring back map's background
+
+                        // create an off-screen anchor tag
+                        var lnk = document.createElement('a'),
+                            e;
+
+                        // get current datetime
+                        var currentdate = new Date();
+
+                        var hours = (currentdate.getHours() > 12) ? currentdate.getHours() + 12 : currentdate.getHours();
+                        hours = (hours.toString().length == 1) ? '0' + hours : hours;
+
+                        var datetime =  ("0" + (currentdate.getMonth() + 1)).slice(-2) + "_" +
+                                        ("0" + currentdate.getDate()).slice(-2) + "_" +
+                                        currentdate.getFullYear() + "_"  
+                                        + hours + "_" +
+                                        + currentdate.getMinutes() + "_" +
+                                        currentdate.getSeconds();
+
+                        lnk.download = 'map_'+datetime+'.png';
+
+                        // compress down canvas
+                        var canvas = document.getElementById("canvas");
+                        var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+
+                        lnk.href = image;
+                        // window.location.href=image;
+                        if (document.createEvent) {
+
+                            e = document.createEvent("MouseEvents");
+                            e.initMouseEvent("click", true, true, window,
+                                             0, 0, 0, 0, 0, false, false, false,
+                                             false, 0, null);
+
+                            lnk.dispatchEvent(e);
+
+                        } else if (lnk.fireEvent) {
+                            lnk.fireEvent("onclick");
+                        }
+                    }
+                });
+
+
+
+
             });
 
+        }
 
-
-
-        });
-
-    }
+    } // downloadIMG();
 
 
 
@@ -949,25 +966,30 @@ var sizeChange = function(option) {
         e.preventDefault();
     });
 
+    var mapLoadAction = true;
 
     // show that map is still loading
     function mapLoading() {
         if (scene.tile_manager.isLoadingVisibleTiles()) {
             $("#download_img").html('Image loading...<img src="images/preloader.gif" alt="Preloader" id="map_loader" />');
             $("#download_img").addClass("gray");
+            mapLoadAction = true;
         }
     }
 
+    // listen for anything causing a possible map update
     scene.subscribe({
         move: function () {
             mapLoading();
         }
     });
 
+    // fire when map is down loading
     scene.subscribe({
         view_complete: function () {
             $("#download_img").html("Download image");
             $("#download_img").removeClass("gray");
+            mapLoadAction = false;
         },     
         error: function (e) {
             console.log('scene error:', e);
