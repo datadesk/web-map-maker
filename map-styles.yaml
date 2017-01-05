@@ -444,7 +444,7 @@ layers:
                     #cap: [[0,butt],[15,round]]
                     #join: round
                     color: *road
-                    width: [[6,0px],[8, 2px], [14, 5.5px], [15, 6.0px], [16, 6.5px], [17, 20m]]
+                    width: [[6,0px],[8, 2px], [14, 5.5px], [15, 6.5px], [16, 7px], [17, 20m]]
                     cap: round
                     join: round
             link:
