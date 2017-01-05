@@ -97,7 +97,7 @@
                     <button class="btn gray" onclick="showBuildings()" id='buildings_btn'>Buildings</button>
                     <button class="btn gray" onclick="zoomFreeze()" id='zoom_lock'>Lock zoom</button>
                     <button class="btn gray" onclick="panFreeze()" id='pan_lock'>Lock pan</button>
-                    <button class="btn gray" onclick="showLabels()" id='auto_labels_btn'>Auto labels</button>
+                    <button class="btn gray active" onclick="showLabels()" id='auto_labels_btn'>Auto labels</button>
                     <input type="file" id="geo_files" name="files[]" multiple>
                     <label for="geo_files" class="btn gray">Upload GeoJSON</label>
                 </div>
@@ -592,8 +592,9 @@ function findFirstDescendant(parent, tagname) {
 }
 
 var transitVisible = false;
-var labelsVisible = false;
+var labelsVisible = true;
 var terrainVisible = false;
+
 
 function showTerrain() {
     // store landuse parent
@@ -700,6 +701,7 @@ function showTransit() {
 
 // auto labels
 function showLabels() {
+
     // check current status
     if (labelsVisible) {
         // turn all these label layers hidden
@@ -846,6 +848,11 @@ var sizeChange = function(option) {
         scene.config.layers.roads.minor_road.draw.lines.color = '#a7a9ac';
         scene.config.layers.roads.service.draw.lines.color = '#a7a9ac';
 
+        // turn off labels
+        labelsVisible = true;
+        showLabels();
+
+
         scene.updateConfig(); // update config
         scene.rebuild(); // rebuild the map
 
@@ -864,6 +871,8 @@ var sizeChange = function(option) {
         // update buttons
         $("#print_btn").removeClass("active");
         $("#web_btn").addClass("active");
+        $("#auto_labels_btn").addClass("active");
+        labelsVisible = true;
 
         // bring back attribution
         $(".leaflet-control-attribution").show();
@@ -900,8 +909,6 @@ var sizeChange = function(option) {
     function handleFileSelect(evt) {
         // add multiple files to the map
         for (var i = 0; i <  evt.target.files.length; i++) {
-
-
 
             var f = evt.target.files[i]; 
 
