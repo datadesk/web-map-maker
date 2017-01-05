@@ -803,8 +803,6 @@ box-sizing: content-box;
                 var svg = new Blob([svgString], {type: "image/svg+xml;charset=utf-8"});
                 var url = DOMURL.createObjectURL(svg);
 
-                console.log(svgString);
-
                 img.onload = function() {
                     console.log('img.onload');
 
@@ -817,7 +815,6 @@ box-sizing: content-box;
                     var svgSize = [$("#map svg").width(),$("#map svg").height()];
 
                     ctx.drawImage(img, (+svgOffset[0]*-1)-((svgSize[0]-mapSize[0])/2), (+svgOffset[1]*-1)-((svgSize[1]-mapSize[1])/2), svgSize[0], svgSize[1]);
-
                 };
                 img.src = url;
             }
