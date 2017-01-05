@@ -421,22 +421,13 @@ box-sizing: content-box;
                         </fieldset>
                     </form>
                 </div>
-                <div class="map_option">
-
-                    <form class="standalone-dropdown">
-                        <fieldset>
-                            <select onchange="layerChange(this)" id="layer_change">
-                                <option value="quiet_la" selected>Quiet LA</option>
-                                <option value="quiet_la_print">Quiet LA (print)</option>
-                                <!-- <option value="terrain_la">Terrain LA</option> -->
-                                <!-- <option value="betty_la">Betty LA</option> -->
-                                <!-- <option value="satellite">Satellite</option> -->
-                            </select>
-                        </fieldset>
-                    </form>
-                </div>
 
                 <div class="map_option">
+                    <div class="btn-group">
+                        <button class="btn gray active" onclick="showWeb();" id='web_btn'>Web</button>
+                        <button class="btn gray" onclick="showPrint();" id='print_btn'>Print</button>
+                    </div>
+
                     <button class="btn gray" onclick="showTerrain()" id='terrain_btn'>Terrain</button>
                     <button class="btn gray" onclick="showTransit()" id='transit_btn'>Transit</button>
                     <button class="btn gray" onclick="showBuildings()" id='buildings_btn'>Buildings</button>
@@ -501,6 +492,7 @@ box-sizing: content-box;
     </div>
 
     <script>
+
     // Get window width
     var windowWidth = document.documentElement.clientWidth;
     var windowHeight = document.documentElement.clientHeight;
@@ -562,6 +554,7 @@ box-sizing: content-box;
         minZoom: 1.5,
         closePopupOnClick: false
     });
+
 
     map.attributionControl.setPrefix('@latimesgraphics, Mapzen, OpenStreetMap');
     var quietLAlayer = Tangram.leafletLayer({
@@ -803,11 +796,14 @@ box-sizing: content-box;
             // add svg elements (like geojson objects)
             if ($("#map svg").length > 0) {
                 console.log('svg query');
+
                 var svgString = new XMLSerializer().serializeToString(document.querySelector('svg'));
                 var DOMURL = self.URL || self.webkitURL || self;
                 var img = new Image();
                 var svg = new Blob([svgString], {type: "image/svg+xml;charset=utf-8"});
                 var url = DOMURL.createObjectURL(svg);
+
+                console.log(svgString);
 
                 img.onload = function() {
                     console.log('img.onload');
@@ -821,13 +817,9 @@ box-sizing: content-box;
                     var svgSize = [$("#map svg").width(),$("#map svg").height()];
 
                     ctx.drawImage(img, (+svgOffset[0]*-1)-((svgSize[0]-mapSize[0])/2), (+svgOffset[1]*-1)-((svgSize[1]-mapSize[1])/2), svgSize[0], svgSize[1]);
-                    // var png = canvas.toDataURL("image/png");
-                    // document.querySelector('#img-out').innerHTML = '<img src="'+png+'"/>';
-                    // DOMURL.revokeObjectURL(png);
 
-                    // window.open(png);
                 };
-                img.src = url;                
+                img.src = url;
             }
 
             // any popup text layers and other html like the source and ruler
@@ -840,14 +832,30 @@ box-sizing: content-box;
                     $(".leaflet-control-zoom").show(); // show zoom again
                     $("#map").css("background","#ddd"); // bring back map's background
 
-                    // add extention
-                    // $("#canvas").attr("download", "file.png");
+                    // create an off-screen anchor tag
+                    var lnk = document.createElement('a'),
+                        e;
 
+                    lnk.download = 'image.png';
+
+                    // compress down canvas
                     var canvas = document.getElementById("canvas");
                     var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
 
-                    window.location.href=image;
+                    lnk.href = image;
+                    // window.location.href=image;
+                    if (document.createEvent) {
 
+                        e = document.createEvent("MouseEvents");
+                        e.initMouseEvent("click", true, true, window,
+                                         0, 0, 0, 0, 0, false, false, false,
+                                         false, 0, null);
+
+                        lnk.dispatchEvent(e);
+
+                    } else if (lnk.fireEvent) {
+                        lnk.fireEvent("onclick");
+                    }
                 }
             });
 
@@ -855,71 +863,6 @@ box-sizing: content-box;
 
 
         });
-
-//     // var id = "map";
-
-// leafletImage(map, function(err, canvas) {
-//     // now you have canvas
-//     // example thing to do with that canvas:
-//     var img = document.createElement('img');
-//     var dimensions = map.getSize();
-//     img.width = dimensions.x;
-//     img.height = dimensions.y;
-//     img.src = canvas.toDataURL();
-//     document.getElementById('img-out').innerHTML = '';
-//     document.getElementById('img-out').appendChild(img);
-// });
-
-    // function buildCanvas(basemap) {
-
-    //     // get map's current dimensions
-    //     var mapWidth = $("#map canvas").width();
-    //     console.log(mapWidth);
-
-    //     var canvas = document.getElementById("canvas");
-    //     var ctx = canvas.getContext("2d");
-
-    //     var base = new Image();
-    //     base.src=basemap;
-    //     ctx.drawImage(base,0,0, 1300, 730);
-
-    //     addSVG();
-
-    // }
-
-
-    // function addSVG() {
-    //     var svgString = new XMLSerializer().serializeToString(document.querySelector('svg'));
-
-    //     var canvas = document.getElementById("canvas");
-    //     var ctx = canvas.getContext("2d");
-
-    //     var DOMURL = self.URL || self.webkitURL || self;
-    //     var img = new Image();
-    //     var svg = new Blob([svgString], {type: "image/svg+xml;charset=utf-8"});
-    //     var url = DOMURL.createObjectURL(svg);
-
-    //     img.onload = function() {
-    //         // be sure to offset it
-
-
-    //         var svg1 = document.querySelector('svg');
-    //         var box = svg1.getAttribute('viewBox');
-            
-    //         var svgOffset = box.split(/\s+|,/);
-    //         // console.log(svgOffset);
-    //         // console.log(+svgOffset[0]+130);
-
-    //         ctx.drawImage(img, (+svgOffset[0]*-1)-130, (+svgOffset[1]*-1)-73, 1560, 876);
-    //         var png = canvas.toDataURL("image/png");
-    //         // document.querySelector('#img-out').innerHTML = '<img src="'+png+'"/>';
-    //         DOMURL.revokeObjectURL(png);
-
-    //         window.open(png);
-    //     };
-    //     img.src = url;
-
-    // }
 
     }
 
@@ -1210,38 +1153,36 @@ var sizeChange = function(option) {
 
 };
 
-    function layerChange(option) {
-        if (option.value == 'satellite') {
-            var bingLayer = L.bingLayer("AqEQ_HqipMZe_KnMeHEJ_CEtkNG9Y34_aXaGeIya4fBtc4hTIA9KYzMfFaK5nbK5", {type: "Aerial"}).addTo(map);
-            quietLAlayer.remove();
-        } else if (option.value == 'quiet_la_print') {
-            // swap to print color
-            scene.config.layers.roads.highway.draw.lines.color = '#a7a9ac';
-            scene.config.layers.roads.highway.link.draw.lines.color = '#a7a9ac';
-            scene.config.layers.roads.highway.link['tunnel-link'].draw.lines.color = '#a7a9ac';
-            scene.config.layers.roads.highway.link['tunnel-link'].draw.lines.outline.color = '#a7a9ac';
-            scene.config.layers.roads.highway.tunnel.draw.lines.color = '#a7a9ac';
-            scene.config.layers.roads.highway.tunnel.draw.lines.outline.color = '#a7a9ac';
-            scene.config.layers.roads.highway.tunnel.draw.lines.color = '#a7a9ac';
+    function showPrint() {
+        // swap to print color
+        scene.config.layers.roads.highway.draw.lines.color = '#a7a9ac';
+        scene.config.layers.roads.highway.link.draw.lines.color = '#a7a9ac';
+        scene.config.layers.roads.highway.link['tunnel-link'].draw.lines.color = '#a7a9ac';
+        scene.config.layers.roads.highway.link['tunnel-link'].draw.lines.outline.color = '#a7a9ac';
+        scene.config.layers.roads.highway.tunnel.draw.lines.color = '#a7a9ac';
+        scene.config.layers.roads.highway.tunnel.draw.lines.outline.color = '#a7a9ac';
+        scene.config.layers.roads.highway.tunnel.draw.lines.color = '#a7a9ac';
 
+        scene.config.layers.roads.highway.draw.lines.outline.color = '#a7a9ac';
+        scene.config.layers.roads.major_road.draw.lines.color = '#a7a9ac';
+        scene.config.layers.roads.minor_road.draw.lines.color = '#a7a9ac';
+        scene.config.layers.roads.service.draw.lines.color = '#a7a9ac';
 
+        scene.updateConfig(); // update config
+        scene.rebuild(); // rebuild the map
 
-            scene.config.layers.roads.highway.draw.lines.outline.color = '#a7a9ac';
-            scene.config.layers.roads.major_road.draw.lines.color = '#a7a9ac';
-            scene.config.layers.roads.minor_road.draw.lines.color = '#a7a9ac';
-            scene.config.layers.roads.service.draw.lines.color = '#a7a9ac';
+        // update buttons
+        $("#print_btn").addClass("active");
+        $("#web_btn").removeClass("active");
 
+    }
 
-
-            scene.updateConfig(); // update config
-            scene.rebuild(); // rebuild the map
-
-        } else if (option.value == 'quiet_la') {
-            scene.load('map-styles.yaml');
-            buildingsVisible = false;
-            $("#buildings_btn").removeClass("active"); // update button
-
-        }
+    function showWeb() {
+        scene.load('map-styles.yaml');
+        buildingsVisible = false;
+        // update buttons
+        $("#print_btn").removeClass("active");
+        $("#web_btn").addClass("active");
     }
 
     // Apple's Magic Mouse is a little finicky--prevent scroll when mouse is down on map
