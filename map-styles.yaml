@@ -304,7 +304,7 @@ layers:
                 any:
                     - type: state
                     # territorial here is probably a hack
-                    - kind: [department, region]
+                    - kind: [department, region, provincial, territorial]
                     - kind_detail: 4
             draw:
                 lines:
