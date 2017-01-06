@@ -290,6 +290,7 @@ label {font:18px/27px Georgia, serif;}
 
 .leaflet-control-attribution {
     height: auto;
+    font-family: 'Benton Gothic Regular', Arial, sans-serif;
 }
 
 @keyframes blink-animation {
