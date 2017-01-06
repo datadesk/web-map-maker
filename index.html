@@ -481,6 +481,9 @@
                     console.log('svg query');
 
                     // Super hacky solution to SVG drawing problem: change zoom level then put it back
+                    // This is here to patch a bug where a small pan of the map will result in
+                    // geojson/svg objects being cut off in the downloaded image
+                    // Someday we might have a real solution to the problem but until then ¯\_(ツ)_/¯
                     map.setZoom(map.getZoom() - 0.5);
                     map.setZoom(map.getZoom() + 0.5);
 
