@@ -92,6 +92,11 @@ textures:
             'MEX_3char': [220, 1100, 220, 220]
             'MEX_4char': [440, 1100, 220, 220]
             'MEX_5char': [660, 1100, 220, 220]
+            'us_state_1char': [0, 880, 220, 220]
+            'us_state_2char': [0, 880, 220, 220]
+            'us_state_3char': [220, 880, 220, 220]
+            'us_state_4char': [440, 880, 220, 220]
+            'us_state_5char': [660, 880, 220, 220]
             'generic_shield_1char': [0, 1320, 220, 220]
             'generic_shield_2char': [0, 1320, 220, 220]
             'generic_shield_3char': [220, 1320, 220, 220]
@@ -598,9 +603,12 @@ layers:
             draw:
                 shields:
                     sprite: 
-                        function() { 
+                        function() {
+                            var n = feature.network;
                             if (feature.network == 'US:I' || feature.network == 'US:US' || feature.network == 'US:CA' || feature.network == 'US:CA:CR' || feature.network == 'MX' || feature.network == 'MEX') {
                                 return (feature.network + '_' + feature.shield_text.length + 'char'); 
+                            } else if (n == 'US:AL' || n == 'US:AK' || n == 'US:AZ' || n == 'US:AR' || n == 'US:CO' || n == 'US:CT' || n == 'US:DE' || n == 'US:FL' || n == 'US:GA' || n == 'US:HI' || n == 'US:ID' || n == 'US:IL' || n == 'US:IN' || n == 'US:IA' || n == 'US:KS' || n == 'US:KY' || n == 'US:LA' || n == 'US:ME' || n == 'US:MD' || n == 'US:MA' || n == 'US:MI' || n == 'US:MN' || n == 'US:MS' || n == 'US:MO' || n == 'US:MT' || n == 'US:NE' || n == 'US:NV' || n == 'US:NH' || n == 'US:NJ' || n == 'US:NM' || n == 'US:NY' || n == 'US:NC' || n == 'US:ND' || n == 'US:OH' || n == 'US:OK' || n == 'US:OR' || n == 'US:PA' || n == 'US:RI' || n == 'US:SC' || n == 'US:SD' || n == 'US:TN' || n == 'US:TX' || n == 'US:UT' || n == 'US:VT' || n == 'US:VA' || n == 'US:WA' || n == 'US:WV' || n == 'US:WI' || n == 'US:WY') {
+                                return ('us_state_' + feature.shield_text.length + 'char'); 
                             } else {
                                 return ('generic_shield_' + feature.shield_text.length + 'char'); 
                             }

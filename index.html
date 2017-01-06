@@ -408,11 +408,11 @@
             var feature = selection.feature;
             if (feature != null) {
                 if (feature.properties != null) {
-                    console.log(feature);
+                    // console.log(feature);
 
                     // $('#tooltip').css({'display':'block','opacity':1,'height':'auto'});
                     if (feature.properties.kind == 'highway'){
-                        console.log(feature.properties.ref);
+                        // console.log(feature.properties.ref);
                         $('#tooltip').text(feature.properties.ref);
                     } else {
                         // console.log(feature.properties.name);
