@@ -859,7 +859,6 @@ var sizeChange = function(option) {
         scene.config.layers.roads.highway.tunnel.draw.lines.outline.color = '#a7a9ac';
         scene.config.layers.roads.highway.tunnel.draw.lines.color = '#a7a9ac';
 
-        scene.config.layers.roads.highway.draw.lines.outline.color = '#a7a9ac';
         scene.config.layers.roads.major_road.draw.lines.color = '#a7a9ac';
         scene.config.layers.roads.minor_road.draw.lines.color = '#a7a9ac';
         scene.config.layers.roads.service.draw.lines.color = '#a7a9ac';
@@ -867,7 +866,6 @@ var sizeChange = function(option) {
         // turn off labels
         labelsVisible = true;
         showLabels();
-
 
         scene.updateConfig(); // update config
         scene.rebuild(); // rebuild the map
