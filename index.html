@@ -406,14 +406,13 @@
                 return;
             }
             var feature = selection.feature;
-            // console.log(feature);
             if (feature != null) {
                 if (feature.properties != null) {
                     console.log(feature);
 
                     // $('#tooltip').css({'display':'block','opacity':1,'height':'auto'});
                     if (feature.properties.kind == 'highway'){
-                        // console.log(feature.properties.ref);
+                        console.log(feature.properties.ref);
                         $('#tooltip').text(feature.properties.ref);
                     } else {
                         // console.log(feature.properties.name);

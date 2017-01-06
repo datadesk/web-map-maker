@@ -63,25 +63,41 @@ textures:
         sprites:
             # define sprites: [x origin, y origin, width, height]
             'US:I_1char': [0, 0, 220, 220]
-            'US:I_2char': [220, 0, 220, 220]
-            'US:I_3char': [440, 0, 220, 220]
-            'US:I_4char': [660, 0, 220, 220]
-            'US:I_5char': [880, 0, 220, 220]
+            'US:I_2char': [0, 0, 220, 220]
+            'US:I_3char': [220, 0, 220, 220]
+            'US:I_4char': [440, 0, 220, 220]
+            'US:I_5char': [660, 0, 220, 220]
             'US:US_1char': [0, 440, 220, 220]
-            'US:US_2char': [220, 440, 220, 220]
-            'US:US_3char': [440, 440, 220, 220]
-            'US:US_4char': [660, 440, 220, 220]
-            'US:US_5char': [880, 440, 220, 220]
+            'US:US_2char': [0, 440, 220, 220]
+            'US:US_3char': [220, 440, 220, 220]
+            'US:US_4char': [440, 440, 220, 220]
+            'US:US_5char': [660, 440, 220, 220]
             'US:CA_1char': [0, 220, 220, 220]
-            'US:CA_2char': [220, 220, 220, 220]
-            'US:CA_3char': [440, 220, 220, 220]
-            'US:CA_4char': [660, 220, 220, 220]
-            'US:CA_5char': [880, 220, 220, 220]
+            'US:CA_2char': [0, 220, 220, 220]
+            'US:CA_3char': [220, 220, 220, 220]
+            'US:CA_4char': [440, 220, 220, 220]
+            'US:CA_5char': [660, 220, 220, 220]
             'US:CA:CR_1char': [0, 660, 220, 220]
-            'US:CA:CR_2char': [220, 660, 220, 220]
-            'US:CA:CR_3char': [440, 660, 220, 220]
-            'US:CA:CR_4char': [660, 660, 220, 220]
-            'US:CA:CR_5char': [880, 660, 220, 220]
+            'US:CA:CR_2char': [0, 660, 220, 220]
+            'US:CA:CR_3char': [220, 660, 220, 220]
+            'US:CA:CR_4char': [440, 660, 220, 220]
+            'US:CA:CR_5char': [660, 660, 220, 220]
+            'MX_1char': [0, 1100, 220, 220]
+            'MX_2char': [0, 1100, 220, 220]
+            'MX_3char': [220, 1100, 220, 220]
+            'MX_4char': [440, 1100, 220, 220]
+            'MX_5char': [660, 1100, 220, 220]
+            'MEX_1char': [0, 1100, 220, 220]
+            'MEX_2char': [0, 1100, 220, 220]
+            'MEX_3char': [220, 1100, 220, 220]
+            'MEX_4char': [440, 1100, 220, 220]
+            'MEX_5char': [660, 1100, 220, 220]
+            'generic_shield_1char': [0, 1320, 220, 220]
+            'generic_shield_2char': [0, 1320, 220, 220]
+            'generic_shield_3char': [220, 1320, 220, 220]
+            'generic_shield_4char': [440, 1320, 220, 220]
+            'generic_shield_5char': [660, 1320, 220, 220]
+
         url: images/shields.png
 
 cameras:
@@ -448,7 +464,7 @@ layers:
             not: { kind: rail }
         draw:
             lines:
-                # interactive: true
+                interactive: true
                 order: function() { return feature.sort_rank; }
                 cap: round
         highway:
@@ -581,15 +597,20 @@ layers:
             filter: { network: true, shield_text: true, $zoom: { min: 7, max: 11 }, kind_detail: motorway }
             draw:
                 shields:
-                    sprite: function() { return (feature.network + '_' +
-                            feature.shield_text.length +
-                            'char'); }
+                    sprite: 
+                        function() { 
+                            if (feature.network == 'US:I' || feature.network == 'US:US' || feature.network == 'US:CA' || feature.network == 'US:CA:CR' || feature.network == 'MX' || feature.network == 'MEX') {
+                                return (feature.network + '_' + feature.shield_text.length + 'char'); 
+                            } else {
+                                return ('generic_shield_' + feature.shield_text.length + 'char'); 
+                            }
+                        }
                     # sprite_default: 'US:CA'
                     size: 80px
                     cull_from_tile: true
                     text:
                         anchor: center
-                        repeat_distance: 600px
+                        repeat_distance: 200px
                         text_source: shield_text
                         font:
                             family: 'Benton Gothic Regular'
@@ -826,10 +847,11 @@ layers:
             filter: { name: ["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"], kind: [region], $zoom: {min: 5, max: 7} }
             draw:
                 text-blend-order:
-                    priority: 14
+                    priority: 5
                     visible: true
                     text_source: function() { return feature["name"]; }
                     font:
+                        transform: uppercase
                         size: 30px
                         weight: 200
                         fill: [0.5,0.5,0.5,0.5]
@@ -838,7 +860,7 @@ layers:
             filter: { name: true, kind: [region], $zoom: {min: 7, max: 9} }
             draw:
                 text-blend-order:
-                    priority: 14
+                    priority: 5
                     visible: true
                     text_source: function() { if(feature["name:short"]) { return feature["name"]; } else { return ""; } }
                     font:
