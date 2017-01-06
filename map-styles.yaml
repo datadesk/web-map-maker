@@ -288,7 +288,7 @@ layers:
         disputed:
             filter:
                 any:
-                    - kind: disputed
+                    - kind: [disputed, line_of_control, indeterminate, indefinite]
                     - kind_detail: 2,4,6,8
             draw:
                 lines-dash:
@@ -304,7 +304,7 @@ layers:
                 any:
                     - type: state
                     # territorial here is probably a hack
-                    - kind: [department, region, provincial, territorial]
+                    - kind: [department, region]
                     - kind_detail: 4
             draw:
                 lines:
