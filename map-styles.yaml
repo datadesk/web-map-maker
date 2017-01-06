@@ -89,49 +89,6 @@ cameras:
         type: flat
 
 styles:
-    lines-dash:
-        doc:
-            author: 
-                name: Patricio Gonzalez Vivo
-                twitter: patriciogv
-            version: 0.0.1
-            tangram-version: 0.0.7
-            licence: MIT
-            description: |
-                Apply a stripe pattern to a line
-            examples:
-                sandbox:
-                    url: https://tangrams.github.io/tangram-sandbox/styles/elevation.yaml
-                    img: https://tangrams.github.io/tangram-sandbox/styles/elevation.png
-                    lines: 59-63
-        ui:
-            shaders:
-                defines:
-                    DASH_SCALE:
-                        type: number
-                        label: Scale
-                        range: 
-                            min: 1.
-                            max: 1000.
-                            step: 1.
-                    DASH_SIZE:
-                        type: number
-                        label: Size
-                        range: 
-                            min: 0.
-                            max: 1.
-                            step: 0.01
-        base: lines
-        texcoords: true
-        shaders:
-            defines:
-                DASH_SCALE: .5
-                DASH_SIZE: .5
-            blocks:
-                filter: |
-                    if ( step(DASH_SIZE,fract(v_texcoord.y*DASH_SCALE)) == 0.){
-                        discard;
-                    }
     text-blend-order:
         base: text
         blend_order: 1
@@ -178,6 +135,9 @@ styles:
                     float brightness = .5 - m * .5;
                     color.rgb += brightness;
                     color *= v_color; // apply layer color
+        dashed-lines:
+            base: lines
+            dash: [6,1]
 
 
 layers:
@@ -288,12 +248,13 @@ layers:
         disputed:
             filter:
                 any:
-                    - kind: [disputed, line_of_control, indeterminate, indefinite]
-                    - kind_detail: 2,4,6,8
+                    - kind: [disputed]
+                    - kind_detail: 2
             draw:
-                lines-dash:
+                dashed-lines:
                     color: *nation_brdr
                     width: [[1, 0.5px], [2, 1.0px], [4, 1.5px], [9, 2.5px], [14, 3.5px], [16, 4.5px], [17, 14m]]
+
             water:
                 filter: { maritime_boundary: true }
                 draw:
