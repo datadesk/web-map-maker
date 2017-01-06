@@ -316,3 +316,6 @@ label {font:18px/27px Georgia, serif;}
     height: 14px;
 }
 
+#transit_btn, #buildings_btn {
+    opacity: 0.5;
+}

@@ -280,14 +280,24 @@
         // buildings out under 14 zoom
         if (zoomRounded < 14) {
             $("#buildings_btn").removeClass("active"); // no buildings at zoom
+            $("#buildings_btn").css("opacity","0.5"); // update btn opacity
+        } else {
+            $("#buildings_btn").css("opacity","1"); // update btn opacity
         }
 
         // transit wont show outside 11 zoom
         if (zoomRounded < 11) {
             $("#transit_btn").removeClass("active"); // update button
+            $("#transit_btn").css("opacity","0.5"); // update btn opacity
         } else if (transitVisible) {
             $("#transit_btn").addClass("active"); // update button
         }
+
+        if (zoomRounded >= 11) {
+            $("#transit_btn").css("opacity","1"); // update btn opacity
+        }
+
+
     });
 
 // $("#map_holder").resizable({
