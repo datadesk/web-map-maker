@@ -464,6 +464,10 @@
                 if ($("#map svg").length > 0) {
                     console.log('svg query');
 
+                    // Super hacky solution to SVG drawing problem: change zoom level then put it back
+                    map.setZoom(map.getZoom() - 0.5);
+                    map.setZoom(map.getZoom() + 0.5);
+
                     var svgString = new XMLSerializer().serializeToString(document.querySelector('svg'));
                     var DOMURL = self.URL || self.webkitURL || self;
                     var img = new Image();
@@ -476,7 +480,6 @@
                         // be sure to offset it
                         var svg1 = document.querySelector('svg');
                         var box = svg1.getAttribute('viewBox');
-                        
                         var svgOffset = box.split(/\s+|,/);
 
                         var svgSize = [$("#map svg").width(),$("#map svg").height()];
