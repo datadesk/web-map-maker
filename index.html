@@ -281,9 +281,15 @@
         if (zoomRounded < 14) {
             $("#buildings_btn").removeClass("active"); // no buildings at zoom
             $("#buildings_btn").css("opacity","0.5"); // update btn opacity
-        } else {
+        } else if (buildingsVisible) {
+            $("#buildings_btn").addClass("active"); // no buildings at zoom
+        }
+
+        if (zoomRounded >= 14) {
             $("#buildings_btn").css("opacity","1"); // update btn opacity
         }
+
+
 
         // transit wont show outside 11 zoom
         if (zoomRounded < 11) {
