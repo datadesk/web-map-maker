@@ -208,7 +208,7 @@ label {font:18px/27px Georgia, serif;}
     width: 50px;
     height: 30px;
     margin-left: -9px;
-    background: url(images/popup-tip.png) top left no-repeat;
+    background: url(../images/popup-tip.png) top left no-repeat;
      -webkit-transform: rotate(0deg); 
     -moz-transform: rotate(0deg);
     -ms-transform: rotate(0deg);
