@@ -857,7 +857,8 @@ layers:
                 text-blend-order:
                     priority: 5
                     visible: true
-                    text_source: function() { return feature["name"]; }
+                    text_source: [name:en, name]
+                    text_wrap: 10
                     font:
                         transform: uppercase
                         size: 30px
@@ -891,6 +892,7 @@ layers:
                     # interactive: true
                     anchor: top
                     priority: 6
+                    text_source: [name:en, name]
 
             populated-places-natural-earth-z6:
                 filter: { name: true, source: naturalearthdata.com, $zoom: {min: 6, max: 9} }
