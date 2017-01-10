@@ -629,6 +629,7 @@ function showTerrain() {
         scene.config.layers.earth.draw.polygons.visible = true;
         scene.config.layers.earth.draw.terrain.visible = false;
 
+
         // update base landuse
         landuse.aerodrome.draw = { 'polygons': landuse.aerodrome.draw.terrain };
         landuse.arena.draw = { 'polygons': landuse.arena.draw.terrain };
@@ -691,6 +692,11 @@ function showTerrain() {
         landuse.stadium.draw = { 'terrain': landuse.stadium.draw.polygons };
         landuse.urban_area.draw = { 'terrain': landuse.urban_area.draw.polygons };
         landuse.wetland.draw = { 'terrain': landuse.wetland.draw.polygons };
+
+        console.log(landuse.park.draw);
+        landuse.park.draw.terrain.color = '#dbe0cc';
+
+// d7dbcd
 
         scene.updateConfig(); // update config
         scene.rebuild(); // rebuild the map

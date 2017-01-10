@@ -51,7 +51,7 @@ sources:
         type: TopoJSON
         url: https://tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.topojson
         url_params:
-                api_key: function() { return configOptions.mapzenAPI; }
+                api_key: mapzen-dFUP7Q3
         rasters: [normals]
     normals:
         type: Raster
@@ -921,9 +921,9 @@ layers:
                     all:
                         - source: [openstreetmap, openstreetmap.org]
                         - name: true
-                        - population: { min: 100000 }
+                        - population: { min: 50000 }
                         - not: { kind: [country, county, region, island, neighbourhood, suburb, quarter] }
-                        - $zoom: {min: 4, max: 13}
+                        - $zoom: {min: 4, max: 10}
                         - kind: locality
                 draw:
                     text-blend-order:
@@ -935,6 +935,26 @@ layers:
                             size: [[11,26px],[12,30px]]
                             fill: '#9C9C9C'
                             stroke: { color: *background, width: 4 }
+            populated-places-osm-z11:
+                filter:
+                    all:
+                        - source: [openstreetmap, openstreetmap.org]
+                        - name: true
+                        - population: { min: 100 }
+                        - not: { kind: [country, county, region, island, neighbourhood, suburb, quarter] }
+                        - $zoom: {min: 10, max: 13}
+                        - kind: locality
+                draw:
+                    text-blend-order:
+                        # anchor: center
+                        visible: true
+                        offset: [0, 3px] # half icon size
+                        priority: 16
+                        font:
+                            size: [[11,26px],[12,30px]]
+                            fill: '#9C9C9C'
+                            stroke: { color: *background, width: 4 }
+
             populated-places-osm-z13:
                 filter:
                     all:
