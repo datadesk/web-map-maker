@@ -51,7 +51,7 @@ sources:
         type: TopoJSON
         url: https://tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.topojson
         url_params:
-                api_key: mapzen-dFUP7Q3
+                api_key: function() { return configOptions.mapzenAPI; }
         rasters: [normals]
     normals:
         type: Raster

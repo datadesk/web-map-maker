@@ -35,6 +35,8 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geocoder-mapzen/1.4.1/leaflet-geocoder-mapzen.js"></script>
 
+    <script type="text/javascript" src="js/config.js"></script>
+
 </head>
 <body>
     <nav title="Navigation">
@@ -221,7 +223,7 @@
     });
 
 
-    map.attributionControl.setPrefix('@latimesgraphics, Mapzen, OpenStreetMap');
+    map.attributionControl.setPrefix(configOptions.attribution+'Mapzen, OpenStreetMap');
     var quietLAlayer = Tangram.leafletLayer({
         scene: 'map-styles.yaml',
         events: {
@@ -958,7 +960,7 @@ var sizeChange = function(option) {
     var popupMarker;
     // Initialize on a div element with an ID of "geocodifier"
     var geocoder = new BingGeocodifier('geocodifier', {
-        key: "AqEQ_HqipMZe_KnMeHEJ_CEtkNG9Y34_aXaGeIya4fBtc4hTIA9KYzMfFaK5nbK5",
+        key: configOptions.bingAPI,
         onClick: function(item, coords) {
             console.log(item);
             map.panTo(item.geocodePoints[0].coordinates);
