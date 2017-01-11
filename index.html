@@ -61,7 +61,7 @@
         <h1>Map Maker</h1>
         <p>This tool is for aproximate location only. Geocoders can mislocate addresses by small distances. Map data is provided by Mapzen's API using OpenStreetMap. <a href="http://www.openstreetmap.org/" target="_blank">Improve the map!</a></p>
         <div id="popupContainer">
-            <input id="popupText" type="text" placeholder="Popup text"><div id="geocodifier"></div>
+            <input id="popupText" type="text" placeholder="Popup text" maxlength="40"><div id="geocodifier"></div>
         </div>
 
         <div id="web_blank">
@@ -979,11 +979,11 @@ var sizeChange = function(option) {
     });
 
     document.getElementById('popupText').onkeyup=function() {
+
         // grab popup text
         var userPopupText = $("#popupText").val();
 
-
-        if (popupMarker != undefined) {
+        if (popupMarker != undefined && userPopupText.length <= 40) {
             // update popup
             popupMarker._popup.setContent(userPopupText);
         }
