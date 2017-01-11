@@ -194,7 +194,7 @@
             var text = "<span class='px_measure'>"+i/330+" col</span>";
             $("#col_ruler").append(text);
         } else if (i % 100 === 0 && i <= 1400) {
-            var text = "<span class='px_measure'>"+i+"px</span>";
+            var text = "<span class='px_measure'>"+(i-100)+"px</span>";
             $("#pixel_ruler").append(text);
         }
     }
@@ -692,11 +692,6 @@ function showTerrain() {
         landuse.stadium.draw = { 'terrain': landuse.stadium.draw.polygons };
         landuse.urban_area.draw = { 'terrain': landuse.urban_area.draw.polygons };
         landuse.wetland.draw = { 'terrain': landuse.wetland.draw.polygons };
-
-        console.log(landuse.park.draw);
-        landuse.park.draw.terrain.color = '#dbe0cc';
-
-// d7dbcd
 
         scene.updateConfig(); // update config
         scene.rebuild(); // rebuild the map
