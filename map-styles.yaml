@@ -923,7 +923,26 @@ layers:
                         - name: true
                         - population: { min: 100000 }
                         - not: { kind: [country, county, region, island, neighbourhood, suburb, quarter] }
-                        - $zoom: {min: 4, max: 13}
+                        - $zoom: {min: 4, max: 11}
+                        - kind: locality
+                draw:
+                    text-blend-order:
+                        # anchor: center
+                        visible: true
+                        offset: [0, 3px] # half icon size
+                        priority: 16
+                        font:
+                            size: [[11,26px],[12,30px]]
+                            fill: '#9C9C9C'
+                            stroke: { color: *background, width: 4 }
+            populated-places-osm-z11:
+                filter:
+                    all:
+                        - source: [openstreetmap, openstreetmap.org]
+                        - name: true
+                        - population: { min: 50000 }
+                        - not: { kind: [country, county, region, island, neighbourhood, suburb, quarter] }
+                        - $zoom: {min: 11, max: 13}
                         - kind: locality
                 draw:
                     text-blend-order:
@@ -941,9 +960,9 @@ layers:
                         - source: [openstreetmap, openstreetmap.org]
                         - name: true
                         - population: { min: 100 }
-                        - not: { kind: [country, county, region, island, suburb, quarter] }
-                        - $zoom: [13]
-                        - kind: [city,town,neighbourhood]
+                        - not: { kind: [country, county, region, island, neighbourhood, suburb, quarter] }
+                        - $zoom: {min: 13, max: 14}
+                        - kind: locality
                 draw:
                     text-blend-order:
                         # anchor: center
@@ -951,6 +970,6 @@ layers:
                         offset: [0, 3px] # half icon size
                         priority: 16
                         font:
-                            size: [[13,26px]]
+                            size: [[11,26px],[12,30px]]
                             fill: '#9C9C9C'
                             stroke: { color: *background, width: 4 }
