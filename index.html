@@ -736,6 +736,7 @@ function showLabels() {
         scene.config.layers.places['populated-places']['populated-places-natural-earth-z6']['z3places-1']['draw']['text-blend-order'].visible = false;
         scene.config.layers.places['populated-places']['populated-places-natural-earth-z6']['z4places-2']['draw']['text-blend-order'].visible = false;
         scene.config.layers.places['populated-places']['populated-places-osm-z10']['draw']['text-blend-order'].visible = false;
+        scene.config.layers.places['populated-places']['populated-places-osm-z11']['draw']['text-blend-order'].visible = false;
         scene.config.layers.places['populated-places']['populated-places-osm-z13']['draw']['text-blend-order'].visible = false;
 
         scene.config.layers.places['country-z2']['draw']['text-blend-order'].visible = false;
@@ -762,6 +763,7 @@ function showLabels() {
         scene.config.layers.places['populated-places']['populated-places-natural-earth-z6']['z3places-1']['draw']['text-blend-order'].visible = true;
         scene.config.layers.places['populated-places']['populated-places-natural-earth-z6']['z4places-2']['draw']['text-blend-order'].visible = true;
         scene.config.layers.places['populated-places']['populated-places-osm-z10']['draw']['text-blend-order'].visible = true;
+        scene.config.layers.places['populated-places']['populated-places-osm-z11']['draw']['text-blend-order'].visible = true;
         scene.config.layers.places['populated-places']['populated-places-osm-z13']['draw']['text-blend-order'].visible = true;
 
         scene.config.layers.places['country-z2']['draw']['text-blend-order'].visible = true;
@@ -870,6 +872,17 @@ var sizeChange = function(option) {
         scene.config.layers.roads.major_road.draw.lines.color = '#a7a9ac';
         scene.config.layers.roads.minor_road.draw.lines.color = '#a7a9ac';
         scene.config.layers.roads.service.draw.lines.color = '#a7a9ac';
+
+        // make water darker
+        scene.config.layers['ocean-water'].draw.polygons.color = '#a6bcd3';
+        scene.config.layers['water-not-ocean'].draw.polygons.color = '#a6bcd3';
+        scene.config.layers['water-not-ocean']['inland-water'].draw.polygons.color = '#a6bcd3';
+        scene.config.layers['water-not-ocean']['other-water-areas'].draw.polygons.color = '#a6bcd3';
+        scene.config.layers['water-not-ocean']['playas'].draw.polygons.color = '#a6bcd3';
+        scene.config.layers['water-not-ocean']['water_boundaries-not-ocean'].draw.lines.color = '#a6bcd3';
+        scene.config.layers['water-not-ocean']['river'].draw.lines.color = '#a6bcd3';
+        scene.config.layers['swimming-pools'].draw.polygons.color = '#a6bcd3';
+
 
         // turn off labels
         labelsVisible = true;
