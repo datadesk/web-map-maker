@@ -658,7 +658,7 @@ layers:
 
     buildings:
         data: { source: mapzen, layer: buildings }
-        filter: { $zoom: { min: 14 }}
+        filter: { $zoom: { min: 13 }}
         draw:
             polygons:
                 visible: false
