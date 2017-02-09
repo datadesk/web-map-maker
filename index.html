@@ -119,7 +119,7 @@
                 <div id="map_holder">
 
                     <div id="map"></div>
-                    
+
                     <button class='btn gray' onclick='downloadIMG();' id='download_img'>Image loading...<img src="images/preloader.gif" alt="Preloader" id="map_loader" /></button>
                     <div id="map_size"></div>
                 </div>
@@ -165,29 +165,31 @@
 
     // user map options
     // this stores all the user's map edits so they can be reloaded
-    var userOptions = {}
+    var userOptions = {};
 
     // build the map's ruler
     function createGrid(size) {
+        // magic number: why 1600?
         var ratioW = 1600/size,
             ratioH = 1600/size;
-                
+
         var parent = $('<div />', {
-            class: 'grid', 
-            width: ratioW  * size, 
+            class: 'grid',
+            width: ratioW  * size,
             height: ratioH  * size
         }).addClass('grid' + ' grid'+size).appendTo('#grid_holder');
 
         for (var i = 0; i < ratioH; i++) {
             for(var p = 0; p < ratioW; p++){
                 $('<div />', {
-                    width: size - 1, 
+                    width: size - 1,
                     height: size - 1
                 }).appendTo(parent);
             }
         }
     }
 
+    // magic number: why 1500 here? What does that mean?
     for (var i = 0; i < 1500; i+=10) {
         // checks if fits for print or web columns
         if (i % 330 === 0) {
@@ -272,7 +274,7 @@
 
         // warning for too close of a zoom
         if (zoomRounded >= 16) {
-            $("#warning_msg").text("WARNING: The map is zoomed in very close. Are major roads or freeways visible for reference?")
+            $("#warning_msg").text("WARNING: The map is zoomed in very close. Are major roads or freeways visible for reference?");
         } else {
             $("#warning_msg").text("");
         }
@@ -340,7 +342,7 @@
 
 
         setTimeout(
-            function(){ 
+            function(){
                 // add mo' map
                 map.invalidateSize({ pan: false });
             }, 400
@@ -408,8 +410,8 @@
                 return;
             }
             var feature = selection.feature;
-            if (feature != null) {
-                if (feature.properties != null) {
+            if (feature !== null) {
+                if (feature.properties !== null) {
                     // console.log(feature);
 
                     // $('#tooltip').css({'display':'block','opacity':1,'height':'auto'});
@@ -530,7 +532,7 @@
 
                         var datetime =  ("0" + (currentdate.getMonth() + 1)).slice(-2) + "_" +
                                         ("0" + currentdate.getDate()).slice(-2) + "_" +
-                                        currentdate.getFullYear() + "_"  
+                                        currentdate.getFullYear() + "_"
                                         + hours + "_" +
                                         + currentdate.getMinutes() + "_" +
                                         currentdate.getSeconds();
@@ -816,7 +818,7 @@ function showBuildings() {
 var sizeChange = function(option) {
     if (option.value == 'video') {
         $("#map_holder").width(1930); // these have to be 10 over to compensate for resizable
-        $("#map_holder").height(1080);        
+        $("#map_holder").height(1080);
     } else if (option.value == 'web_large') {
         $("#map_holder").width(1310);
         $("#map_holder").height(730);
@@ -850,7 +852,7 @@ var sizeChange = function(option) {
     $("#map_size").text(mapSize);
 
     setTimeout(
-        function(){ 
+        function(){
             // add mo' map
             map.invalidateSize({ pan: false });
             // $( "#map_holder" ).resizable({grid:10});
@@ -939,7 +941,7 @@ var sizeChange = function(option) {
     var lineStyle = {'color':'#cd7139','weight': 4,'opacity': 1, 'lineJoin':'round'};
     var polyStyle = {'color': '#000','weight': 2,'opacity': 0.65,'fillOpacity': 0, 'lineJoin':'round'};
     var pointStyle = { radius: 10.5, fillColor: '#cd7139',color: '#fff',weight: 1,opacity: 0.3,fillOpacity: 0.8};
-    
+
     function addStyle(feature){
         switch (feature.geometry.type) {
             case 'MultiPolygon': return polyStyle;
@@ -954,10 +956,10 @@ var sizeChange = function(option) {
         // add multiple files to the map
         for (var i = 0; i <  evt.target.files.length; i++) {
 
-            var f = evt.target.files[i]; 
+            var f = evt.target.files[i];
 
             var r = new FileReader();
-            r.onload = function(e) { 
+            r.onload = function(e) {
 
                 var contents = e.target.result;
                 // turn string into json object
@@ -1041,7 +1043,7 @@ var sizeChange = function(option) {
             $("#download_img").html("Download image");
             $("#download_img").removeClass("gray");
             mapLoadAction = false;
-        },     
+        },
         error: function (e) {
             console.log('scene error:', e);
         },
