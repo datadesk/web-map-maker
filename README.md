@@ -17,7 +17,7 @@ This tool is still very much a work-in-progress. There are bugs. But we'll get t
 
 ## Getting started
 
-You don't need much to get up and running. Download this repo and add `config.js` file with this information:
+You don't need much to get up and running. Download this repo and add `config.js` file to the `js` folder with this information:
 
 ```
 var configOptions = {
