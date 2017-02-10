@@ -12,7 +12,7 @@
 
 <img width="1216" alt="mapmaker-screenshot" src="https://cloud.githubusercontent.com/assets/695934/22846871/a5d57d04-ef9e-11e6-87ef-8c1bfb874b22.png">
 
-We make a lot of maps at the Los Angeles Times. So we made this tool to help us make them faster.
+We make a lot of maps at the Los Angeles Times. So we made this tool to help us make them faster. It uses [Mapzen's Tangram mapping engine](https://mapzen.com/products/tangram/) to render OpenStreetMap data as vector tiles. It then bakes out your map into an static image. 
 
 This tool is still very much a work in progress — please report any bugs you find using GitHub issues!
 
@@ -27,6 +27,8 @@ var configOptions = {
     'attribution': 'Who's making the map here, '
 }
 ```
+
+You should also [get a Mapzen key](https://mapzen.com/developers/sign_in) and update it int he [map-styles.yaml file](https://github.com/datadesk/web-map-maker/blob/master/map-styles.yaml#L54).
 
 Then you're ready to run the mapmaker. The easiest way is to fire up a simple python server (obviously you'll need python) with this command:
 
