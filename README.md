@@ -13,12 +13,13 @@
 
 We make a lot of maps at the Los Angeles Times. So we made this tool to help us make them faster.
 
-This tool is still very much a work-in-progress. There are bugs. But we'll get there.
+This tool is still very much a work in progress — please report any bugs you find using GitHub issues!
 
 ## Getting started
 
-You don't need much to get up and running. Download this repo and add a `config.js` file to the `js` folder with this information:
+You don't need much to get up and running. Download this repo and make a config.js file (we provided a template [here](https://github.com/datadesk/web-map-maker/tree/master/js/config.js-TEMPLATE))
 
+It should look like this:
 ```
 var configOptions = {
     'bingAPI': 'Your API here',
@@ -26,15 +27,23 @@ var configOptions = {
 }
 ```
 
-cd into the folder and spin up a server
+Then you're ready to run the mapmaker. The easiest way is to fire up a simple python server (obviously you'll need python) with this command:
 
 ```
 python -m SimpleHTTPSever 8000
 ```
 
-You should be able to visit `localhost:8000` to access the map maker. Chrome is the only supported browser right now.
+The app will be hosted at `localhost:8000` by default.
+
+## What you need to know
+
+Because we've developed this as an internal tool for use at the Los Angeles Times, it's really geared toward our use as far as styles and workflow. But it should be customizable and we're open to suggestions that would help make it better for others to use, too.
+
+Chrome is the only supported browser right now.
+
+Also check the [issues tab](https://github.com/datadesk/web-map-maker/issues).
 
 ## Make this better
 
-File an issue, fork this repo or contact jon@latimes.com with thoughts, concerns or questions.
+Have any ideas? File an issue, fork this repo or contact jon@latimes.com with thoughts, concerns or questions.
 
