@@ -443,6 +443,44 @@
         }
     });
 
+    // Send the map image to S3
+    // We'll need this so that we can send the image to P2P
+    function sendToS3(filename, uri) {
+        return new Promise(function(resolve, reject) {
+            var params = "name=" + filename + "&filedata=" + encodeURIComponent(uri);
+            var postrequest = new XMLHttpRequest();
+            postrequest.open("POST", "http://stockserver.usa.tribune.com/chartbuilder/save-to-s3/", true);
+            postrequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+            postrequest.onload = function() {
+                if (postrequest.status == 200) {
+                    resolve(postrequest.response);
+                }
+            };
+
+            postrequest.send(params);
+        });
+    }
+
+
+    function sendToP2P(slug) {
+        return new Promise(function(resolve, reject) {
+            var params = "slug=" + slug + "&source=mapmaker";
+            var postrequest = new XMLHttpRequest();
+            postrequest.open("POST", "http://stockserver.usa.tribune.com/chartbuilder/send-to-p2p/", true);
+            postrequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+            postrequest.onload = function() {
+                console.log("postrequest: ", postrequest.response);
+                if (postrequest.status == 200) {
+                    resolve(postrequest.response);
+                } else if (postrequest.status == 500) {
+                    reject(postrequest.response);
+                }
+            };
+            postrequest.send(params);
+        });
+    }
 
     function downloadIMG() {
         if (!mapLoadAction) {
@@ -543,6 +581,14 @@
                         var canvas = document.getElementById("canvas");
                         var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
 
+                        sendToS3('map_'+datetime+".png", image)
+                            .then(sendToP2P('map_'+datetime))
+                            .then(function() {
+                                console.log("great success!");
+                            }).catch(function() {
+                                console.log("womp womp");
+                            });
+
                         lnk.href = image;
                         // window.location.href=image;
                         if (document.createEvent) {
@@ -568,7 +614,6 @@
         }
 
     } // downloadIMG();
-
 
 
 var frozenZoom = false;
@@ -963,7 +1008,7 @@ var sizeChange = function(option) {
 
                 var contents = e.target.result;
                 // turn string into json object
-                var parsedJSON = jQuery.parseJSON(contents)
+                var parsedJSON = jQuery.parseJSON(contents);
 
                 // add GeoJSON to map
                 L.geoJson(parsedJSON, {
@@ -972,7 +1017,7 @@ var sizeChange = function(option) {
                         return L.circleMarker(latlng, pointStyle);
                     }
                 }).addTo(map);
-            }
+            };
             r.readAsText(f);
         }
 
@@ -1007,12 +1052,12 @@ var sizeChange = function(option) {
         // grab popup text
         var userPopupText = $("#popupText").val();
 
-        if (popupMarker != undefined && userPopupText.length <= 40) {
+        if (popupMarker !== undefined && userPopupText.length <= 40) {
             // update popup
             popupMarker._popup.setContent(userPopupText);
         }
 
-    }
+    };
 
     // prevent page refresh when hitting enter
     $("#bing-geocodifier-form").submit(function(e) {
