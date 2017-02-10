@@ -166,6 +166,7 @@
     // user map options
     // this stores all the user's map edits so they can be reloaded
     var userOptions = {};
+    var mapSlug = "la-mapmaker-";
 
     // build the map's ruler
     function createGrid(size) {
@@ -443,6 +444,15 @@
         }
     });
 
+    function slugify(v){
+        var slug = v.toLowerCase();
+        // Switch spaces to slugs
+        slug = slug.replace(/\s/g, "-");
+        // Trim special characters
+        slug = slug.replace(/[^\w-]+/g, "");
+        return slug;
+    }
+
     // Send the map image to S3
     // We'll need this so that we can send the image to P2P
     function sendToS3(filename, uri) {
@@ -467,14 +477,18 @@
         return new Promise(function(resolve, reject) {
             var params = "slug=" + slug + "&source=mapmaker";
             var postrequest = new XMLHttpRequest();
-            postrequest.open("POST", "http://stockserver.usa.tribune.com/chartbuilder/send-to-p2p/", true);
+            var responseMessage;
+            postrequest.open("POST", configOptions.stockServerUrl, true);
             postrequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
             postrequest.onload = function() {
-                console.log("postrequest: ", postrequest.response);
                 if (postrequest.status == 200) {
+                    responseMessage = "Your map has been uploaded to P2P with the slug <strong>" + postrequest.response + "</strong>";
+                    $('#map_holder').append("<p>" + responseMessage + "</p>");
                     resolve(postrequest.response);
                 } else if (postrequest.status == 500) {
+                    responseMessage = "There was an error uploading your map to P2P. You may want to upload manually.";
+                    $('#map_holder').append("<p>" + responseMessage + "</p>");
                     reject(postrequest.response);
                 }
             };
@@ -568,21 +582,21 @@
                         var hours = (currentdate.getHours() > 12) ? currentdate.getHours() + 12 : currentdate.getHours();
                         hours = (hours.toString().length == 1) ? '0' + hours : hours;
 
-                        var datetime =  ("0" + (currentdate.getMonth() + 1)).slice(-2) + "_" +
-                                        ("0" + currentdate.getDate()).slice(-2) + "_" +
-                                        currentdate.getFullYear() + "_"
-                                        + hours + "_" +
-                                        + currentdate.getMinutes() + "_" +
+                        var datetime =  ("0" + (currentdate.getMonth() + 1)).slice(-2) + "-" +
+                                        ("0" + currentdate.getDate()).slice(-2) + "-" +
+                                        currentdate.getFullYear() + "-"
+                                        + hours + "-" +
+                                        + currentdate.getMinutes() + "-" +
                                         currentdate.getSeconds();
 
-                        lnk.download = 'map_'+datetime+'.png';
+                        lnk.download = mapSlug + datetime + '.png';
 
                         // compress down canvas
                         var canvas = document.getElementById("canvas");
                         var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
 
-                        sendToS3('map_'+datetime+".png", image)
-                            .then(sendToP2P('map_'+datetime))
+                        sendToS3(mapSlug + datetime + ".png", image)
+                            .then(sendToP2P(mapSlug + datetime))
                             .then(function() {
                                 console.log("great success!");
                             }).catch(function() {
@@ -1051,6 +1065,7 @@ var sizeChange = function(option) {
 
         // grab popup text
         var userPopupText = $("#popupText").val();
+        mapSlug = "la-mapmaker-" + slugify($("#popupText").val());
 
         if (popupMarker !== undefined && userPopupText.length <= 40) {
             // update popup
