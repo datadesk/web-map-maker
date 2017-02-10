@@ -1,0 +1,7 @@
+// Add your own configuration options to this file
+// and save it as config.js
+
+var configOptions = {
+    'bingAPI': YOUR_API_KEY_HERE,
+    'attribution': YOUR_ATTRIBUTION_STRING_HERE
+}
