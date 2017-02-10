@@ -10,7 +10,7 @@
 |__| |__||_______||_______|  |_|   |_||__| |__||___|      |_|   |_||__| |__||___| |_||_______||___|  |_|
 ```
 
-![screenshot](https://github.com/datadesk/web-map-maker/master/mapmaker-screenshot.png)
+<img width="1216" alt="mapmaker-screenshot" src="https://cloud.githubusercontent.com/assets/695934/22846871/a5d57d04-ef9e-11e6-87ef-8c1bfb874b22.png">
 
 We make a lot of maps at the Los Angeles Times. So we made this tool to help us make them faster.
 
