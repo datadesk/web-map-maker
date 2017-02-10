@@ -1,6 +1,5 @@
 # web-map-maker
 
-
 ```
  _     _  _______  _______    __   __  _______  _______    __   __  _______  ___   _  _______  ______   
 | | _ | ||       ||  _    |  |  |_|  ||   _   ||       |  |  |_|  ||   _   ||   | | ||       ||    _ |  
@@ -10,6 +9,8 @@
 |   _   ||   |___ | |_|   |  | ||_|| ||   _   ||   |      | ||_|| ||   _   ||    _  ||   |___ |   |  | |
 |__| |__||_______||_______|  |_|   |_||__| |__||___|      |_|   |_||__| |__||___| |_||_______||___|  |_|
 ```
+
+[[https://raw.githubusercontent.com/datadesk/web-map-maker/master/mapmaker-screenshot.png]]
 
 We make a lot of maps at the Los Angeles Times. So we made this tool to help us make them faster.
 
