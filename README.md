@@ -24,7 +24,7 @@ It should look like this:
 ```
 var configOptions = {
     'bingAPI': 'Your API here',
-    'attribution': 'Who's making the map here, '
+    'attribution': 'Author name, '
 }
 ```
 
