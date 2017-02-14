@@ -1,3 +1,6 @@
+global:
+    mapzen_api_key: mapzen-dFUP7Q3
+
 labels-global:
     - &freeway_labels         false
     - &city_labels            false
@@ -51,12 +54,14 @@ sources:
         type: TopoJSON
         url: https://tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.topojson
         url_params:
-                api_key: mapzen-dFUP7Q3
+            api_key: global.mapzen_api_key
         rasters: [normals]
     normals:
         type: Raster
         url: https://tile.mapzen.com/mapzen/terrain/v1/normal/{z}/{x}/{y}.png
         max_zoom: 15
+        url_params:
+            api_key: global.mapzen_api_key
 
 textures:
     shields:
@@ -215,7 +220,7 @@ layers:
                 polygons:
                     color: *water
         water_boundaries-not-ocean:
-            filter: 
+            filter:
                 all:
                     - boundary: true
                     - $zoom: { min: 13 }
@@ -601,15 +606,15 @@ layers:
             filter: { network: true, shield_text: true, $zoom: { min: 7, max: 11 }, kind_detail: motorway }
             draw:
                 shields:
-                    sprite: 
+                    sprite:
                         function() {
                             var n = feature.network;
                             if (feature.network == 'US:I' || feature.network == 'US:US' || feature.network == 'US:CA' || feature.network == 'US:CA:CR' || feature.network == 'MX' || feature.network == 'MEX') {
-                                return (feature.network + '_' + feature.shield_text.length + 'char'); 
+                                return (feature.network + '_' + feature.shield_text.length + 'char');
                             } else if (n == 'US:AL' || n == 'US:AK' || n == 'US:AZ' || n == 'US:AR' || n == 'US:CO' || n == 'US:CT' || n == 'US:DE' || n == 'US:FL' || n == 'US:GA' || n == 'US:HI' || n == 'US:ID' || n == 'US:IL' || n == 'US:IN' || n == 'US:IA' || n == 'US:KS' || n == 'US:KY' || n == 'US:LA' || n == 'US:ME' || n == 'US:MD' || n == 'US:MA' || n == 'US:MI' || n == 'US:MN' || n == 'US:MS' || n == 'US:MO' || n == 'US:MT' || n == 'US:NE' || n == 'US:NV' || n == 'US:NH' || n == 'US:NJ' || n == 'US:NM' || n == 'US:NY' || n == 'US:NC' || n == 'US:ND' || n == 'US:OH' || n == 'US:OK' || n == 'US:OR' || n == 'US:PA' || n == 'US:RI' || n == 'US:SC' || n == 'US:SD' || n == 'US:TN' || n == 'US:TX' || n == 'US:UT' || n == 'US:VT' || n == 'US:VA' || n == 'US:WA' || n == 'US:WV' || n == 'US:WI' || n == 'US:WY') {
-                                return ('us_state_' + feature.shield_text.length + 'char'); 
+                                return ('us_state_' + feature.shield_text.length + 'char');
                             } else {
-                                return ('generic_shield_' + feature.shield_text.length + 'char'); 
+                                return ('generic_shield_' + feature.shield_text.length + 'char');
                             }
                         }
                     # sprite_default: 'US:CA'
@@ -680,20 +685,20 @@ layers:
                 order: 499
         railway:
             filter: { kind: [railway, train]}
-            draw: 
+            draw:
                 lines:
                     color: *rail_line
                     width: 2px
-        light_rail: 
+        light_rail:
             filter: { kind: [light_rail,tram, subway], $zoom: { min: 11 }}
             draw:
                 lines:
-                    color: function() { 
-                        if(feature.ref == '806') { return '#A4BED7';} 
-                        else if (feature.ref == '801') { return '#6B9CC2'; } 
-                        else if (feature.ref == '804') { return '#FADA85'; } 
-                        else if (feature.ref == '803') { return '#759371'; } 
-                        else if (feature.ref == '805') { return '#BCADD0'; } 
+                    color: function() {
+                        if(feature.ref == '806') { return '#A4BED7';}
+                        else if (feature.ref == '801') { return '#6B9CC2'; }
+                        else if (feature.ref == '804') { return '#FADA85'; }
+                        else if (feature.ref == '803') { return '#759371'; }
+                        else if (feature.ref == '805') { return '#BCADD0'; }
                         else if (feature.ref == '802') { return '#DD9894'; }
                         else { return feature.colour; } }
                     width: [[11, 5px],[15, 3.5px ],[18, 5m]]
@@ -702,7 +707,7 @@ layers:
 
     transit-overlay-station-labels:
         visible: false
-        data: { source: mapzen, layer: [pois] }                   
+        data: { source: mapzen, layer: [pois] }
         station-train-subway:
             filter: { kind: [station, train-station, train_station], $zoom: { min: 11 } }
             stations:
@@ -752,7 +757,7 @@ layers:
                         fill: '#9C9C9C'
                         weight: 200
                         size: 26px
-                        stroke: { color: *background, width: 4 }          
+                        stroke: { color: *background, width: 4 }
         country-z3:
             filter: { name: true, population: true, kind: [country], $zoom: [3] }
             draw:
