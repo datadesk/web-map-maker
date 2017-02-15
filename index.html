@@ -159,6 +159,13 @@
 
     <script>
 
+    // check if config options are done
+    if (typeof configOptions !== 'undefined') {
+        var attribution = (typeof configOptions.attribution !== 'undefined') ? configOptions.attribution : '';
+    } else {
+        var attribution = '';
+    }
+
     // Get window width
     var windowWidth = document.documentElement.clientWidth;
     var windowHeight = document.documentElement.clientHeight;
@@ -226,14 +233,13 @@
     });
 
 
-    map.attributionControl.setPrefix(configOptions.attribution+'Mapzen, OpenStreetMap');
+    map.attributionControl.setPrefix(attribution+'Mapzen, OpenStreetMap');
     var quietLAlayer = Tangram.leafletLayer({
         scene: 'map-styles.yaml',
         events: {
-            click: function(selection) { console.log('Click!', selection); }
+            // click: function(selection) { console.log('Click!', selection); }
         }
     });
-    console.log(quietLAlayer);
 
     quietLAlayer.addTo(map);
     // L.control.scale().addTo(map);
@@ -350,56 +356,12 @@
         );
     });
 
-
-
-
-    // // Show selected feature on click
-    // scene.container.addEventListener('click', function (event) {
-    //     var pixel = {
-    //         x: event.clientX - $map.offset().left,
-    //         y: event.clientY - $map.offset().top + $(window).scrollTop()
-    //     };
-    //     scene.getFeatureAt(pixel).then(function(selection) {
-    //         if (!selection) {
-    //             return;
-    //         }
-    //         var feature = selection.feature;
-    //         if (feature != null) {
-    //             if (feature.properties != null) {
-    //                 console.log(feature.properties);
-    //             }
-    //         }
-    //     });
-    // });
-
-
-    // // Show selected feature on mouseover
-// (function() {
     scene.container.onmousemove = handleMouseMove;
 
     function handleMouseMove(event) {
         var dot, eventDoc, doc, body, pageX, pageY;
 
         event = event || window.event; // IE-ism
-
-        // If pageX/Y aren't available and clientX/Y are,
-        // calculate pageX/Y - logic taken from jQuery.
-        // (This is to support old IE)
-        // if (event.pageX == null && event.clientX != null) {
-        //     eventDoc = (event.target && event.target.ownerDocument) || document;
-        //     doc = eventDoc.documentElement;
-        //     body = eventDoc.body;
-
-        //     event.pageX = event.clientX +
-        //       (doc && doc.scrollLeft || body && body.scrollLeft || 0) -
-        //       (doc && doc.clientLeft || body && body.clientLeft || 0);
-        //     event.pageY = event.clientY +
-        //       (doc && doc.scrollTop  || body && body.scrollTop  || 0) -
-        //       (doc && doc.clientTop  || body && body.clientTop  || 0 );
-        // }
-
-
-
 
         var pixel = {
             x: event.clientX - $map.offset().left,
@@ -428,9 +390,6 @@
                 }
             }
         });
-
-        // console.log(event.pageX)
-        // Use event.pageX / event.pageY here
     }
 
     // Move the tooltip with the mouse
@@ -453,48 +412,7 @@
         return slug;
     }
 
-    // Send the map image to S3
-    // We'll need this so that we can send the image to P2P
-    function sendToS3(filename, uri) {
-        return new Promise(function(resolve, reject) {
-            var params = "name=" + filename + "&filedata=" + encodeURIComponent(uri);
-            var postrequest = new XMLHttpRequest();
-            postrequest.open("POST", "http://stockserver.usa.tribune.com/chartbuilder/save-to-s3/", true);
-            postrequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
-            postrequest.onload = function() {
-                if (postrequest.status == 200) {
-                    resolve(postrequest.response);
-                }
-            };
-
-            postrequest.send(params);
-        });
-    }
-
-
-    function sendToP2P(slug) {
-        return new Promise(function(resolve, reject) {
-            var params = "slug=" + slug + "&source=mapmaker";
-            var postrequest = new XMLHttpRequest();
-            var responseMessage;
-            postrequest.open("POST", configOptions.stockServerUrl, true);
-            postrequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-            postrequest.onload = function() {
-                if (postrequest.status == 200) {
-                    responseMessage = "Your map has been uploaded to P2P with the slug <strong>" + postrequest.response + "</strong>";
-                    $('#map_holder').append("<p>" + responseMessage + "</p>");
-                    resolve(postrequest.response);
-                } else if (postrequest.status == 500) {
-                    responseMessage = "There was an error uploading your map to P2P. You may want to upload manually.";
-                    $('#map_holder').append("<p>" + responseMessage + "</p>");
-                    reject(postrequest.response);
-                }
-            };
-            postrequest.send(params);
-        });
-    }
 
     function downloadIMG() {
         if (!mapLoadAction) {
@@ -513,8 +431,6 @@
             // wipe the canvas clean
             ctx.clearRect(0, 0, canvasSize[0], canvasSize[1]);
 
-
-
             // hide map controls buttons
             $("#map").css("background","none");
             $(".leaflet-control-zoom").hide();
@@ -522,7 +438,6 @@
             // basemap
             scene.screenshot().then(function(screenshot) {
 
-                console.log(mapSize);
                 // store map size
                 // store svg viewbox info (for later offsetting)
 
@@ -533,7 +448,6 @@
 
                 // add svg elements (like geojson objects)
                 if ($("#map svg").length > 0) {
-                    console.log('svg query');
 
                     // Super hacky solution to SVG drawing problem: change zoom level then put it back
                     // This is here to patch a bug where a small pan of the map will result in
@@ -549,8 +463,6 @@
                     var url = DOMURL.createObjectURL(svg);
 
                     img.onload = function() {
-                        console.log('img.onload');
-
                         // be sure to offset it
                         var svg1 = document.querySelector('svg');
                         var box = svg1.getAttribute('viewBox');
@@ -566,7 +478,6 @@
                 html2canvas($("#map"), {
 
                     onrendered: function(canvas) {
-                        console.log('html2canvas');
 
                         ctx.drawImage(canvas,0,0, mapSize[0], mapSize[1]);
                         $(".leaflet-control-zoom").show(); // show zoom again
@@ -595,13 +506,16 @@
                         var canvas = document.getElementById("canvas");
                         var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
 
-                        sendToS3(mapSlug + datetime + ".png", image)
-                            .then(sendToP2P(mapSlug + datetime))
-                            .then(function() {
-                                console.log("great success!");
-                            }).catch(function() {
-                                console.log("womp womp");
-                            });
+                        // fire if sendToS3 exists
+                        if (typeof sendToS3 !== "undefined") { 
+                            sendToS3(mapSlug + datetime + ".png", image)
+                                .then(sendToP2P(mapSlug + datetime))
+                                .then(function() {
+                                    console.log("great success!");
+                                }).catch(function() {
+                                    console.log("womp womp");
+                                });
+                        }
 
                         lnk.href = image;
                         // window.location.href=image;
@@ -1041,43 +955,50 @@ var sizeChange = function(option) {
     // listen for file uploader
     document.getElementById('geo_files').addEventListener('change', handleFileSelect, false);
 
-    var popupMarker;
-    // Initialize on a div element with an ID of "geocodifier"
-    var geocoder = new BingGeocodifier('geocodifier', {
-        key: configOptions.bingAPI,
-        onClick: function(item, coords) {
-            console.log(item);
-            map.panTo(item.geocodePoints[0].coordinates);
+    // geocode is broken if no Bing API key
+    if (typeof configOptions !== 'undefined') {
+        var popupMarker;
+        // Initialize on a div element with an ID of "geocodifier"
+        var geocoder = new BingGeocodifier('geocodifier', {
+            key: configOptions.bingAPI,
+            onClick: function(item, coords) {
+                console.log(item);
+                map.panTo(item.geocodePoints[0].coordinates);
 
-            // check for popup text
-            var userPopupText = $("#popupText").val();
+                // check for popup text
+                var userPopupText = $("#popupText").val();
 
-            if (userPopupText.length > 0) {
-                popupMarker = L.circleMarker(item.geocodePoints[0].coordinates,{
-                    'fillOpacity': 0,
-                    'opacity': 0
-                }).bindPopup(userPopupText).addTo(map).openPopup();
+                if (userPopupText.length > 0) {
+                    popupMarker = L.circleMarker(item.geocodePoints[0].coordinates,{
+                        'fillOpacity': 0,
+                        'opacity': 0
+                    }).bindPopup(userPopupText).addTo(map).openPopup();
+                }
             }
-        }
-    });
+        });
 
-    document.getElementById('popupText').onkeyup=function() {
+        document.getElementById('popupText').onkeyup=function() {
 
-        // grab popup text
-        var userPopupText = $("#popupText").val();
-        mapSlug = "la-mapmaker-" + slugify($("#popupText").val());
+            // grab popup text
+            var userPopupText = $("#popupText").val();
+            mapSlug = "la-mapmaker-" + slugify($("#popupText").val());
 
-        if (popupMarker !== undefined && userPopupText.length <= 40) {
-            // update popup
-            popupMarker._popup.setContent(userPopupText);
-        }
+            if (popupMarker !== undefined && userPopupText.length <= 40) {
+                // update popup
+                popupMarker._popup.setContent(userPopupText);
+            }
 
-    };
+        };
 
-    // prevent page refresh when hitting enter
-    $("#bing-geocodifier-form").submit(function(e) {
-        e.preventDefault();
-    });
+        // prevent page refresh when hitting enter
+        $("#bing-geocodifier-form").submit(function(e) {
+            e.preventDefault();
+        });
+
+    } else {
+        alert('Please put your Bing API key into config.js for search to work.');
+        $("#popupContainer").hide();
+    }
 
     var mapLoadAction = true;
 
