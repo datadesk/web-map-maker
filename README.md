@@ -14,7 +14,9 @@
 
 We make a lot of maps at the Los Angeles Times. So we made this tool to help us make them faster. It uses [Mapzen's Tangram mapping engine](https://mapzen.com/products/tangram/) to render OpenStreetMap data as vector tiles. It then bakes out your map into an static image. 
 
-This tool is still very much a work in progress — please report any bugs you find using GitHub issues!
+This tool is still very much a work in progress — please report any bugs you find using GitHub issues! 
+
+Try it out on [the demonstration page](http://datadesk.github.io/web-map-maker/).
 
 ## Getting started
 
@@ -45,6 +47,11 @@ Because we've developed this as an internal tool for use at the Los Angeles Time
 Chrome is the only supported browser right now.
 
 Also check the [issues tab](https://github.com/datadesk/web-map-maker/issues).
+
+## Web vs. Print
+We make maps for the internet and the print edition. We've currently darkened the colors for our print styles a bit. And some of the roads get larger too. We also handle all print labels in Adobe Illustrator (for now) so the "print" style creates and unlabeled map.
+
+"PX" stands in for "pixel" and "col" stands in for "column" of which the Los Angeles Times prints six per page. 
 
 ## Make this better
 
