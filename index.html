@@ -708,11 +708,15 @@ function showLabels() {
         scene.config.layers.roads.shields.visible = false;
         scene.config.layers.roads['small-shields'].visible = false;
 
+
+
         scene.config.layers.places['populated-places']['populated-places-natural-earth-z6']['z3places-1']['draw']['text-blend-order'].visible = false;
         scene.config.layers.places['populated-places']['populated-places-natural-earth-z6']['z4places-2']['draw']['text-blend-order'].visible = false;
         scene.config.layers.places['populated-places']['populated-places-osm-z10']['draw']['text-blend-order'].visible = false;
         scene.config.layers.places['populated-places']['populated-places-osm-z11']['draw']['text-blend-order'].visible = false;
         scene.config.layers.places['populated-places']['populated-places-osm-z13']['draw']['text-blend-order'].visible = false;
+
+
 
         scene.config.layers.places['country-z2']['draw']['text-blend-order'].visible = false;
         scene.config.layers.places['country-z3']['draw']['text-blend-order'].visible = false;
@@ -722,6 +726,12 @@ function showLabels() {
         scene.config.layers.places['country-z7']['draw']['text-blend-order'].visible = false;
         scene.config.layers.places['regionz5-6']['draw']['text-blend-order'].visible = false;
         scene.config.layers.places['regionz7-9']['draw']['text-blend-order'].visible = false;
+
+        scene.config.layers.places['country-z3']['early-ones']['draw']['text-blend-order'].visible = false;
+        scene.config.layers.places['country-z4']['early-ones-z4']['draw']['text-blend-order'].visible = false;
+        scene.config.layers.places['country-z5']['early-ones-z5']['draw']['text-blend-order'].visible = false;
+        scene.config.layers.places['country-z6']['small-ones-z6']['draw']['text-blend-order'].visible = false;
+        scene.config.layers.places['country-z7']['small-ones-z7']['draw']['text-blend-order'].visible = false;
 
 
         labelsVisible = false;
@@ -749,6 +759,13 @@ function showLabels() {
         scene.config.layers.places['country-z7']['draw']['text-blend-order'].visible = true;
         scene.config.layers.places['regionz5-6']['draw']['text-blend-order'].visible = true;
         scene.config.layers.places['regionz7-9']['draw']['text-blend-order'].visible = true;
+
+        scene.config.layers.places['country-z3']['early-ones']['draw']['text-blend-order'].visible = true;
+        scene.config.layers.places['country-z4']['early-ones-z4']['draw']['text-blend-order'].visible = true;
+        scene.config.layers.places['country-z5']['early-ones-z5']['draw']['text-blend-order'].visible = true;
+        scene.config.layers.places['country-z6']['small-ones-z6']['draw']['text-blend-order'].visible = true;
+        scene.config.layers.places['country-z7']['small-ones-z7']['draw']['text-blend-order'].visible = true;
+
 
         scene.updateConfig(); // update config
         scene.rebuild(); // rebuild the map
