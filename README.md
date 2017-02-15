@@ -48,8 +48,10 @@ Chrome is the only supported browser right now.
 
 Also check the [issues tab](https://github.com/datadesk/web-map-maker/issues).
 
-## What's a 'col' and a 'px'?
-We make maps for the internet and the print edition. "PX" stands in for "pixel" and "col" stands in for "column" of which the Los Angeles Times prints six per page. 
+## Web vs. Print
+We make maps for the internet and the print edition. We've currently darkened the colors for our print styles a bit. And some of the roads get larger too. We also handle all print labels in Adobe Illustrator (for now) so the "print" style creates and unlabeled map.
+
+"PX" stands in for "pixel" and "col" stands in for "column" of which the Los Angeles Times prints six per page. 
 
 ## Make this better
 
