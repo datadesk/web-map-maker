@@ -1,5 +1,9 @@
 global:
     mapzen_api_key: mapzen-dFUP7Q3
+    road_color: '#c8c8c1'
+    water_color: '#c3d5dd'
+    labels_visible: true
+    landuse_style: polygons
 
 labels-global:
     - &freeway_labels         false
@@ -185,14 +189,14 @@ layers:
         draw:
             polygons:
                 order: function() { return feature.sort_rank; }
-                color: *water
+                color: global.water_color
                 join: round
         water_boundaries-ocean:
             filter: { boundary: true, $zoom: { min: 10 } }
             draw:
                 lines:
                     order: function() { return feature.sort_rank; }
-                    color: *water
+                    color: global.water_color
                     width: [[10,1px],[12,2px]]
                     join: round
     water-not-ocean:
@@ -201,24 +205,24 @@ layers:
         draw:
             polygons:
                 order: function() { return feature.sort_rank; }
-                color: *water
+                color: global.water_color
         inland-water:
             filter:
                 all:
                     - kind: [lake, water, riverbank, reservoir, playa]
             draw:
                 polygons:
-                    color: *water
+                    color: global.water_color
         other-water-areas:
             filter: { not: { kind: [lake, water, reservoir, playa] }, $zoom: { min: 11 }, area: { min: 100 } }
             draw:
                 polygons:
-                    color: *water
+                    color: global.water_color
         playas:
             filter: { kind: playa, $zoom: {min: 6} }
             draw:
                 polygons:
-                    color: *water
+                    color: global.water_color
         water_boundaries-not-ocean:
             filter:
                 all:
@@ -230,7 +234,7 @@ layers:
             draw:
                 lines:
                     order: function() { return feature.sort_rank; }
-                    color: *water
+                    color: global.water_color
                     width: [[13,1.0px],[16,1.5px],[18,2m]]
                     join: round
         river:
@@ -238,7 +242,7 @@ layers:
             draw:
                 lines:
                     order: function() { return feature.sort_rank; }
-                    color: *water
+                    color: global.water_color
                     width: [[13,0.5px],[14,1.0px],[16,1.5px],[18,4m]]
                     join: round
 
@@ -329,84 +333,98 @@ layers:
             filter: {kind: [aerodrome, apron]}
             draw:
                 polygons:
+                    style: global.landuse_style
                     color: *industrial
                     order: 1
         arena:
             filter: {kind: arena}
             draw:
                 polygons:
+                    style: global.landuse_style
                     color: *stadium
                     order: 1
         beach:
             filter: {kind: beach}
             draw:
                 polygons:
+                    style: global.landuse_style
                     color: *beach
                     order: 1
         cemetery:
             filter: {kind: cemetery}
             draw:
                 polygons:
+                    style: global.landuse_style
                     order: 1
                     color: *cemetery
         college:
             filter: {kind: college}
             draw:
                 polygons:
+                    style: global.landuse_style
                     color: *school
                     order: 1
         commercial:
             filter: {kind: [commercial, retail] }
             draw:
                 polygons:
+                    style: global.landuse_style
                     order: 1
                     color: *commercial
         farm:
             filter: {kind: [farm, farmland, farmyard] }
             draw:
                 polygons:
+                    style: global.landuse_style
                     color: *land
                     order: 1
         footway:
             filter: {kind: footway}
             draw:
                 polygons:
+                    style: global.landuse_style
                     color: *land
                     order: 1
         forest:
             filter: {kind: [forest, wood, natural_forest, natural_wood]}
             draw:
                 polygons:
+                    style: global.landuse_style
                     color: *forest
                     order: 1
         grass:
             filter: {kind: [grass, meadow, scrub]}
             draw:
                 polygons:
+                    style: global.landuse_style
                     order: 1
                     color: *grass
         hospital:
             filter: {kind: hospital}
             draw:
                 polygons:
+                    style: global.landuse_style
                     color: *hospital
                     order: 1
         industrial:
             filter: {kind: [industrial, quarry, substation, wastewater_plant]}
             draw:
                 polygons:
+                    style: global.landuse_style
                     color: *industrial
                     order: 1
         kindergarten:
             filter: {kind: kindergarten}
             draw:
                 polygons:
+                    style: global.landuse_style
                     color: *school
                     order: 1
         military:
             filter: {kind: military}
             draw:
                 polygons:
+                    style: global.landuse_style
                     color: *military
                     order: 1
         park:
@@ -414,57 +432,68 @@ layers:
                 playground, pitch, recreation_ground, village_green, zoo] }
             draw:
                 polygons:
+                    style: global.landuse_style
                     color: *park
                     order: 1
         parking:
             filter: {kind: parking }
             draw:
                 polygons:
+                    style: global.landuse_style
                     color: *background
         pedestrian:
             filter: {kind: pedestrian}
             draw:
                 polygons:
+                    style: global.landuse_style
                     color: *pedestrian
         place_of_worship:
             filter: {kind: place_of_worship}
             draw:
                 polygons:
+                    style: global.landuse_style
                     color: *place_of_worship
         prison:
             filter: {kind: prison}
             draw:
                 polygons:
+                    style: global.landuse_style
                     color: *industrial
         railway:
             filter: {kind: railway}
             draw:
                 polygons:
+                    style: global.landuse_style
                     color: *industrial
         school:
             filter: {kind: [school, university]}
             draw:
                 polygons:
+                    style: global.landuse_style
                     color: *school
         sports_center:
             filter: {kind: [sports_center, sports_centre] }
             draw:
                 polygons:
+                    style: global.landuse_style
                     color: *stadium
         stadium:
             filter: {kind: stadium}
             draw:
                 polygons:
+                    style: global.landuse_style
                     color: *stadium
         urban_area:
             filter: {kind: "urban area"}
             draw:
                 polygons:
+                    style: global.landuse_style
                     color: *residential
         wetland:
             filter: {kind: wetland}
             draw:
                 polygons:
+                    style: global.landuse_style
                     color: *land
 
     roads:
@@ -483,7 +512,7 @@ layers:
                     order: 490
                     #cap: [[0,butt],[15,round]]
                     #join: round
-                    color: *road
+                    color: global.road_color
                     width: [[6,0px],[8, 2px], [14, 5.5px], [15, 6.5px], [16, 7px], [17, 20m]]
                     cap: round
                     join: round
@@ -491,12 +520,12 @@ layers:
                 filter: { is_link: true } # on- and off-ramps, etc
                 draw:
                     lines:
-                        color: *road
+                        color: global.road_color
                         width: [[8, 0.3px], [9, 0.4px], [12, 0.8px], [13, 1px], [14, 1.3px], [15, 2px], [16, 6m]]
                         cap: round
                         join: round
                         outline:
-                            color: *road
+                            color: global.road_color
                             width: 0px
                 early_link:
                     filter: { $zoom: { max: 15 } }
@@ -508,16 +537,16 @@ layers:
                     filter: {is_tunnel: true, $zoom: {min: 13} }
                     draw:
                         lines:
-                            color: *road
+                            color: global.road_color
                             outline:
-                                color: *road
+                                color: global.road_color
             tunnel:
                 filter: {is_tunnel: true, $zoom: {min: 13} }
                 draw:
                     lines:
-                        color: *road
+                        color: global.road_color
                         outline:
-                            color: *road
+                            color: global.road_color
             highway_bridge:
                 filter: {is_bridge: true}
                 draw:
@@ -530,21 +559,21 @@ layers:
             draw:
                 lines:
                     order: function() { return feature.sort_rank; }
-                    color: *road
+                    color: global.road_color
                     width: [[8, 0.3px], [9, 0.4px], [12, 0.8px], [13, 1px], [14, 1.3px], [15, 2px], [16, 6m]]
         minor_road:
             filter: { kind: minor_road, not: { kind_detail: service } }
             draw:
                 lines:
                     order: function() { return feature.sort_rank; }
-                    color: *road
+                    color: global.road_color
                     width: [[12,0px], [13, 0.15px], [14, 0.3px], [15, 1px], [16, 2m]]
         service:
             filter: { kind_detail: service }
             draw:
                 lines:
                     order: function() { return feature.sort_rank; }
-                    color: *road
+                    color: global.road_color
                     width: 1m
         airports:
             filter: { kind: aeroway }
@@ -566,7 +595,7 @@ layers:
                         cap: square
 
         labels:
-            visible: true
+            visible: global.labels_visible
             filter:
                 $zoom: { min: 7 }
                 not: { kind: [rail, aeroway], is_tunnel: true }
@@ -602,7 +631,7 @@ layers:
                             stroke: {color: *background, width: 4}
 
         shields:
-            visible: true
+            visible: global.labels_visible
             filter: { network: true, shield_text: true, $zoom: { min: 7, max: 11 }, kind_detail: motorway }
             draw:
                 shields:
@@ -635,7 +664,7 @@ layers:
             #         shields:
             #             repeat_distance: 75px
         small-shields:
-            visible: true
+            visible: global.labels_visible
             filter: { network: true, shield_text: true, $zoom: { min: 11 } }
             draw:
                 shields:
@@ -751,7 +780,7 @@ layers:
             draw:
                 text-blend-order:
                     priority: 3
-                    visible: true
+                    visible: global.labels_visible
                     text_source: function() { return feature["name:en"] || feature["name"]; }
                     font:
                         fill: '#9C9C9C'
@@ -763,7 +792,7 @@ layers:
             draw:
                 text-blend-order:
                     priority: 3
-                    visible: true
+                    visible: global.labels_visible
                     text_source: function() { return feature["name:en"] || feature["name"]; }
                     font:
                         fill: '#9C9C9C'
@@ -775,13 +804,13 @@ layers:
                 filter: { not: { name: ["United States of America","Brasil","中华人民共和国","España","Norge","Россия","Canada","Kalaallit Nunaat","Ísland","Australia","India","日本","Guam","Indonesia","South Africa","مصر","Nigeria","Kenya"] }, $zoom: {min: 3, max: 4} }
                 draw:
                     text-blend-order:
-                        visible: true
+                        visible: global.labels_visible
         country-z4:
             filter: { name: true, population: true, kind: [country], $zoom: [4] }
             draw:
                 text-blend-order:
                     priority: 3
-                    visible: true
+                    visible: global.labels_visible
                     text_source: function() { return feature["name:en"] || feature["name"]; }
                     font:
                         fill: '#9C9C9C'
@@ -792,7 +821,7 @@ layers:
                 filter: { name: [Nederland,Luxembourg,Liechtenstein,San Marino,Civitatis Vaticanæ,Crna Gora,Македонија,The Gambia,Burundi,Swaziland,الإمارات العربية المتحدة,العراق,Singapore,El Salvador,Belize,Trinidad and Tobago, Saint Lucia, Montserrat,Anguilla,República Dominicana,Bahamas,British Virgin Islands,Antigua and Barbuda,Grenada,Sint Maarten,Saint Kitts and Nevis,Cayman Islands,België - Belgique - Belgien], $zoom: {min: 4, max: 5} }
                 draw:
                     text-blend-order:
-                        visible: true
+                        visible: global.labels_visible
         country-z5:
             filter:
                 all:
@@ -807,7 +836,7 @@ layers:
             draw:
                 text-blend-order:
                     priority: 3
-                    visible: true
+                    visible: global.labels_visible
                     text_source: function() { return feature["name:en"] || feature["name"]; }
                     font:
                         fill: '#9C9C9C'
@@ -818,14 +847,14 @@ layers:
                 filter: { name: [Luxembourg,Liechtenstein,San Marino,Civitatis Vaticanæ,El Salvador,Belize,België - Belgique - Belgien], $zoom: {min: 5, max: 6} }
                 draw:
                     text-blend-order:
-                        visible: true
+                        visible: global.labels_visible
         country-z6:
             # South Ossetia and Abkhazia aren't countries (they are disputed areas)
             filter: { name: true, kind: [country], $zoom: [6], not: { name: "United States of America" } }
             draw:
                 text-blend-order:
                     priority: 3
-                    visible: true
+                    visible: global.labels_visible
                     text_source: function() { return feature["name:en"] || feature["name"]; }
                     font:
                         size: 26px
@@ -836,14 +865,14 @@ layers:
                 filter: { name: [Luxembourg,Liechtenstein,San Marino,Civitatis Vaticanæ,België - Belgique - Belgien,Хуссар Ирыстон,Аҧсны - Абхазия], $zoom: {min: 6, max: 7} }
                 draw:
                     text-blend-order:
-                        visible: true
+                        visible: global.labels_visible
         country-z7:
             # South Ossetia and Abkhazia aren't countries (they are disputed areas)
             filter: { name: true, kind: [country], $zoom: { min: 7, max: 9 }, not: { name: ["United States of America", "Приднестровье"] } }
             draw:
                 text-blend-order:
                     priority: 3
-                    visible: true
+                    visible: global.labels_visible
                     text_source: function() { return feature["name:en"] || feature["name"]; }
                     font:
                         size: 20px
@@ -854,13 +883,13 @@ layers:
                 filter: { name: [Liechtenstein,San Marino,Civitatis Vaticanæ,Хуссар Ирыстон,Аҧсны - Абхазия], $zoom: {min: 7, max: 8} }
                 draw:
                     text-blend-order:
-                        visible: true
+                        visible: global.labels_visible
         regionz5-6:
             filter: { name: ["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"], kind: [region], $zoom: {min: 5, max: 7} }
             draw:
                 text-blend-order:
                     priority: 5
-                    visible: true
+                    visible: global.labels_visible
                     text_source: [name:en, name]
                     text_wrap: 10
                     font:
@@ -874,7 +903,7 @@ layers:
             draw:
                 text-blend-order:
                     priority: 5
-                    visible: true
+                    visible: global.labels_visible
                     text_source: function() { if(feature["name:short"]) { return feature["name"]; } else { return ""; } }
                     font:
                         size: 30px
@@ -904,7 +933,7 @@ layers:
                     filter: { min_zoom: [0] }
                     draw:
                         text-blend-order:
-                            visible: true
+                            visible: global.labels_visible
                             offset: [0, 3px] # half icon size
                             font:
                                 size: 24px
@@ -914,7 +943,7 @@ layers:
                     filter: { min_zoom: [1,2,3,4,5] }
                     draw:
                         text-blend-order:
-                            visible: true
+                            visible: global.labels_visible
                             offset: [0, 3px] # half icon size
                             priority: 8
                             font:
@@ -933,7 +962,7 @@ layers:
                 draw:
                     text-blend-order:
                         # anchor: center
-                        visible: true
+                        visible: global.labels_visible
                         offset: [0, 3px] # half icon size
                         priority: 5
                         font:
@@ -952,7 +981,7 @@ layers:
                 draw:
                     text-blend-order:
                         # anchor: center
-                        visible: true
+                        visible: global.labels_visible
                         offset: [0, 3px] # half icon size
                         priority: 16
                         font:
@@ -971,7 +1000,7 @@ layers:
                 draw:
                     text-blend-order:
                         # anchor: center
-                        visible: true
+                        visible: global.labels_visible
                         offset: [0, 3px] # half icon size
                         priority: 16
                         font:
