@@ -609,7 +609,6 @@ function showTerrain() {
         scene.config.global.landuse_style = 'polygons';
 
         scene.updateConfig(); // update config
-        scene.rebuild(); // rebuild the map
         $("#terrain_btn").removeClass("active"); // update button
 
         terrainVisible = false;
@@ -624,7 +623,6 @@ function showTerrain() {
         scene.config.global.landuse_style = 'terrain';
 
         scene.updateConfig(); // update config
-        scene.rebuild(); // rebuild the map
         terrainVisible = true;
         $("#terrain_btn").addClass("active"); // update button
     }
@@ -638,7 +636,6 @@ function showTransit() {
             scene.config.layers.transit.visible = false;
             scene.config.layers['transit-overlay-station-labels'].visible = false;
             scene.updateConfig(); // update config
-            scene.rebuild(); // rebuild the map
             $("#transit_btn").removeClass("active"); // update button
             transitVisible = false;
         } else {
@@ -646,7 +643,6 @@ function showTransit() {
             scene.config.layers.transit.visible = true;
             scene.config.layers['transit-overlay-station-labels'].visible = true;
             scene.updateConfig(); // update config
-            scene.rebuild(); // rebuild the map
             $("#transit_btn").addClass("active"); // update button
             transitVisible = true;
         }
@@ -664,14 +660,12 @@ function showLabels() {
         labelsVisible = false;
 
         scene.updateConfig(); // update config
-        scene.rebuild(); // rebuild the map
         $("#auto_labels_btn").removeClass("active"); // update button
     } else {
         // turn all these label layers visible
         scene.config.global.labels_visible = true;
 
         scene.updateConfig(); // update config
-        scene.rebuild(); // rebuild the map
         $("#auto_labels_btn").addClass("active"); // update button
 
         labelsVisible = true;
@@ -690,7 +684,6 @@ function showBuildings() {
             scene.config.layers.buildings.draw.polygons.visible = false;
             scene.config.layers["swimming-pools"].draw.polygons.visible = false; // pools
             scene.updateConfig(); // update config
-            scene.rebuild(); // rebuild the map
             $("#buildings_btn").removeClass("active"); // update button
             buildingsVisible = false;
         } else {
@@ -700,7 +693,6 @@ function showBuildings() {
             scene.config.layers.buildings.draw.polygons.visible = true;
             scene.config.layers["swimming-pools"].draw.polygons.visible = true; // pools
             scene.updateConfig(); // update config
-            scene.rebuild(); // rebuild the map
             $("#buildings_btn").addClass("active"); // update button
             buildingsVisible = true;
         }
@@ -776,7 +768,6 @@ var sizeChange = function(option) {
         showLabels();
 
         scene.updateConfig(); // update config
-        scene.rebuild(); // rebuild the map
 
         // update buttons
         $("#print_btn").addClass("active");
