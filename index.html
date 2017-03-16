@@ -606,33 +606,9 @@ function showTerrain() {
 
 
         // update base landuse
-        landuse.aerodrome.draw = { 'polygons': landuse.aerodrome.draw.terrain };
-        landuse.arena.draw = { 'polygons': landuse.arena.draw.terrain };
-        landuse.cemetery.draw = { 'polygons': landuse.cemetery.draw.terrain };
-        landuse.college.draw = { 'polygons': landuse.college.draw.terrain };
-        landuse.commercial.draw = { 'polygons': landuse.commercial.draw.terrain };
-        landuse.farm.draw = { 'polygons': landuse.farm.draw.terrain };
-        landuse.footway.draw = { 'polygons': landuse.footway.draw.terrain };
-        landuse.forest.draw = { 'polygons': landuse.forest.draw.terrain };
-        landuse.grass.draw = { 'polygons': landuse.grass.draw.terrain };
-        landuse.hospital.draw = { 'polygons': landuse.hospital.draw.terrain };
-        landuse.industrial.draw = { 'polygons': landuse.industrial.draw.terrain };
-        landuse.kindergarten.draw = { 'polygons': landuse.kindergarten.draw.terrain };
-        landuse.military.draw = { 'polygons': landuse.military.draw.terrain };
-        landuse.park.draw = { 'polygons': landuse.park.draw.terrain };
-        landuse.parking.draw = { 'polygons': landuse.parking.draw.terrain };
-        landuse.pedestrian.draw = { 'polygons': landuse.pedestrian.draw.terrain };
-        landuse.place_of_worship.draw = { 'polygons': landuse.place_of_worship.draw.terrain };
-        landuse.prison.draw = { 'polygons': landuse.prison.draw.terrain };
-        landuse.railway.draw = { 'polygons': landuse.railway.draw.terrain };
-        landuse.school.draw = { 'polygons': landuse.school.draw.terrain };
-        landuse.sports_center.draw = { 'polygons': landuse.sports_center.draw.terrain };
-        landuse.stadium.draw = { 'polygons': landuse.stadium.draw.terrain };
-        landuse.urban_area.draw = { 'polygons': landuse.urban_area.draw.terrain };
-        landuse.wetland.draw = { 'polygons': landuse.wetland.draw.terrain };
+        scene.config.global.landuse_style = 'polygons';
 
         scene.updateConfig(); // update config
-        scene.rebuild(); // rebuild the map
         $("#terrain_btn").removeClass("active"); // update button
 
         terrainVisible = false;
@@ -643,33 +619,10 @@ function showTerrain() {
         scene.config.layers.earth.draw.terrain.visible = true;
 
         // update base landuse
-        landuse.aerodrome.draw = { 'terrain': landuse.aerodrome.draw.polygons };
-        landuse.arena.draw = { 'terrain': landuse.arena.draw.polygons };
-        landuse.cemetery.draw = { 'terrain': landuse.cemetery.draw.polygons };
-        landuse.college.draw = { 'terrain': landuse.college.draw.polygons };
-        landuse.commercial.draw = { 'terrain': landuse.commercial.draw.polygons };
-        landuse.farm.draw = { 'terrain': landuse.farm.draw.polygons };
-        landuse.footway.draw = { 'terrain': landuse.footway.draw.polygons };
-        landuse.forest.draw = { 'terrain': landuse.forest.draw.polygons };
-        landuse.grass.draw = { 'terrain': landuse.grass.draw.polygons };
-        landuse.hospital.draw = { 'terrain': landuse.hospital.draw.polygons };
-        landuse.industrial.draw = { 'terrain': landuse.industrial.draw.polygons };
-        landuse.kindergarten.draw = { 'terrain': landuse.kindergarten.draw.polygons };
-        landuse.military.draw = { 'terrain': landuse.military.draw.polygons };
-        landuse.park.draw = { 'terrain': landuse.park.draw.polygons };
-        landuse.parking.draw = { 'terrain': landuse.parking.draw.polygons };
-        landuse.pedestrian.draw = { 'terrain': landuse.pedestrian.draw.polygons };
-        landuse.place_of_worship.draw = { 'terrain': landuse.place_of_worship.draw.polygons };
-        landuse.prison.draw = { 'terrain': landuse.prison.draw.polygons };
-        landuse.railway.draw = { 'terrain': landuse.railway.draw.polygons };
-        landuse.school.draw = { 'terrain': landuse.school.draw.polygons };
-        landuse.sports_center.draw = { 'terrain': landuse.sports_center.draw.polygons };
-        landuse.stadium.draw = { 'terrain': landuse.stadium.draw.polygons };
-        landuse.urban_area.draw = { 'terrain': landuse.urban_area.draw.polygons };
-        landuse.wetland.draw = { 'terrain': landuse.wetland.draw.polygons };
+
+        scene.config.global.landuse_style = 'terrain';
 
         scene.updateConfig(); // update config
-        scene.rebuild(); // rebuild the map
         terrainVisible = true;
         $("#terrain_btn").addClass("active"); // update button
     }
@@ -683,7 +636,6 @@ function showTransit() {
             scene.config.layers.transit.visible = false;
             scene.config.layers['transit-overlay-station-labels'].visible = false;
             scene.updateConfig(); // update config
-            scene.rebuild(); // rebuild the map
             $("#transit_btn").removeClass("active"); // update button
             transitVisible = false;
         } else {
@@ -691,7 +643,6 @@ function showTransit() {
             scene.config.layers.transit.visible = true;
             scene.config.layers['transit-overlay-station-labels'].visible = true;
             scene.updateConfig(); // update config
-            scene.rebuild(); // rebuild the map
             $("#transit_btn").addClass("active"); // update button
             transitVisible = true;
         }
@@ -704,71 +655,17 @@ function showLabels() {
     // check current status
     if (labelsVisible) {
         // turn all these label layers hidden
-        scene.config.layers.roads.labels.visible = false;
-        scene.config.layers.roads.shields.visible = false;
-        scene.config.layers.roads['small-shields'].visible = false;
-
-
-
-        scene.config.layers.places['populated-places']['populated-places-natural-earth-z6']['z3places-1']['draw']['text-blend-order'].visible = false;
-        scene.config.layers.places['populated-places']['populated-places-natural-earth-z6']['z4places-2']['draw']['text-blend-order'].visible = false;
-        scene.config.layers.places['populated-places']['populated-places-osm-z10']['draw']['text-blend-order'].visible = false;
-        scene.config.layers.places['populated-places']['populated-places-osm-z11']['draw']['text-blend-order'].visible = false;
-        scene.config.layers.places['populated-places']['populated-places-osm-z13']['draw']['text-blend-order'].visible = false;
-
-
-
-        scene.config.layers.places['country-z2']['draw']['text-blend-order'].visible = false;
-        scene.config.layers.places['country-z3']['draw']['text-blend-order'].visible = false;
-        scene.config.layers.places['country-z4']['draw']['text-blend-order'].visible = false;
-        scene.config.layers.places['country-z5']['draw']['text-blend-order'].visible = false;
-        scene.config.layers.places['country-z6']['draw']['text-blend-order'].visible = false;
-        scene.config.layers.places['country-z7']['draw']['text-blend-order'].visible = false;
-        scene.config.layers.places['regionz5-6']['draw']['text-blend-order'].visible = false;
-        scene.config.layers.places['regionz7-9']['draw']['text-blend-order'].visible = false;
-
-        scene.config.layers.places['country-z3']['early-ones']['draw']['text-blend-order'].visible = false;
-        scene.config.layers.places['country-z4']['early-ones-z4']['draw']['text-blend-order'].visible = false;
-        scene.config.layers.places['country-z5']['early-ones-z5']['draw']['text-blend-order'].visible = false;
-        scene.config.layers.places['country-z6']['small-ones-z6']['draw']['text-blend-order'].visible = false;
-        scene.config.layers.places['country-z7']['small-ones-z7']['draw']['text-blend-order'].visible = false;
-
+        scene.config.global.labels_visible = false;
 
         labelsVisible = false;
 
         scene.updateConfig(); // update config
-        scene.rebuild(); // rebuild the map
         $("#auto_labels_btn").removeClass("active"); // update button
     } else {
         // turn all these label layers visible
-        scene.config.layers.roads.labels.visible = true;
-        scene.config.layers.roads.shields.visible = true;
-        scene.config.layers.roads['small-shields'].visible = true;
-
-        scene.config.layers.places['populated-places']['populated-places-natural-earth-z6']['z3places-1']['draw']['text-blend-order'].visible = true;
-        scene.config.layers.places['populated-places']['populated-places-natural-earth-z6']['z4places-2']['draw']['text-blend-order'].visible = true;
-        scene.config.layers.places['populated-places']['populated-places-osm-z10']['draw']['text-blend-order'].visible = true;
-        scene.config.layers.places['populated-places']['populated-places-osm-z11']['draw']['text-blend-order'].visible = true;
-        scene.config.layers.places['populated-places']['populated-places-osm-z13']['draw']['text-blend-order'].visible = true;
-
-        scene.config.layers.places['country-z2']['draw']['text-blend-order'].visible = true;
-        scene.config.layers.places['country-z3']['draw']['text-blend-order'].visible = true;
-        scene.config.layers.places['country-z4']['draw']['text-blend-order'].visible = true;
-        scene.config.layers.places['country-z5']['draw']['text-blend-order'].visible = true;
-        scene.config.layers.places['country-z6']['draw']['text-blend-order'].visible = true;
-        scene.config.layers.places['country-z7']['draw']['text-blend-order'].visible = true;
-        scene.config.layers.places['regionz5-6']['draw']['text-blend-order'].visible = true;
-        scene.config.layers.places['regionz7-9']['draw']['text-blend-order'].visible = true;
-
-        scene.config.layers.places['country-z3']['early-ones']['draw']['text-blend-order'].visible = true;
-        scene.config.layers.places['country-z4']['early-ones-z4']['draw']['text-blend-order'].visible = true;
-        scene.config.layers.places['country-z5']['early-ones-z5']['draw']['text-blend-order'].visible = true;
-        scene.config.layers.places['country-z6']['small-ones-z6']['draw']['text-blend-order'].visible = true;
-        scene.config.layers.places['country-z7']['small-ones-z7']['draw']['text-blend-order'].visible = true;
-
+        scene.config.global.labels_visible = true;
 
         scene.updateConfig(); // update config
-        scene.rebuild(); // rebuild the map
         $("#auto_labels_btn").addClass("active"); // update button
 
         labelsVisible = true;
@@ -787,7 +684,6 @@ function showBuildings() {
             scene.config.layers.buildings.draw.polygons.visible = false;
             scene.config.layers["swimming-pools"].draw.polygons.visible = false; // pools
             scene.updateConfig(); // update config
-            scene.rebuild(); // rebuild the map
             $("#buildings_btn").removeClass("active"); // update button
             buildingsVisible = false;
         } else {
@@ -797,7 +693,6 @@ function showBuildings() {
             scene.config.layers.buildings.draw.polygons.visible = true;
             scene.config.layers["swimming-pools"].draw.polygons.visible = true; // pools
             scene.updateConfig(); // update config
-            scene.rebuild(); // rebuild the map
             $("#buildings_btn").addClass("active"); // update button
             buildingsVisible = true;
         }
@@ -853,16 +748,7 @@ var sizeChange = function(option) {
 
     function showPrint() {
         // swap to print color
-        scene.config.layers.roads.highway.draw.lines.color = '#98a5ac';
-        scene.config.layers.roads.highway.link.draw.lines.color = '#98a5ac';
-        scene.config.layers.roads.highway.link['tunnel-link'].draw.lines.color = '#98a5ac';
-        scene.config.layers.roads.highway.link['tunnel-link'].draw.lines.outline.color = '#98a5ac';
-        scene.config.layers.roads.highway.tunnel.draw.lines.color = '#98a5ac';
-        scene.config.layers.roads.highway.tunnel.draw.lines.outline.color = '#98a5ac';
-        scene.config.layers.roads.highway.tunnel.draw.lines.color = '#98a5ac';
-        scene.config.layers.roads.major_road.draw.lines.color = '#98a5ac';
-        scene.config.layers.roads.minor_road.draw.lines.color = '#98a5ac';
-        scene.config.layers.roads.service.draw.lines.color = '#98a5ac';
+        scene.config.global.road_color = '#98a5ac';
 
         // bump up size of major roads
         scene.config.layers.roads.major_road.draw.lines.width[3][1] = '1.5px';
@@ -875,22 +761,13 @@ var sizeChange = function(option) {
         scene.config.layers.roads.minor_road.draw.lines.width[2][1] = '0.5px';
 
         // make water darker
-        scene.config.layers['ocean-water'].draw.polygons.color = '#a6bcd3';
-        scene.config.layers['water-not-ocean'].draw.polygons.color = '#a6bcd3';
-        scene.config.layers['water-not-ocean']['inland-water'].draw.polygons.color = '#a6bcd3';
-        scene.config.layers['water-not-ocean']['other-water-areas'].draw.polygons.color = '#a6bcd3';
-        scene.config.layers['water-not-ocean']['playas'].draw.polygons.color = '#a6bcd3';
-        scene.config.layers['water-not-ocean']['water_boundaries-not-ocean'].draw.lines.color = '#a6bcd3';
-        scene.config.layers['water-not-ocean']['river'].draw.lines.color = '#a6bcd3';
-        scene.config.layers['swimming-pools'].draw.polygons.color = '#a6bcd3';
-
+        scene.config.global.water_color = '#a6bcd3';
 
         // turn off labels
         labelsVisible = true;
         showLabels();
 
         scene.updateConfig(); // update config
-        scene.rebuild(); // rebuild the map
 
         // update buttons
         $("#print_btn").addClass("active");
@@ -971,7 +848,6 @@ var sizeChange = function(option) {
 
     // listen for file uploader
     document.getElementById('geo_files').addEventListener('change', handleFileSelect, false);
-
     // geocode is broken if no Bing API key
     if (typeof configOptions !== 'undefined') {
         var popupMarker;

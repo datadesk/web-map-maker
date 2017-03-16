@@ -20,7 +20,7 @@ Try it out on [the demonstration page](http://datadesk.github.io/web-map-maker/)
 
 ## Getting started
 
-You don't need much to get up and running. Download this repo and make a config.js file (we provided a template [here](https://github.com/datadesk/web-map-maker/tree/master/js/config.js-TEMPLATE))
+You don't need much to get up and running. Download this repo and make a config.js file (we provided a template [here](https://github.com/datadesk/web-map-maker/tree/master/js/config.js-TEMPLATE)), then put it in the "js" directory.
 
 It should look like this:
 ```
@@ -30,7 +30,7 @@ var configOptions = {
 }
 ```
 
-You should also [get a Mapzen key](https://mapzen.com/developers/sign_in) and update it int he [map-styles.yaml file](https://github.com/datadesk/web-map-maker/blob/master/map-styles.yaml#L54).
+You should also [get a Mapzen key](https://mapzen.com/developers/sign_in) and update it in the [map-styles.yaml file](https://github.com/datadesk/web-map-maker/blob/master/map-styles.yaml#L54).
 
 Then you're ready to run the mapmaker. The easiest way is to fire up a simple python server (obviously you'll need python) with this command:
 
@@ -49,7 +49,7 @@ Chrome is the only supported browser right now.
 Also check the [issues tab](https://github.com/datadesk/web-map-maker/issues).
 
 ## Web vs. Print
-We make maps for the internet and the print edition. We've currently darkened the colors for our print styles a bit. And some of the roads get larger too. We also handle all print labels in Adobe Illustrator (for now) so the "print" style creates and unlabeled map.
+We make maps for the internet and the print edition. We've currently darkened the colors for our print styles a bit. And some of the roads get larger too. We also handle all print labels in Adobe Illustrator (for now) so the "print" style creates an unlabeled map.
 
 "PX" stands in for "pixel" and "col" stands in for "column" of which the Los Angeles Times prints six per page. 
 
