@@ -35,7 +35,7 @@ You should also [get a Mapzen key](https://mapzen.com/developers/sign_in) and up
 Then you're ready to run the mapmaker. The easiest way is to fire up a simple python server (obviously you'll need python) with this command:
 
 ```
-python -m SimpleHTTPSever 8000
+python -m SimpleHTTPServer 8000
 ```
 
 The app will be hosted at `localhost:8000` by default.
