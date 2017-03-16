@@ -224,7 +224,7 @@
     var $map = $('#map');
     var map = L.map('map', {
         attributionControl: true,
-        center: new L.LatLng(34.0425, -118.24),
+        center: configOptions.initCoords,
         zoom: 10,
         detectRetina: true,
         minZoom: 1.5,
