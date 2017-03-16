@@ -447,6 +447,12 @@ layers:
                 polygons:
                     style: global.landuse_style
                     color: *pedestrian
+        pier:
+            filter: {kind: pier}
+            draw:
+                polygons:
+                    style: global.landuse_style
+                    color: *background
         place_of_worship:
             filter: {kind: place_of_worship}
             draw:
