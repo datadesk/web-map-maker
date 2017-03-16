@@ -219,12 +219,13 @@
         return s;
     }
 
+    var initCoords = (typeof configOptions !== 'undefined') ? configOptions.initCoords : [34.0425, -118.24];
 
     // jQuery map reference
     var $map = $('#map');
     var map = L.map('map', {
         attributionControl: true,
-        center: configOptions.initCoords,
+        center: initCoords,
         zoom: 10,
         detectRetina: true,
         minZoom: 1.5,
