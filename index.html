@@ -219,16 +219,16 @@
         return s;
     }
 
-    var initCoords = (typeof configOptions !== 'undefined') ? configOptions.initCoords : [34.0425, -118.24];
+    var initCoords = (typeof configOptions.initCoords !== 'undefined') ? configOptions.initCoords : [34.0425, -118.24];
 
-    var initZoom = (typeof configOptions !== 'undefined') ? configOptions.initZoom : 10;
+    var initZoom = (typeof configOptions.initZoom !== 'undefined') ? configOptions.initZoom : 10;
 
     // jQuery map reference
     var $map = $('#map');
     var map = L.map('map', {
         attributionControl: true,
         center: initCoords,
-        zoom: initZoom,
+        zoom: 10,
         detectRetina: true,
         minZoom: 1.5,
         maxZoom: 19,

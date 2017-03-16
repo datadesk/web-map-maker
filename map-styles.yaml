@@ -391,7 +391,6 @@ layers:
                 polygons:
                     style: global.landuse_style
                     color: *forest
-                    order: 1
         grass:
             filter: {kind: [grass, meadow, scrub]}
             draw:
@@ -448,7 +447,7 @@ layers:
                     style: global.landuse_style
                     color: *pedestrian
         pier:
-            filter: {kind: pier}
+            filter: { kind: pier}
             draw:
                 polygons:
                     style: global.landuse_style
