@@ -320,3 +320,7 @@ label {font:18px/27px Georgia, serif;}
 #transit_btn, #buildings_btn {
     opacity: 0.5;
 }
+
+p.description {
+    max-width: 800px;
+}
