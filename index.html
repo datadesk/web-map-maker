@@ -319,31 +319,23 @@
 
     });
 
-// $("#map_holder").resizable({
-// minWidth: 300,
-// handles: "e",
-// resize: function (event, ui) {
-//     if(Math.abs(200 - ui.size.width) <= 15){
-//         $("#map_holder").css("width", 1300);
-//     }
-// }
-// });
-
-
     // function to fire after map's parent is resized
     $("#map_holder").resize(function(){
+        // get map's size
+        var mapHeight = $("#map").height(),
+            mapWidth = $("#map").width()
+
         // update map's size
-        mapSize = $("#map").width() + 'x' + $("#map").height();
-        $("#map_size").text(mapSize);
+        $("#map_size").text(mapWidth + 'x' + mapHeight);
 
         // change size to custom
-        if ($("#map").width() + 'x' + $("#map").height() == '1920x1080') {
+        if (mapWidth + 'x' + mapHeight == '1920x1080') {
             document.getElementById('preset_sizes').value = 'video';
-        } else if ($("#map").width() + 'x' + $("#map").height() == '1300x730') {
+        } else if (mapWidth + 'x' + mapHeight == '1300x730') {
             document.getElementById('preset_sizes').value = 'web_large';
-        } else if ($("#map").width() + 'x' + $("#map").height() == '400x450') {
+        } else if (mapWidth + 'x' + mapHeight == '400x450') {
             document.getElementById('preset_sizes').value = 'web_small';
-        } else if ($("#map").width() % 330 === 0) {
+        } else if (mapWidth % 330 === 0) {
             document.getElementById('preset_sizes').value = 'col' + $("#map").width()/330;
         } else {
             document.getElementById('preset_sizes').value = 'custom';
