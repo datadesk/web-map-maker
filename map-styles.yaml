@@ -798,7 +798,7 @@ layers:
                 text-blend-order:
                     priority: 3
                     visible: global.labels_visible
-                    text_source: function() { return feature["name:en"] || feature["name"]; }
+                    text_source: function() { if (feature["name:en"] == "People's Republic of China") { return "China"; } else { return feature["name:en"] || feature["name"]; }}
                     font:
                         fill: '#9C9C9C'
                         weight: 200
@@ -816,7 +816,7 @@ layers:
                 text-blend-order:
                     priority: 3
                     visible: global.labels_visible
-                    text_source: function() { return feature["name:en"] || feature["name"]; }
+                    text_source: function() { if (feature["name:en"] == "People's Republic of China") { return "China"; } else { return feature["name:en"] || feature["name"]; }}
                     font:
                         fill: '#9C9C9C'
                         weight: 200
@@ -842,7 +842,7 @@ layers:
                 text-blend-order:
                     priority: 3
                     visible: global.labels_visible
-                    text_source: function() { return feature["name:en"] || feature["name"]; }
+                    text_source: function() { if (feature["name:en"] == "People's Republic of China") { return "China"; } else { return feature["name:en"] || feature["name"]; }}
                     font:
                         fill: '#9C9C9C'
                         weight: 600
@@ -860,7 +860,7 @@ layers:
                 text-blend-order:
                     priority: 3
                     visible: global.labels_visible
-                    text_source: function() { return feature["name:en"] || feature["name"]; }
+                    text_source: function() { if (feature["name:en"] == "People's Republic of China") { return "China"; } else { return feature["name:en"] || feature["name"]; }}
                     font:
                         size: 26px
                         weight: 600
@@ -878,7 +878,7 @@ layers:
                 text-blend-order:
                     priority: 3
                     visible: global.labels_visible
-                    text_source: function() { return feature["name:en"] || feature["name"]; }
+                    text_source: function() { if (feature["name:en"] == "People's Republic of China") { return "China"; } else { return feature["name:en"] || feature["name"]; }}
                     font:
                         size: 20px
                         weight: 600
