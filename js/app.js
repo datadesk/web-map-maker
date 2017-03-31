@@ -381,41 +381,6 @@ function downloadIMG() {
 
 var frozenZoom = false;
 
-function zoomFreeze() {
-if ($("#zoom_lock").hasClass('active')) {
-    $('.leaflet-control-zoom').css('display','block');
-    map.touchZoom.enable();
-    map.doubleClickZoom.enable();
-    map.scrollWheelZoom.enable();
-    map.boxZoom.enable();
-    map.keyboard.enable();
-    $("#zoom_lock").removeClass('active');
-    frozenZoom = false;
-} else {
-    $('.leaflet-control-zoom').css('display','none');
-    map.touchZoom.disable();
-    map.doubleClickZoom.disable();
-    map.scrollWheelZoom.disable();
-    map.boxZoom.disable();
-    map.keyboard.disable();
-    $("#zoom_lock").addClass('active');
-    frozenZoom = true;
-}
-
-}
-
-function panFreeze() {
-if ($("#pan_lock").hasClass('active')) {
-    map.dragging.enable();
-    map.options.scrollWheelZoom = '';
-    $("#pan_lock").removeClass('active');
-} else {
-    map.dragging.disable();
-    map.options.scrollWheelZoom = 'center';
-    $("#pan_lock").addClass('active');
-}
-}
-
 function findFirstDescendant(parent, tagname) {
 parent = document.getElementById(parent);
 var descendants = parent.getElementsByTagName(tagname);

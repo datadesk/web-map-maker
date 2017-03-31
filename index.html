@@ -93,14 +93,25 @@
                         <button class="btn gray" onclick="showPrint();" id='print_btn'>Print</button>
                     </div>
 
-                    <button class="btn gray" onclick="showTerrain()" id='terrain_btn'>Terrain</button>
-                    <button class="btn gray" onclick="showTransit()" id='transit_btn'>Transit</button>
-                    <button class="btn gray" onclick="showBuildings()" id='buildings_btn'>Buildings</button>
-                    <button class="btn gray" onclick="zoomFreeze()" id='zoom_lock'>Lock zoom</button>
-                    <button class="btn gray" onclick="panFreeze()" id='pan_lock'>Lock pan</button>
-                    <button class="btn gray active" onclick="showLabels()" id='auto_labels_btn'>Auto labels</button>
+                    <!-- <button class="btn gray" onclick="showTerrain()" id='terrain_btn'>Terrain</button> -->
+                    <!-- <button class="btn gray" onclick="showTransit()" id='transit_btn'>Transit</button> -->
+                    <!-- <button class="btn gray" onclick="showBuildings()" id='buildings_btn'>Buildings</button> -->
+                    <!-- <button class="btn gray active" onclick="showLabels()" id='auto_labels_btn'>Auto labels</button> -->
                     <input type="file" id="geo_files" name="files[]" accept=".geojson,.json" multiple>
                     <label for="geo_files" class="btn gray">Upload GeoJSON</label>
+                </div>
+                <div class="map_option">
+                    <form class="standalone-dropdown">
+                        <fieldset>
+                            <select onchange="onChange(this)" id="layer-list">
+                                <option value="" selected>Layers</option>
+                                <option value="foxpro">Labels</option>
+                                <option value="foxpro">Buildings</option>
+                                <option value="foxpro">Transit</option>
+                                <option value="foxpro">Terrain</option>
+                            </select>
+                        </fieldset>
+                    </form>
                 </div>
 
 
