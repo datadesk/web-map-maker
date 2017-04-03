@@ -135,7 +135,10 @@ box-sizing: content-box;
     z-index: 9999 !important;
 }
 
-#map {width:calc(100%-10px); height:100%; margin: 0 10px 10px 0;
+#map {
+    width: calc(100%-10px); 
+    height:100%; 
+    margin: 0 10px 10px 0;
     box-shadow: 0px 0px 5px rgba(0,0,0,0.4);
 }
 
@@ -305,7 +308,7 @@ label {font:18px/27px Georgia, serif;}
 }
 
 #canvas {
-    display: none;
+    visibility: hidden;
 }
 
 .ui-resizable-e {
