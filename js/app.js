@@ -735,7 +735,36 @@ scene.subscribe({
 });
 
 /* LAYERS DROPDOWN */
-// 
+// list of layers to show/hide
+var layers = {
+    'labels_visible': ['countries','states','cities','neighborhoods','highway_shields','major_roads','schools','hospitals'],
+    'terrain_visible': [],
+    'buildings_visible': [],
+    'roads_visible': ['highways','highway_ramps','major_roads','minor_roads','service','taxi_and_runways'],
+    'borders_visible': ['countries','disputed','states','counties'],
+    'landuse_visible': ['airports','arena','beach','cemetery','college','commercial','farm','forest','hospital','industrial','kindergarten','military','park','parking','pier','place_of_worship','prison','school','stadium','wetland'],
+    'water_visible': ['ocean','inland_water','swimming_pools']
+}
+
+// add list to html
+Object.keys(layers).forEach(function(key) {
+    // looping by key
+    var keyName = key.replace('_visible','');
+    $("#checkboxes").append('<label for="'+key+'"><input type="checkbox" id="'+key+'" name="layers" />'+keyName+'</label>');
+
+    // loop through any sublayers
+    for (var i = 0; i < layers[key].length; i++) {
+        $("#checkboxes").append('<label for="'+layers[key][i]+'" class="inset"><input type="checkbox" id="'+layers[key][i]+'" name="layers" />'+layers[key][i]+'</label>');
+    }
+                              
+    console.log(key, layers[key]);
+
+});
+
+// check what's visible on init
+$("#labels_visible").attr("checked",true);
+$("#roads_visible").attr("checked",true);
+$("#water_visible").attr("checked",true);
 
 var expanded = false;
 
@@ -753,7 +782,6 @@ function showCheckboxes() {
 }
 
 // listen for checkbox click
-
 $("#checkboxes label input").click(function(){
     // grab all checked layers
     var checkedBoxes = document.querySelectorAll('input[name=layers]:checked');
@@ -768,6 +796,8 @@ $("#checkboxes label input").click(function(){
         scene.config.global['labels_visible'] = true;
     } else {
         scene.config.global['labels_visible'] = false;
+        // turn off child labels
+
     }
     scene.updateConfig(); // update config
 
