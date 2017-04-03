@@ -4,6 +4,7 @@ global:
     water_color: '#c3d5dd'
     labels_visible: true
     landuse_style: polygons
+    countries_visible: labels_visible
 
 labels-global:
     - &freeway_labels         false
@@ -785,7 +786,7 @@ layers:
             draw:
                 text-blend-order:
                     priority: 3
-                    visible: global.labels_visible
+                    visible: global.countries_visible
                     text_source: function() { return feature["name:en"] || feature["name"]; }
                     font:
                         fill: '#9C9C9C'
@@ -797,7 +798,7 @@ layers:
             draw:
                 text-blend-order:
                     priority: 3
-                    visible: global.labels_visible
+                    visible: global.countries_visible
                     text_source: function() { if (feature["name:en"] == "People's Republic of China") { return "China"; } else { return feature["name:en"] || feature["name"]; }}
                     font:
                         fill: '#9C9C9C'
@@ -809,13 +810,13 @@ layers:
                 filter: { not: { name: ["United States of America","Brasil","中华人民共和国","España","Norge","Россия","Canada","Kalaallit Nunaat","Ísland","Australia","India","日本","Guam","Indonesia","South Africa","مصر","Nigeria","Kenya"] }, $zoom: {min: 3, max: 4} }
                 draw:
                     text-blend-order:
-                        visible: global.labels_visible
+                        visible: global.countries_visible
         country-z4:
             filter: { name: true, population: true, kind: [country], $zoom: [4] }
             draw:
                 text-blend-order:
                     priority: 3
-                    visible: global.labels_visible
+                    visible: global.countries_visible
                     text_source: function() { if (feature["name:en"] == "People's Republic of China") { return "China"; } else { return feature["name:en"] || feature["name"]; }}
                     font:
                         fill: '#9C9C9C'
@@ -826,7 +827,7 @@ layers:
                 filter: { name: [Nederland,Luxembourg,Liechtenstein,San Marino,Civitatis Vaticanæ,Crna Gora,Македонија,The Gambia,Burundi,Swaziland,الإمارات العربية المتحدة,العراق,Singapore,El Salvador,Belize,Trinidad and Tobago, Saint Lucia, Montserrat,Anguilla,República Dominicana,Bahamas,British Virgin Islands,Antigua and Barbuda,Grenada,Sint Maarten,Saint Kitts and Nevis,Cayman Islands,België - Belgique - Belgien], $zoom: {min: 4, max: 5} }
                 draw:
                     text-blend-order:
-                        visible: global.labels_visible
+                        visible: global.countries_visible
         country-z5:
             filter:
                 all:
@@ -841,7 +842,7 @@ layers:
             draw:
                 text-blend-order:
                     priority: 3
-                    visible: global.labels_visible
+                    visible: global.countries_visible
                     text_source: function() { if (feature["name:en"] == "People's Republic of China") { return "China"; } else { return feature["name:en"] || feature["name"]; }}
                     font:
                         fill: '#9C9C9C'
@@ -852,14 +853,14 @@ layers:
                 filter: { name: [Luxembourg,Liechtenstein,San Marino,Civitatis Vaticanæ,El Salvador,Belize,België - Belgique - Belgien], $zoom: {min: 5, max: 6} }
                 draw:
                     text-blend-order:
-                        visible: global.labels_visible
+                        visible: global.countries_visible
         country-z6:
             # South Ossetia and Abkhazia aren't countries (they are disputed areas)
             filter: { name: true, kind: [country], $zoom: [6], not: { name: "United States of America" } }
             draw:
                 text-blend-order:
                     priority: 3
-                    visible: global.labels_visible
+                    visible: global.countries_visible
                     text_source: function() { if (feature["name:en"] == "People's Republic of China") { return "China"; } else { return feature["name:en"] || feature["name"]; }}
                     font:
                         size: 26px
@@ -870,14 +871,14 @@ layers:
                 filter: { name: [Luxembourg,Liechtenstein,San Marino,Civitatis Vaticanæ,België - Belgique - Belgien,Хуссар Ирыстон,Аҧсны - Абхазия], $zoom: {min: 6, max: 7} }
                 draw:
                     text-blend-order:
-                        visible: global.labels_visible
+                        visible: global.countries_visible
         country-z7:
             # South Ossetia and Abkhazia aren't countries (they are disputed areas)
             filter: { name: true, kind: [country], $zoom: { min: 7, max: 9 }, not: { name: ["United States of America", "Приднестровье"] } }
             draw:
                 text-blend-order:
                     priority: 3
-                    visible: global.labels_visible
+                    visible: global.countries_visible
                     text_source: function() { if (feature["name:en"] == "People's Republic of China") { return "China"; } else { return feature["name:en"] || feature["name"]; }}
                     font:
                         size: 20px
@@ -888,7 +889,7 @@ layers:
                 filter: { name: [Liechtenstein,San Marino,Civitatis Vaticanæ,Хуссар Ирыстон,Аҧсны - Абхазия], $zoom: {min: 7, max: 8} }
                 draw:
                     text-blend-order:
-                        visible: global.labels_visible
+                        visible: global.countries_visible
         regionz5-6:
             filter: { name: ["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"], kind: [region], $zoom: {min: 5, max: 7} }
             draw:

@@ -378,7 +378,7 @@ p.description {
     z-index: 1000;
     background: #fff;
     min-width: 198px;
-    padding: 5px 0 0 0;
+    padding: 5px 0;
     max-height: 300px;
     overflow-y: scroll;
 }

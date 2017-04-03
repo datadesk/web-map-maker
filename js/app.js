@@ -754,7 +754,8 @@ Object.keys(layers).forEach(function(key) {
 
     // loop through any sublayers
     for (var i = 0; i < layers[key].length; i++) {
-        $("#checkboxes").append('<label for="'+layers[key][i]+'" class="inset"><input type="checkbox" id="'+layers[key][i]+'" name="layers" />'+layers[key][i]+'</label>');
+        var layerName = layers[key][i].replace("_"," ");
+        $("#checkboxes").append('<label for="'+layers[key][i]+'" class="inset"><input type="checkbox" id="'+layers[key][i]+'" name="layers" />'+layerName+'</label>');
     }
                               
     console.log(key, layers[key]);
@@ -763,6 +764,7 @@ Object.keys(layers).forEach(function(key) {
 
 // check what's visible on init
 $("#labels_visible").attr("checked",true);
+$("#countries").attr("checked",true);
 $("#roads_visible").attr("checked",true);
 $("#water_visible").attr("checked",true);
 
@@ -797,8 +799,17 @@ $("#checkboxes label input").click(function(){
     } else {
         scene.config.global['labels_visible'] = false;
         // turn off child labels
-
     }
+
+    // country labels
+    if (visibleLayers.indexOf('countries') != -1) {
+        scene.config.global.countries_visible = true;
+    } else {
+        scene.config.global.countries_visible = false;
+        // turn off child labels
+    }
+
+
     scene.updateConfig(); // update config
 
 });
