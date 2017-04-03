@@ -616,7 +616,7 @@ layers:
                         priority: 3
                         font:
                             fill: '#666'
-                            family: 'Benton Gothic Regular'
+                            family: 'Benton Gothic Regular, Arial'
                             size: 26px
                             stroke: { color: *background, width: 4 }
 
@@ -631,7 +631,7 @@ layers:
                         order: function() { return feature.sort_rank; }
                         font:
                             fill: '#666'
-                            family: 'Benton Gothic Regular'
+                            family: 'Benton Gothic Regular, Arial'
                             size: 26px
                             stroke: {color: *background, width: 4}
 
@@ -659,7 +659,7 @@ layers:
                         repeat_distance: 200px
                         text_source: shield_text
                         font:
-                            family: 'Benton Gothic Regular'
+                            family: 'Benton Gothic Regular, Arial'
                             size: 22px
                             fill: '#9C9C9C'
             # thin-out shields at low-zoom
@@ -685,7 +685,7 @@ layers:
                         # repeat_distance: 600px
                         text_source: shield_text
                         font:
-                            family: 'Benton Gothic Regular'
+                            family: 'Benton Gothic Regular, Arial'
                             size: 22px
                             fill: '#9C9C9C'
             # thin-out shields at low-zoom
@@ -758,7 +758,7 @@ layers:
     #         text:
     #             text_source: name
     #             font:
-    #                 family: 'Benton Gothic Regular'
+    #                 family: 'Benton Gothic Regular, Arial'
     #                 size: 12px
     #                 fill: '#757575'
     #                 # stroke: { color: [255,255,255,0.7], width:1px }
@@ -772,7 +772,7 @@ layers:
             text-blend-order:
                 visible: false    # labels are enabled by each layer below
                 font:
-                    family: 'Benton Gothic Regular'
+                    family: 'Benton Gothic Regular, Arial'
                     # weight: 500
                     fill: '#9C9C9C'
 

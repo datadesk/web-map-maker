@@ -59,9 +59,17 @@ function commafy(num) {
     return s;
 }
 
-var initCoords = (typeof configOptions.initCoords !== 'undefined') ? configOptions.initCoords : [34.0425, -118.24];
+if (typeof configOptions !== 'undefined') {
+    var initCoords = (typeof configOptions.initCoords !== 'undefined') ? configOptions.initCoords : [34.0425, -118.24];
 
-var initZoom = (typeof configOptions.initZoom !== 'undefined') ? configOptions.initZoom : 10;
+    var initZoom = (typeof configOptions.initZoom !== 'undefined') ? configOptions.initZoom : 10;
+} else {
+    var initCoords = [34.0425, -118.24];
+
+    var initZoom = 10;
+}
+
+
 
 // jQuery map reference
 var $map = $('#map');
