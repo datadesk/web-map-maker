@@ -803,7 +803,7 @@ $("#checkboxes label input").click(function(){
 
     // country labels
     if (visibleLayers.indexOf('countries') != -1) {
-        scene.config.global.countries_visible = true;
+        scene.config.global.countries_visible = scene.config.global['labels_visible'];
     } else {
         scene.config.global.countries_visible = false;
         // turn off child labels
