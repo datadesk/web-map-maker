@@ -101,18 +101,39 @@
                     <label for="geo_files" class="btn gray">Upload GeoJSON</label>
                 </div>
                 <div class="map_option">
-                    <form class="standalone-dropdown">
-                        <fieldset>
-                            <select onchange="onChange(this)" id="layer-list">
-                                <option value="" selected>Layers</option>
-                                <option value="foxpro">Labels</option>
-                                <option value="foxpro">Buildings</option>
-                                <option value="foxpro">Transit</option>
-                                <option value="foxpro">Terrain</option>
-                            </select>
-                        </fieldset>
+                    <form>
+                      <div class="multiselect">
+                        <div class="selectBox" onclick="showCheckboxes()">
+                          <select>
+                            <option>Visible layers</option>
+                          </select>
+                          <div class="overSelect"></div>
+                        </div>
+                        <div id="checkboxes">
+                          <label for="labels_visible">
+                            <input type="checkbox" id="labels_visible" name="layers" checked />Labels</label>
+                              <label for="countries" class="inset">
+                                <input type="checkbox" id="countries" name="layers" checked />Countries</label>
+
+
+                          <label for="terrain">
+                            <input type="checkbox" id="terrain" name="layers" />Terrain</label>
+                          <label for="buildings">
+                            <input type="checkbox" id="buildings" name="layers" />Buildings</label>
+                          <label for="roads">
+                            <input type="checkbox" id="roads" name="layers" />Roads</label>
+                          <label for="borders">
+                            <input type="checkbox" id="borders" name="layers" />Borders</label>
+                          <label for="landuse">
+                            <input type="checkbox" id="landuse" name="layers" />Landuse</label>
+                          <label for="water">
+                            <input type="checkbox" id="water" name="layers" />Water</label>
+                        </div>
+                      </div>
                     </form>
                 </div>
+
+
 
 
 

@@ -327,3 +327,72 @@ label {font:18px/27px Georgia, serif;}
 p.description {
     max-width: 800px;
 }
+
+/* layer dropdown */
+.multiselect {
+    width: 200px;
+    cursor: pointer;
+}
+
+.multiselect select {
+    margin-bottom: 0px;
+}
+
+#map_options .multiselect label input {
+    margin: 2px 5px 5px;
+}
+
+.selectBox {
+    position: relative;
+}
+
+.selectBox select {
+    width: 100%;
+    font-weight: bold;
+}
+
+.overSelect {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border: 2px solid #b5b5b5;
+    color: #acacac;
+    font-family: Arial,sans-serif;
+    border-radius: 6px;
+}
+
+.selectBox select {
+    color: #acacac;
+    font-weight: normal;
+    letter-spacing: 1px;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+#checkboxes {
+    display: none;
+    border: 1px #dadada solid;
+    position: absolute;
+    z-index: 1000;
+    background: #fff;
+    min-width: 198px;
+    padding: 5px 0 0 0;
+    max-height: 300px;
+    overflow-y: scroll;
+}
+
+#checkboxes label {
+    display: block;
+    font-family: 'Benton Gothic Regular', Arial, sans-serif;
+    font-size: 16px;
+}
+
+#checkboxes .inset {
+    margin: 0 0 0 15px;
+}
+
+#checkboxes label:hover {
+    background-color: #1e90ff;
+}

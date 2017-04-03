@@ -733,3 +733,78 @@ scene.subscribe({
         console.log('scene warning:', e);
     }
 });
+
+/* LAYERS DROPDOWN */
+// 
+
+var expanded = false;
+
+function showCheckboxes() {
+    var checkboxes = document.getElementById("checkboxes");
+
+    if (!expanded) {
+        checkboxes.style.display = "block";
+        expanded = true;
+    } else {
+        checkboxes.style.display = "none";
+        expanded = false;
+    }
+
+}
+
+// listen for checkbox click
+
+$("#checkboxes label input").click(function(){
+    // grab all checked layers
+    var checkedBoxes = document.querySelectorAll('input[name=layers]:checked');
+    var visibleLayers = [];
+    for (var i = 0; i < checkedBoxes.length; i++) {
+        visibleLayers.push(checkedBoxes[i].id);
+    }
+
+    console.log(visibleLayers);
+    // loop through layers to show/hide
+    if (visibleLayers.indexOf('labels_visible') != -1) {
+        scene.config.global['labels_visible'] = true;
+    } else {
+        scene.config.global['labels_visible'] = false;
+    }
+    scene.updateConfig(); // update config
+
+});
+
+
+
+// function showTerrain() {
+// // store landuse parent
+// var landuse = scene.config.layers.landuse;
+// mapLoading();
+// if (terrainVisible) {
+
+//     // change earth to terrain
+//     scene.config.layers.earth.draw.polygons.visible = true;
+//     scene.config.layers.earth.draw.terrain.visible = false;
+
+
+//     // update base landuse
+//     scene.config.global.landuse_style = 'polygons';
+
+//     scene.updateConfig(); // update config
+//     $("#terrain_btn").removeClass("active"); // update button
+
+//     terrainVisible = false;
+// } else {
+
+//     // change earth to terrain
+//     scene.config.layers.earth.draw.polygons.visible = false;
+//     scene.config.layers.earth.draw.terrain.visible = true;
+
+//     // update base landuse
+
+//     scene.config.global.landuse_style = 'terrain';
+
+//     scene.updateConfig(); // update config
+//     terrainVisible = true;
+//     $("#terrain_btn").addClass("active"); // update button
+// }
+// }
