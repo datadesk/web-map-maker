@@ -4,7 +4,9 @@ global:
     water_color: '#c3d5dd'
     labels_visible: true
     landuse_style: polygons
-    countries_visible: labels_visible
+    countries_visible: true
+    buildings_visible: false
+    transit_visible: false
 
 labels-global:
     - &freeway_labels         false
@@ -244,7 +246,7 @@ layers:
                 lines:
                     order: function() { return feature.sort_rank; }
                     color: global.water_color
-                    width: [[13,0.5px],[14,1.0px],[16,1.5px],[18,4m]]
+                    width: [[13,1px],[14,2px],[16,3px],[18,4m]]
                     join: round
 
     swimming-pools:
@@ -701,17 +703,17 @@ layers:
         filter: { $zoom: { min: 13 }}
         draw:
             polygons:
-                visible: false
+                visible: global.buildings_visible
                 order: function() { return feature.sort_rank; }
                 color: *building
             lines:
-                visible: false
+                visible: global.buildings_visible
                 order: function() { return feature.sort_rank; }
                 color: "#c8c8c1"
                 width: [[17,0],[18,0.5m],[20,0.25m]]
                 style: lines
     transit:
-        visible: false
+        visible: global.transit_visible
         data: { source: mapzen , layer: transit }
         filter: {not:{ kind: [platform]}, $zoom: { min: 11 }}
         draw:
@@ -741,7 +743,7 @@ layers:
                     z: function() { if(feature.colour == 'purple') { return 1;} else if (feature.colour == 'red') { return 2; } }
 
     transit-overlay-station-labels:
-        visible: false
+        visible: global.transit_visible
         data: { source: mapzen, layer: [pois] }
         station-train-subway:
             filter: { kind: [station, train-station, train_station], $zoom: { min: 11 } }

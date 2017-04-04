@@ -139,16 +139,11 @@ map.on('zoomend', function() {
 
     $("#zoom_level").text(zoomRounded.toFixed(1));
 
-    // buildings out under 14 zoom
+    // buildings out under 13 zoom
     if (zoomRounded < 13) {
-        $("#buildings_btn").removeClass("active"); // no buildings at zoom
-        $("#buildings_btn").css("opacity","0.5"); // update btn opacity
-    } else if (buildingsVisible) {
-        $("#buildings_btn").addClass("active"); // no buildings at zoom
-    }
-
-    if (zoomRounded >= 13) {
-        $("#buildings_btn").css("opacity","1"); // update btn opacity
+        $("#buildings_visible").parent().addClass("unavailable"); // update btn opacity
+    } else {
+        $("#buildings_visible").parent().removeClass("unavailable"); // update btn opacity
     }
 
 
@@ -469,30 +464,6 @@ if (labelsVisible) {
 
 }
 
-// shows and hides buildings and swimming pools
-function showBuildings() {
-// check zoom
-if (map.getZoom() >= 13) {
-    if (buildingsVisible) {
-        // remove buildings
-        scene.config.layers.buildings.draw.lines.visible = false;
-        scene.config.layers.buildings.draw.polygons.visible = false;
-        scene.config.layers["swimming-pools"].draw.polygons.visible = false; // pools
-        scene.updateConfig(); // update config
-        $("#buildings_btn").removeClass("active"); // update button
-        buildingsVisible = false;
-    } else {
-        mapLoading();
-        // add buildings
-        scene.config.layers.buildings.draw.lines.visible = true;
-        scene.config.layers.buildings.draw.polygons.visible = true;
-        scene.config.layers["swimming-pools"].draw.polygons.visible = true; // pools
-        scene.updateConfig(); // update config
-        $("#buildings_btn").addClass("active"); // update button
-        buildingsVisible = true;
-    }
-}
-} // showBuildings()
 
 // watching for anytime the size preset dropdown fires
 var sizeChange = function(option) {
@@ -724,10 +695,11 @@ scene.subscribe({
 /* LAYERS DROPDOWN */
 // list of layers to show/hide
 var layers = {
-    'labels_visible': ['countries','states','cities','neighborhoods','highway_shields','major_roads','schools','hospitals'],
+    'labels_visible': ['countries_visible','states','cities','neighborhoods','highway_shields','major_roads','points_of_interest'],
     'terrain_visible': [],
     'buildings_visible': [],
     'roads_visible': ['highways','highway_ramps','major_roads','minor_roads','service','taxi_and_runways'],
+    'transit_visible': [],
     'borders_visible': ['countries','disputed','states','counties'],
     'landuse_visible': ['airports','arena','beach','cemetery','college','commercial','farm','forest','hospital','industrial','kindergarten','military','park','parking','pier','place_of_worship','prison','school','stadium','wetland'],
     'water_visible': ['ocean','inland_water','swimming_pools']
@@ -741,7 +713,7 @@ Object.keys(layers).forEach(function(key) {
 
     // loop through any sublayers
     for (var i = 0; i < layers[key].length; i++) {
-        var layerName = layers[key][i].replace("_"," ");
+        var layerName = layers[key][i].replace(/_/g, ' ');
         $("#checkboxes").append('<label for="'+layers[key][i]+'" class="inset"><input type="checkbox" id="'+layers[key][i]+'" name="layers" />'+layerName+'</label>');
     }
                               
@@ -751,9 +723,18 @@ Object.keys(layers).forEach(function(key) {
 
 // check what's visible on init
 $("#labels_visible").attr("checked",true);
-$("#countries").attr("checked",true);
+$("#countries_visible").attr("checked",true);
 $("#roads_visible").attr("checked",true);
 $("#water_visible").attr("checked",true);
+
+// set what layers are visible based on zoom
+if (initZoom < 13) {
+    $("#buildings_visible").parent().addClass("unavailable");
+}
+
+if (initZoom < 11) {
+    $("#transit_visible").parent().addClass("unavailable");
+}
 
 var expanded = false;
 
@@ -772,6 +753,8 @@ function showCheckboxes() {
 
 // listen for checkbox click
 $("#checkboxes label input").click(function(){
+    var thisID = $(this).attr("id");
+
     // grab all checked layers
     var checkedBoxes = document.querySelectorAll('input[name=layers]:checked');
     var visibleLayers = [];
@@ -780,59 +763,77 @@ $("#checkboxes label input").click(function(){
     }
 
     console.log(visibleLayers);
-    // loop through layers to show/hide
-    if (visibleLayers.indexOf('labels_visible') != -1) {
-        scene.config.global['labels_visible'] = true;
-    } else {
-        scene.config.global['labels_visible'] = false;
-        // turn off child labels
-    }
+    // // loop through layers to show/hide
+    // if (visibleLayers.indexOf('labels_visible') != -1) {
+    //     scene.config.global['labels_visible'] = true;
+    // } else {
+    //     scene.config.global['labels_visible'] = false;
+    //     // turn off child labels
+    // }
 
-    // country labels
-    if (visibleLayers.indexOf('countries') != -1) {
-        scene.config.global.countries_visible = scene.config.global['labels_visible'];
-    } else {
-        scene.config.global.countries_visible = false;
-        // turn off child labels
-    }
+    // // country labels
+    // if (visibleLayers.indexOf('countries') != -1) {
+    //     scene.config.global.countries_visible = scene.config.global['labels_visible'];
+    // } else {
+    //     scene.config.global.countries_visible = false;
+    //     // turn off child labels
+    // }
+
+    // if (visibleLayers.indexOf('terrain_visible') != -1) {
+    //     scene.config.global.landuse_style = 'terrain';
+    //     scene.config.layers.earth.draw.polygons.visible = false;
+    //     scene.config.layers.earth.draw.terrain.visible = true;
+    // } else {
+    //     scene.config.global.landuse_style = 'polygons';
+    //     scene.config.layers.earth.draw.polygons.visible = true;
+    //     scene.config.layers.earth.draw.terrain.visible = false;
+    // }
+
+    // if (visibleLayers.indexOf('buildings_visible') != -1) {
+    //     scene.config.global['buildings_visible'] = true;
+    // } else {
+    //     scene.config.global['buildings_visible'] = false;
+    // }
+
+    // if (visibleLayers.indexOf(thisID) != -1) {
+        switchLayer(thisID);
+    // }
 
 
     scene.updateConfig(); // update config
 
+
+    // $("#states").prop("indeterminate", true);
 });
 
+// a function to switch global variables to show/hide layers
+function switchLayer(layer) {
+    if (scene.config.global[layer]) {
+        scene.config.global[layer] = false;
+    } else {
+        scene.config.global[layer] = true;
+    }
+}
 
 
-// function showTerrain() {
-// // store landuse parent
-// var landuse = scene.config.layers.landuse;
-// mapLoading();
-// if (terrainVisible) {
 
-//     // change earth to terrain
-//     scene.config.layers.earth.draw.polygons.visible = true;
-//     scene.config.layers.earth.draw.terrain.visible = false;
-
-
-//     // update base landuse
-//     scene.config.global.landuse_style = 'polygons';
-
-//     scene.updateConfig(); // update config
-//     $("#terrain_btn").removeClass("active"); // update button
-
-//     terrainVisible = false;
-// } else {
-
-//     // change earth to terrain
-//     scene.config.layers.earth.draw.polygons.visible = false;
-//     scene.config.layers.earth.draw.terrain.visible = true;
-
-//     // update base landuse
-
-//     scene.config.global.landuse_style = 'terrain';
-
-//     scene.updateConfig(); // update config
-//     terrainVisible = true;
-//     $("#terrain_btn").addClass("active"); // update button
-// }
-// }
+function showTransit() {
+// check zoom
+if (map.getZoom() >= 11) {
+    if (transitVisible) {
+        // remove transit
+        scene.config.layers.transit.visible = false;
+        scene.config.layers['transit-overlay-station-labels'].visible = false;
+        scene.updateConfig(); // update config
+        $("#transit_btn").removeClass("active"); // update button
+        transitVisible = false;
+    } else {
+        // add transit layer
+        scene.config.layers.transit.visible = true;
+        scene.config.layers['transit-overlay-station-labels'].visible = true;
+        scene.updateConfig(); // update config
+        $("#transit_btn").addClass("active"); // update button
+        transitVisible = true;
+    }
+}
+}

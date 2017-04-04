@@ -397,3 +397,7 @@ p.description {
 #checkboxes label:hover {
     background-color: #1e90ff;
 }
+
+#checkboxes .unavailable {
+    opacity: 0.3;
+}
