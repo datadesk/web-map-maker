@@ -240,8 +240,6 @@ function slugify(v){
     return slug;
 }
 
-
-
 function downloadIMG() {
     if (!mapLoadAction) {
 
@@ -263,104 +261,110 @@ function downloadIMG() {
         $("#map").css("background","none");
         $(".leaflet-control-zoom").hide();
 
+        // scene.screenshot().then(function(screenshot) { window.open(screenshot.url); });
+
         // basemap
         scene.screenshot().then(function(screenshot) {
 
             // store map size
             // store svg viewbox info (for later offsetting)
 
-            var base = new Image();
-            base.src = screenshot.url;
-            ctx.drawImage(base,0,0, mapSize[0], mapSize[1]);
+            var baseIMG = new Image();
+            baseIMG.src = screenshot.url;
+
+            baseIMG.onload = function() {
+                ctx.drawImage(baseIMG,0,0, mapSize[0], mapSize[1]);
 
 
-            // add svg elements (like geojson objects)
-            if ($("#map svg").length > 0) {
+                // add svg elements (like geojson objects)
+                if ($("#map svg").length > 0) {
 
-                // Super hacky solution to SVG drawing problem: change zoom level then put it back
-                // This is here to patch a bug where a small pan of the map will result in
-                // geojson/svg objects being cut off in the downloaded image
-                // Someday we might have a real solution to the problem but until then ¯\_(ツ)_/¯
-                map.setZoom(map.getZoom() - 0.5);
-                map.setZoom(map.getZoom() + 0.5);
+                    // Super hacky solution to SVG drawing problem: change zoom level then put it back
+                    // This is here to patch a bug where a small pan of the map will result in
+                    // geojson/svg objects being cut off in the downloaded image
+                    // Someday we might have a real solution to the problem but until then ¯\_(ツ)_/¯
+                    map.setZoom(map.getZoom() - 0.5);
+                    map.setZoom(map.getZoom() + 0.5);
 
-                var svgString = new XMLSerializer().serializeToString(document.querySelector('svg'));
-                var DOMURL = self.URL || self.webkitURL || self;
-                var img = new Image();
-                var svg = new Blob([svgString], {type: "image/svg+xml;charset=utf-8"});
-                var url = DOMURL.createObjectURL(svg);
+                    var svgString = new XMLSerializer().serializeToString(document.querySelector('svg'));
+                    var DOMURL = self.URL || self.webkitURL || self;
+                    var img = new Image();
+                    var svg = new Blob([svgString], {type: "image/svg+xml;charset=utf-8"});
+                    var url = DOMURL.createObjectURL(svg);
 
-                img.onload = function() {
-                    // be sure to offset it
-                    var svg1 = document.querySelector('svg');
-                    var box = svg1.getAttribute('viewBox');
-                    var svgOffset = box.split(/\s+|,/);
+                    img.onload = function() {
+                        // be sure to offset it
+                        var svg1 = document.querySelector('svg');
+                        var box = svg1.getAttribute('viewBox');
+                        var svgOffset = box.split(/\s+|,/);
 
-                    var svgSize = [$("#map svg").width(),$("#map svg").height()];
-                    ctx.drawImage(img, (+svgOffset[0]*-1)-((svgSize[0]-mapSize[0])/2), (+svgOffset[1]*-1)-((svgSize[1]-mapSize[1])/2), svgSize[0], svgSize[1]);
-                };
-                img.src = url;
+                        var svgSize = [$("#map svg").width(),$("#map svg").height()];
+                        ctx.drawImage(img, (+svgOffset[0]*-1)-((svgSize[0]-mapSize[0])/2), (+svgOffset[1]*-1)-((svgSize[1]-mapSize[1])/2), svgSize[0], svgSize[1]);
+                    };
+                    img.src = url;
+                }
+
+                // any popup text layers and other html like the source and ruler
+                html2canvas($("#map"), {
+
+                    onrendered: function(canvas) {
+
+                        ctx.drawImage(canvas,0,0, mapSize[0], mapSize[1]);
+                        $(".leaflet-control-zoom").show(); // show zoom again
+                        $("#map").css("background","#ddd"); // bring back map's background
+
+                        // create an off-screen anchor tag
+                        var lnk = document.createElement('a'),
+                            e;
+
+                        // get current datetime
+                        var currentdate = new Date();
+
+                        var hours = (currentdate.getHours() > 12) ? currentdate.getHours() + 12 : currentdate.getHours();
+                        hours = (hours.toString().length == 1) ? '0' + hours : hours;
+
+                        var datetime =  ("0" + (currentdate.getMonth() + 1)).slice(-2) + "-" +
+                                        ("0" + currentdate.getDate()).slice(-2) + "-" +
+                                        currentdate.getFullYear() + "-"
+                                        + hours + "-" +
+                                        + currentdate.getMinutes() + "-" +
+                                        currentdate.getSeconds();
+
+                        lnk.download = mapSlug + datetime + '.png';
+
+                        // compress down canvas
+                        var canvas = document.getElementById("canvas");
+                        var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+
+                        // fire if sendToS3 exists
+                        if (typeof sendToS3 !== "undefined") { 
+                            sendToS3(mapSlug + datetime + ".png", image)
+                                .then(sendToP2P(mapSlug + datetime))
+                                .then(function() {
+                                    console.log("great success!");
+                                }).catch(function() {
+                                    console.log("womp womp");
+                                });
+                        }
+
+                        lnk.href = image;
+                        // window.location.href=image;
+                        if (document.createEvent) {
+
+                            e = document.createEvent("MouseEvents");
+                            e.initMouseEvent("click", true, true, window,
+                                             0, 0, 0, 0, 0, false, false, false,
+                                             false, 0, null);
+
+                            lnk.dispatchEvent(e);
+
+                        } else if (lnk.fireEvent) {
+                            lnk.fireEvent("onclick");
+                        }
+                    }
+                });
             }
 
-            // any popup text layers and other html like the source and ruler
-            html2canvas($("#map"), {
-
-                onrendered: function(canvas) {
-
-                    ctx.drawImage(canvas,0,0, mapSize[0], mapSize[1]);
-                    $(".leaflet-control-zoom").show(); // show zoom again
-                    $("#map").css("background","#ddd"); // bring back map's background
-
-                    // create an off-screen anchor tag
-                    var lnk = document.createElement('a'),
-                        e;
-
-                    // get current datetime
-                    var currentdate = new Date();
-
-                    var hours = (currentdate.getHours() > 12) ? currentdate.getHours() + 12 : currentdate.getHours();
-                    hours = (hours.toString().length == 1) ? '0' + hours : hours;
-
-                    var datetime =  ("0" + (currentdate.getMonth() + 1)).slice(-2) + "-" +
-                                    ("0" + currentdate.getDate()).slice(-2) + "-" +
-                                    currentdate.getFullYear() + "-"
-                                    + hours + "-" +
-                                    + currentdate.getMinutes() + "-" +
-                                    currentdate.getSeconds();
-
-                    lnk.download = mapSlug + datetime + '.png';
-
-                    // compress down canvas
-                    var canvas = document.getElementById("canvas");
-                    var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-
-                    // fire if sendToS3 exists
-                    if (typeof sendToS3 !== "undefined") { 
-                        sendToS3(mapSlug + datetime + ".png", image)
-                            .then(sendToP2P(mapSlug + datetime))
-                            .then(function() {
-                                console.log("great success!");
-                            }).catch(function() {
-                                console.log("womp womp");
-                            });
-                    }
-
-                    lnk.href = image;
-                    // window.location.href=image;
-                    if (document.createEvent) {
-
-                        e = document.createEvent("MouseEvents");
-                        e.initMouseEvent("click", true, true, window,
-                                         0, 0, 0, 0, 0, false, false, false,
-                                         false, 0, null);
-
-                        lnk.dispatchEvent(e);
-
-                    } else if (lnk.fireEvent) {
-                        lnk.fireEvent("onclick");
-                    }
-                }
-            });
 
 
 
