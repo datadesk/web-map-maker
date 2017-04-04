@@ -261,8 +261,6 @@ function downloadIMG() {
         $("#map").css("background","none");
         $(".leaflet-control-zoom").hide();
 
-        // scene.screenshot().then(function(screenshot) { window.open(screenshot.url); });
-
         // basemap
         scene.screenshot().then(function(screenshot) {
 
