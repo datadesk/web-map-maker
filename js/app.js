@@ -220,31 +220,16 @@ function handleMouseMove(event) {
             if (feature.properties !== null) {
                 // console.log(feature);
 
-                // $('#tooltip').css({'display':'block','opacity':1,'height':'auto'});
                 if (feature.properties.kind == 'highway'){
                     // console.log(feature.properties.ref);
-                    $('#tooltip').text(feature.properties.ref);
                 } else {
                     // console.log(feature.properties.name);
-                    $('#tooltip').text(feature.properties.name);
                 }
-            } else {
-                $('#tooltip').text('');
             }
         }
     });
 }
 
-// Move the tooltip with the mouse
-$(window).mousemove( function(e) {
-    if (windowWidth > 400) {
-        var tooltipHeight = $("#tooltip").height();
-        mouseY = e.pageY;
-        mouseX = e.pageX;
-        $("#tooltip").css({"top":(mouseY+10)+"px","left":(mouseX+5)+"px"});
-
-    }
-});
 
 function slugify(v){
     var slug = v.toLowerCase();
