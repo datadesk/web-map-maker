@@ -344,6 +344,8 @@ p.description {
 
 .selectBox {
     position: relative;
+    height: 34px;
+    margin: 3px 0 0 0;
 }
 
 .selectBox select {
@@ -369,6 +371,7 @@ p.description {
     letter-spacing: 1px;
     font-size: 14px;
     line-height: 20px;
+    height: 34px;
 }
 
 #checkboxes {
@@ -377,16 +380,20 @@ p.description {
     position: absolute;
     z-index: 1000;
     background: #fff;
-    min-width: 198px;
+    width: 600px;
     padding: 5px 0;
-    max-height: 300px;
+    max-height: 400px;
     overflow-y: scroll;
+    column-count: 3;
+    -webkit-column-count: 3;
+    -moz-column-count: 3;
 }
 
 #checkboxes label {
     display: block;
     font-family: 'Benton Gothic Regular', Arial, sans-serif;
-    font-size: 16px;
+    font-size: 14px;
+    line-height: 18px;
     text-transform: capitalize;
 }
 
