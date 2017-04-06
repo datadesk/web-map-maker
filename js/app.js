@@ -78,7 +78,7 @@ var map = L.map('map', {
     center: initCoords,
     zoom: 10,
     detectRetina: true,
-    minZoom: 1.5,
+    minZoom: 2,
     maxZoom: 19,
     closePopupOnClick: false
 });
@@ -140,26 +140,32 @@ map.on('zoomend', function() {
     $("#zoom_level").text(zoomRounded.toFixed(1));
 
     // buildings out under 13 zoom
-    if (zoomRounded < 13) {
+    if (zoomRounded < 14) {
         $("#buildings_visible").parent().addClass("unavailable"); // update btn opacity
     } else {
         $("#buildings_visible").parent().removeClass("unavailable"); // update btn opacity
     }
 
-
-
-    // transit wont show outside 11 zoom
+    // transit unavailable less than 11 zoom
     if (zoomRounded < 11) {
-        $("#transit_btn").removeClass("active"); // update button
-        $("#transit_btn").css("opacity","0.5"); // update btn opacity
-    } else if (transitVisible) {
-        $("#transit_btn").addClass("active"); // update button
+        $("#transit_visible").parent().addClass("unavailable"); // update btn opacity
+    } else {
+        $("#transit_visible").parent().removeClass("unavailable"); // update btn opacity
     }
 
-    if (zoomRounded >= 11) {
-        $("#transit_btn").css("opacity","1"); // update btn opacity
+    // countries 
+    if (zoomRounded > 9 || zoomRounded < 2) {
+        $("#labels_visible_countries").parent().addClass("unavailable"); // update btn opacity
+    } else {
+        $("#labels_visible_countries").parent().removeClass("unavailable"); // update btn opacity
     }
 
+    // states and regions
+    if (zoomRounded > 9 || zoomRounded <= 5) {
+        $("#labels_visible_states").parent().addClass("unavailable"); // update btn opacity
+    } else {
+        $("#labels_visible_states").parent().removeClass("unavailable"); // update btn opacity
+    }
 
 });
 
@@ -384,85 +390,85 @@ var labelsVisible = true;
 var terrainVisible = false;
 
 
-function showTerrain() {
-// store landuse parent
-var landuse = scene.config.layers.landuse;
-mapLoading();
-if (terrainVisible) {
+// function showTerrain() {
+// // store landuse parent
+// var landuse = scene.config.layers.landuse;
+// mapLoading();
+// if (terrainVisible) {
 
-    // change earth to terrain
-    scene.config.layers.earth.draw.polygons.visible = true;
-    scene.config.layers.earth.draw.terrain.visible = false;
-
-
-    // update base landuse
-    scene.config.global.landuse_style = 'polygons';
-
-    scene.updateConfig(); // update config
-    $("#terrain_btn").removeClass("active"); // update button
-
-    terrainVisible = false;
-} else {
-
-    // change earth to terrain
-    scene.config.layers.earth.draw.polygons.visible = false;
-    scene.config.layers.earth.draw.terrain.visible = true;
-
-    // update base landuse
-
-    scene.config.global.landuse_style = 'terrain';
-
-    scene.updateConfig(); // update config
-    terrainVisible = true;
-    $("#terrain_btn").addClass("active"); // update button
-}
-}
-
-function showTransit() {
-// check zoom
-if (map.getZoom() >= 11) {
-    if (transitVisible) {
-        // remove transit
-        scene.config.layers.transit.visible = false;
-        scene.config.layers['transit-overlay-station-labels'].visible = false;
-        scene.updateConfig(); // update config
-        $("#transit_btn").removeClass("active"); // update button
-        transitVisible = false;
-    } else {
-        // add transit layer
-        scene.config.layers.transit.visible = true;
-        scene.config.layers['transit-overlay-station-labels'].visible = true;
-        scene.updateConfig(); // update config
-        $("#transit_btn").addClass("active"); // update button
-        transitVisible = true;
-    }
-}
-}
-
-// auto labels
-function showLabels() {
-
-// check current status
-if (labelsVisible) {
-    // turn all these label layers hidden
-    scene.config.global.labels_visible = false;
-
-    labelsVisible = false;
-
-    scene.updateConfig(); // update config
-    $("#auto_labels_btn").removeClass("active"); // update button
-} else {
-    // turn all these label layers visible
-    scene.config.global.labels_visible = true;
-
-    scene.updateConfig(); // update config
-    $("#auto_labels_btn").addClass("active"); // update button
-
-    labelsVisible = true;
-}
+//     // change earth to terrain
+//     scene.config.layers.earth.draw.polygons.visible = true;
+//     scene.config.layers.earth.draw.terrain.visible = false;
 
 
-}
+//     // update base landuse
+//     scene.config.global.landuse_style = 'polygons';
+
+//     scene.updateConfig(); // update config
+//     $("#terrain_btn").removeClass("active"); // update button
+
+//     terrainVisible = false;
+// } else {
+
+//     // change earth to terrain
+//     scene.config.layers.earth.draw.polygons.visible = false;
+//     scene.config.layers.earth.draw.terrain.visible = true;
+
+//     // update base landuse
+
+//     scene.config.global.landuse_style = 'terrain';
+
+//     scene.updateConfig(); // update config
+//     terrainVisible = true;
+//     $("#terrain_btn").addClass("active"); // update button
+// }
+// }
+
+// function showTransit() {
+// // check zoom
+// if (map.getZoom() >= 11) {
+//     if (transitVisible) {
+//         // remove transit
+//         scene.config.layers.transit.visible = false;
+//         scene.config.layers['transit-overlay-station-labels'].visible = false;
+//         scene.updateConfig(); // update config
+//         $("#transit_btn").removeClass("active"); // update button
+//         transitVisible = false;
+//     } else {
+//         // add transit layer
+//         scene.config.layers.transit.visible = true;
+//         scene.config.layers['transit-overlay-station-labels'].visible = true;
+//         scene.updateConfig(); // update config
+//         $("#transit_btn").addClass("active"); // update button
+//         transitVisible = true;
+//     }
+// }
+// }
+
+// // auto labels
+// function showLabels() {
+
+// // check current status
+// if (labelsVisible) {
+//     // turn all these label layers hidden
+//     scene.config.global.labels_visible = false;
+
+//     labelsVisible = false;
+
+//     scene.updateConfig(); // update config
+//     $("#auto_labels_btn").removeClass("active"); // update button
+// } else {
+//     // turn all these label layers visible
+//     scene.config.global.labels_visible = true;
+
+//     scene.updateConfig(); // update config
+//     $("#auto_labels_btn").addClass("active"); // update button
+
+//     labelsVisible = true;
+// }
+
+
+// }
 
 
 // watching for anytime the size preset dropdown fires
@@ -555,8 +561,6 @@ function showWeb() {
 
     // bring back attribution
     $(".leaflet-control-attribution").show();
-
-
 }
 
 // Apple's Magic Mouse is a little finicky--prevent scroll when mouse is down on map
@@ -695,11 +699,11 @@ scene.subscribe({
 /* LAYERS DROPDOWN */
 // list of layers to show/hide
 var layers = {
-    'labels_visible': ['countries_visible','states','cities','neighborhoods','highway_shields','major_roads','points_of_interest'],
     'terrain_visible': [],
     'buildings_visible': [],
-    'roads_visible': ['highways','highway_ramps','major_roads','minor_roads','service','taxi_and_runways'],
     'transit_visible': [],
+    'labels_visible': ['countries','states','cities','neighborhoods','highway_shields','major_roads','points_of_interest'],
+    'roads_visible': ['highways','highway_ramps','major_roads','minor_roads','service','taxi_and_runways'],
     'borders_visible': ['countries','disputed','states','counties'],
     'landuse_visible': ['airports','arena','beach','cemetery','college','commercial','farm','forest','hospital','industrial','kindergarten','military','park','parking','pier','place_of_worship','prison','school','stadium','wetland'],
     'water_visible': ['ocean','inland_water','swimming_pools']
@@ -714,27 +718,48 @@ Object.keys(layers).forEach(function(key) {
     // loop through any sublayers
     for (var i = 0; i < layers[key].length; i++) {
         var layerName = layers[key][i].replace(/_/g, ' ');
-        $("#checkboxes").append('<label for="'+layers[key][i]+'" class="inset"><input type="checkbox" id="'+layers[key][i]+'" name="layers" />'+layerName+'</label>');
+        $("#checkboxes").append('<label for="'+key+"_"+layers[key][i]+'" class="inset"><input type="checkbox" id="'+key+"_"+layers[key][i]+'" name="layers" />'+layerName+'</label>');
     }
                               
-    console.log(key, layers[key]);
-
 });
 
-// check what's visible on init
-$("#labels_visible").attr("checked",true);
-$("#countries_visible").attr("checked",true);
-$("#roads_visible").attr("checked",true);
-$("#water_visible").attr("checked",true);
+// check what layers are available on init
+scene.subscribe({
+    load: function (e) {
+        console.log(scene.config);
+
+
+        // loop through layers list
+        Object.keys(layers).forEach(function(key) {
+            console.log(key);
+            // $("#"+key).attr("checked",scene.config.global[key]);
+
+            // loop through the sublayers
+            for (var i = 0; i < layers[key].length; i++) {
+                var sublayer = key + "_" + layers[key][i];
+                $("#"+sublayer).attr("checked",scene.config.global[sublayer]);
+
+                console.log("  " + layers[key][i]);
+            }
+                                      
+            // console.log(key, layers[key]);
+
+        });
+
+    }
+});
+
 
 // set what layers are visible based on zoom
-if (initZoom < 13) {
-    $("#buildings_visible").parent().addClass("unavailable");
-}
+if (initZoom < 14) { $("#buildings_visible").parent().addClass("unavailable"); }
 
-if (initZoom < 11) {
-    $("#transit_visible").parent().addClass("unavailable");
-}
+if (initZoom < 11) { $("#transit_visible").parent().addClass("unavailable"); }
+
+if (initZoom > 9 || initZoom < 5) { $("#labels_visible_states").parent().addClass("unavailable"); }
+
+if (initZoom > 9 || initZoom < 2) { $("#labels_visible_countries").parent().addClass("unavailable"); }
+
+
 
 var expanded = false;
 
@@ -753,6 +778,7 @@ function showCheckboxes() {
 
 // listen for checkbox click
 $("#checkboxes label input").click(function(){
+
     var thisID = $(this).attr("id");
 
     // grab all checked layers
@@ -817,23 +843,23 @@ function switchLayer(layer) {
 
 
 
-function showTransit() {
-// check zoom
-if (map.getZoom() >= 11) {
-    if (transitVisible) {
-        // remove transit
-        scene.config.layers.transit.visible = false;
-        scene.config.layers['transit-overlay-station-labels'].visible = false;
-        scene.updateConfig(); // update config
-        $("#transit_btn").removeClass("active"); // update button
-        transitVisible = false;
-    } else {
-        // add transit layer
-        scene.config.layers.transit.visible = true;
-        scene.config.layers['transit-overlay-station-labels'].visible = true;
-        scene.updateConfig(); // update config
-        $("#transit_btn").addClass("active"); // update button
-        transitVisible = true;
-    }
-}
-}
+// function showTransit() {
+// // check zoom
+// if (map.getZoom() >= 11) {
+//     if (transitVisible) {
+//         // remove transit
+//         scene.config.layers.transit.visible = false;
+//         scene.config.layers['transit-overlay-station-labels'].visible = false;
+//         scene.updateConfig(); // update config
+//         $("#transit_btn").removeClass("active"); // update button
+//         transitVisible = false;
+//     } else {
+//         // add transit layer
+//         scene.config.layers.transit.visible = true;
+//         scene.config.layers['transit-overlay-station-labels'].visible = true;
+//         scene.updateConfig(); // update config
+//         $("#transit_btn").addClass("active"); // update button
+//         transitVisible = true;
+//     }
+// }
+// }

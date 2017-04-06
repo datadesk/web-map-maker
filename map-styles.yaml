@@ -4,9 +4,19 @@ global:
     water_color: '#c3d5dd'
     labels_visible: true
     landuse_style: polygons
-    countries_visible: true
+    labels_visible_countries: true
+    labels_visible_states: true
+    labels_visible_cities: true
+    labels_visible_highway_shields: true
+    labels_visible_major_roads: true
+    # terrain_visible: false
     buildings_visible: false
+    # roads_visible: true
+    # borders_visible: true
+    # landuse_visible: true
     transit_visible: false
+    # water_visible: true
+
 
 labels-global:
     - &freeway_labels         false
@@ -603,13 +613,13 @@ layers:
                         cap: square
 
         labels:
-            visible: global.labels_visible
             filter:
                 $zoom: { min: 7 }
                 not: { kind: [rail, aeroway], is_tunnel: true }
 
             major_road:
                 filter: { kind: major_road, $zoom: { min: 14 } }
+                visible: global.labels_visible_major_roads
                 draw:
                     text:
                         text_source: name
@@ -625,6 +635,7 @@ layers:
 
 
             minor_road:
+                visible: global.labels_visible
                 filter: { kind: minor_road, $zoom: { min: 17 } }
                 draw:
                     text:
@@ -639,7 +650,7 @@ layers:
                             stroke: {color: *background, width: 4}
 
         shields:
-            visible: global.labels_visible
+            visible: global.labels_visible_highway_shields
             filter: { network: true, shield_text: true, $zoom: { min: 7, max: 11 }, kind_detail: motorway }
             draw:
                 shields:
@@ -700,7 +711,7 @@ layers:
 
     buildings:
         data: { source: mapzen, layer: buildings }
-        filter: { $zoom: { min: 13 }}
+        filter: { $zoom: { min: 14 }}
         draw:
             polygons:
                 visible: global.buildings_visible
@@ -788,7 +799,7 @@ layers:
             draw:
                 text-blend-order:
                     priority: 3
-                    visible: global.countries_visible
+                    visible: global.labels_visible_countries
                     text_source: function() { return feature["name:en"] || feature["name"]; }
                     font:
                         fill: '#9C9C9C'
@@ -800,7 +811,7 @@ layers:
             draw:
                 text-blend-order:
                     priority: 3
-                    visible: global.countries_visible
+                    visible: global.labels_visible_countries
                     text_source: function() { if (feature["name:en"] == "People's Republic of China") { return "China"; } else { return feature["name:en"] || feature["name"]; }}
                     font:
                         fill: '#9C9C9C'
@@ -812,13 +823,13 @@ layers:
                 filter: { not: { name: ["United States of America","Brasil","中华人民共和国","España","Norge","Россия","Canada","Kalaallit Nunaat","Ísland","Australia","India","日本","Guam","Indonesia","South Africa","مصر","Nigeria","Kenya"] }, $zoom: {min: 3, max: 4} }
                 draw:
                     text-blend-order:
-                        visible: global.countries_visible
+                        visible: global.labels_visible_countries
         country-z4:
             filter: { name: true, population: true, kind: [country], $zoom: [4] }
             draw:
                 text-blend-order:
                     priority: 3
-                    visible: global.countries_visible
+                    visible: global.labels_visible_countries
                     text_source: function() { if (feature["name:en"] == "People's Republic of China") { return "China"; } else { return feature["name:en"] || feature["name"]; }}
                     font:
                         fill: '#9C9C9C'
@@ -829,7 +840,7 @@ layers:
                 filter: { name: [Nederland,Luxembourg,Liechtenstein,San Marino,Civitatis Vaticanæ,Crna Gora,Македонија,The Gambia,Burundi,Swaziland,الإمارات العربية المتحدة,العراق,Singapore,El Salvador,Belize,Trinidad and Tobago, Saint Lucia, Montserrat,Anguilla,República Dominicana,Bahamas,British Virgin Islands,Antigua and Barbuda,Grenada,Sint Maarten,Saint Kitts and Nevis,Cayman Islands,België - Belgique - Belgien], $zoom: {min: 4, max: 5} }
                 draw:
                     text-blend-order:
-                        visible: global.countries_visible
+                        visible: global.labels_visible_countries
         country-z5:
             filter:
                 all:
@@ -844,7 +855,7 @@ layers:
             draw:
                 text-blend-order:
                     priority: 3
-                    visible: global.countries_visible
+                    visible: global.labels_visible_countries
                     text_source: function() { if (feature["name:en"] == "People's Republic of China") { return "China"; } else { return feature["name:en"] || feature["name"]; }}
                     font:
                         fill: '#9C9C9C'
@@ -855,14 +866,14 @@ layers:
                 filter: { name: [Luxembourg,Liechtenstein,San Marino,Civitatis Vaticanæ,El Salvador,Belize,België - Belgique - Belgien], $zoom: {min: 5, max: 6} }
                 draw:
                     text-blend-order:
-                        visible: global.countries_visible
+                        visible: global.labels_visible_countries
         country-z6:
             # South Ossetia and Abkhazia aren't countries (they are disputed areas)
             filter: { name: true, kind: [country], $zoom: [6], not: { name: "United States of America" } }
             draw:
                 text-blend-order:
                     priority: 3
-                    visible: global.countries_visible
+                    visible: global.labels_visible_countries
                     text_source: function() { if (feature["name:en"] == "People's Republic of China") { return "China"; } else { return feature["name:en"] || feature["name"]; }}
                     font:
                         size: 26px
@@ -873,14 +884,14 @@ layers:
                 filter: { name: [Luxembourg,Liechtenstein,San Marino,Civitatis Vaticanæ,België - Belgique - Belgien,Хуссар Ирыстон,Аҧсны - Абхазия], $zoom: {min: 6, max: 7} }
                 draw:
                     text-blend-order:
-                        visible: global.countries_visible
+                        visible: global.labels_visible_countries
         country-z7:
             # South Ossetia and Abkhazia aren't countries (they are disputed areas)
             filter: { name: true, kind: [country], $zoom: { min: 7, max: 9 }, not: { name: ["United States of America", "Приднестровье"] } }
             draw:
                 text-blend-order:
                     priority: 3
-                    visible: global.countries_visible
+                    visible: global.labels_visible_countries
                     text_source: function() { if (feature["name:en"] == "People's Republic of China") { return "China"; } else { return feature["name:en"] || feature["name"]; }}
                     font:
                         size: 20px
@@ -891,13 +902,13 @@ layers:
                 filter: { name: [Liechtenstein,San Marino,Civitatis Vaticanæ,Хуссар Ирыстон,Аҧсны - Абхазия], $zoom: {min: 7, max: 8} }
                 draw:
                     text-blend-order:
-                        visible: global.countries_visible
+                        visible: global.labels_visible_countries
         regionz5-6:
             filter: { name: ["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"], kind: [region], $zoom: {min: 5, max: 7} }
             draw:
                 text-blend-order:
                     priority: 5
-                    visible: global.labels_visible
+                    visible: global.labels_visible_states
                     text_source: [name:en, name]
                     text_wrap: 10
                     font:
@@ -911,7 +922,7 @@ layers:
             draw:
                 text-blend-order:
                     priority: 5
-                    visible: global.labels_visible
+                    visible: global.labels_visible_states
                     text_source: function() { if(feature["name:short"]) { return feature["name"]; } else { return ""; } }
                     font:
                         size: 30px
@@ -941,7 +952,7 @@ layers:
                     filter: { min_zoom: [0] }
                     draw:
                         text-blend-order:
-                            visible: global.labels_visible
+                            visible: global.labels_visible_cities
                             offset: [0, 3px] # half icon size
                             font:
                                 size: 24px
@@ -951,7 +962,7 @@ layers:
                     filter: { min_zoom: [1,2,3,4,5] }
                     draw:
                         text-blend-order:
-                            visible: global.labels_visible
+                            visible: global.labels_visible_cities
                             offset: [0, 3px] # half icon size
                             priority: 8
                             font:
@@ -970,7 +981,7 @@ layers:
                 draw:
                     text-blend-order:
                         # anchor: center
-                        visible: global.labels_visible
+                        visible: global.labels_visible_cities
                         offset: [0, 3px] # half icon size
                         priority: 5
                         font:
@@ -989,7 +1000,7 @@ layers:
                 draw:
                     text-blend-order:
                         # anchor: center
-                        visible: global.labels_visible
+                        visible: global.labels_visible_cities
                         offset: [0, 3px] # half icon size
                         priority: 16
                         font:
@@ -1008,7 +1019,7 @@ layers:
                 draw:
                     text-blend-order:
                         # anchor: center
-                        visible: global.labels_visible
+                        visible: global.labels_visible_cities
                         offset: [0, 3px] # half icon size
                         priority: 16
                         font:
