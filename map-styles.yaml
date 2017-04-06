@@ -16,6 +16,12 @@ global:
     # landuse_visible: true
     transit_visible: false
     # water_visible: true
+    roads_visible_highways: true
+    roads_visible_highway_ramps: true
+    roads_visible_major: true
+    roads_visible_minor: true
+    roads_visible_service: true
+    roads_visible_taxi_and_runways: true
 
 
 labels-global:
@@ -251,7 +257,7 @@ layers:
                     width: [[13,1.0px],[16,1.5px],[18,2m]]
                     join: round
         river:
-            filter: { kind: [river,canal,stream,dam,ditch,drain], $zoom: { min: 13 } }
+            filter: { kind: [river,canal,dam,ditch,drain], $zoom: { min: 13 } }
             draw:
                 lines:
                     order: function() { return feature.sort_rank; }
@@ -527,6 +533,7 @@ layers:
             filter: { kind: highway }
             draw:
                 lines:
+                    visible: global.roads_visible_highways
                     order: 490
                     #cap: [[0,butt],[15,round]]
                     #join: round
@@ -538,6 +545,7 @@ layers:
                 filter: { is_link: true } # on- and off-ramps, etc
                 draw:
                     lines:
+                        visible: global.roads_visible_highway_ramps
                         color: global.road_color
                         width: [[8, 0.3px], [9, 0.4px], [12, 0.8px], [13, 1px], [14, 1.3px], [15, 2px], [16, 6m]]
                         cap: round
@@ -576,6 +584,7 @@ layers:
             filter: { kind: major_road }
             draw:
                 lines:
+                    visible: global.roads_visible_major
                     order: function() { return feature.sort_rank; }
                     color: global.road_color
                     width: [[8, 0.3px], [9, 0.4px], [12, 0.8px], [13, 1px], [14, 1.3px], [15, 2px], [16, 6m]]
@@ -583,6 +592,7 @@ layers:
             filter: { kind: minor_road, not: { kind_detail: service } }
             draw:
                 lines:
+                    visible: global.roads_visible_minor
                     order: function() { return feature.sort_rank; }
                     color: global.road_color
                     width: [[12,0px], [13, 0.15px], [14, 0.3px], [15, 1px], [16, 2m]]
@@ -590,6 +600,15 @@ layers:
             filter: { kind_detail: service }
             draw:
                 lines:
+                    visible: global.roads_visible_service
+                    order: function() { return feature.sort_rank; }
+                    color: global.road_color
+                    width: 1m
+        track:
+            filter: { kind_detail: track }
+            draw:
+                lines:
+                    visible: global.roads_visible_service
                     order: function() { return feature.sort_rank; }
                     color: global.road_color
                     width: 1m
@@ -597,18 +616,21 @@ layers:
             filter: { kind: aeroway }
             draw:
                 lines:
+                    visible: global.roads_visible_taxi_and_runways
                     color: *aeroway
 
             taxiways:
                 filter: { kind_detail: taxiway }
                 draw:
                     lines:
+                        visible: global.roads_visible_taxi_and_runways
                         width: [[13, 0px], [14, 2px], [17, 10px]]
 
             runways:
                 filter: { kind_detail: runway }
                 draw:
                     lines:
+                        visible: global.roads_visible_taxi_and_runways
                         width: [[11, 3px], [12, 5px], [13, 10px], [15, 75]]
                         cap: square
 
@@ -632,11 +654,9 @@ layers:
                             family: 'Benton Gothic Regular, Arial'
                             size: 26px
                             stroke: { color: *background, width: 4 }
-
-
             minor_road:
                 visible: global.labels_visible
-                filter: { kind: minor_road, $zoom: { min: 17 } }
+                filter: { kind: minor_road, $zoom: { min: 16 } }
                 draw:
                     text:
                         text_source: name
@@ -648,10 +668,9 @@ layers:
                             family: 'Benton Gothic Regular, Arial'
                             size: 26px
                             stroke: {color: *background, width: 4}
-
         shields:
-            visible: global.labels_visible_highway_shields
             filter: { network: true, shield_text: true, $zoom: { min: 7, max: 11 }, kind_detail: motorway }
+            visible: global.labels_visible_highway_shields
             draw:
                 shields:
                     sprite:
@@ -683,7 +702,7 @@ layers:
             #         shields:
             #             repeat_distance: 75px
         small-shields:
-            visible: global.labels_visible
+            visible: global.labels_visible_highway_shields
             filter: { network: true, shield_text: true, $zoom: { min: 11 } }
             draw:
                 shields:
@@ -802,6 +821,7 @@ layers:
                     visible: global.labels_visible_countries
                     text_source: function() { return feature["name:en"] || feature["name"]; }
                     font:
+                        transform: uppercase
                         fill: '#9C9C9C'
                         weight: 200
                         size: 26px
@@ -814,6 +834,7 @@ layers:
                     visible: global.labels_visible_countries
                     text_source: function() { if (feature["name:en"] == "People's Republic of China") { return "China"; } else { return feature["name:en"] || feature["name"]; }}
                     font:
+                        transform: uppercase
                         fill: '#9C9C9C'
                         weight: 200
                         size: 26px
@@ -832,6 +853,7 @@ layers:
                     visible: global.labels_visible_countries
                     text_source: function() { if (feature["name:en"] == "People's Republic of China") { return "China"; } else { return feature["name:en"] || feature["name"]; }}
                     font:
+                        transform: uppercase
                         fill: '#9C9C9C'
                         weight: 200
                         size: 26px
@@ -858,6 +880,7 @@ layers:
                     visible: global.labels_visible_countries
                     text_source: function() { if (feature["name:en"] == "People's Republic of China") { return "China"; } else { return feature["name:en"] || feature["name"]; }}
                     font:
+                        transform: uppercase
                         fill: '#9C9C9C'
                         weight: 600
                         size: 26px
@@ -876,6 +899,7 @@ layers:
                     visible: global.labels_visible_countries
                     text_source: function() { if (feature["name:en"] == "People's Republic of China") { return "China"; } else { return feature["name:en"] || feature["name"]; }}
                     font:
+                        transform: uppercase
                         size: 26px
                         weight: 600
                         fill: '#9C9C9C'
@@ -894,7 +918,8 @@ layers:
                     visible: global.labels_visible_countries
                     text_source: function() { if (feature["name:en"] == "People's Republic of China") { return "China"; } else { return feature["name:en"] || feature["name"]; }}
                     font:
-                        size: 20px
+                        transform: uppercase
+                        size: 26px
                         weight: 600
                         fill: '#9C9C9C'
                         stroke: { color: *background, width: 4 }

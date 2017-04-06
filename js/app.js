@@ -167,6 +167,19 @@ map.on('zoomend', function() {
         $("#labels_visible_states").parent().removeClass("unavailable"); // update btn opacity
     }
 
+    if (zoomRounded < 12) { 
+        $("#roads_visible_minor").parent().addClass("unavailable"); 
+    } else {
+        $("#roads_visible_minor").parent().removeClass("unavailable"); 
+    }
+
+    if (zoomRounded < 15) { 
+        $("#roads_visible_service").parent().addClass("unavailable"); 
+    } else {
+        $("#roads_visible_service").parent().removeClass("unavailable"); 
+    }
+
+
 });
 
 // function to fire after map's parent is resized
@@ -518,50 +531,50 @@ setTimeout(
 
 };
 
-function showPrint() {
-    // swap to print color
-    scene.config.global.road_color = '#98a5ac';
+// function showPrint() {
+//     // swap to print color
+//     scene.config.global.road_color = '#98a5ac';
 
-    // bump up size of major roads
-    scene.config.layers.roads.major_road.draw.lines.width[3][1] = '1.5px';
-    scene.config.layers.roads.major_road.draw.lines.width[4][1] = '2.5px';
-    scene.config.layers.roads.major_road.draw.lines.width[5][1] = '3.5px';
-    scene.config.layers.roads.major_road.draw.lines.width[6][1] = '10m';
+//     // bump up size of major roads
+//     scene.config.layers.roads.major_road.draw.lines.width[3][1] = '1.5px';
+//     scene.config.layers.roads.major_road.draw.lines.width[4][1] = '2.5px';
+//     scene.config.layers.roads.major_road.draw.lines.width[5][1] = '3.5px';
+//     scene.config.layers.roads.major_road.draw.lines.width[6][1] = '10m';
 
-    // bump up size of minor roads
-    scene.config.layers.roads.minor_road.draw.lines.width[1][1] = '0.5px';
-    scene.config.layers.roads.minor_road.draw.lines.width[2][1] = '0.5px';
+//     // bump up size of minor roads
+//     scene.config.layers.roads.minor_road.draw.lines.width[1][1] = '0.5px';
+//     scene.config.layers.roads.minor_road.draw.lines.width[2][1] = '0.5px';
 
-    // make water darker
-    scene.config.global.water_color = '#a6bcd3';
+//     // make water darker
+//     scene.config.global.water_color = '#a6bcd3';
 
-    // turn off labels
-    labelsVisible = true;
-    showLabels();
+//     // turn off labels
+//     labelsVisible = true;
+//     showLabels();
 
-    scene.updateConfig(); // update config
+//     scene.updateConfig(); // update config
 
-    // update buttons
-    $("#print_btn").addClass("active");
-    $("#web_btn").removeClass("active");
+//     // update buttons
+//     $("#print_btn").addClass("active");
+//     $("#web_btn").removeClass("active");
 
-    // hide attribution
-    $(".leaflet-control-attribution").hide();
+//     // hide attribution
+//     $(".leaflet-control-attribution").hide();
 
-}
+// }
 
-function showWeb() {
-    scene.load('map-styles.yaml');
-    buildingsVisible = false;
-    // update buttons
-    $("#print_btn").removeClass("active");
-    $("#web_btn").addClass("active");
-    $("#auto_labels_btn").addClass("active");
-    labelsVisible = true;
+// function showWeb() {
+//     scene.load('map-styles.yaml');
+//     buildingsVisible = false;
+//     // update buttons
+//     $("#print_btn").removeClass("active");
+//     $("#web_btn").addClass("active");
+//     $("#auto_labels_btn").addClass("active");
+//     labelsVisible = true;
 
-    // bring back attribution
-    $(".leaflet-control-attribution").show();
-}
+//     // bring back attribution
+//     $(".leaflet-control-attribution").show();
+// }
 
 // Apple's Magic Mouse is a little finicky--prevent scroll when mouse is down on map
 $("#map").mousedown(function() {
@@ -703,7 +716,7 @@ var layers = {
     'buildings_visible': [],
     'transit_visible': [],
     'labels_visible': ['countries','states','cities','neighborhoods','highway_shields','major_roads','points_of_interest'],
-    'roads_visible': ['highways','highway_ramps','major_roads','minor_roads','service','taxi_and_runways'],
+    'roads_visible': ['highways','highway_ramps','major','minor','service','taxi_and_runways'],
     'borders_visible': ['countries','disputed','states','counties'],
     'landuse_visible': ['airports','arena','beach','cemetery','college','commercial','farm','forest','hospital','industrial','kindergarten','military','park','parking','pier','place_of_worship','prison','school','stadium','wetland'],
     'water_visible': ['ocean','inland_water','swimming_pools']
@@ -759,6 +772,9 @@ if (initZoom > 9 || initZoom < 5) { $("#labels_visible_states").parent().addClas
 
 if (initZoom > 9 || initZoom < 2) { $("#labels_visible_countries").parent().addClass("unavailable"); }
 
+if (initZoom < 12) { $("#roads_visible_minor").parent().addClass("unavailable"); }
+
+if (initZoom < 15) { $("#roads_visible_service").parent().addClass("unavailable"); }
 
 
 var expanded = false;
