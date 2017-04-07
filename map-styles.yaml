@@ -22,6 +22,7 @@ global:
     roads_visible_minor: true
     roads_visible_service: true
     roads_visible_taxi_and_runways: true
+    water_visible_swimming_pools: true
 
 
 labels-global:
@@ -270,7 +271,7 @@ layers:
         filter: { kind:[swimming_pool], $zoom: { min: 17 } }
         draw:
             polygons:
-                visible: true
+                visible: global.water_visible_swimming_pools
                 order: function() { return feature.sort_rank; }
                 color: "#d1e1e8"
 
@@ -645,9 +646,10 @@ layers:
                 draw:
                     text:
                         text_source: name
+                        anchor: bottom
                         offset: [0px, -14px]
                         order: function() { return feature.sort_rank; }
-                        repeat_distance: 200px
+                        repeat_distance: 400px
                         priority: 3
                         font:
                             fill: '#666'

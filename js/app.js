@@ -167,16 +167,31 @@ map.on('zoomend', function() {
         $("#labels_visible_states").parent().removeClass("unavailable"); // update btn opacity
     }
 
+    // highway shields
+    if (zoomRounded <= 7) {
+        $("#labels_visible_highway_shields").parent().addClass("unavailable"); // update btn opacity
+    } else {
+        $("#labels_visible_highway_shields").parent().removeClass("unavailable"); // update btn opacity
+    }
+
+    // minor roads
     if (zoomRounded < 12) { 
         $("#roads_visible_minor").parent().addClass("unavailable"); 
     } else {
         $("#roads_visible_minor").parent().removeClass("unavailable"); 
     }
 
+    // service roads
     if (zoomRounded < 15) { 
         $("#roads_visible_service").parent().addClass("unavailable"); 
     } else {
         $("#roads_visible_service").parent().removeClass("unavailable"); 
+    }
+
+    if (zoomRounded < 17) {
+        $("#water_visible_swimming_pools").parent().addClass("unavailable"); 
+    } else {
+        $("#water_visible_swimming_pools").parent().removeClass("unavailable"); 
     }
 
 
@@ -776,6 +791,7 @@ if (initZoom < 12) { $("#roads_visible_minor").parent().addClass("unavailable");
 
 if (initZoom < 15) { $("#roads_visible_service").parent().addClass("unavailable"); }
 
+if (initZoom < 17) { $("#water_visible_swimming_pools").parent().addClass("unavailable"); }
 
 var expanded = false;
 
