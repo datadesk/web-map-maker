@@ -834,15 +834,18 @@ function parentChecks() {
 
 
     // check labels
-    containsCount(allLabels,visibleLayers,'labels_visible');
+    containsCount(allLabels,'labels_visible');
 
     // check roads
-    containsCount(allRoads,visibleLayers,'roads_visible');
+    containsCount(allRoads,'roads_visible');
 
-    function containsCount(needles, haystack, id){
+    // check borders
+    containsCount(allBorders,'borders_visible');
+
+    function containsCount(needles, id){
         var matchCount = 0;
         for (var i = 0 , len = needles.length; i < len; i++){
-            if($.inArray(needles[i], haystack) != -1) matchCount++;
+            if($.inArray(needles[i], visibleLayers) != -1) matchCount++;
         }
         if (matchCount === needles.length) {
             $("#"+id).prop('indeterminate',false);
@@ -866,6 +869,24 @@ function parentChecks() {
 $("#checkboxes label input").click(function(){
 
     var thisID = $(this).attr("id");
+
+
+    // if terrain
+    if (thisID == 'terrain_visible') {
+        if ($("#"+thisID).prop("checked")) {
+            scene.config.global.landuse_style = 'terrain';
+            scene.config.layers.earth.draw.polygons.visible = false;
+            scene.config.layers.earth.draw.terrain.visible = true;
+        } else {
+            scene.config.global.landuse_style = 'polygons';
+            scene.config.layers.earth.draw.polygons.visible = true;
+            scene.config.layers.earth.draw.terrain.visible = false;
+        }
+
+    }
+
+
+
 
     parentChecks();
     // grab all checked layers
