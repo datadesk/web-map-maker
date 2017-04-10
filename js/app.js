@@ -194,6 +194,12 @@ map.on('zoomend', function() {
         $("#water_visible_swimming_pools").parent().removeClass("unavailable"); 
     }
 
+    if (zoomRounded < 10) {
+        $("#borders_visible_counties").parent().addClass("unavailable"); 
+    } else {
+        $("#borders_visible_counties").parent().removeClass("unavailable"); 
+    }
+
 
 });
 
@@ -793,6 +799,8 @@ if (initZoom < 15) { $("#roads_visible_service").parent().addClass("unavailable"
 
 if (initZoom < 17) { $("#water_visible_swimming_pools").parent().addClass("unavailable"); }
 
+if (initZoom < 10) { $("#borders_visible_counties").parent().addClass("unavailable"); }
+
 var expanded = false;
 
 function showCheckboxes() {
@@ -808,12 +816,8 @@ function showCheckboxes() {
 
 }
 
-// listen for checkbox click
-$("#checkboxes label input").click(function(){
-
-    var thisID = $(this).attr("id");
-
-    // grab all checked layers
+// function to check on parent checkboxes
+function parentChecks() {
     var checkedBoxes = document.querySelectorAll('input[name=layers]:checked');
     var visibleLayers = [];
     for (var i = 0; i < checkedBoxes.length; i++) {
@@ -821,6 +825,21 @@ $("#checkboxes label input").click(function(){
     }
 
     console.log(visibleLayers);
+}
+
+// listen for checkbox click
+$("#checkboxes label input").click(function(){
+
+    var thisID = $(this).attr("id");
+
+    parentChecks();
+    // grab all checked layers
+    // var visibleLayers = [];
+    // for (var i = 0; i < checkedBoxes.length; i++) {
+    //     visibleLayers.push(checkedBoxes[i].id);
+    // }
+
+    // console.log(visibleLayers);
     // // loop through layers to show/hide
     // if (visibleLayers.indexOf('labels_visible') != -1) {
     //     scene.config.global['labels_visible'] = true;

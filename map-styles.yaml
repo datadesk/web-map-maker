@@ -67,7 +67,7 @@ quiet-la-colors:
         - &place_of_worship '#e3c5c9'
         - &admin            '#000000'
     borders:
-        - &county_brdr      '#8a7c7c'
+        - &county_brdr      '#a39a96'
         - &california_brdr  '#827676'
         - &nation_brdr      '#a7a8ab'
         - &state_brdr       '#cbced1'
@@ -90,7 +90,7 @@ sources:
         max_zoom: 15
         url_params:
             api_key: global.mapzen_api_key
-    counties:
+    hello:
         type: TopoJSON
         url: https://gist.githubusercontent.com/mbostock/4090846/raw/c899e3d4f3353924e495667c842f54a07090cfab/us.json
 
@@ -149,6 +149,9 @@ styles:
     dashed-lines:
         base: lines
         dash: [4,1]
+    long-dash:
+        base: lines
+        dash: [10,1]
     text-blend-order:
         base: text
         blend_order: 1
@@ -341,26 +344,22 @@ layers:
                     lines:
                         visible: false
         counties:
-            data: { source: counties }
+            filter:
+                all:
+                    - kind: [county]
+                    # - kind_detail: 6
+                    - $zoom: { min: 6 } 
             draw:
-                lines:
+                long-dash:
+                    visible: global.borders_visible_counties
                     order: 101
-                    color: purple
-                    width: [[7, .5px], [9, 1px], [14, 5px]]
-            # filter:
-            #     any:
-            #         - kind_detail: 6
-            # draw:
-            #     lines:
-            #         color: '#000000'
-            #         width: 10px
-            #         # width: [[1, 0.5px], [2, 0.75px], [3, 1px], [5, 1.5px], [9, 3.5px], [14, 5.5px], [16, 6.5px], [17, 16m]]
-            #         order: 1000
-            # water:
-            #     filter: { maritime_boundary: true }
-            #     draw:
-            #         lines:
-            #             visible: false
+                    color: *county_brdr
+                    width: 1.5px
+            water:
+                filter: { maritime_boundary: true }
+                draw:
+                    lines:
+                        visible: false
     landuse:
         data: { source: mapzen, layer: landuse }
         draw:
