@@ -22,6 +22,10 @@ global:
     roads_visible_minor: true
     roads_visible_service: true
     roads_visible_taxi_and_runways: true
+    borders_visible_countries: true
+    borders_visible_disputed: true
+    borders_visible_states: true
+    borders_visible_counties: true
     water_visible_swimming_pools: true
 
 
@@ -86,6 +90,9 @@ sources:
         max_zoom: 15
         url_params:
             api_key: global.mapzen_api_key
+    counties:
+        type: TopoJSON
+        url: https://gist.githubusercontent.com/mbostock/4090846/raw/c899e3d4f3353924e495667c842f54a07090cfab/us.json
 
 textures:
     shields:
@@ -287,6 +294,7 @@ layers:
                     - kind_detail: 2
             draw:
                 lines:
+                    visible: global.borders_visible_countries
                     color: *nation_brdr
                     width: [[1, 0.5px], [2, 1.0px], [4, 1.5px], [9, 2.5px], [14, 3.5px], [16, 4.5px], [17, 14m]]
                     dash: [2,1]
@@ -302,6 +310,7 @@ layers:
                     - kind_detail: 2,4,6,8
             draw:
                 dashed-lines:
+                    visible: global.borders_visible_disputed
                     color: *nation_brdr
                     width: [[1, 0.5px], [2, 1.0px], [4, 1.5px], [9, 2.5px], [14, 3.5px], [16, 4.5px], [17, 14m]]
             water:
@@ -318,6 +327,7 @@ layers:
                     - kind_detail: 4
             draw:
                 lines:
+                    visible: global.borders_visible_states
                     color: [[6,*state_brdr],[7,*nation_brdr]]
                     width: [[1, 0.25px], [2, 0.5px], [4, 1.5px], [9, 1.5px], [14, 2px], [16, 2.5px], [17, 7m]]
             water:
@@ -330,20 +340,27 @@ layers:
                 draw:
                     lines:
                         visible: false
-        # county:
-        #     filter:
-        #         any:
-        #             - kind_detail: 6
-        #     draw:
-        #         lines:
-        #             color: *county_brdr
-        #             width: [[1, 0.5px], [2, 0.75px], [3, 1px], [5, 1.5px], [9, 3.5px], [14, 5.5px], [16, 6.5px], [17, 16m]]
-        #             order: 400
-        #     water:
-        #         filter: { maritime_boundary: true }
-        #         draw:
-        #             lines:
-        #                 visible: false
+        counties:
+            data: { source: counties }
+            draw:
+                lines:
+                    order: 101
+                    color: purple
+                    width: [[7, .5px], [9, 1px], [14, 5px]]
+            # filter:
+            #     any:
+            #         - kind_detail: 6
+            # draw:
+            #     lines:
+            #         color: '#000000'
+            #         width: 10px
+            #         # width: [[1, 0.5px], [2, 0.75px], [3, 1px], [5, 1.5px], [9, 3.5px], [14, 5.5px], [16, 6.5px], [17, 16m]]
+            #         order: 1000
+            # water:
+            #     filter: { maritime_boundary: true }
+            #     draw:
+            #         lines:
+            #             visible: false
     landuse:
         data: { source: mapzen, layer: landuse }
         draw:
@@ -646,8 +663,8 @@ layers:
                 draw:
                     text:
                         text_source: name
-                        anchor: bottom
-                        offset: [0px, -14px]
+                        # anchor: bottom
+                        offset: [0px, -13px]
                         order: function() { return feature.sort_rank; }
                         repeat_distance: 400px
                         priority: 3
@@ -827,7 +844,7 @@ layers:
                         fill: '#9C9C9C'
                         weight: 200
                         size: 26px
-                        stroke: { color: *background, width: 4 }
+                        stroke: { color: '#fff', width: 4 }
         country-z3:
             filter: { name: true, population: true, kind: [country], $zoom: [3] }
             draw:
