@@ -819,6 +819,12 @@ function showCheckboxes() {
 
 }
 
+// // list of all labels by group
+// var allLabels = ['labels_visible_countries','labels_visible_states','labels_visible_cities','labels_visible_neighborhoods','labels_visible_highway_shields','labels_visible_major_roads','labels_visible_points_of_interest'],
+//     allRoads = ['roads_visible_highways','roads_visible_highway_ramps','roads_visible_major','roads_visible_minor','roads_visible_service','roads_visible_taxi_and_runways'],
+//     allBorders = ['borders_visible_countries','borders_visible_disputed','borders_visible_states','borders_visible_counties'];
+
+
 // function to check on parent checkboxes
 function parentChecks() {
     var checkedBoxes = document.querySelectorAll('input[name=layers]:checked');
@@ -827,25 +833,24 @@ function parentChecks() {
         visibleLayers.push(checkedBoxes[i].id);
     }
 
-    var allLabels = ['labels_visible_countries','labels_visible_states','labels_visible_cities','labels_visible_neighborhoods','labels_visible_highway_shields','labels_visible_major_roads','labels_visible_points_of_interest'],
-        allRoads = ['roads_visible_highways','roads_visible_highway_ramps','roads_visible_major','roads_visible_minor','roads_visible_service','roads_visible_taxi_and_runways'],
-        allBorders = ['borders_visible_countries','borders_visible_disputed','borders_visible_states','borders_visible_counties'];
 
 
 
     // check labels
-    containsCount(allLabels,'labels_visible');
+    containsCount(layers.labels_visible,'labels_visible');
 
     // check roads
-    containsCount(allRoads,'roads_visible');
+    containsCount(layers.roads_visible,'roads_visible');
 
     // check borders
-    containsCount(allBorders,'borders_visible');
+    containsCount(layers.borders_visible,'borders_visible');
 
+    // figure out how strong a match count of layers
     function containsCount(needles, id){
+        console.log(needles);
         var matchCount = 0;
         for (var i = 0 , len = needles.length; i < len; i++){
-            if($.inArray(needles[i], visibleLayers) != -1) matchCount++;
+            if($.inArray(id+"_"+needles[i], visibleLayers) != -1) matchCount++;
         }
         if (matchCount === needles.length) {
             $("#"+id).prop('indeterminate',false);
@@ -882,7 +887,6 @@ $("#checkboxes label input").click(function(){
             scene.config.layers.earth.draw.polygons.visible = true;
             scene.config.layers.earth.draw.terrain.visible = false;
         }
-
     }
 
 
