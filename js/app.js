@@ -659,7 +659,7 @@ if (typeof configOptions !== 'undefined') {
     var geocoder = new BingGeocodifier('geocodifier', {
         key: configOptions.bingAPI,
         onClick: function(item, coords) {
-            console.log(item);
+            // console.log(item);
             map.panTo(item.geocodePoints[0].coordinates);
 
             // check for popup text
@@ -760,12 +760,14 @@ Object.keys(layers).forEach(function(key) {
 // check what layers are available on init
 scene.subscribe({
     load: function (e) {
-        console.log(scene.config);
+
+
+        // console.log(scene.config);
 
 
         // loop through layers list
         Object.keys(layers).forEach(function(key) {
-            console.log(key);
+            // console.log(key);
             // $("#"+key).attr("checked",scene.config.global[key]);
 
             // loop through the sublayers
@@ -773,12 +775,13 @@ scene.subscribe({
                 var sublayer = key + "_" + layers[key][i];
                 $("#"+sublayer).attr("checked",scene.config.global[sublayer]);
 
-                console.log("  " + layers[key][i]);
+                // console.log("  " + layers[key][i]);
             }
                                       
             // console.log(key, layers[key]);
 
         });
+        parentChecks(); // check which parents need selecting
 
     }
 });
@@ -824,6 +827,38 @@ function parentChecks() {
         visibleLayers.push(checkedBoxes[i].id);
     }
 
+    var allLabels = ['labels_visible_countries','labels_visible_states','labels_visible_cities','labels_visible_neighborhoods','labels_visible_highway_shields','labels_visible_major_roads','labels_visible_points_of_interest'],
+        allRoads = ['roads_visible_highways','roads_visible_highway_ramps','roads_visible_major','roads_visible_minor','roads_visible_service','roads_visible_taxi_and_runways'],
+        allBorders = ['borders_visible_countries','borders_visible_disputed','borders_visible_states','borders_visible_counties'];
+
+
+
+    // check labels
+    containsCount(allLabels,visibleLayers,'labels_visible');
+
+    // check roads
+    containsCount(allRoads,visibleLayers,'roads_visible');
+
+    function containsCount(needles, haystack, id){
+        var matchCount = 0;
+        for (var i = 0 , len = needles.length; i < len; i++){
+            if($.inArray(needles[i], haystack) != -1) matchCount++;
+        }
+        if (matchCount === needles.length) {
+            $("#"+id).prop('indeterminate',false);
+            $("#"+id).prop('checked',true);
+        } else if (matchCount > 0) {
+            $("#"+id).prop('checked',false);
+            $("#"+id).prop('indeterminate',true);
+        } else {
+            $("#"+id).prop('checked',false);
+            $("#"+id).prop('indeterminate',false);
+        }
+
+    }
+
+
+    // if ("labels_")
     console.log(visibleLayers);
 }
 
