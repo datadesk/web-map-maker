@@ -174,6 +174,13 @@ map.on('zoomend', function() {
         $("#labels_visible_highway_shields").parent().removeClass("unavailable"); // update btn opacity
     }
 
+    // major roads
+    if (zoomRounded < 14) {
+        $("#labels_visible_major_roads").parent().addClass("unavailable");
+    } else {
+        $("#labels_visible_major_roads").parent().removeClass("unavailable"); 
+    }
+
     // minor roads
     if (zoomRounded < 12) { 
         $("#roads_visible_minor").parent().addClass("unavailable"); 
@@ -803,6 +810,8 @@ if (initZoom < 15) { $("#roads_visible_service").parent().addClass("unavailable"
 if (initZoom < 17) { $("#water_visible_swimming_pools").parent().addClass("unavailable"); }
 
 if (initZoom < 10) { $("#borders_visible_counties").parent().addClass("unavailable"); }
+
+if (initZoom < 14) { $("#labels_visible_major_roads").parent().addClass("unavailable"); }
 
 var expanded = false;
 
