@@ -846,17 +846,20 @@ function parentChecks() {
 
 
     // check labels
-    containsCount(layers.labels_visible,'labels_visible');
+    containsCount('labels_visible');
 
     // check roads
-    containsCount(layers.roads_visible,'roads_visible');
+    containsCount('roads_visible');
 
     // check borders
-    containsCount(layers.borders_visible,'borders_visible');
+    containsCount('borders_visible');
+
+    // check water
+    containsCount('water_visible')
 
     // figure out how strong a match count of layers
-    function containsCount(needles, id){
-        console.log(needles);
+    function containsCount(id){
+        var needles = layers[id];
         var matchCount = 0;
         for (var i = 0 , len = needles.length; i < len; i++){
             if($.inArray(id+"_"+needles[i], visibleLayers) != -1) matchCount++;

@@ -26,6 +26,8 @@ global:
     borders_visible_disputed: true
     borders_visible_states: true
     borders_visible_counties: true
+    water_visible_ocean: true
+    water_visible_inland_water: true
     water_visible_swimming_pools: true
 
 
@@ -218,6 +220,7 @@ layers:
         filter: { kind: ocean }
         draw:
             polygons:
+                visible: global.water_visible_ocean
                 order: function() { return feature.sort_rank; }
                 color: global.water_color
                 join: round
@@ -234,6 +237,7 @@ layers:
         filter: { not: { kind: [ocean,swimming_pool,playa] }, $zoom: { min: 1 } }
         draw:
             polygons:
+                visible: global.water_visible_inland_water
                 order: function() { return feature.sort_rank; }
                 color: global.water_color
         inland-water:
@@ -242,16 +246,19 @@ layers:
                     - kind: [lake, water, riverbank, reservoir, playa]
             draw:
                 polygons:
+                    visible: global.water_visible_inland_water
                     color: global.water_color
         other-water-areas:
             filter: { not: { kind: [lake, water, reservoir, playa] }, $zoom: { min: 11 }, area: { min: 100 } }
             draw:
                 polygons:
+                    visible: global.water_visible_inland_water
                     color: global.water_color
         playas:
             filter: { kind: playa, $zoom: {min: 6} }
             draw:
                 polygons:
+                    visible: global.water_visible_inland_water
                     color: global.water_color
         water_boundaries-not-ocean:
             filter:
@@ -263,6 +270,7 @@ layers:
                     - { $zoom: { min: 15 } }
             draw:
                 lines:
+                    visible: global.water_visible_inland_water
                     order: function() { return feature.sort_rank; }
                     color: global.water_color
                     width: [[13,1.0px],[16,1.5px],[18,2m]]
@@ -271,6 +279,7 @@ layers:
             filter: { kind: [river,canal,dam,ditch,drain], $zoom: { min: 13 } }
             draw:
                 lines:
+                    visible: global.water_visible_inland_water
                     order: function() { return feature.sort_rank; }
                     color: global.water_color
                     width: [[13,1px],[14,2px],[16,3px],[18,4m]]
@@ -283,7 +292,7 @@ layers:
             polygons:
                 visible: global.water_visible_swimming_pools
                 order: function() { return feature.sort_rank; }
-                color: "#d1e1e8"
+                color: global.water_color
 
     boundaries:
         data: { source: mapzen, layer: boundaries }
