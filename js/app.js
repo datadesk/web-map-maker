@@ -702,7 +702,7 @@ var mapLoadAction = true;
 // show that map is still loading
 function mapLoading() {
     if (scene.tile_manager.isLoadingVisibleTiles()) {
-        $("#download_img").html('Image loading...<img src="images/preloader.gif" alt="Preloader" id="map_loader" />');
+        $("#download_img").html('Map loading...<img src="images/preloader.gif" alt="Preloader" id="map_loader" />');
         $("#download_img").addClass("gray");
         mapLoadAction = true;
     }
