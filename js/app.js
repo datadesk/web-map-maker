@@ -267,38 +267,6 @@ $("#map_holder").resize(function(){
     );
 });
 
-scene.container.onmousemove = handleMouseMove;
-
-function handleMouseMove(event) {
-    var dot, eventDoc, doc, body, pageX, pageY;
-
-    event = event || window.event; // IE-ism
-
-    var pixel = {
-        x: event.clientX - $map.offset().left,
-        y: event.clientY - $map.offset().top + $(window).scrollTop()
-    };
-    scene.getFeatureAt(pixel).then(function(selection) {
-        // console.log(pixel);
-        if (!selection) {
-            return;
-        }
-        var feature = selection.feature;
-        if (feature !== null) {
-            if (feature.properties !== null) {
-                // console.log(feature);
-
-                if (feature.properties.kind == 'highway'){
-                    // console.log(feature.properties.ref);
-                } else {
-                    // console.log(feature.properties.name);
-                }
-            }
-        }
-    });
-}
-
-
 function slugify(v){
     var slug = v.toLowerCase();
     // Switch spaces to slugs
@@ -445,98 +413,16 @@ function downloadIMG() {
 var frozenZoom = false;
 
 function findFirstDescendant(parent, tagname) {
-parent = document.getElementById(parent);
-var descendants = parent.getElementsByTagName(tagname);
-if ( descendants.length )
-  return descendants[0];
-return null;
+    parent = document.getElementById(parent);
+    var descendants = parent.getElementsByTagName(tagname);
+    if ( descendants.length )
+        return descendants[0];
+    return null;
 }
 
 var transitVisible = false;
 var labelsVisible = true;
 var terrainVisible = false;
-
-
-// function showTerrain() {
-// // store landuse parent
-// var landuse = scene.config.layers.landuse;
-// mapLoading();
-// if (terrainVisible) {
-
-//     // change earth to terrain
-//     scene.config.layers.earth.draw.polygons.visible = true;
-//     scene.config.layers.earth.draw.terrain.visible = false;
-
-
-//     // update base landuse
-//     scene.config.global.landuse_style = 'polygons';
-
-//     scene.updateConfig(); // update config
-//     $("#terrain_btn").removeClass("active"); // update button
-
-//     terrainVisible = false;
-// } else {
-
-//     // change earth to terrain
-//     scene.config.layers.earth.draw.polygons.visible = false;
-//     scene.config.layers.earth.draw.terrain.visible = true;
-
-//     // update base landuse
-
-//     scene.config.global.landuse_style = 'terrain';
-
-//     scene.updateConfig(); // update config
-//     terrainVisible = true;
-//     $("#terrain_btn").addClass("active"); // update button
-// }
-// }
-
-// function showTransit() {
-// // check zoom
-// if (map.getZoom() >= 11) {
-//     if (transitVisible) {
-//         // remove transit
-//         scene.config.layers.transit.visible = false;
-//         scene.config.layers['transit-overlay-station-labels'].visible = false;
-//         scene.updateConfig(); // update config
-//         $("#transit_btn").removeClass("active"); // update button
-//         transitVisible = false;
-//     } else {
-//         // add transit layer
-//         scene.config.layers.transit.visible = true;
-//         scene.config.layers['transit-overlay-station-labels'].visible = true;
-//         scene.updateConfig(); // update config
-//         $("#transit_btn").addClass("active"); // update button
-//         transitVisible = true;
-//     }
-// }
-// }
-
-// // auto labels
-// function showLabels() {
-
-// // check current status
-// if (labelsVisible) {
-//     // turn all these label layers hidden
-//     scene.config.global.labels_visible = false;
-
-//     labelsVisible = false;
-
-//     scene.updateConfig(); // update config
-//     $("#auto_labels_btn").removeClass("active"); // update button
-// } else {
-//     // turn all these label layers visible
-//     scene.config.global.labels_visible = true;
-
-//     scene.updateConfig(); // update config
-//     $("#auto_labels_btn").addClass("active"); // update button
-
-//     labelsVisible = true;
-// }
-
-
-// }
-
 
 // watching for anytime the size preset dropdown fires
 var sizeChange = function(option) {
