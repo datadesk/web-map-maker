@@ -50,7 +50,6 @@ quiet-la-colors:
         - &text             '#757575'
     areas:
         - &background       '#efebe7'
-        - &land             '#f4f2ed'
         - &school           '#e9e5eb'
         - &beach            '#ebe2cd'
         - &runway           '#bfbebd'
@@ -611,7 +610,7 @@ layers:
                             size: 26px
                             stroke: { color: *background, width: 4 }
             minor_road:
-                visible: global.labels_visible
+                visible: global.labels_visible_major_roads
                 filter: { kind: minor_road, $zoom: { min: 16 } }
                 draw:
                     text:
@@ -986,7 +985,6 @@ layers:
                         - kind: locality
                 draw:
                     text-blend-order:
-                        # anchor: center
                         visible: global.labels_visible_cities
                         offset: [0, 3px] # half icon size
                         priority: 16
