@@ -370,17 +370,6 @@ function downloadIMG() {
                         var canvas = document.getElementById("canvas");
                         var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
 
-                        // fire if sendToS3 exists
-                        if (typeof sendToS3 !== "undefined") { 
-                            sendToS3(mapSlug + datetime + ".png", image)
-                                .then(sendToP2P(mapSlug + datetime))
-                                .then(function() {
-                                    console.log("great success!");
-                                }).catch(function() {
-                                    console.log("womp womp");
-                                });
-                        }
-
                         lnk.href = image;
                         // window.location.href=image;
                         if (document.createEvent) {

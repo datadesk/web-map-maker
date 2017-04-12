@@ -629,7 +629,7 @@ layers:
                             size: 26px
                             stroke: {color: *background, width: 4}
         shields:
-            filter: { network: true, shield_text: true, $zoom: { min: 7, max: 11 }, kind_detail: motorway }
+            filter: { network: true, shield_text: true, $zoom: { min: 7, max: 11 }, kind: highway }
             visible: global.labels_visible_highway_shields
             draw:
                 shields:
@@ -663,7 +663,7 @@ layers:
             #             repeat_distance: 75px
         small-shields:
             visible: global.labels_visible_highway_shields
-            filter: { network: true, shield_text: true, $zoom: { min: 11 } }
+            filter: { network: true, shield_text: true, $zoom: { min: 11 }, kind: highway }
             draw:
                 shields:
                     repeat_distance: 300px
