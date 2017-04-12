@@ -361,7 +361,6 @@ layers:
             filter:
                 all:
                     - kind: [county]
-                    # - kind_detail: 6
                     - $zoom: { min: 6 } 
             draw:
                 long-dash:

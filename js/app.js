@@ -803,15 +803,15 @@ $("#checkboxes label input").click(function(){
             scene.config.layers.earth.draw.polygons.visible = true;
             scene.config.layers.earth.draw.terrain.visible = false;
         }
-    } else if (layers[thisID].length > 0) {
+    } else if (Array.isArray(layers[thisID]) && layers[thisID].length > 0) {
     // if any parent layer
         for (var i = 0; i < layers[thisID].length; i++) {
             var sublayer = thisID + '_' + layers[thisID][i];
-            console.log(sublayer);
-
             if (status == 'checked') {
                 scene.config.global[sublayer] = true;
+                $("#"+sublayer).prop('checked',true);
             } else if (status == 'unchecked') {
+                $("#"+sublayer).prop('checked',false);
                 scene.config.global[sublayer] = false;
             }
         }
