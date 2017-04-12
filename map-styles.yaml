@@ -94,9 +94,6 @@ sources:
         max_zoom: 15
         url_params:
             api_key: global.mapzen_api_key
-    hello:
-        type: TopoJSON
-        url: https://gist.githubusercontent.com/mbostock/4090846/raw/c899e3d4f3353924e495667c842f54a07090cfab/us.json
 
 textures:
     shields:
