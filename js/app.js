@@ -729,11 +729,6 @@ function showCheckboxes() {
 
 }
 
-// // list of all labels by group
-// var allLabels = ['labels_visible_countries','labels_visible_states','labels_visible_cities','labels_visible_neighborhoods','labels_visible_highway_shields','labels_visible_major_roads','labels_visible_points_of_interest'],
-//     allRoads = ['roads_visible_highways','roads_visible_highway_ramps','roads_visible_major','roads_visible_minor','roads_visible_service','roads_visible_taxi_and_runways'],
-//     allBorders = ['borders_visible_countries','borders_visible_disputed','borders_visible_states','borders_visible_counties'];
-
 
 // function to check on parent checkboxes
 function parentChecks() {
@@ -791,6 +786,11 @@ $("#checkboxes label input").click(function(){
 
     var thisID = $(this).attr("id");
 
+    // checkbox status
+    var status = ($("#"+thisID).prop('indeterminate')) ? 'indeterminate' :
+                 ($("#"+thisID).prop('checked')) ? 'checked' : 'unchecked';
+
+
 
     // if terrain
     if (thisID == 'terrain_visible') {
@@ -803,12 +803,29 @@ $("#checkboxes label input").click(function(){
             scene.config.layers.earth.draw.polygons.visible = true;
             scene.config.layers.earth.draw.terrain.visible = false;
         }
+    } else if (layers[thisID].length > 0) {
+    // if any parent layer
+        for (var i = 0; i < layers[thisID].length; i++) {
+            var sublayer = thisID + '_' + layers[thisID][i];
+            console.log(sublayer);
+
+            if (status == 'checked') {
+                scene.config.global[sublayer] = true;
+            } else if (status == 'unchecked') {
+                scene.config.global[sublayer] = false;
+            }
+        }
+    } else {
+        switchLayer(thisID);
+        parentChecks();
     }
 
 
 
 
-    parentChecks();
+
+
+
     // grab all checked layers
     // var visibleLayers = [];
     // for (var i = 0; i < checkedBoxes.length; i++) {
@@ -849,7 +866,6 @@ $("#checkboxes label input").click(function(){
     // }
 
     // if (visibleLayers.indexOf(thisID) != -1) {
-        switchLayer(thisID);
     // }
 
 
