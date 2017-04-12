@@ -9,13 +9,8 @@ global:
     labels_visible_cities: true
     labels_visible_highway_shields: true
     labels_visible_major_roads: true
-    # terrain_visible: false
     buildings_visible: false
-    # roads_visible: true
-    # borders_visible: true
-    # landuse_visible: true
     transit_visible: false
-    # water_visible: true
     roads_visible_highways: true
     roads_visible_highway_ramps: true
     roads_visible_major: true
@@ -26,6 +21,21 @@ global:
     borders_visible_disputed: true
     borders_visible_states: true
     borders_visible_counties: true
+
+    landuse_visible_airports: true
+    landuse_visible_beach: true
+    landuse_visible_cemetery: true
+    landuse_visible_college: true
+    landuse_visible_forest: true
+    landuse_visible_hospital: true
+    landuse_visible_military: true
+    landuse_visible_park: true
+    landuse_visible_pier: true
+    landuse_visible_prison: true
+    landuse_visible_resort: true
+    landuse_visible_stadium: true
+    landuse_visible_wetland: true
+
     water_visible_ocean: true
     water_visible_inland_water: true
     water_visible_swimming_pools: true
@@ -381,13 +391,6 @@ layers:
                     style: global.landuse_style
                     color: *industrial
                     order: 1
-        arena:
-            filter: {kind: arena}
-            draw:
-                polygons:
-                    style: global.landuse_style
-                    color: *stadium
-                    order: 1
         beach:
             filter: {kind: beach}
             draw:
@@ -403,32 +406,11 @@ layers:
                     order: 1
                     color: *cemetery
         college:
-            filter: {kind: college}
+            filter: {kind: [college, university]}
             draw:
                 polygons:
                     style: global.landuse_style
                     color: *school
-                    order: 1
-        commercial:
-            filter: {kind: [commercial, retail] }
-            draw:
-                polygons:
-                    style: global.landuse_style
-                    order: 1
-                    color: *commercial
-        farm:
-            filter: {kind: [farm, farmland, farmyard] }
-            draw:
-                polygons:
-                    style: global.landuse_style
-                    color: *land
-                    order: 1
-        footway:
-            filter: {kind: footway}
-            draw:
-                polygons:
-                    style: global.landuse_style
-                    color: *land
                     order: 1
         forest:
             filter: {kind: [forest, wood, natural_forest, natural_wood]}
@@ -436,33 +418,12 @@ layers:
                 polygons:
                     style: global.landuse_style
                     color: *forest
-        grass:
-            filter: {kind: [grass, meadow, scrub]}
-            draw:
-                polygons:
-                    style: global.landuse_style
-                    order: 1
-                    color: *grass
         hospital:
             filter: {kind: hospital}
             draw:
                 polygons:
                     style: global.landuse_style
                     color: *hospital
-                    order: 1
-        industrial:
-            filter: {kind: [industrial, quarry, substation, wastewater_plant]}
-            draw:
-                polygons:
-                    style: global.landuse_style
-                    color: *industrial
-                    order: 1
-        kindergarten:
-            filter: {kind: kindergarten}
-            draw:
-                polygons:
-                    style: global.landuse_style
-                    color: *school
                     order: 1
         military:
             filter: {kind: military}
@@ -479,50 +440,20 @@ layers:
                     style: global.landuse_style
                     color: *park
                     order: 1
-        parking:
-            filter: {kind: parking }
-            draw:
-                polygons:
-                    style: global.landuse_style
-                    color: *background
-        pedestrian:
-            filter: {kind: pedestrian}
-            draw:
-                polygons:
-                    style: global.landuse_style
-                    color: *pedestrian
         pier:
             filter: { kind: pier}
             draw:
                 polygons:
                     style: global.landuse_style
                     color: *background
-        place_of_worship:
-            filter: {kind: place_of_worship}
-            draw:
-                polygons:
-                    style: global.landuse_style
-                    color: *place_of_worship
         prison:
             filter: {kind: prison}
             draw:
                 polygons:
                     style: global.landuse_style
                     color: *industrial
-        railway:
-            filter: {kind: railway}
-            draw:
-                polygons:
-                    style: global.landuse_style
-                    color: *industrial
-        school:
-            filter: {kind: [school, university]}
-            draw:
-                polygons:
-                    style: global.landuse_style
-                    color: *school
-        sports_center:
-            filter: {kind: [sports_center, sports_centre] }
+        resort:
+            filter: {kind: [resort,theme_park]}
             draw:
                 polygons:
                     style: global.landuse_style
@@ -533,16 +464,11 @@ layers:
                 polygons:
                     style: global.landuse_style
                     color: *stadium
-        urban_area:
-            filter: {kind: "urban area"}
-            draw:
-                polygons:
-                    style: global.landuse_style
-                    color: *residential
         wetland:
             filter: {kind: wetland}
             draw:
                 polygons:
+                    visible: global.landuse_visible_wetland
                     style: global.landuse_style
                     color: *land
 
