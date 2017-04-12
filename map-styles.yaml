@@ -51,33 +51,25 @@ quiet-la-colors:
     areas:
         - &background       '#efebe7'
         - &land             '#f4f2ed'
-        - &forest           rgb(222,224,213)
-        - &grass            '#e9ebe0'   # lighten(@forest, 5%)
-        - &park             '#e1e3da'   # lighten(@forest, 3%)
-        - &cemetery         '#e4e5dc'
-        - &hospital         '#e8e4e8'
-        - &school           '#e9e5eb'   # lighten(#D9D5E3, 5%)
-        - &stadium          '#d9cdc1'
+        - &school           '#e9e5eb'
         - &beach            '#ebe2cd'
         - &runway           '#bfbebd'
-        - &aerodrome        '#d6d6d6'
+        - &airports         '#eae6e4'
+        - &cemetery         '#e1e3da'
+        - &college          '#e9e5eb'
+        - &forest           '#e1e3da'
+        - &hospital         '#e8e4e8'
+        - &military         '#e8e4e1'
+        - &park             '#e1e3da'
+        - &prison           '#e8e4e1'
+        - &theme_park       '#d9cdc1'
+        - &stadium          '#d9cdc1'
+        - &wetland          '#e1e3da'
+
         - &building         '#e0ddda'
         - &building_outline 'rgba(0,0,0,0)'
         - &building_top     'rgba(230,230,230,1)'
-        - &earth2_e    '#d8d3ca'           # urban early
-        - &earth2_e2   '#d4cfc6'           # urban early fade in
-        - &earth2_e3   '#dbd8d3'           # urban early fade in 3
-        - &earth2_ev   true                # urban early visibility
-
         - &water            '#c3d5dd'
-        - &residential      '#efede8'   # @land * 0.98
-        - &commercial       '#edebe6'   # @land * 0.97
-        - &industrial       '#eae6e4'   # @land * 0.96
-        - &military         '#e8e4e1'   # @land * 0.95
-        - &parking          '#eeeeee'
-        - &pedestrian       '#e7e7e7'   # @parking * 0.97
-        - &place_of_worship '#e3c5c9'
-        - &admin            '#000000'
     borders:
         - &county_brdr      '#a39a96'
         - &california_brdr  '#827676'
@@ -388,13 +380,15 @@ layers:
             filter: {kind: [aerodrome, apron]}
             draw:
                 polygons:
+                    visible: global.landuse_visible_airports
                     style: global.landuse_style
-                    color: *industrial
+                    color: *airports
                     order: 1
         beach:
             filter: {kind: beach}
             draw:
                 polygons:
+                    visible: global.landuse_visible_beach
                     style: global.landuse_style
                     color: *beach
                     order: 1
@@ -402,6 +396,7 @@ layers:
             filter: {kind: cemetery}
             draw:
                 polygons:
+                    visible: global.landuse_visible_cemetery
                     style: global.landuse_style
                     order: 1
                     color: *cemetery
@@ -409,19 +404,22 @@ layers:
             filter: {kind: [college, university]}
             draw:
                 polygons:
+                    visible: global.landuse_visible_college
                     style: global.landuse_style
-                    color: *school
+                    color: *college
                     order: 1
         forest:
             filter: {kind: [forest, wood, natural_forest, natural_wood]}
             draw:
                 polygons:
+                    visible: global.landuse_visible_forest
                     style: global.landuse_style
                     color: *forest
         hospital:
             filter: {kind: hospital}
             draw:
                 polygons:
+                    visible: global.landuse_visible_hospital
                     style: global.landuse_style
                     color: *hospital
                     order: 1
@@ -429,6 +427,7 @@ layers:
             filter: {kind: military}
             draw:
                 polygons:
+                    visible: global.landuse_visible_military
                     style: global.landuse_style
                     color: *military
                     order: 1
@@ -437,6 +436,7 @@ layers:
                 playground, pitch, recreation_ground, village_green, zoo] }
             draw:
                 polygons:
+                    visible: global.landuse_visible_park
                     style: global.landuse_style
                     color: *park
                     order: 1
@@ -444,24 +444,28 @@ layers:
             filter: { kind: pier}
             draw:
                 polygons:
+                    visible: global.landuse_visible_pier
                     style: global.landuse_style
                     color: *background
         prison:
             filter: {kind: prison}
             draw:
                 polygons:
+                    visible: global.landuse_visible_prison
                     style: global.landuse_style
-                    color: *industrial
+                    color: *prison
         resort:
             filter: {kind: [resort,theme_park]}
             draw:
                 polygons:
+                    visible: global.landuse_visible_resort
                     style: global.landuse_style
-                    color: *stadium
+                    color: *theme_park
         stadium:
             filter: {kind: stadium}
             draw:
                 polygons:
+                    visible: global.landuse_visible_stadium
                     style: global.landuse_style
                     color: *stadium
         wetland:
@@ -470,7 +474,7 @@ layers:
                 polygons:
                     visible: global.landuse_visible_wetland
                     style: global.landuse_style
-                    color: *land
+                    color: *wetland
 
     roads:
         data: { source: mapzen, layer: roads }

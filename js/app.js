@@ -169,16 +169,32 @@ map.on('zoomend', function() {
 
     // highway shields
     if (zoomRounded <= 7) {
-        $("#labels_visible_highway_shields").parent().addClass("unavailable"); // update btn opacity
+        $("#labels_visible_highway_shields").parent().addClass("unavailable");
     } else {
-        $("#labels_visible_highway_shields").parent().removeClass("unavailable"); // update btn opacity
+        $("#labels_visible_highway_shields").parent().removeClass("unavailable");
     }
 
-    // major roads
+    // major road labels
     if (zoomRounded < 14) {
         $("#labels_visible_major_roads").parent().addClass("unavailable");
     } else {
         $("#labels_visible_major_roads").parent().removeClass("unavailable"); 
+    }
+
+    // highways
+    if (zoomRounded < 6) {
+        $("#roads_visible_highways").parent().addClass("unavailable");
+    } else {
+        $("#roads_visible_highways").parent().removeClass("unavailable"); 
+    }
+
+    // major roads
+    if (zoomRounded < 8) {
+        $("#roads_visible_major").parent().addClass("unavailable");
+        $("#roads_visible_highway_ramps").parent().addClass("unavailable");
+    } else {
+        $("#roads_visible_major").parent().removeClass("unavailable"); 
+        $("#roads_visible_highway_ramps").parent().removeClass("unavailable");
     }
 
     // minor roads
@@ -195,12 +211,22 @@ map.on('zoomend', function() {
         $("#roads_visible_service").parent().removeClass("unavailable"); 
     }
 
+    // airport roads
+    if (zoomRounded < 11) { 
+        $("#roads_visible_taxi_and_runways").parent().addClass("unavailable"); 
+    } else {
+        $("#roads_visible_taxi_and_runways").parent().removeClass("unavailable"); 
+    }
+
+
+    // swimming pools
     if (zoomRounded < 17) {
         $("#water_visible_swimming_pools").parent().addClass("unavailable"); 
     } else {
         $("#water_visible_swimming_pools").parent().removeClass("unavailable"); 
     }
 
+    // country borders
     if (zoomRounded < 10) {
         $("#borders_visible_counties").parent().addClass("unavailable"); 
     } else {
@@ -855,7 +881,10 @@ function parentChecks() {
     containsCount('borders_visible');
 
     // check water
-    containsCount('water_visible')
+    containsCount('water_visible');
+
+    // check landuse
+    containsCount('landuse_visible');
 
     // figure out how strong a match count of layers
     function containsCount(id){
