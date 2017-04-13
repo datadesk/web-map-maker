@@ -317,8 +317,8 @@ function downloadIMG() {
                     // This is here to patch a bug where a small pan of the map will result in
                     // geojson/svg objects being cut off in the downloaded image
                     // Someday we might have a real solution to the problem but until then ¯\_(ツ)_/¯
-                    map.setZoom(map.getZoom() - 0.5);
-                    map.setZoom(map.getZoom() + 0.5);
+                    map.setZoom(map.getZoom() - 0.5, {'animate': false});
+                    map.setZoom(map.getZoom() + 0.5, {'animate': false});
 
                     var svgString = new XMLSerializer().serializeToString(document.querySelector('svg'));
                     var DOMURL = self.URL || self.webkitURL || self;
@@ -369,6 +369,17 @@ function downloadIMG() {
                         // compress down canvas
                         var canvas = document.getElementById("canvas");
                         var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+
+                        // fire if sendToS3 exists
+                        if (typeof sendToS3 !== "undefined") { 
+                            sendToS3(mapSlug + datetime + ".png", image)
+                                .then(sendToP2P(mapSlug + datetime))
+                                .then(function() {
+                                    console.log("great success!");
+                                }).catch(function() {
+                                    console.log("womp womp");
+                                });
+                        }
 
                         lnk.href = image;
                         // window.location.href=image;

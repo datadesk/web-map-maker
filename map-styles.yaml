@@ -21,7 +21,6 @@ global:
     borders_visible_disputed: true
     borders_visible_states: true
     borders_visible_counties: true
-
     landuse_visible_airports: true
     landuse_visible_beach: true
     landuse_visible_cemetery: true
@@ -35,7 +34,6 @@ global:
     landuse_visible_resort: true
     landuse_visible_stadium: true
     landuse_visible_wetland: true
-
     water_visible_ocean: true
     water_visible_inland_water: true
     water_visible_swimming_pools: true
