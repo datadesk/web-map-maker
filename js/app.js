@@ -884,11 +884,11 @@ function switchLayer(layer) {
     }
 }
 
-// // text marker test
-L.marker([33.99548,-118.45990], {draggable: true, icon: L.divIcon ({
-    iconSize: [100, 15],
-    iconAnchor: [0, 0],
-    html: 'Here\'s your label',
-    className: 'text-label ui-resizable'
-    })}).addTo(map);
+// // // text marker test
+// L.marker([33.99548,-118.45990], {draggable: true, icon: L.divIcon ({
+//     iconSize: [100, 15],
+//     iconAnchor: [0, 0],
+//     html: 'Here\'s your label',
+//     className: 'text-label ui-resizable'
+//     })}).addTo(map);
 
