@@ -193,7 +193,9 @@ label {font:18px/27px Georgia, serif;}
 }
 .leaflet-control-attribution a{display:none;}
 .leaflet-control-scale-line{font-size: 16px !important;height:26px;border: 2px solid #999; border-color: rgba(0,0,0,.4);border-top: 0;}
-.leaflet-marker-icon {display:none;}
+
+/*.leaflet-marker-icon {display:none;}*/
+
 .leaflet-popup-tip-container {
     width: 20px;
     height: 27px;
@@ -308,7 +310,7 @@ label {font:18px/27px Georgia, serif;}
 }
 
 #canvas {
-    visibility: hidden;
+    /*visibility: hidden;*/
 }
 
 .ui-resizable-e {
@@ -408,3 +410,17 @@ p.description {
 #checkboxes .unavailable {
     opacity: 0.3;
 }
+
+/*.text-label textarea {
+    font-size: 24px;
+    line-height: 28px;
+    font-family: 'Benton Gothic Regular', Arial, sans-serif;
+    background: none;
+    border: 1px solid rgba(0,0,0,0);
+    box-shadow: none;
+}
+
+.text-label textarea:focus, .text-label textarea:hover {
+    border: 1px dashed rgba(0,0,0,0.5);
+    cursor: move;
+}*/

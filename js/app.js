@@ -345,7 +345,7 @@ function downloadIMG() {
 
                         ctx.drawImage(canvas,0,0, mapSize[0], mapSize[1]);
                         $(".leaflet-control-zoom").show(); // show zoom again
-                        $("#map").css("background","#ddd"); // bring back map's background
+                        // $("#map").css("background","#ddd"); // bring back map's background
 
                         // create an off-screen anchor tag
                         var lnk = document.createElement('a'),
@@ -370,19 +370,8 @@ function downloadIMG() {
                         var canvas = document.getElementById("canvas");
                         var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
 
-                        // fire if sendToS3 exists
-                        if (typeof sendToS3 !== "undefined") { 
-                            sendToS3(mapSlug + datetime + ".png", image)
-                                .then(sendToP2P(mapSlug + datetime))
-                                .then(function() {
-                                    console.log("great success!");
-                                }).catch(function() {
-                                    console.log("womp womp");
-                                });
-                        }
-
                         lnk.href = image;
-                        // window.location.href=image;
+
                         if (document.createEvent) {
 
                             e = document.createEvent("MouseEvents");
@@ -895,25 +884,11 @@ function switchLayer(layer) {
     }
 }
 
+// // text marker test
+// L.marker([33.99548,-118.45990], {draggable: true, icon: L.divIcon ({
+//     iconSize: [100, 15],
+//     iconAnchor: [0, 0],
+//     html: '<textarea>Here\'s your label</textarea>',
+//     className: 'text-label'
+//     })}).addTo(map);
 
-
-// function showTransit() {
-// // check zoom
-// if (map.getZoom() >= 11) {
-//     if (transitVisible) {
-//         // remove transit
-//         scene.config.layers.transit.visible = false;
-//         scene.config.layers['transit-overlay-station-labels'].visible = false;
-//         scene.updateConfig(); // update config
-//         $("#transit_btn").removeClass("active"); // update button
-//         transitVisible = false;
-//     } else {
-//         // add transit layer
-//         scene.config.layers.transit.visible = true;
-//         scene.config.layers['transit-overlay-station-labels'].visible = true;
-//         scene.updateConfig(); // update config
-//         $("#transit_btn").addClass("active"); // update button
-//         transitVisible = true;
-//     }
-// }
-// }
