@@ -345,7 +345,7 @@ function downloadIMG() {
 
                         ctx.drawImage(canvas,0,0, mapSize[0], mapSize[1]);
                         $(".leaflet-control-zoom").show(); // show zoom again
-                        // $("#map").css("background","#ddd"); // bring back map's background
+                        $("#map").css("background","#ddd"); // bring back map's background
 
                         // create an off-screen anchor tag
                         var lnk = document.createElement('a'),
