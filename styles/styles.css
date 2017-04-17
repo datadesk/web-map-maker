@@ -411,17 +411,16 @@ p.description {
     opacity: 0.3;
 }
 
-/*.text-label {
+.text-label input {
     font-size: 24px;
     line-height: 28px;
     font-family: 'Benton Gothic Regular', Arial, sans-serif;
     background: none;
     border: 1px solid rgba(0,0,0,0);
     box-shadow: none;
-}*/
+}
 
-/*.text-label textarea:focus, .text-label textarea:hover {
+.text-label textarea:focus, .text-label textarea:hover {
     border: 1px dashed rgba(0,0,0,0.5);
     cursor: move;
 }
-*/
