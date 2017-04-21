@@ -317,8 +317,8 @@ function downloadIMG() {
                     // This is here to patch a bug where a small pan of the map will result in
                     // geojson/svg objects being cut off in the downloaded image
                     // Someday we might have a real solution to the problem but until then ¯\_(ツ)_/¯
-                    map.setZoom(map.getZoom() - 0.5);
-                    map.setZoom(map.getZoom() + 0.5);
+                    map.setZoom(map.getZoom() - 0.5, {'animate': false});
+                    map.setZoom(map.getZoom() + 0.5, {'animate': false});
 
                     var svgString = new XMLSerializer().serializeToString(document.querySelector('svg'));
                     var DOMURL = self.URL || self.webkitURL || self;
@@ -371,7 +371,7 @@ function downloadIMG() {
                         var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
 
                         lnk.href = image;
-                        // window.location.href=image;
+
                         if (document.createEvent) {
 
                             e = document.createEvent("MouseEvents");
@@ -884,25 +884,11 @@ function switchLayer(layer) {
     }
 }
 
+// // text marker test
+// L.marker([33.99548,-118.45990], {draggable: true, icon: L.divIcon ({
+//     iconSize: [100, 15],
+//     iconAnchor: [0, 0],
+//     html: '<input type="text" value="Here\'s your label">',
+//     className: 'text-label ui-resizable'
+//     })}).addTo(map);
 
-
-// function showTransit() {
-// // check zoom
-// if (map.getZoom() >= 11) {
-//     if (transitVisible) {
-//         // remove transit
-//         scene.config.layers.transit.visible = false;
-//         scene.config.layers['transit-overlay-station-labels'].visible = false;
-//         scene.updateConfig(); // update config
-//         $("#transit_btn").removeClass("active"); // update button
-//         transitVisible = false;
-//     } else {
-//         // add transit layer
-//         scene.config.layers.transit.visible = true;
-//         scene.config.layers['transit-overlay-station-labels'].visible = true;
-//         scene.updateConfig(); // update config
-//         $("#transit_btn").addClass("active"); // update button
-//         transitVisible = true;
-//     }
-// }
-// }
