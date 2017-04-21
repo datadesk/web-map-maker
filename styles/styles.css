@@ -7,6 +7,14 @@
     font-weight:normal;
     font-style:normal;
 }
+
+@font-face {
+    font-family: 'Benton Gothic Regular Italic';
+    src: url('https://s3.amazonaws.com/latimes-datadesk-template/fonts/0.5.0/benton-gothic-regular-italic.woff') format('woff');
+    font-weight:normal;
+    font-style:normal;
+}
+
 @font-face {
     font-family: 'Benton Gothic Bold';
     src: url('https://s3.amazonaws.com/latimes-datadesk-template/fonts/0.5.0/benton-gothic-bold.eot');
@@ -17,7 +25,100 @@
     font-style:normal;
 }
 
-body { 
+@font-face {
+    font-family: 'Benton Gothic Bold Italic';
+    src: url('https://s3.amazonaws.com/latimes-datadesk-template/fonts/0.5.0/benton-gothic-bold-italic.woff') format('woff');
+    font-weight:normal;
+    font-style:normal;
+}
+
+@font-face {
+    font-family: 'Benton Gothic Black';
+    src: url('https://s3.amazonaws.com/latimes-datadesk-template/fonts/0.5.0/benton-gothic-black.woff') format('woff');
+    font-weight:normal;
+    font-style:normal;
+}
+
+@font-face {
+    font-family: 'Benton Gothic Black Italic';
+    src: url('https://s3.amazonaws.com/latimes-datadesk-template/fonts/0.5.0/benton-gothic-black-italic.woff') format('woff');
+    font-weight:normal;
+    font-style:normal;
+}
+
+@font-face {
+    font-family: 'Benton Gothic Condensed Regular';
+    src: url('https://s3.amazonaws.com/latimes-datadesk-template/fonts/0.5.0/benton-gothic-condensed-regular.woff') format('woff');
+    font-weight:normal;
+    font-style:normal;
+}
+
+@font-face {
+    font-family: 'Benton Gothic Condensed Regular Italic';
+    src: url('https://s3.amazonaws.com/latimes-datadesk-template/fonts/0.5.0/benton-gothic-condensed-regular-italic.woff') format('woff');
+    font-weight:normal;
+    font-style:normal;
+}
+
+@font-face {
+    font-family: 'Benton Gothic Condensed Bold';
+    src: url('https://s3.amazonaws.com/latimes-datadesk-template/fonts/0.5.0/benton-gothic-condensed-bold.woff') format('woff');
+    font-weight:normal;
+    font-style:normal;
+}
+
+@font-face {
+    font-family: 'Benton Gothic Condensed Bold Italic';
+    src: url('https://s3.amazonaws.com/latimes-datadesk-template/fonts/0.5.0/benton-gothic-condensed-bold-italic.woff') format('woff');
+    font-weight:normal;
+    font-style:normal;
+}
+
+@font-face {
+    font-family: 'Benton Gothic Condensed Black';
+    src: url('https://s3.amazonaws.com/latimes-datadesk-template/fonts/0.5.0/benton-gothic-condensed-black.woff') format('woff');
+    font-weight:normal;
+    font-style:normal;
+}
+
+@font-face {
+    font-family: 'Benton Gothic Condensed Black Italic';
+    src: url('https://s3.amazonaws.com/latimes-datadesk-template/fonts/0.5.0/benton-gothic-condensed-black-italic.woff') format('woff');
+    font-weight:normal;
+    font-style:normal;
+}
+
+@font-face {
+    font-family: 'Benton Gothic Light';
+    src: url('https://s3.amazonaws.com/latimes-datadesk-template/fonts/0.5.0/benton-gothic-light.woff') format('woff');
+    font-weight:normal;
+    font-style:normal;
+}
+
+@font-face {
+    font-family: 'Benton Gothic Light Italic';
+    src: url('https://s3.amazonaws.com/latimes-datadesk-template/fonts/0.5.0/benton-gothic-light-italic.woff') format('woff');
+    font-weight:normal;
+    font-style:normal;
+}
+
+@font-face {
+    font-family: 'Benton Gothic Medium';
+    src: url('https://s3.amazonaws.com/latimes-datadesk-template/fonts/0.5.0/benton-gothic-medium.woff') format('woff');
+    font-weight:normal;
+    font-style:normal;
+}
+
+@font-face {
+    font-family: 'Benton Gothic Medium Italic';
+    src: url('https://s3.amazonaws.com/latimes-datadesk-template/fonts/0.5.0/benton-gothic-medium-italic.woff') format('woff');
+    font-weight:normal;
+    font-style:normal;
+}
+
+
+
+body { cyber
     padding: 0 0 30px;
 }
 
