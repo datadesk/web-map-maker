@@ -2358,7 +2358,7 @@ layers:
         #           style: lines
         #           order: 330
         #           visible: global.buildings_visible
-        #           color: *building_outline
+        #           color: global.building_outline
         #           width: [[13, 0px], [15,1px], [18, 1px]]
 
         buildings-labels:
