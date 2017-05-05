@@ -271,7 +271,7 @@ global:
     roads_visible_highways:             true  # ∆
     roads_visible_highway_ramps:        true # ∆
     roads_visible_major:                true # ∆
-    roads_visible_minor:                true # this should be added to  UI list
+    roads_visible_minor:                true # ∆
     roads_visible_service:              true # ∆
     roads_visible_taxi_and_runways:     true # ∆
     roads_visible_link:                 true  # ∆
@@ -293,13 +293,9 @@ global:
     buildings:                          '#f7f9fc'
     building_outline:                   '#888' #
     city_wall:                          [0.682,0.682,0.682] # these need addressing
-    retaining_wall:                     [0.827,0.808,0.780] # these need addressing
-    snow_fence:                         [0.827,0.808,0.780] # these need addressing
-    fence:                              [0.827,0.808,0.780] # these need addressing
     dam:                                [0.827,0.808,0.780] # these need addressing
 
     #icons
-    icon_size_hide:                     '0px' # ∆ 
     icon_visible_poi_landuse:           true # ∆
 
     #labels:
@@ -1404,6 +1400,7 @@ layers:
                 filter: { is_tunnel: true, $zoom: { min: 13 } }
                 draw:
                     lines:
+                        cap: [[14,butt],[15,butt]]
                         color: global.minor_road
                         outline:
                             color: global.road_color
@@ -2517,24 +2514,6 @@ layers:
                 lines:
                     color: global.city_wall
                     width: [[12, 0.75px], [13, 1.0px], [14, 1.2px], [15, 2.0px], [16, 2.5px], [19, 6m]]
-        retaining_wall:
-            filter: { kind: retaining_wall }
-            draw:
-                lines:
-                    color: global.retaining_wall
-                    width: [[14, 0.5px], [15, 1.0px], [16, 1.5px], [17, 2.0px], [19, 4m]]
-        snow_fence:
-            filter: { kind: snow_fence }
-            draw:
-                lines:
-                    color: global.snow_fence
-                    width: [[14, 0.5px], [15, 1.0px], [16, 1.5px], [17, 2.0px], [19, 1.5m]]
-        fence:
-            filter: { kind: fence }
-            draw:
-                lines:
-                    color: [[14,[0.770,0.765,0.755]],[18,[0.770,0.765,0.755]],[19,[0.841,0.837,0.824]]]
-                    width: [[14, 0.5px], [15, 0.75px], [16, 0.75px], [18, 1.5px], [19, 1m]]
         dam:
             filter: { kind: dam }
             draw:
@@ -4077,7 +4056,7 @@ layers:
                     text_wrap: 10
                     font:
                         family: global.text_font_family
-                        size: 12px
+                        size: 26px
                         style: italic
                         fill: global.text_fill
                         weight: normal
