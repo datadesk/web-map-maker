@@ -3857,7 +3857,7 @@ layers:
                 kind: [airport, aerodrome]
             draw:
                 icons:
-                    visible: global.icon_visible_poi_landuse
+                    visible: global.labels_visible_points_of_interest
                     size: 0px
                     priority: 42
                     text:
