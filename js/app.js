@@ -220,7 +220,7 @@ map.on('zoomend', function() {
 
 
     // swimming pools
-    if (zoomRounded < 17) {
+    if (zoomRounded < 16) {
         $("#water_visible_swimming_pools").parent().addClass("unavailable"); 
     } else {
         $("#water_visible_swimming_pools").parent().removeClass("unavailable"); 
@@ -708,7 +708,7 @@ if (initZoom < 12) { $("#roads_visible_minor").parent().addClass("unavailable");
 
 if (initZoom < 15) { $("#roads_visible_service").parent().addClass("unavailable"); }
 
-if (initZoom < 17) { $("#water_visible_swimming_pools").parent().addClass("unavailable"); }
+if (initZoom < 16) { $("#water_visible_swimming_pools").parent().addClass("unavailable"); }
 
 if (initZoom < 10) { $("#borders_visible_counties").parent().addClass("unavailable"); }
 
@@ -778,7 +778,7 @@ function parentChecks() {
 
 
     // if ("labels_")
-    console.log(visibleLayers);
+    // console.log(visibleLayers);
 }
 
 // listen for checkbox click

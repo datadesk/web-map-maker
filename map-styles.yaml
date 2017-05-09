@@ -223,7 +223,7 @@ global:
     #water
     water_visible_ocean:                true # ∆
     water_visible_inland_water:         true # ∆
-    water_visible_swimming_pools:       true # ∆
+    water_visible_swimming_pools:       false # ∆
     #water Color
     water:                              '#B2DBF6' # ∆
 
@@ -1144,6 +1144,7 @@ layers:
                 color: global.background
     water:
         data: { source: mapzen, layer: water }
+        filter: { not: { kind: [swimming_pool] } }
         draw:
             polygons:
                 order: function() { return feature.sort_rank; }
@@ -1159,7 +1160,7 @@ layers:
         lakes:
             filter:
                 all:
-                    - kind: [ocean, lake, water, riverbank, reservoir, swimming_pool]
+                    - kind: [ocean, lake, water, riverbank, reservoir]
                 # WARNING: any area filters here must match the area filters in the water_boundaries-not-ocean layer
                 any:
                     # limit show smaller landuse areas to higher zooms
@@ -1196,13 +1197,6 @@ layers:
             draw:
                 polygons:
                     color: global.water
-        swimming_pool:
-            filter: { kind: swimming_pool }
-            draw:
-                polygons:
-                    visible: global.water_visible_swimming_pools
-                    color: global.water
-
         river:
             #river center lines, not boundaries for polygons
             filter: { kind: [river,canal,stream,dam,ditch,drain], $zoom: { min: 11 }, not: { is_tunnel: true } }
@@ -1226,8 +1220,15 @@ layers:
                         - kind: drain
                 draw:
                     lines:
-                        visible: true
-
+                        visible: false
+    swimming-pools:
+        data: { source: mapzen, layer: water }
+        filter: { kind:[swimming_pool], $zoom: { min: 16 } }
+        draw:
+            polygons:
+                visible: global.water_visible_swimming_pools
+                order: function() { return feature.sort_rank; }
+                color: global.water
 
     water-line-labels:
         data: { source: mapzen, layer: water }
