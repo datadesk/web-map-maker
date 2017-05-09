@@ -717,14 +717,23 @@ if (initZoom < 14) { $("#labels_visible_major_roads").parent().addClass("unavail
 var expanded = false;
 
 function showCheckboxes() {
+
     var checkboxes = document.getElementById("checkboxes");
 
     if (!expanded) {
         checkboxes.style.display = "block";
         expanded = true;
+        // toggle layer focus style
+        $(".overSelect").css("border","2px solid #797979");
+        $(".selectBox select").css("color","#797979");
+
     } else {
         checkboxes.style.display = "none";
         expanded = false;
+        // toggle layer focus style
+        $(".overSelect").css("border","2px solid #b5b5b5");
+        $(".selectBox select").css("color","#acacac");
+
     }
 
 }
