@@ -1348,12 +1348,14 @@ layers:
             filter: { source: 'naturalearthdata.com', $zoom: { max: 8 } }
             draw:
                 lines:
+                    visible: global.roads_visible_major
                     color: global.road_color
                     width: [[1,0px],[7, 1px],[8,1.75px]]
             major_road:
                 filter: { kind: major_road }
                 draw:
                     lines:
+                        visible: global.roads_visible_major
                         color: global.road_color
                         width: [[7, 0.5px], [8, 0.5px]]
             ferry:
@@ -1451,6 +1453,7 @@ layers:
                         filter: { is_tunnel: true, $zoom: { min: 13 } }
                         draw:
                             lines:
+                                visible: global.roads_visible_major
                                 color: global.minor_road
                                 outline:
                                     color: global.road_color
@@ -1509,26 +1512,29 @@ layers:
                 filter: { is_tunnel: true, $zoom: { min: 13 } }
                 draw:
                     lines:
-                        color:  global.minor_road
+                        visible: global.roads_visible_major
+                        color: global.minor_road
                         outline:
                             color: global.road_color
             secondary:
                 filter: { kind_detail: secondary }
                 draw:
                     lines:
+                        visible: global.roads_visible_major
                         color: global.road_color
                         width: [[8, 0.5px], [10, 0.5px], [11, 0.8px], [12, 1px], [14, 2.6px], [16, 6m]]
                 routes:
                     filter: { ref: true, $zoom: { min: 8 } }
                     draw:
                         lines:
-                            visible: global.labels_visible_minor_roads
+                            visible: global.roads_visible_major
                             color: global.road_color
                             width: [[8, 0.5px], [10, 0.5px], [11, 0.8px], [12, 1px], [14, 2.6px], [16, 6m]]
                     tunnel:
                         filter: { is_tunnel: true, $zoom: { min: 13 } }
                         draw:
                             lines:
+                                visible: global.roads_visible_major
                                 color: global.minor_road
                                 outline:
                                     color: global.road_color
@@ -1559,29 +1565,34 @@ layers:
                 filter: { kind_detail: [tertiary, tertiary_link] }
                 draw:
                     lines:
+                        visible: global.roads_visible_major
                         color: global.road_color
                         width: [[8, 0.5px], [10, 0.5px], [11, 0.8px], [12, 1px], [14, 2.2px], [16, 5m]]
                 early:
                     filter: { $zoom: { max: 14 } }
                     draw:
                         lines:
+                            visible: global.roads_visible_major
                             order: 352
                 routes:
                     filter: { ref: true, $zoom: { min: 12 } }
                     draw:
                         lines:
+                            visible: global.roads_visible_major
                             color: global.minor_road
                             width: [[12, 0px], [13, 0.3px], [14, 0.6px], [15, 1.8px], [16, 3m]]
                     early:
                         filter: { $zoom: { max: 14 } }
                         draw:
                             lines:
+                                visible: global.roads_visible_major
                                 order: function() { return feature.sort_rank + 3; }
 
                     tunnel:
                         filter: {is_tunnel: true, $zoom: { min: 13 } }
                         draw:
                             lines:
+                                visible: global.roads_visible_major
                                 color: global.minor_road
                                 outline:
                                     color: global.road_color
