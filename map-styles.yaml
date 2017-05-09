@@ -1664,8 +1664,7 @@ layers:
             draw:
                 lines:
                     visible: global.roads_visible_service
-                    # color: global.service_road
-                    mix-blend-mode: multiply;
+                    color: global.minor_road
                     width: [[16, 2m], [17, 3m]]
             early:
                 filter: { $zoom: { max: 16 } }
