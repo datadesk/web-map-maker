@@ -274,7 +274,6 @@ global:
     roads_visible_minor:                true # ∆
     roads_visible_service:              true # ∆
     roads_visible_taxi_and_runways:     true # ∆
-    roads_visible_link:                 true  # ∆
     roads_visible_ferry_route:          true  # ∆
     transit_visible:                    false   # ∆
     #road/transit colors
@@ -959,40 +958,6 @@ layers:
                 collide: false
                 anchor: top
                 transition: { show: { time: 0s }, hide: { time: 0s } }
-    mz_route_transit_stop:
-        data: { source: mz_route_transit_stop }
-        draw:
-            ux-icons-overlay:
-                interactive: global.interactive
-                sprite: ux-transit-stop
-                size: [15px,15px]
-                collide: false
-                transition: { show: { time: 0s }, hide: { time: 0s } }
-    mz_search_result:
-        data: { source: mz_search_result }
-        draw:
-            ux-icons-overlay:
-                interactive: global.interactive
-                sprite: ux-search-active
-                size: [36px,54px]
-                collide: false
-                anchor: top
-                transition: { show: { time: 0s }, hide: { time: 0s } }
-        inactive:
-            filter: { state: inactive }
-            draw:
-                ux-icons-overlay:
-                    sprite: ux-search-inactive
-    mz_dropped_pin:
-        data: { source: mz_dropped_pin }
-        draw:
-            ux-icons-overlay:
-                interactive: global.interactive
-                sprite: ux-search-active
-                size: [36px,54px]
-                collide: false
-                anchor: top
-                transition: { show: { time: 0s }, hide: { time: 0s } }
 
     # Used by the SDK to place point, line, and polygon overlays on the map
     mz_default_point:
@@ -1500,7 +1465,7 @@ layers:
                 filter: { is_link: true } # on- and off-ramps, etc
                 draw:
                     lines:
-                        visible: global.roads_visible_link
+                        visible: global.roads_visible_major
                         color: global.road_color
                         width: [[10, 0px], [11, 1px], [12, 1px], [13, 2px], [14, 4px], [17, 4m]]
                 early_link:
