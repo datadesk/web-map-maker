@@ -1539,16 +1539,9 @@ layers:
                                 priority: 56
                                 visible: global.labels_visible_minor_roads
                                 font:
-                                    fill: [0.536,0.556,0.581]
-                                    size: [[13, 11px], [15, 11px], [16, 12px]]
-                                    stroke: { color: global.text_stroke, width: 3px }
-                        z15-up:
-                            filter: { $zoom: { min: 15 } }
-                            draw:
-                                text-blend-order:
-                                    visible: global.labels_visible_minor_roads
-                                    font:
-                                        weight: 600
+                                    weight: normal
+                                    fill: global.road_text
+                                    size: [[12, 28px],[15, 30px]]
                 labels-secondary:
                     filter:
                         $zoom: { min: 13 }
@@ -3861,7 +3854,6 @@ layers:
                     size: 0px
                     priority: 42
                     text:
-                        visible: global.icon_visible_poi_landuse
                         text_source: global.ux_language_text_source
             early:
                 filter: { $zoom: [9,10,11,12,13] }
