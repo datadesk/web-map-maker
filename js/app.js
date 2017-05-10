@@ -126,7 +126,7 @@ var zoomRounded = Math.floor(map.getZoom()*10) / 10;
 $("#zoom_level").text(zoomRounded.toFixed(1));
 
 // and update it!
-map.on('zoomend', function() {
+map.on('zoom', function() {
 
     zoomRounded = Math.floor(map.getZoom()*10) / 10;
 
@@ -892,6 +892,48 @@ function switchLayer(layer) {
         scene.config.global[layer] = true;
     }
 }
+
+// this updates live while user is moving slider
+var wto;
+document.getElementById('zoom-slider').addEventListener("input", function() {
+    var zoomValue = $(this).val();
+    console.log(zoomValue);
+    clearTimeout(wto);
+    // do stuff when user has been idle for 0.1 second
+    map.setZoom(zoomValue);
+
+
+});
+
+// listen for slider change
+// var wto;
+$('#zoom-slider').change(function(){
+    var zoomValue = $(this).val();
+    map.setZoom(zoomValue);
+
+//     // // handle millions
+//     // if (+retirement_value >= 1000000) {
+//     //     formattedVal = Math.round(retirement_value/100000)/10;
+//     //     $("#zoom-total").text("$" + formattedVal + " million");
+//     //     // keeps to a tenth of a million
+//     //     retirement_value = Math.round(retirement_value/100000)*100000;
+//     // } else {
+//     //     // round to nearest thousand
+//     //     retirement_value = Math.round(retirement_value/1000)*1000;
+//     //     formattedVal = String(retirement_value).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+//     //     $("#zoom-total").text("$" + formattedVal);
+//     // }
+
+//     // check if something selected in dropdown
+//     clearTimeout(wto);
+//     wto = setTimeout(function() {
+//         // do stuff when user has been idle for 0.5 second
+//         var value = $('#zoom-slider').val();
+//         console.log(value);
+//         // updateNumber(value);
+//     }, 100);
+});
+
 
 // // text marker test
 // L.marker([33.99548,-118.45990], {draggable: true, icon: L.divIcon ({
