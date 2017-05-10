@@ -307,7 +307,7 @@ global:
     labels_visible_service_road:        true # ∆ this should be added to  UI list as Paths, service roads
     labels_visible_water:               true # this should be added to  UI list
     labels_visible_neighborhoods:       true # ∆
-    labels_visible_points_of_interest:  false # ∆
+    labels_visible_points_of_interest:  true # ∆
     labels_visible_landuse:             true
     labels_visible_island:              true # ∆
     labels_visible_building:            false # ∆ saved for possible future inclusion
@@ -1512,7 +1512,7 @@ layers:
                                 visible: global.labels_visible_minor_roads
                                 font:
                                     weight: normal
-                                    fill: global.road_text
+                                    fill: global.road_text_minor
                                     size: [[12, 28px],[15, 30px]]
                 labels-secondary:
                     filter:
@@ -1523,7 +1523,7 @@ layers:
                             offset: [0px, 18px]
                             visible: global.labels_visible_minor_roads
                             font:
-                                fill: global.road_text
+                                fill: global.road_text_minor
                                 size: [[13, 28px], [15, 30px]]
                                 stroke: { color: global.text_stroke, width: 3px }
             tertiary:
@@ -1572,7 +1572,7 @@ layers:
                             # repeat_distance: 400px
                             visible: global.labels_visible_minor_roads
                             font:
-                                fill: global.road_text
+                                fill: global.road_text_minor
                                 size: [[13, 26px], [15, 28px]]
                                 stroke: { color: [[13, global.text_stroke], [15, [0.969,0.973,0.973]]], width: 4px }
         minor_road:
@@ -2160,9 +2160,9 @@ layers:
                         priority: 58
                         visible: global.labels_visible_service_roads
                         font:
-                            fill: [0.536,0.556,0.581]
-                            size: [[15, 9px], [18, 13px]]
-
+                            fill: global.road_text_minor
+                            size: [[13, 28px], [15, 30px]]
+                            stroke: { color: global.text_stroke, width: 3px }
         winter_sport_pistes:
             filter: { kind: piste }
             draw:
@@ -3228,7 +3228,8 @@ layers:
         data: { source: mapzen, layer: pois }
         filter:
             all:
-                - not: { kind: [building,address,farm,apron,residential,commercial,industrial] }
+                - kind: [park,hospital,cemetery,school,golf_course,university,stadium,college,beach,aerodrome]
+                # - not: { kind: [attraction,building,address,farm,apron,residential,commercial,industrial,peak,viewpoint,nature_reserve,garden,museum,water_tower,substation,hotel,theatre,station,music,cinema,doityourself,parking,gate,library,information,helipad,newspaper,pedestrian,artwork,monument,tree,pub,electronics,office,pharmacy,bicycle,mall,fitness,historical,food_bank,recreation_ground,sports_centre,closed,archaeological_site,car,playground,picnic_site,bus_station] }
                 - $geometry: point
                 - $zoom: { min: 11 }
                 # White list a few kinds to "always" show per the tile zoom inclusion, else test feature's min_zoom
@@ -3492,19 +3493,19 @@ layers:
 
 
         # NOTE: all natural_* should only be in landuse layer
-        suppress-icon-always:
-            filter:
-                kind: [natural_forest, natural_park, natural_wood]
-            draw:
-                icons:
-                    size: 0px
-                    priority: 100
-                    text:
-                        font:
-                            fill: '#666'
-                            family: global.text_font_family
-                            style: italic
-                            size: [[13,24px],[14,24px],[18,26px]]
+        # suppress-icon-always:
+        #     filter:
+        #         kind: [natural_forest, natural_park, natural_wood]
+        #     draw:
+        #         icons:
+        #             size: 0px
+        #             priority: 100
+        #             text:
+        #                 font:
+        #                     fill: '#666'
+        #                     family: global.text_font_family
+        #                     style: italic
+        #                     size: [[13,24px],[14,24px],[18,26px]]
             # This should work, but doesn't. hmmm
             # no-area:
             #     filter:
@@ -3515,14 +3516,14 @@ layers:
             #             visible: false
 
         # server problem: this should probably only have landuse layer label placements (not appear in pois layer)
-        suppress-icon-z17:
-            filter:
-                $zoom: { min: 19 }
-                kind: [common, grass, houseboat, pedestrian, railway, ship, wetland]
-            draw:
-                icons:
-                    size: 0px
-                    text: { font: { style: italic } }
+        # suppress-icon-z17:
+        #     filter:
+        #         $zoom: { min: 19 }
+        #         kind: [common, grass, houseboat, pedestrian, railway, ship, wetland]
+        #     draw:
+        #         icons:
+        #             size: 0px
+        #             text: { font: { style: italic } }
 
         # the server should be setting better values here
         z-server-friend:
@@ -3590,7 +3591,7 @@ layers:
                 filter:
                     area: true
                     $zoom: { max: 20 }
-                    kind: [common, grass, houseboat, pedestrian, pitch, railway, ship, wetland]
+                    kind: [common, grass, houseboat, pitch, railway, ship, wetland]
                 draw:
                     icons:
                         visible: false
@@ -4434,24 +4435,7 @@ layers:
                         style: global.landuse_style
                         color: global.landuse_park
                         order: 1
-        pedestrian:
-            filter:
-                kind: [pedestrian,common]
-            draw:
-                polygons:
-                    visible: global.landuse_visible_park
-                    style: global.landuse_style
-                    color: global.landuse_park
-                    order: 1
-            green-stuff:
-                filter:
-                    surface: [grass]
-                draw:
-                    polygons:
-                        visible: global.landuse_visible_park
-                        style: global.landuse_style
-                        color: global.landuse_park
-                        order: 1
+
         minor_green_stuff:
             filter:
                 kind: [pitch, meadow, village_green, grass, farmland, playground]

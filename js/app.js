@@ -80,7 +80,8 @@ var map = L.map('map', {
     detectRetina: true,
     minZoom: 2,
     maxZoom: 19,
-    closePopupOnClick: false
+    closePopupOnClick: false,
+    zoomControl: false
 });
 
 
