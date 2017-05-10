@@ -247,6 +247,11 @@ box-sizing: content-box;
     background: none !important;
 }
 
+/* hide canvas */
+#canvas {
+    visibility: hidden;
+}
+
 .ui-icon-gripsmall-diagonal-se {background-position: -81px -224px; right: 10px;}
 
 label {font:18px/27px Georgia, serif;}
