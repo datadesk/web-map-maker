@@ -907,7 +907,6 @@ document.getElementById('zoom-slider').addEventListener("input", function() {
 map.on('zoomend',function(){
     var zoomRounded = Math.floor(map.getZoom()*10) / 10;
     $("#zoom_level").text(zoomRounded.toFixed(1));
-    console.log(zoomRounded);
 
     // update slider position
     document.getElementById("zoom-slider").value = map.getZoom();
