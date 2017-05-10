@@ -243,6 +243,10 @@ box-sizing: content-box;
     box-shadow: 0px 0px 5px rgba(0,0,0,0.4);
 }
 
+#map canvas {
+    background: none !important;
+}
+
 .ui-icon-gripsmall-diagonal-se {background-position: -81px -224px; right: 10px;}
 
 label {font:18px/27px Georgia, serif;}
