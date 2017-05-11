@@ -1379,18 +1379,6 @@ layers:
                         cap: round
                         outline:
                             cap: butt
-            labels-highway:
-                filter:
-                    $zoom: { min: 13 }
-                draw:
-                    text-blend-order:
-                        priority: 50
-                        visible: global.roads_visible_highways
-                        offset: [0px, 18px]
-                        font:
-                            fill: global.road_text
-                            weight: normal
-                            size: [[13, 28px], [15, 30px]]
         major_road:
             filter: { kind: major_road }
             # default style
@@ -1399,7 +1387,6 @@ layers:
                     visible: global.roads_visible_major
                     color: global.road_color
                     width: [[8, 0.5px], [10, 0.5px], [11, 0.8px], [12, 1px], [14, 2.6px], [16, 6m]]
-                
             trunk_primary:
                 filter: { kind_detail: [trunk, primary] }
                 draw:
@@ -1427,7 +1414,7 @@ layers:
                         draw:
                             text-blend-order:
                                 priority: 51
-                                offset: [0px, 18px]
+                                offset: [0px, -20px]
                                 visible: global.labels_visible_major_roads
                                 font:
                                     fill: global.road_text
@@ -1447,7 +1434,7 @@ layers:
                     draw:
                         text-blend-order:
                             priority: 51
-                            offset: [0px, 18px]
+                            offset: [0px, -20px]
                             visible: global.labels_visible_major_roads
                             font:
                                 fill: global.road_text
@@ -1457,7 +1444,7 @@ layers:
                         filter: { $zoom: [16] }
                         draw:
                             text-blend-order:
-                                offset: [0px, 18px]
+                                offset: [0px, -20px]
                                 visible: global.labels_visible_major_roads
                                 font:
                                     weight: normal
@@ -1507,7 +1494,7 @@ layers:
                         filter: { $zoom: { min: 13 } }
                         draw:
                             text-blend-order:
-                                offset: [0px, 18px]
+                                offset: [0px, -20px]
                                 priority: 56
                                 visible: global.labels_visible_minor_roads
                                 font:
@@ -1520,7 +1507,7 @@ layers:
                     draw:
                         text-blend-order:
                             priority: 56
-                            offset: [0px, 18px]
+                            offset: [0px, -20px]
                             visible: global.labels_visible_minor_roads
                             font:
                                 fill: global.road_text_minor
@@ -1568,7 +1555,7 @@ layers:
                     draw:
                         text-blend-order:
                             priority: 57
-                            offset: [0px, 18px]
+                            offset: [0px, -20px]
                             # repeat_distance: 400px
                             visible: global.labels_visible_minor_roads
                             font:
@@ -1618,7 +1605,7 @@ layers:
                 draw:
                     text-blend-order:
                         priority: 59
-                        offset: [0px, 16px]
+                        offset: [0px, -18px]
                         visible: global.labels_visible_minor_roads
                         font:
                             fill: global.road_text_minor
@@ -1658,7 +1645,7 @@ layers:
                 draw:
                     text-blend-order:
                         priority: 60
-                        offset: [0px, 16px]
+                        offset: [0px, -18px]
                         visible: global.labels_visible_service_roads
                         font:
                             fill: global.road_text_minor
@@ -4038,50 +4025,6 @@ layers:
                 order: function() { return feature.sort_rank; }
                 visible: false
 
-        landuse-labels:
-            filter:
-                all:
-                    - label_placement: true
-                    - name: true
-            draw:
-                text-blend-order:
-                    text_source: global.ux_language_text_source
-                    interactive: global.interactive
-                    move_into_tile: true
-                    priority: 100
-                    visible: global.labels_visible_landuse
-                    font:
-                        fill: global.text_fill
-                        family: global.text_font_family
-                        style: italic
-                        size: 26px
-                        stroke: { color: global.text_stroke_address, width: 1 }
-
-            show-with-icon:
-                filter: { kind: [allotments] }
-                draw:
-                    text-blend-order:
-                        visible: false
-                    icons:
-                        visible: global.icon_visible_poi_landuse
-                        size: [[13, 18px], [16, 18px], [18, 22px]]
-                        sprite: function() { return feature.kind; }
-                        sprite_default: generic
-                        interactive: global.interactive
-                        priority: 65 #function() { return (feature.min_zoom && Math.floor(feature.min_zoom * 1000)) || 65; }
-                        repeat_group: abc
-                        buffer: 7px
-                        text:
-                            visible: global.labels_visible_points_of_interest
-                            text_source: global.ux_language_text_source
-                            text_wrap: 18
-                            max_lines: 3
-                            font:
-                                family: global.text_font_family
-                                weight: 600
-                                fill: [0.10,0.10,0.10]
-                                size: [[13,10px],[14,10px],[18,11px]]
-                                stroke: { color: global.text_stroke, width: 3 }
         tier1:
             # filter:
             #     any:
@@ -4406,7 +4349,6 @@ layers:
                         style: global.landuse_style
                         color: global.landuse_theme_park
                         order: 2
-                        
             beach:
                 filter:
                     kind: beach
