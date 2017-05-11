@@ -3131,84 +3131,84 @@ layers:
                             priority: 27
 
 
-        neighbourhoods:
-            filter:
-                kind:
-                    - macrohood
-                    - neighbourhood
-                    - borough
-                $zoom: { min: 13 }
-                is_landuse_aoi: false
-            draw:
-                text-blend-order:
-                    visible: global.labels_visible_neighborhoods
-                    priority: 29
-                    buffer: 8px
-                    text_wrap: 11
-                    max_lines: 5
-                    font:
-                        family: global.text_font_family
-                        fill: global.text_fill_gray
-                        weight: normal
-                        style: italic
-                        stroke: { color: global.text_stroke, width: 3 }
-                        size: 28px
-            neighborhood-z13:
-                filter:
-                    $zoom: [13]
-                    min_zoom: [13]
-                    max_zoom: { min: 14 }
-                    kind_tile_rank: { max: 8 }
-                draw:
-                    text-blend-order:
-                        text_wrap: 10
-                        visible: global.labels_visible_neighborhoods
-                        font:
-                            size: 28px
-            neighborhood-z14:
-                filter:
-                    $zoom: [14]
-                    min_zoom: [13,14]
-                    max_zoom: { min: 15 }
-                    kind_tile_rank: { max: 8 }
-                draw:
-                    text-blend-order:
-                        text_wrap: 12
-                        visible: global.labels_visible_neighborhoods
-                        font:
-                            size: 30px
-            neighborhood-z15:
-                filter:
-                    $zoom: [15]
-                    min_zoom: [13,14,15]
-                    max_zoom: { min: 16 }
-                    kind_tile_rank: { max: 8 }
-                draw:
-                    text-blend-order:
-                        text_wrap: 12
-                        visible: global.labels_visible_neighborhoods
-                        font:
-                            size: 30px
-                z15-new:
-                    filter:
-                        all:
-                            - min_zoom: 15
-                    draw:
-                        text-blend-order:
-                            priority: 19
-                            font:
-                                size: 30px
-            neighborhood-z16:
-                filter:
-                    $zoom: [16]
-                    min_zoom: [13,14,15,16]
-                    max_zoom: { min: 17 }
-                    kind_tile_rank: { max: 8 }
-                draw:
-                    text-blend-order:
-                        visible: global.labels_visible_neighborhoods
-                        font:
-                            size: 32px
+        # neighbourhoods:
+        #     filter:
+        #         kind:
+        #             - macrohood
+        #             - neighbourhood
+        #             - borough
+        #         $zoom: { min: 13 }
+        #         is_landuse_aoi: false
+        #     draw:
+        #         text-blend-order:
+        #             visible: global.labels_visible_neighborhoods
+        #             priority: 29
+        #             buffer: 8px
+        #             text_wrap: 11
+        #             max_lines: 5
+        #             font:
+        #                 family: global.text_font_family
+        #                 fill: global.text_fill_gray
+        #                 weight: normal
+        #                 style: italic
+        #                 stroke: { color: global.text_stroke, width: 3 }
+        #                 size: 28px
+        #     neighborhood-z13:
+        #         filter:
+        #             $zoom: [13]
+        #             min_zoom: [13]
+        #             max_zoom: { min: 14 }
+        #             kind_tile_rank: { max: 8 }
+        #         draw:
+        #             text-blend-order:
+        #                 text_wrap: 10
+        #                 visible: global.labels_visible_neighborhoods
+        #                 font:
+        #                     size: 28px
+        #     neighborhood-z14:
+        #         filter:
+        #             $zoom: [14]
+        #             min_zoom: [13,14]
+        #             max_zoom: { min: 15 }
+        #             kind_tile_rank: { max: 8 }
+        #         draw:
+        #             text-blend-order:
+        #                 text_wrap: 12
+        #                 visible: global.labels_visible_neighborhoods
+        #                 font:
+        #                     size: 30px
+        #     neighborhood-z15:
+        #         filter:
+        #             $zoom: [15]
+        #             min_zoom: [13,14,15]
+        #             max_zoom: { min: 16 }
+        #             kind_tile_rank: { max: 8 }
+        #         draw:
+        #             text-blend-order:
+        #                 text_wrap: 12
+        #                 visible: global.labels_visible_neighborhoods
+        #                 font:
+        #                     size: 30px
+        #         z15-new:
+        #             filter:
+        #                 all:
+        #                     - min_zoom: 15
+        #             draw:
+        #                 text-blend-order:
+        #                     priority: 19
+        #                     font:
+        #                         size: 30px
+        #     neighborhood-z16:
+        #         filter:
+        #             $zoom: [16]
+        #             min_zoom: [13,14,15,16]
+        #             max_zoom: { min: 17 }
+        #             kind_tile_rank: { max: 8 }
+        #         draw:
+        #             text-blend-order:
+        #                 visible: global.labels_visible_neighborhoods
+        #                 font:
+        #                     size: 32px
 
 
     pois:
