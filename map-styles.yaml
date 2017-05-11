@@ -4310,7 +4310,7 @@ layers:
                     polygons:
                         visible: global.landuse_visible_cemetery
                         style: global.landuse_style
-                        color: global.landuse_cemetary
+                        color: '#dfe5c3'
                         order: 1
             golf_course:
                 filter:
