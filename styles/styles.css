@@ -525,9 +525,13 @@ p.description {
     font-size: 24px;
     line-height: 28px;
     font-family: 'Benton Gothic Regular', Arial, sans-serif;
+    color: #000;
     background: none;
     border: 1px solid rgba(0,0,0,0);
     box-shadow: none;
+    letter-spacing: 0.5px;
+    cursor: move;
+    width: 300px;
 }
 
 .text-label textarea:focus, .text-label textarea:hover {

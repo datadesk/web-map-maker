@@ -303,9 +303,9 @@ global:
     labels_visible_cities:              true # ∆
     labels_visible_highway_shields:     true # ∆
     labels_visible_major_roads:         true # ∆
-    labels_visible_minor_roads:         true # ∆ this should be added to  UI list
+    labels_visible_minor_roads:         true # ∆
     labels_visible_service_road:        true # ∆ this should be added to  UI list as Paths, service roads
-    labels_visible_water:               true # this should be added to  UI list
+    labels_visible_water:               true # ∆
     labels_visible_neighborhoods:       true # ∆
     labels_visible_points_of_interest:  true # ∆
     labels_visible_landuse:             true
@@ -2301,7 +2301,7 @@ layers:
                 visible: global.buildings_visible
                 order: 491 #function() { return feature.sort_rank; }
                 color: global.building_outline
-                width: [[14,0],[15,0.75px],[18,0.75px]]
+                width: [[14,0px],[15,0.75px],[18,0.75px]]
                 style: lines
                 
         # buildings_over_landuse:   # this is a bug that mapzen is working on

@@ -645,7 +645,7 @@ var layers = {
     'terrain_visible': [],
     'buildings_visible': [],
     'transit_visible': [],
-    'labels_visible': ['countries','states','cities','neighborhoods','highway_shields','major_roads','minor_roads','points_of_interest'],
+    'labels_visible': ['countries','states','cities','neighborhoods','highway_shields','major_roads','minor_roads','points_of_interest','water'],
     'roads_visible': ['highways','highway_ramps','major','minor','service','taxi_and_runways'],
     'borders_visible': ['countries','disputed','states','counties'],
     'landuse_visible': ['airports','beach','cemetery','college','forest','hospital','military','park','pier','prison','resort','stadium','wetland'],
@@ -919,7 +919,7 @@ map.on('zoomend',function(){
 // L.marker([33.99548,-118.45990], {draggable: true, icon: L.divIcon ({
 //     iconSize: [100, 15],
 //     iconAnchor: [0, 0],
-//     html: '<input type="text" value="Here\'s your label">',
+//     html: '<input type="text" value="Here\'s your label"><div id="target">O</div>',
 //     className: 'text-label ui-resizable'
 //     })}).addTo(map);
 
