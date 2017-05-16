@@ -309,7 +309,6 @@ global:
     labels_visible_neighborhoods:       true # ∆
     labels_visible_points_of_interest:  true # ∆
     labels_visible_landuse:             true
-    labels_visible_island:              true # ∆
     labels_visible_building:            false # ∆ saved for possible future inclusion
     labels_visible_address:             false # ∆ saved for possible future inclusion
     labels_visible_airport_gate:        false # not used but saving for later
@@ -4008,7 +4007,7 @@ layers:
             filter: { kind: [archipelago, island, islet] }
             draw:
                 text-blend-order:
-                    visible: global.labels_visible_island
+                    visible: global.labels_visible_neighborhoods
                     text_wrap: 10
                     font:
                         family: global.text_font_family
