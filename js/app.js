@@ -913,13 +913,40 @@ map.on('zoomend',function(){
     document.getElementById("zoom-slider").value = map.getZoom();
 });
 
+// freeze zoom
+
+function zoomFreeze() {
+    if ($("#zoom_lock").hasClass('fa-lock')) {
+        // enable zooming
+        $("#zoom_lock")
+            .removeClass('fa-lock')
+            .addClass('fa-unlock-alt');
+        map.touchZoom.enable();
+        map.doubleClickZoom.enable();
+        map.scrollWheelZoom.enable();
+        map.boxZoom.enable();
+        map.keyboard.enable();
+        frozenZoom = false;
+    } else {
+        // disable zooming
+        $("#zoom_lock")
+            .removeClass('fa-unlock-alt')
+            .addClass('fa-lock');
+        map.touchZoom.disable();
+        map.doubleClickZoom.disable();
+        map.scrollWheelZoom.disable();
+        map.boxZoom.disable();
+        map.keyboard.disable();
+        frozenZoom = true;
+    }
+}
 
 
-// // text marker test
-// L.marker([33.99548,-118.45990], {draggable: true, icon: L.divIcon ({
-//     iconSize: [100, 15],
-//     iconAnchor: [0, 0],
-//     html: '<input type="text" value="Here\'s your label"><div id="target">O</div>',
-//     className: 'text-label ui-resizable'
-//     })}).addTo(map);
+// text marker test
+L.marker([33.99548,-118.45990], {draggable: true, icon: L.divIcon ({
+    iconSize: [100, 15],
+    iconAnchor: [0, 0],
+    html: '<input type="text" value="Here\'s your label"><div id="target">O</div>',
+    className: 'text-label ui-resizable'
+    })}).addTo(map);
 

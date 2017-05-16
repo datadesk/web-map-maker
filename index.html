@@ -11,6 +11,8 @@
     <link rel="stylesheet" type="text/css" href="http://d1qqc1e9kvmdh8.cloudfront.net/css/ngux-tophat-responsive-0.4.5.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geocoder-mapzen/1.4.1/leaflet-geocoder-mapzen.css">
 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+
     <link rel="stylesheet" href="styles/leaflet.css">
     <!-- <link rel="stylesheet" href="http://latimes-graphics-media.s3.amazonaws.com/styles/leaflet-extra.css" /> -->
     <link rel="stylesheet" href="styles/jquery-ui.css">
@@ -113,9 +115,11 @@
 
 
 
-                <p class='map-info'>Zoom: <span id="zoom_level"></span> <span id="warning_msg"></span></p>
+                <p class='map-info'>Zoom: <span id="zoom_level"></span> <i class="fa fa-unlock-alt" id="zoom_lock" onclick="zoomFreeze();" aria-hidden="true"></i> <span id="warning_msg"></span></p>
 
-                <input type="range" step="0.001" id="zoom-slider" class="graphic-slider" min="2" max="19" value="10">
+                <input type="range" step="0.001" id="zoom-slider" class="graphic-slider" min="2" max="19" value="10"> 
+
+
 
             </div>
             <div id="map_area">

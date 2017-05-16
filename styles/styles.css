@@ -650,3 +650,10 @@ input[type=range]::-ms-fill-upper {
 input[type=range]:focus::-ms-fill-upper {
   background: #D1D2D4;
 }
+
+#zoom_lock {
+    cursor: pointer;
+}
+.fa-unlock-alt {
+    color: #ddd;
+}
