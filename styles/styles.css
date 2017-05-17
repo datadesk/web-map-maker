@@ -532,6 +532,8 @@ p.description {
     letter-spacing: 0.5px;
     cursor: move;
     white-space: nowrap;
+    margin: 0;
+    padding: 0;
 }
 
 .text-label input {
@@ -545,6 +547,9 @@ p.description {
     letter-spacing: 0.5px;
     cursor: move;
     display: none;
+    margin: 0;
+    padding: 0;
+    height: 26px;
     /*width: 300px;*/
 }
 
