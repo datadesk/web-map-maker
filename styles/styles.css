@@ -521,7 +521,18 @@ p.description {
     opacity: 0.3;
 }
 
-.custom_label span.display_text {
+.custom_label {
+    min-width: 200px;
+    display: inline-block;
+}
+
+.custom_label .rotate_handle {
+    display: block;
+    margin: 3px 10px 0 0;
+    float: left;
+}
+
+.custom_label span.small_label {
     font-size: 24px;
     line-height: 28px;
     font-family: 'Benton Gothic Regular', Arial, sans-serif;
@@ -550,12 +561,12 @@ p.description {
     margin: 0;
     padding: 0;
     height: 26px;
-    /*width: 300px;*/
+    width: 300px;
 }
 
-.text-label textarea:focus, .text-label textarea:hover {
-    border: 1px dashed rgba(0,0,0,0.5);
-    cursor: move;
+.label-size-btn {
+    display: inline-block;
+    margin: 0 5px;
 }
 
 input[type=range] {

@@ -946,9 +946,11 @@ function zoomFreeze() {
 L.marker([33.99548,-118.45990], {draggable: true, icon: L.divIcon ({
     iconSize: [100, 15],
     iconAnchor: [0, 0],
-    html: '<div class="custom_label"><span class="display_text">Here\'s your label</span><input type="text" class="text_input"><i class="fa fa-repeat rotate_handle" aria-hidden="true"></i> L M S</div>',
+    html: '<div class="custom_label"><span class="display_text small_label">Here\'s your label</span><input type="text" class="text_input" maxlength="40"><i class="fa fa-repeat rotate_handle" aria-hidden="true"></i> <span class="label-size-btn large">L</span> <span class="label-size-btn large">M</span> <span class="label-size-btn large">S</span></div>',
     className: 'text-label ui-resizable'
     })}).addTo(map);
+
+
 
 // edit text to swap in input and out
 $(".display_text").click(function(){
@@ -967,17 +969,50 @@ $(".text_input").blur(function(){
 
 
 // function to handle rotating custom label
-$(".custom_label .rotate_handle").mousedown(function() {
-    var target = $(this).parent(),
-        originX = target.offset().left + target.width() / 2,
-        originY = target.offset().top + target.height() / 2,
-        dragging = false,
-        startingDegrees = 0,
-        lastDegrees = 0,
-        currentDegrees = 0;
+// $(function() {
+    $(".custom_label .rotate_handle").mousedown(function(e) {
+        console.log('rotate-try');
 
-    console.log('hello');
-});
+        var target = $(this).parent(),
+            originX = target.offset().left + target.width() / 2,
+            originY = target.offset().top + target.height() / 2,
+            dragging = false,
+            startingDegrees = 0,
+            lastDegrees = 0,
+            currentDegrees = 0;
+
+            // target.mousedown(function(e) {
+                dragging = true;
+                mouseX = e.pageX;
+                mouseY = e.pageY;
+                radians = Math.atan2(mouseY - originY, mouseX - originX),
+                startingDegrees = radians * (180 / Math.PI);
+            // });
+        $(document).mouseup(function() {
+            lastDegrees = currentDegrees;
+            dragging = false;
+        }).mousemove(function(e) {
+            var mouseX, mouseY, radians, degrees;
+            
+            if (!dragging) {
+                return;
+            }
+            
+            mouseX = e.pageX;
+            mouseY = e.pageY;
+            radians = Math.atan2(mouseY - originY, mouseX - originX),
+            degrees = radians * (180 / Math.PI) - startingDegrees + lastDegrees;
+            
+            currentDegrees = degrees;
+            
+            target.css('-webkit-transform', 'rotate(' + degrees + 'deg)');
+            target.css('-ms-transform', 'rotate(' + degrees + 'deg)');
+            target.css('transform', 'rotate(' + degrees + 'deg)');
+        });
+            
+    });
+
+// });
 
 
 // $(function() {
