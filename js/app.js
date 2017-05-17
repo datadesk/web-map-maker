@@ -965,7 +965,7 @@ $(".display_text").click(function(){
 $(".text_input").blur(function(){
     $(".text_input").hide();
     $(".display_text").text($(".text_input").val());
-    $(".display_text").show();
+    $(".display_text").css("display","block");
 });
 
 
