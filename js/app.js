@@ -943,13 +943,14 @@ function zoomFreeze() {
 
 
 // text marker test
-L.marker([33.99548,-118.45990], {draggable: true, icon: L.divIcon ({
+var customLabel1 = L.marker([33.99548,-118.45990], {draggable: true, icon: L.divIcon ({
     iconSize: [100, 15],
     iconAnchor: [0, 0],
     html: '<div class="custom_label"><span class="display_text small_label">Here\'s your label</span><input type="text" class="text_input" maxlength="40"><i class="fa fa-repeat rotate_handle" aria-hidden="true"></i> <span class="label-size-btn large">L</span> <span class="label-size-btn large">M</span> <span class="label-size-btn large">S</span></div>',
     className: 'text-label ui-resizable'
-    })}).addTo(map);
+    })});
 
+customLabel1.addTo(map);
 
 
 // edit text to swap in input and out
@@ -973,6 +974,10 @@ $(".text_input").blur(function(){
     $(".custom_label .rotate_handle").mousedown(function(e) {
         console.log('rotate-try');
 
+        // temporarily freeze dragging
+        customLabel1.dragging.disable();
+        map.dragging.disable();
+
         var target = $(this).parent(),
             originX = target.offset().left + target.width() / 2,
             originY = target.offset().top + target.height() / 2,
@@ -991,6 +996,11 @@ $(".text_input").blur(function(){
         $(document).mouseup(function() {
             lastDegrees = currentDegrees;
             dragging = false;
+
+            // unfreeze dragging
+            customLabel1.dragging.enable();
+            map.dragging.enable();
+
         }).mousemove(function(e) {
             var mouseX, mouseY, radians, degrees;
             
@@ -1009,7 +1019,7 @@ $(".text_input").blur(function(){
             target.css('-ms-transform', 'rotate(' + degrees + 'deg)');
             target.css('transform', 'rotate(' + degrees + 'deg)');
         });
-            
+
     });
 
 // });
