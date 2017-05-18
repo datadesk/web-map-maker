@@ -2299,8 +2299,8 @@ layers:
             lines:
                 visible: global.buildings_visible
                 order: 491 #function() { return feature.sort_rank; }
-                color: global.building_outline
-                width: [[14,0px],[15,0.75px],[18,0.75px]]
+                color: function() { if (feature.area > 5000 || feature.landuse_kind == 'college' || feature.landuse_kind == 'library' || feature.landuse_kind == 'hospital' || feature.landuse_kind == 'golf_course' || feature.landuse_kind == 'university' || feature.landuse_kind == 'cemetery' || feature.landuse_kind == 'park' || feature.landuse_kind == 'aerodrome') { return "#666"; } else { return [255,255,255,0]; } }
+                width: [[15,0],[16,1px]]
                 style: lines
                 
         # buildings_over_landuse:   # this is a bug that mapzen is working on
