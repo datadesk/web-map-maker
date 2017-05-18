@@ -247,6 +247,7 @@ global:
     landuse_airports:                   '#eff0ef'
     landuse_cemetery:                   '#E4E4D5'
     landuse_college:                    '#F2F0E7'
+    landuse_school:                     '#F2F0E7'
     # - &forest                         '#E7F1CA'
     landuse_hospital:                   '#E2EDEF'
     landuse_military:                   '#eff0ef'
@@ -2300,7 +2301,7 @@ layers:
             lines:
                 visible: global.buildings_visible
                 order: 491 #function() { return feature.sort_rank; }
-                color: function() { if (feature.area > 5000 || feature.landuse_kind == 'college' || feature.landuse_kind == 'library' || feature.landuse_kind == 'hospital' || feature.landuse_kind == 'golf_course' || feature.landuse_kind == 'university' || feature.landuse_kind == 'cemetery' || feature.landuse_kind == 'park' || feature.landuse_kind == 'aerodrome') { return "#666"; } else { return [255,255,255,0]; } }
+                color: function() { if (feature.area > 5000 || feature.landuse_kind == 'college' || feature.landuse_kind == 'library' || feature.landuse_kind == 'hospital' || feature.landuse_kind == 'golf_course' || feature.landuse_kind == 'university' || feature.landuse_kind == 'cemetery' || feature.landuse_kind == 'park' || feature.landuse_kind == 'aerodrome') { return "#666"; } else { return "#fff"; } }
                 width: [[15,0],[16,1px]]
                 style: lines
 
@@ -4233,6 +4234,15 @@ layers:
                         visible: global.landuse_visible_college
                         style: global.landuse_style
                         color: global.landuse_college
+                        order: 1
+            school:
+                filter:
+                    kind: [school]
+                draw:
+                    polygons:
+                        visible: global.landuse_visible_college
+                        style: global.landuse_style
+                        color: global.landuse_school
                         order: 1
         tier4:
             # filter:
