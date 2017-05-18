@@ -522,7 +522,7 @@ p.description {
 }
 
 .custom_label {
-    min-width: 200px;
+    /*min-width: 200px;*/
     display: inline-block;
 }
 

@@ -982,10 +982,13 @@ $(".text_input").blur(function(){
             originX = target.offset().left + target.width() / 2,
             originY = target.offset().top + target.height() / 2,
             dragging = false,
-            startingDegrees = 0,
+            startingDegrees = (typeof target[0].style.transform == 'undefined') ? 0 : target[0].style.transform.substr(7,target[0].style.transform.indexOf('deg')-7),
             lastDegrees = 0,
             currentDegrees = 0;
 
+            console.log(startingDegrees)
+
+            console.log((typeof target[0].style.transform == 'undefined') ? 0 : target[0].style.transform.substr(7,target[0].style.transform.indexOf('deg')-7));
             // target.mousedown(function(e) {
                 dragging = true;
                 mouseX = e.pageX;
@@ -1015,6 +1018,11 @@ $(".text_input").blur(function(){
             
             currentDegrees = degrees;
             
+            // update to lock onto 0, 90, 270 if it rounds to it
+            if (Math.round(degrees) <= 3 && Math.round(degrees) >= -3) { 
+                degrees = 0; 
+            } 
+
             target.css('-webkit-transform', 'rotate(' + degrees + 'deg)');
             target.css('-ms-transform', 'rotate(' + degrees + 'deg)');
             target.css('transform', 'rotate(' + degrees + 'deg)');
