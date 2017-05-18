@@ -23,7 +23,7 @@ Try it out on [the demonstration page](http://datadesk.github.io/web-map-maker/)
 You don't need much to get up and running. Download this repo and make a config.js file (we provided a template [here](https://github.com/datadesk/web-map-maker/tree/master/js/config.js-TEMPLATE)), then put it in the "js" directory. A Bing API key isn't necessary to use the map maker; only for geocoding and location search. You can also define initial coordinates or zoom so you can start the map in your preferred location each time. 
 
 It should look like this:
-```
+```js
 var configOptions = {
     'bingAPI': 'Your API here',
     'attribution': 'Author name, ',
@@ -36,7 +36,7 @@ You should also [get a Mapzen key](https://mapzen.com/developers/sign_in) and up
 
 Then you're ready to run the mapmaker. The easiest way is to fire up a simple python server (obviously you'll need python) with this command:
 
-```
+```sh
 python -m SimpleHTTPServer 8000
 ```
 
