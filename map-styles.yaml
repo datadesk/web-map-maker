@@ -1207,7 +1207,7 @@ layers:
             text-blend-order:
                 text_source: global.ux_language_text_source
                 font:
-                    fill: global.labels_visible_water
+                    fill: global.text_water
                     family: global.text_font_family
                     style: italic
                     weight: normal
