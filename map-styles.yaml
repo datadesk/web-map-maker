@@ -1375,6 +1375,7 @@ layers:
                 filter: { is_bridge: true }
                 draw:
                     lines:
+                        order: 492
                         cap: round
                         outline:
                             cap: butt
@@ -1621,7 +1622,7 @@ layers:
                 lines:
                     visible: global.roads_visible_service
                     color: global.minor_road
-                    width: [[16, 2m], [17, 3m]]
+                    width: [[16, 1m], [17, 1.5m]]
             early:
                 filter: { $zoom: { max: 16 } }
                 draw:
@@ -2302,7 +2303,7 @@ layers:
                 color: function() { if (feature.area > 5000 || feature.landuse_kind == 'college' || feature.landuse_kind == 'library' || feature.landuse_kind == 'hospital' || feature.landuse_kind == 'golf_course' || feature.landuse_kind == 'university' || feature.landuse_kind == 'cemetery' || feature.landuse_kind == 'park' || feature.landuse_kind == 'aerodrome') { return "#666"; } else { return [255,255,255,0]; } }
                 width: [[15,0],[16,1px]]
                 style: lines
-                
+
         # buildings_over_landuse:   # this is a bug that mapzen is working on
         #   filter: { landuse_kind: [station,aerodrome,parking,park,university,national_park, conservation, protected_area, nature_reserve, forest, grass, beach, battlefield], $zoom: { min: 14 }, scale_rank: [1,2,3,4,5] }
         #   draw:
