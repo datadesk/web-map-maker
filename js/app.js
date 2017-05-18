@@ -968,9 +968,8 @@ $(".text_input").blur(function(){
     $(".display_text").css("display","block");
 });
 
-
 // function to handle rotating custom label
-// $(function() {
+$(function() {
     $(".custom_label .rotate_handle").mousedown(function(e) {
         console.log('rotate-try');
 
@@ -1030,7 +1029,7 @@ $(".text_input").blur(function(){
 
     });
 
-// });
+});
 
 
 // $(function() {

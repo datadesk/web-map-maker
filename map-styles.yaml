@@ -1196,7 +1196,7 @@ layers:
 
     water-line-labels:
         data: { source: mapzen, layer: water }
-        visible: global.text_water
+        visible: global.labels_visible_water
         filter:
             all:
                 - name: true
@@ -1207,7 +1207,7 @@ layers:
             text-blend-order:
                 text_source: global.ux_language_text_source
                 font:
-                    fill: global.text_water
+                    fill: global.labels_visible_water
                     family: global.text_font_family
                     style: italic
                     weight: normal
