@@ -545,23 +545,22 @@ p.description {
     margin: 0;
     padding: 0;
     cursor: move;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
     box-shadow: none;
     border: 1px solid rgba(0,0,0,0);
     color: #000;
     background: none;
-    background: none;
 }
 
 .small_label span, .small_label textarea {
-    font-size: 24px;
-    line-height: 28px;
+    font-size: 26px;
+    line-height: 30px;
     font-family: 'Benton Gothic Regular', Arial, sans-serif;
 }
 
 .medium_label span, .medium_label textarea {
-    font-size: 32px;
-    line-height: 36px;
+    font-size: 34px;
+    line-height: 38px;
     font-family: 'Benton Gothic Bold', Arial, sans-serif;
 }
 
