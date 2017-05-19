@@ -1077,6 +1077,23 @@ function customLabelTools() {
 
     });
 
+    // delete label
+    $(".remove_label").click(function(){
+        var parentID = $(this).parent()[0].id; 
+        console.log(parentID);
+        console.log(customLabels);
+
+        map.removeLayer(customLabels[parentID]);
+
+
+
+        // console.log(customLabels);
+            // if (confirm("Are you sure you want to delete this?") == true) {
+            //     txt = "You pressed OK!";
+            // } else {
+            //     txt = "You pressed Cancel!";
+            // }
+    });
 
 }
 
