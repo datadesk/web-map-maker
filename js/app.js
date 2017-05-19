@@ -1043,9 +1043,11 @@ function customLabelTools() {
                 currentDegrees = degrees;
                 
                 // update to lock onto 0, 90, 270 if it rounds to it
-                if (Math.round(degrees) <= 3 && Math.round(degrees) >= -3) { 
+                if (degrees <= 5 && degrees >= -5) { 
                     degrees = 0; 
-                } 
+                } else if (degrees >= -275 && degrees <= -265) {
+                    degrees = -270;
+                }
 
                 target.css('-webkit-transform', 'rotate(' + degrees + 'deg)');
                 target.css('-ms-transform', 'rotate(' + degrees + 'deg)');
