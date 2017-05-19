@@ -976,45 +976,34 @@ function addCustomLabel(size) {
     var customLabel = L.marker(map.getCenter(), {draggable: true, icon: L.divIcon ({
         iconSize: [100, 15],
         iconAnchor: [0, 0],
-        html: '<div class="custom_label" id="custom_label'+thisID+'"><span class="display_text small_label">Here\'s your label</span><input type="text" class="text_input" maxlength="40"><i class="fa fa-repeat rotate_handle" aria-hidden="true"></i> <i class="fa fa-times remove_label" aria-hidden="true"></i></div>',
+        html: '<div class="custom_label small_label" id="custom_label'+thisID+'"><span class="display_text">Here\'s your label</span><textarea class="text_input" maxlength="100"></textarea><i class="fa fa-repeat rotate_handle" aria-hidden="true"></i> <i class="fa fa-times remove_label" aria-hidden="true"></i></div>',
         className: 'text-label ui-resizable',
         id: 'custom_label'+thisID
         })});
 
+    // add label to the object of all labels
     customLabels['custom_label'+thisID] = customLabel;
 
-
+    // add label to map
     customLabel.addTo(map);
 
-    customLabelTools();
-
     // fire custom label tool listener
+    customLabelTools();
 }
-
-
-// text marker test
-// var customLabel1 = L.marker([33.99548,-118.45990], {draggable: true, icon: L.divIcon ({
-//     iconSize: [100, 15],
-//     iconAnchor: [0, 0],
-//     html: '<div class="custom_label"><span class="display_text small_label">Here\'s your label</span><input type="text" class="text_input" maxlength="40"><i class="fa fa-repeat rotate_handle" aria-hidden="true"></i> <span class="label-size-btn large">L</span> <span class="label-size-btn large">M</span> <span class="label-size-btn large">S</span></div>',
-//     className: 'text-label ui-resizable'
-//     })});
-
-// customLabel1.addTo(map);
 
 function customLabelTools() {
     // edit text to swap in input and out
     $(".display_text").click(function(){
         // hide display text
         $(this).hide();
-        $(".text_input").val($(this).text());
+        $(".text_input").val($(this).html().replace(/<br\s*[\/]?>/gi, "\n"));
         $(".text_input").show();
         $(".text_input").focus();
     });
 
     $(".text_input").blur(function(){
         $(".text_input").hide();
-        $(".display_text").text($(".text_input").val());
+        $(".display_text").html($(".text_input").val().replace(/\n\r?/g, '<br />'));
         $(".display_text").css("display","block");
     });
 

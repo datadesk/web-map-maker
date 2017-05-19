@@ -532,8 +532,10 @@ p.description {
     float: left;
 }
 
-.custom_label span.small_label {
+.small_label span {
     font-size: 24px;
+    display: inline-block;
+    width: 300px;
     line-height: 28px;
     font-family: 'Benton Gothic Regular', Arial, sans-serif;
     color: #000;
@@ -542,12 +544,12 @@ p.description {
     box-shadow: none;
     letter-spacing: 0.5px;
     cursor: move;
-    white-space: nowrap;
+    /*white-space: nowrap;*/
     margin: 0;
     padding: 0;
 }
 
-.text-label input {
+.text-label textarea {
     font-size: 24px;
     line-height: 28px;
     font-family: 'Benton Gothic Regular', Arial, sans-serif;
@@ -560,7 +562,7 @@ p.description {
     display: none;
     margin: 0;
     padding: 0;
-    height: 26px;
+    /*height: 26px;*/
     width: 300px;
 }
 
