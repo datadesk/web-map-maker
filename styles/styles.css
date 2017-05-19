@@ -532,38 +532,41 @@ p.description {
     float: left;
 }
 
-.small_label span {
-    font-size: 24px;
+.text-label span {
     display: inline-block;
-    width: 300px;
-    line-height: 28px;
-    font-family: 'Benton Gothic Regular', Arial, sans-serif;
-    color: #000;
-    background: none;
-    border: 1px solid rgba(0,0,0,0);
-    box-shadow: none;
-    letter-spacing: 0.5px;
-    cursor: move;
-    /*white-space: nowrap;*/
-    margin: 0;
-    padding: 0;
 }
 
 .text-label textarea {
+    display: none;
+}
+
+.text-label span, .text-label textarea {
+    width: 300px;
+    margin: 0;
+    padding: 0;
+    cursor: move;
+    letter-spacing: 0.5px;
+    box-shadow: none;
+    border: 1px solid rgba(0,0,0,0);
+    color: #000;
+    background: none;
+    background: none;
+}
+
+.small_label span, .small_label textarea {
     font-size: 24px;
     line-height: 28px;
     font-family: 'Benton Gothic Regular', Arial, sans-serif;
-    color: #000;
-    background: none;
-    border: 1px solid rgba(0,0,0,0);
-    box-shadow: none;
-    letter-spacing: 0.5px;
-    cursor: move;
-    display: none;
-    margin: 0;
-    padding: 0;
-    /*height: 26px;*/
-    width: 300px;
+}
+
+.medium_label span, .medium_label textarea {
+    font-size: 32px;
+    line-height: 36px;
+    font-family: 'Benton Gothic Bold', Arial, sans-serif;
+}
+
+.text-label textarea:focus {
+    border: 1px dashed #666;
 }
 
 .label-size-btn {

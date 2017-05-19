@@ -296,7 +296,8 @@ function downloadIMG() {
 
         // hide map controls buttons
         $("#map").css("background","none");
-        $(".leaflet-control-zoom").hide();
+        $(".rotate_handle").hide();
+        $(".remove_label").hide();
 
         // basemap
         scene.screenshot().then(function(screenshot) {
@@ -345,8 +346,9 @@ function downloadIMG() {
                     onrendered: function(canvas) {
 
                         ctx.drawImage(canvas,0,0, mapSize[0], mapSize[1]);
-                        $(".leaflet-control-zoom").show(); // show zoom again
                         $("#map").css("background","#ddd"); // bring back map's background
+                        $(".rotate_handle").show();
+                        $(".remove_label").show();
 
                         // create an off-screen anchor tag
                         var lnk = document.createElement('a'),
@@ -976,7 +978,7 @@ function addCustomLabel(size) {
     var customLabel = L.marker(map.getCenter(), {draggable: true, icon: L.divIcon ({
         iconSize: [100, 15],
         iconAnchor: [0, 0],
-        html: '<div class="custom_label small_label" id="custom_label'+thisID+'"><span class="display_text">Here\'s your label</span><textarea class="text_input" maxlength="100"></textarea><i class="fa fa-repeat rotate_handle" aria-hidden="true"></i> <i class="fa fa-times remove_label" aria-hidden="true"></i></div>',
+        html: '<div class="custom_label '+size+'_label" id="custom_label'+thisID+'"><span class="display_text">Here\'s your label</span><textarea class="text_input" maxlength="100"></textarea><i class="fa fa-repeat rotate_handle" aria-hidden="true"></i> <i class="fa fa-times remove_label" aria-hidden="true"></i></div>',
         className: 'text-label ui-resizable',
         id: 'custom_label'+thisID
         })});
@@ -996,15 +998,18 @@ function customLabelTools() {
     $(".display_text").click(function(){
         // hide display text
         $(this).hide();
-        $(".text_input").val($(this).html().replace(/<br\s*[\/]?>/gi, "\n"));
-        $(".text_input").show();
-        $(".text_input").focus();
+        var parentID = $(this).parent()[0].id; 
+        $("#"+parentID+" .text_input").val($(this).html().replace(/<br\s*[\/]?>/gi, "\n"));
+        $("#"+parentID+" .text_input").show();
+        $("#"+parentID+" .text_input").focus();
     });
 
     $(".text_input").blur(function(){
-        $(".text_input").hide();
-        $(".display_text").html($(".text_input").val().replace(/\n\r?/g, '<br />'));
-        $(".display_text").css("display","block");
+        $(this).hide();
+        var parentID = $(this).parent()[0].id; 
+
+        $("#"+parentID+" .display_text").html($("#"+parentID+" .text_input").val().replace(/\n\r?/g, '<br />'));
+        $("#"+parentID+" .display_text").css("display","block");
     });
 
     // function to handle rotating custom label
