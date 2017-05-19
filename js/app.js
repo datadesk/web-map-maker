@@ -941,95 +941,123 @@ function zoomFreeze() {
     }
 }
 
+var customLabels = {};
+
+function addCustomLabel(size) {
+    // text marker test
+    var customLabel = L.marker(map.getCenter(), {draggable: true, icon: L.divIcon ({
+        iconSize: [100, 15],
+        iconAnchor: [0, 0],
+        html: '<div class="custom_label"><span class="display_text small_label">Here\'s your label</span><input type="text" class="text_input" maxlength="40"><i class="fa fa-repeat rotate_handle" aria-hidden="true"></i> <i class="fa fa-times remove_label" aria-hidden="true"></i></div>',
+        className: 'text-label ui-resizable',
+        id: 'customLabel1'
+        })});
+
+    customLabels['customLabel1'] = customLabel;
+
+
+    customLabel.addTo(map);
+
+    customLabelTools();
+
+    // fire custom label tool listener
+}
+
 
 // text marker test
-var customLabel1 = L.marker([33.99548,-118.45990], {draggable: true, icon: L.divIcon ({
-    iconSize: [100, 15],
-    iconAnchor: [0, 0],
-    html: '<div class="custom_label"><span class="display_text small_label">Here\'s your label</span><input type="text" class="text_input" maxlength="40"><i class="fa fa-repeat rotate_handle" aria-hidden="true"></i> <span class="label-size-btn large">L</span> <span class="label-size-btn large">M</span> <span class="label-size-btn large">S</span></div>',
-    className: 'text-label ui-resizable'
-    })});
+// var customLabel1 = L.marker([33.99548,-118.45990], {draggable: true, icon: L.divIcon ({
+//     iconSize: [100, 15],
+//     iconAnchor: [0, 0],
+//     html: '<div class="custom_label"><span class="display_text small_label">Here\'s your label</span><input type="text" class="text_input" maxlength="40"><i class="fa fa-repeat rotate_handle" aria-hidden="true"></i> <span class="label-size-btn large">L</span> <span class="label-size-btn large">M</span> <span class="label-size-btn large">S</span></div>',
+//     className: 'text-label ui-resizable'
+//     })});
 
-customLabel1.addTo(map);
+// customLabel1.addTo(map);
 
+function customLabelTools() {
+    // edit text to swap in input and out
+    $(".display_text").click(function(){
+        // hide display text
+        $(this).hide();
+        $(".text_input").val($(this).text());
+        $(".text_input").show();
+        $(".text_input").focus();
+    });
 
-// edit text to swap in input and out
-$(".display_text").click(function(){
-    // hide display text
-    $(this).hide();
-    $(".text_input").val($(this).text());
-    $(".text_input").show();
-    $(".text_input").focus();
-});
+    $(".text_input").blur(function(){
+        $(".text_input").hide();
+        $(".display_text").text($(".text_input").val());
+        $(".display_text").css("display","block");
+    });
 
-$(".text_input").blur(function(){
-    $(".text_input").hide();
-    $(".display_text").text($(".text_input").val());
-    $(".display_text").css("display","block");
-});
+    // function to handle rotating custom label
+    $(function() {
+        $(".custom_label .rotate_handle").mousedown(function(e) {
+            console.log('rotate-try');
 
-// function to handle rotating custom label
-$(function() {
-    $(".custom_label .rotate_handle").mousedown(function(e) {
-        console.log('rotate-try');
+            // capture custom label
+            var customLabel = customLabels['customLabel1'];
 
-        // temporarily freeze dragging
-        customLabel1.dragging.disable();
-        map.dragging.disable();
+            // temporarily freeze dragging
+            customLabel.dragging.disable();
+            map.dragging.disable();
 
-        var target = $(this).parent(),
-            originX = target.offset().left + target.width() / 2,
-            originY = target.offset().top + target.height() / 2,
-            dragging = false,
-            startingDegrees = (typeof target[0].style.transform == 'undefined') ? 0 : target[0].style.transform.substr(7,target[0].style.transform.indexOf('deg')-7),
-            lastDegrees = 0,
-            currentDegrees = 0;
+            var target = $(this).parent(),
+                originX = target.offset().left + target.width() / 2,
+                originY = target.offset().top + target.height() / 2,
+                dragging = false,
+                startingDegrees = (typeof target[0].style.transform == 'undefined') ? 0 : target[0].style.transform.substr(7,target[0].style.transform.indexOf('deg')-7),
+                lastDegrees = 0,
+                currentDegrees = 0;
 
-            console.log(startingDegrees)
+                // console.log(startingDegrees)
 
-            console.log((typeof target[0].style.transform == 'undefined') ? 0 : target[0].style.transform.substr(7,target[0].style.transform.indexOf('deg')-7));
-            // target.mousedown(function(e) {
-                dragging = true;
+                // console.log((typeof target[0].style.transform == 'undefined') ? 0 : target[0].style.transform.substr(7,target[0].style.transform.indexOf('deg')-7));
+                // target.mousedown(function(e) {
+                    dragging = true;
+                    mouseX = e.pageX;
+                    mouseY = e.pageY;
+                    radians = Math.atan2(mouseY - originY, mouseX - originX),
+                    startingDegrees = radians * (180 / Math.PI);
+                // });
+            $(document).mouseup(function() {
+                lastDegrees = currentDegrees;
+                dragging = false;
+
+                // unfreeze dragging
+                customLabel.dragging.enable();
+                map.dragging.enable();
+
+            }).mousemove(function(e) {
+                var mouseX, mouseY, radians, degrees;
+                
+                if (!dragging) {
+                    return;
+                }
+                
                 mouseX = e.pageX;
                 mouseY = e.pageY;
                 radians = Math.atan2(mouseY - originY, mouseX - originX),
-                startingDegrees = radians * (180 / Math.PI);
-            // });
-        $(document).mouseup(function() {
-            lastDegrees = currentDegrees;
-            dragging = false;
+                degrees = radians * (180 / Math.PI) - startingDegrees + lastDegrees;
+                
+                currentDegrees = degrees;
+                
+                // update to lock onto 0, 90, 270 if it rounds to it
+                if (Math.round(degrees) <= 3 && Math.round(degrees) >= -3) { 
+                    degrees = 0; 
+                } 
 
-            // unfreeze dragging
-            customLabel1.dragging.enable();
-            map.dragging.enable();
+                target.css('-webkit-transform', 'rotate(' + degrees + 'deg)');
+                target.css('-ms-transform', 'rotate(' + degrees + 'deg)');
+                target.css('transform', 'rotate(' + degrees + 'deg)');
+            });
 
-        }).mousemove(function(e) {
-            var mouseX, mouseY, radians, degrees;
-            
-            if (!dragging) {
-                return;
-            }
-            
-            mouseX = e.pageX;
-            mouseY = e.pageY;
-            radians = Math.atan2(mouseY - originY, mouseX - originX),
-            degrees = radians * (180 / Math.PI) - startingDegrees + lastDegrees;
-            
-            currentDegrees = degrees;
-            
-            // update to lock onto 0, 90, 270 if it rounds to it
-            if (Math.round(degrees) <= 3 && Math.round(degrees) >= -3) { 
-                degrees = 0; 
-            } 
-
-            target.css('-webkit-transform', 'rotate(' + degrees + 'deg)');
-            target.css('-ms-transform', 'rotate(' + degrees + 'deg)');
-            target.css('transform', 'rotate(' + degrees + 'deg)');
         });
 
     });
 
-});
+}
+
 
 
 // $(function() {
