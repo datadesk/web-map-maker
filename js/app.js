@@ -941,19 +941,47 @@ function zoomFreeze() {
     }
 }
 
+// count elements in obj
+function countProperties(obj) {
+    var count = 0;
+
+    for (var prop in obj) {
+        if(obj.hasOwnProperty(prop))
+            ++count;
+    }
+
+    return count;
+}
+
+function lastId(obj) {
+    var lastId = 0;
+
+    for (var prop in obj) {
+        if (+prop.substr(12,3) > lastId) {
+            lastId = +prop.substr(12,3);
+        }
+    }
+
+    return lastId;
+}
+
+// setup object to hold all custom labels
 var customLabels = {};
 
 function addCustomLabel(size) {
+
+    var thisID = lastId(customLabels) + 1;
+
     // text marker test
     var customLabel = L.marker(map.getCenter(), {draggable: true, icon: L.divIcon ({
         iconSize: [100, 15],
         iconAnchor: [0, 0],
-        html: '<div class="custom_label"><span class="display_text small_label">Here\'s your label</span><input type="text" class="text_input" maxlength="40"><i class="fa fa-repeat rotate_handle" aria-hidden="true"></i> <i class="fa fa-times remove_label" aria-hidden="true"></i></div>',
+        html: '<div class="custom_label" id="custom_label'+thisID+'"><span class="display_text small_label">Here\'s your label</span><input type="text" class="text_input" maxlength="40"><i class="fa fa-repeat rotate_handle" aria-hidden="true"></i> <i class="fa fa-times remove_label" aria-hidden="true"></i></div>',
         className: 'text-label ui-resizable',
-        id: 'customLabel1'
+        id: 'custom_label'+thisID
         })});
 
-    customLabels['customLabel1'] = customLabel;
+    customLabels['custom_label'+thisID] = customLabel;
 
 
     customLabel.addTo(map);
@@ -995,8 +1023,8 @@ function customLabelTools() {
         $(".custom_label .rotate_handle").mousedown(function(e) {
             console.log('rotate-try');
 
-            // capture custom label
-            var customLabel = customLabels['customLabel1'];
+            // get the right custom label from object
+            var customLabel = customLabels[$(this).parent()[0].id];
 
             // temporarily freeze dragging
             customLabel.dragging.disable();
