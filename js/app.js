@@ -955,12 +955,12 @@ function countProperties(obj) {
     return count;
 }
 
-function lastId(obj) {
+function lastId(array) {
     var lastId = 0;
 
-    for (var prop in obj) {
-        if (+prop.substr(12,3) > lastId) {
-            lastId = +prop.substr(12,3);
+    for (var i = 0; i < array.length; i++) {
+        if (+array[i].options.icon.options.id.substr(12,3) > lastId) {
+            lastId = +array[i].options.icon.options.id.substr(12,3);
         }
     }
 
@@ -968,7 +968,7 @@ function lastId(obj) {
 }
 
 // setup object to hold all custom labels
-var customLabels = {};
+var customLabels = [];
 
 function addCustomLabel(size) {
 
@@ -976,41 +976,62 @@ function addCustomLabel(size) {
 
     // text marker test
     var customLabel = L.marker(map.getCenter(), {draggable: true, icon: L.divIcon ({
-        iconSize: [100, 15],
+        iconSize: [0, 0],
         iconAnchor: [0, 0],
         html: '<div class="custom_label '+size+'_label" id="custom_label'+thisID+'"><span class="display_text">Here\'s your label</span><textarea class="text_input" maxlength="100"></textarea><i class="fa fa-repeat rotate_handle" aria-hidden="true"></i> <i class="fa fa-times remove_label" aria-hidden="true"></i></div>',
         className: 'text-label ui-resizable',
         id: 'custom_label'+thisID
         })});
 
-    // add label to the object of all labels
-    customLabels['custom_label'+thisID] = customLabel;
+    // add label to the array of all labels
+    customLabels.push(customLabel);
+
+    console.log(customLabels);
 
     // add label to map
     customLabel.addTo(map);
-
-    // fire custom label tool listener
-    customLabelTools();
 }
 
+// edit text to swap in input and out
+$('body').on('click', '.display_text', function() {
+    console.log($(this));
+
+    // hide display text
+    $(this).hide();
+    var parentID = $(this).parent()[0].id; 
+    $("#"+parentID+" .text_input").val($(this).html().replace(/<br\s*[\/]?>/gi, "\n"));
+    $("#"+parentID+" .text_input").show();
+    $("#"+parentID+" .text_input").focus();
+});
+
+// on blur
+$('body').on('blur', '.text_input', function() {
+    $(this).hide();
+    var parentID = $(this).parent()[0].id; 
+
+    $("#"+parentID+" .display_text").html($("#"+parentID+" .text_input").val().replace(/\n\r?/g, '<br />'));
+    $("#"+parentID+" .display_text").css("display","block");
+});
+
+// delete label
+$('body').on('click', '.remove_label', function() {
+    var parentID = $(this).parent()[0].id; 
+
+    // loop through label list to find match
+    for (var i = 0; i < customLabels.length; i++) {
+        if (customLabels[i].options.icon.options.id == parentID) {
+            map.removeLayer(customLabels[i]); // remove from map
+            customLabels.splice(i, 1); // remove from list
+        }
+    }
+});
+
+
+
 function customLabelTools() {
-    // edit text to swap in input and out
-    $(".display_text").click(function(){
-        // hide display text
-        $(this).hide();
-        var parentID = $(this).parent()[0].id; 
-        $("#"+parentID+" .text_input").val($(this).html().replace(/<br\s*[\/]?>/gi, "\n"));
-        $("#"+parentID+" .text_input").show();
-        $("#"+parentID+" .text_input").focus();
-    });
 
-    $(".text_input").blur(function(){
-        $(this).hide();
-        var parentID = $(this).parent()[0].id; 
 
-        $("#"+parentID+" .display_text").html($("#"+parentID+" .text_input").val().replace(/\n\r?/g, '<br />'));
-        $("#"+parentID+" .display_text").css("display","block");
-    });
+
 
     // function to handle rotating custom label
     $(".custom_label .rotate_handle").mousedown(function(e) {
@@ -1077,23 +1098,7 @@ function customLabelTools() {
 
     });
 
-    // delete label
-    $(".remove_label").click(function(){
-        var parentID = $(this).parent()[0].id; 
-        console.log(parentID);
-        console.log(customLabels);
 
-        map.removeLayer(customLabels[parentID]);
-
-
-
-        // console.log(customLabels);
-            // if (confirm("Are you sure you want to delete this?") == true) {
-            //     txt = "You pressed OK!";
-            // } else {
-            //     txt = "You pressed Cancel!";
-            // }
-    });
 
 }
 

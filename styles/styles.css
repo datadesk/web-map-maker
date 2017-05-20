@@ -541,7 +541,8 @@ p.description {
 }
 
 .text-label span, .text-label textarea {
-    width: 300px;
+    width: auto;
+    white-space: nowrap;
     margin: 0;
     padding: 0;
     cursor: move;
