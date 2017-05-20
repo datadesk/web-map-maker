@@ -1026,6 +1026,74 @@ $('body').on('click', '.remove_label', function() {
     }
 });
 
+$('body').on('mousedown', '.rotate_handle', function(e) {
+    console.log('rotate-try');
+    console.log($(this).parent()[0].id);
+
+    // get the right custom label from object
+    for (var i = 0; i < customLabels.length; i++) {
+        if (customLabels[i].options.icon.options.id == $(this).parent()[0].id) {
+            var customLabel = customLabels[i]
+        }
+    }
+    // var customLabel = customLabels[$(this).parent()[0].id];
+
+    // temporarily freeze dragging
+    customLabel.dragging.disable();
+    map.dragging.disable();
+
+    var target = $(this).parent(),
+        originX = target.offset().left + target.width() / 2,
+        originY = target.offset().top + target.height() / 2,
+        dragging = false,
+        startingDegrees = (typeof target[0].style.transform == 'undefined') ? 0 : target[0].style.transform.substr(7,target[0].style.transform.indexOf('deg')-7),
+        lastDegrees = 0,
+        currentDegrees = 0;
+
+        // console.log(startingDegrees)
+
+        // console.log((typeof target[0].style.transform == 'undefined') ? 0 : target[0].style.transform.substr(7,target[0].style.transform.indexOf('deg')-7));
+        // target.mousedown(function(e) {
+            dragging = true;
+            mouseX = e.pageX;
+            mouseY = e.pageY;
+            radians = Math.atan2(mouseY - originY, mouseX - originX),
+            startingDegrees = radians * (180 / Math.PI);
+        // });
+    $(document).mouseup(function() {
+        lastDegrees = currentDegrees;
+        dragging = false;
+
+        // unfreeze dragging
+        customLabel.dragging.enable();
+        map.dragging.enable();
+
+    }).mousemove(function(e) {
+        var mouseX, mouseY, radians, degrees;
+        
+        if (!dragging) {
+            return;
+        }
+        
+        mouseX = e.pageX;
+        mouseY = e.pageY;
+        radians = Math.atan2(mouseY - originY, mouseX - originX),
+        degrees = radians * (180 / Math.PI) - startingDegrees + lastDegrees;
+        
+        currentDegrees = degrees;
+        
+        // update to lock onto 0, 90, 270 if it rounds to it
+        if (degrees <= 5 && degrees >= -5) { 
+            degrees = 0; 
+        } else if (degrees >= -275 && degrees <= -265) {
+            degrees = -270;
+        }
+
+        target.css('-webkit-transform', 'rotate(' + degrees + 'deg)');
+        target.css('-ms-transform', 'rotate(' + degrees + 'deg)');
+        target.css('transform', 'rotate(' + degrees + 'deg)');
+    });
+});
 
 
 function customLabelTools() {
@@ -1035,66 +1103,7 @@ function customLabelTools() {
 
     // function to handle rotating custom label
     $(".custom_label .rotate_handle").mousedown(function(e) {
-        console.log('rotate-try');
 
-        // get the right custom label from object
-        var customLabel = customLabels[$(this).parent()[0].id];
-
-        // temporarily freeze dragging
-        customLabel.dragging.disable();
-        map.dragging.disable();
-
-        var target = $(this).parent(),
-            originX = target.offset().left + target.width() / 2,
-            originY = target.offset().top + target.height() / 2,
-            dragging = false,
-            startingDegrees = (typeof target[0].style.transform == 'undefined') ? 0 : target[0].style.transform.substr(7,target[0].style.transform.indexOf('deg')-7),
-            lastDegrees = 0,
-            currentDegrees = 0;
-
-            // console.log(startingDegrees)
-
-            // console.log((typeof target[0].style.transform == 'undefined') ? 0 : target[0].style.transform.substr(7,target[0].style.transform.indexOf('deg')-7));
-            // target.mousedown(function(e) {
-                dragging = true;
-                mouseX = e.pageX;
-                mouseY = e.pageY;
-                radians = Math.atan2(mouseY - originY, mouseX - originX),
-                startingDegrees = radians * (180 / Math.PI);
-            // });
-        $(document).mouseup(function() {
-            lastDegrees = currentDegrees;
-            dragging = false;
-
-            // unfreeze dragging
-            customLabel.dragging.enable();
-            map.dragging.enable();
-
-        }).mousemove(function(e) {
-            var mouseX, mouseY, radians, degrees;
-            
-            if (!dragging) {
-                return;
-            }
-            
-            mouseX = e.pageX;
-            mouseY = e.pageY;
-            radians = Math.atan2(mouseY - originY, mouseX - originX),
-            degrees = radians * (180 / Math.PI) - startingDegrees + lastDegrees;
-            
-            currentDegrees = degrees;
-            
-            // update to lock onto 0, 90, 270 if it rounds to it
-            if (degrees <= 5 && degrees >= -5) { 
-                degrees = 0; 
-            } else if (degrees >= -275 && degrees <= -265) {
-                degrees = -270;
-            }
-
-            target.css('-webkit-transform', 'rotate(' + degrees + 'deg)');
-            target.css('-ms-transform', 'rotate(' + degrees + 'deg)');
-            target.css('transform', 'rotate(' + degrees + 'deg)');
-        });
 
     });
 
