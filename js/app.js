@@ -986,8 +986,6 @@ function addCustomLabel(size) {
     // add label to the array of all labels
     customLabels.push(customLabel);
 
-    console.log(customLabels);
-
     // add label to map
     customLabel.addTo(map);
 }
@@ -1045,30 +1043,19 @@ $('body').on('mousedown', '.rotate_handle', function(e) {
     var target = $(this).parent(),
         originX = target.offset().left + target.width() / 2,
         originY = target.offset().top + target.height() / 2,
-        dragging = false,
+        dragging = true,
         startingDegrees = (typeof target[0].style.transform == 'undefined') ? 0 : target[0].style.transform.substr(7,target[0].style.transform.indexOf('deg')-7),
         lastDegrees = 0,
         currentDegrees = 0;
 
-        // console.log(startingDegrees)
 
-        // console.log((typeof target[0].style.transform == 'undefined') ? 0 : target[0].style.transform.substr(7,target[0].style.transform.indexOf('deg')-7));
-        // target.mousedown(function(e) {
-            dragging = true;
-            mouseX = e.pageX;
-            mouseY = e.pageY;
-            radians = Math.atan2(mouseY - originY, mouseX - originX),
-            startingDegrees = radians * (180 / Math.PI);
-        // });
-    $(document).mouseup(function() {
-        lastDegrees = currentDegrees;
-        dragging = false;
+        mouseX = e.pageX;
+        mouseY = e.pageY;
+        radians = Math.atan2(mouseY - originY, mouseX - originX),
+        startingDegrees = radians * (180 / Math.PI);
 
-        // unfreeze dragging
-        customLabel.dragging.enable();
-        map.dragging.enable();
 
-    }).mousemove(function(e) {
+    $(document).mousemove(function(e) {
         var mouseX, mouseY, radians, degrees;
         
         if (!dragging) {
@@ -1092,6 +1079,14 @@ $('body').on('mousedown', '.rotate_handle', function(e) {
         target.css('-webkit-transform', 'rotate(' + degrees + 'deg)');
         target.css('-ms-transform', 'rotate(' + degrees + 'deg)');
         target.css('transform', 'rotate(' + degrees + 'deg)');
+    }).mouseup(function() {
+        lastDegrees = currentDegrees;
+        dragging = false;
+
+        // unfreeze dragging
+        customLabel.dragging.enable();
+        map.dragging.enable();
+
     });
 });
 
