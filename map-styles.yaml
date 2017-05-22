@@ -275,7 +275,7 @@ global:
     roads_visible_minor:                true # ∆
     roads_visible_service:              true # ∆
     roads_visible_taxi_and_runways:     true # ∆
-    roads_visible_ferry_route:          true  # ∆
+    roads_visible_ferry_route:          true  # add to layer selector
     transit_visible:                    false   # ∆
     #road/transit colors
     road_color:                         '#a6a6a6' # ∆
@@ -2296,24 +2296,19 @@ layers:
         draw:
             polygons:
                 visible: global.buildings_visible
-                order: 490 #function() { return feature.sort_rank; }
+                order: 400
                 color: global.buildings
-            lines:
-                visible: global.buildings_visible
-                order: 491 #function() { return feature.sort_rank; }
-                color: function() { if (feature.area > 5000 || feature.landuse_kind == 'college' || feature.landuse_kind == 'library' || feature.landuse_kind == 'hospital' || feature.landuse_kind == 'golf_course' || feature.landuse_kind == 'university' || feature.landuse_kind == 'cemetery' || feature.landuse_kind == 'park' || feature.landuse_kind == 'aerodrome') || feature.landuse_kind == 'apron') { return "#666"; } else { return "#fff"; } }
-                width: [[15,0],[16,1px]]
-                style: lines
 
-        # buildings_over_landuse:   # this is a bug that mapzen is working on
-        #   filter: { landuse_kind: [station,aerodrome,parking,park,university,national_park, conservation, protected_area, nature_reserve, forest, grass, beach, battlefield], $zoom: { min: 14 }, scale_rank: [1,2,3,4,5] }
-        #   draw:
-        #       lines:
-        #           style: lines
-        #           order: 330
-        #           visible: global.buildings_visible
-        #           color: global.building_outline
-        #           width: [[13, 0px], [15,1px], [18, 1px]]
+
+
+        buildings_over_landuse:   # this is a bug that mapzen is working on
+          draw:
+              lines:
+                  style: lines
+                  order: function() { return feature.sort_rank; }
+                  visible: global.buildings_visible
+                  color: function() { if ((feature.area > 5000 || feature.landuse_kind == 'college' || feature.landuse_kind == 'library' || feature.landuse_kind == 'hospital' || feature.landuse_kind == 'golf_course' || feature.landuse_kind == 'university' || feature.landuse_kind == 'cemetery' || feature.landuse_kind == 'park' || feature.landuse_kind == 'apron' || feature.landuse_kind == 'aerodrome' || feature.landuse_kind == 'school') && (feature.landuse_kind != 'residential') && (feature.landuse_kind != 'commercial') && (feature.landuse_kind != 'parking') && (feature.kind_detail != 'commercial') && (feature.kind_detail != 'retail') && (feature.kind_detail != 'hotel')) { return "#666"; } else { return "#fff"; } }
+                  width: [[15,0],[16,1px]]
 
         buildings-labels:
             filter:
