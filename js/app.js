@@ -431,16 +431,16 @@ if (option.value == 'video') {
     $("#map_holder").width(340);
     $("#map_holder").height(700);
 } else if (option.value == 'col2') {
-    $("#map_holder").width(670);
+    $("#map_holder").width(710);
     $("#map_holder").height(700);
 } else if (option.value == 'col3') {
-    $("#map_holder").width(1000);
+    $("#map_holder").width(1070);
     $("#map_holder").height(700);
 } else if (option.value == 'col4') {
-    $("#map_holder").width(1330);
+    $("#map_holder").width(1450);
     $("#map_holder").height(700);
 } else if (option.value == 'twitter') {
-    $("#map_holder").width(800);
+    $("#map_holder").width(810);
     $("#map_holder").height(400);
 }
 
