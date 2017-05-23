@@ -898,12 +898,13 @@ function switchLayer(layer) {
 
 // this updates live while user is moving slider
 document.getElementById('zoom-slider').addEventListener("input", function() {
-    var zoomValue = parseFloat($(this).val());
+    if (!frozenZoom) {
+        var zoomValue = parseFloat($(this).val());
 
-    // update zoom value
-    // using flyTo instead of setZoom because it is smoother
-    map.flyTo(map.getCenter(),zoomValue,{animate:true,duration:0.1});
-
+        // update zoom value
+        // using flyTo instead of setZoom because it is smoother
+        map.flyTo(map.getCenter(),zoomValue,{animate:true,duration:0.1});
+    }
 });
 
 // when zoom is done
@@ -929,6 +930,7 @@ function zoomFreeze() {
         map.boxZoom.enable();
         map.keyboard.enable();
         frozenZoom = false;
+        document.getElementById("zoom-slider").disabled = false;
     } else {
         // disable zooming
         $("#zoom_lock")
@@ -940,6 +942,7 @@ function zoomFreeze() {
         map.boxZoom.disable();
         map.keyboard.disable();
         frozenZoom = true;
+        document.getElementById("zoom-slider").disabled = true;
     }
 }
 
