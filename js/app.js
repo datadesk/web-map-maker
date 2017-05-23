@@ -931,6 +931,7 @@ function zoomFreeze() {
         map.keyboard.enable();
         frozenZoom = false;
         document.getElementById("zoom-slider").disabled = false;
+        $("#zoom-slider").css("opacity","1");
     } else {
         // disable zooming
         $("#zoom_lock")
@@ -943,6 +944,7 @@ function zoomFreeze() {
         map.keyboard.disable();
         frozenZoom = true;
         document.getElementById("zoom-slider").disabled = true;
+        $("#zoom-slider").css("opacity","0.5");
     }
 }
 
