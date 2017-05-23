@@ -199,14 +199,14 @@ map.on('zoom', function() {
     }
 
     // minor roads
-    if (zoomRounded < 12) { 
+    if (zoomRounded < 13) { 
         $("#roads_visible_minor").parent().addClass("unavailable"); 
     } else {
         $("#roads_visible_minor").parent().removeClass("unavailable"); 
     }
 
     // service roads
-    if (zoomRounded < 15) { 
+    if (zoomRounded < 16) { 
         $("#roads_visible_service").parent().addClass("unavailable"); 
     } else {
         $("#roads_visible_service").parent().removeClass("unavailable"); 

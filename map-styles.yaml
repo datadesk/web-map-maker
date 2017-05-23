@@ -1417,6 +1417,7 @@ layers:
                                 priority: 51
                                 offset: [0px, -20px]
                                 visible: global.labels_visible_major_roads
+                                repeat_distance: 200px
                                 font:
                                     fill: global.road_text
                                     weight: normal
@@ -1426,6 +1427,7 @@ layers:
                             filter: { $zoom: [14] }
                             draw:
                                 text-blend-order:
+                                    repeat_distance: 200px
                                     visible: global.labels_visible_major_roads
                                     font:
                                         weight: normal  # or 500 or 400?
@@ -1436,6 +1438,7 @@ layers:
                         text-blend-order:
                             priority: 51
                             offset: [0px, -20px]
+                            repeat_distance: 200px
                             visible: global.labels_visible_major_roads
                             font:
                                 fill: global.road_text
@@ -1446,6 +1449,7 @@ layers:
                         draw:
                             text-blend-order:
                                 offset: [0px, -20px]
+                                repeat_distance: 200px
                                 visible: global.labels_visible_major_roads
                                 font:
                                     weight: normal
@@ -1497,11 +1501,11 @@ layers:
                             text-blend-order:
                                 offset: [0px, -20px]
                                 priority: 56
-                                visible: global.labels_visible_minor_roads
+                                visible: global.labels_visible_major_roads
                                 font:
-                                    weight: normal
-                                    fill: global.road_text_minor
+                                    fill: global.road_text
                                     size: [[12, 28px],[15, 30px]]
+                                    stroke: { color: global.text_stroke, width: 3px }
                 labels-secondary:
                     filter:
                         $zoom: { min: 13 }
@@ -1509,10 +1513,10 @@ layers:
                         text-blend-order:
                             priority: 56
                             offset: [0px, -20px]
-                            visible: global.labels_visible_minor_roads
+                            visible: global.labels_visible_major_roads
                             font:
-                                fill: global.road_text_minor
-                                size: [[13, 28px], [15, 30px]]
+                                fill: global.road_text
+                                size: [[12, 28px],[15, 30px]]
                                 stroke: { color: global.text_stroke, width: 3px }
             tertiary:
                 filter: { kind_detail: [tertiary, tertiary_link] }
