@@ -650,7 +650,7 @@ var layers = {
     'labels_visible': ['countries','states','cities','neighborhoods','highway_shields','major_roads','minor_roads','points_of_interest','water'],
     'roads_visible': ['highways','highway_ramps','major','minor','service','ferry_route','taxi_and_runways'],
     'borders_visible': ['countries','disputed','states','counties'],
-    'landuse_visible': ['airports','beach','cemetery','college','forest','hospital','military','park','pier','prison','resort','stadium','wetland'],
+    'landuse_visible': ['airports','beach','cemetery','college','forest','hospital','military','park','pier','prison','resort','school','stadium','wetland'],
     'water_visible': ['ocean','inland_water','swimming_pools']
 }
 

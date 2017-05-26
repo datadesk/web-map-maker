@@ -13,7 +13,7 @@
 global:
     # Sign up for a Mapzen API key to enjoy higher rate limits
     # https://mapzen.com/documentation/overview/#developer-accounts-and-api-keys
-    sdk_mapzen_api_key: 'mapzen-dFUP7Q3'     # set this value to your Mapzen API key
+    sdk_mapzen_api_key: 'mapzen-uxhmqQc'     # set this value to your Mapzen API key
 
     #ux/ui
     ux_language: en             # l10n language code, trusting OSM in v0.10 tiles, fixed in v1.0 tiles
@@ -233,6 +233,7 @@ global:
     landuse_visible_beach:              true # ∆
     landuse_visible_cemetery:           true # ∆
     landuse_visible_college:            true # ∆
+    landuse_visible_school:             true
     landuse_visible_forest:             true # ∆
     landuse_visible_hospital:           true # ∆
     landuse_visible_military:           true # ∆
@@ -4239,7 +4240,7 @@ layers:
                     kind: [school]
                 draw:
                     polygons:
-                        visible: global.landuse_visible_college
+                        visible: global.landuse_visible_school
                         style: global.landuse_style
                         color: global.landuse_school
                         order: 1
