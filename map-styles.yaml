@@ -4454,7 +4454,7 @@ layers:
                     kind: school
                 draw:
                     polygons:
-                        visible: global.landuse_visible_college
+                        visible: global.landuse_visible_school
                         style: global.landuse_style
                         color: global.landuse_college
                         order: 1
