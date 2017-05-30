@@ -163,6 +163,16 @@ box-sizing: content-box;
     z-index: -1;
 }
 
+#zoom_to_geojson {
+    cursor: pointer;
+    display: none;
+    clear: both;
+    text-align: center;
+    font-family: Arial;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
 
 /* print column grid */
 .grid330 {

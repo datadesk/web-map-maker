@@ -521,7 +521,7 @@ $("#map").mouseup(function() {
 
 // styles for geojson pulled from v1.0
 var lineStyle = {'color':'#cd7139','weight': 4,'opacity': 1, 'lineJoin':'round'};
-var polyStyle = {'color': '#000','weight': 2,'opacity': 0.65,'fillOpacity': 0, 'lineJoin':'round'};
+var polyStyle = {'color': '#cd7139','weight': 4,'opacity': 1,'fillOpacity': 0, 'lineJoin':'round'};
 var pointStyle = { radius: 10.5, fillColor: '#cd7139',color: '#fff',weight: 1,opacity: 0.3,fillOpacity: 0.8};
 
 function addStyle(feature){
@@ -548,12 +548,20 @@ function handleFileSelect(evt) {
             var parsedJSON = jQuery.parseJSON(contents);
 
             // add GeoJSON to map
-            L.geoJson(parsedJSON, {
+            var geojson = L.geoJson(parsedJSON, {
                 style: function(feature) {return addStyle(feature);},
                 pointToLayer: function (feature, latlng) {
                     return L.circleMarker(latlng, pointStyle);
                 }
-            }).addTo(map);
+            });
+            geojson.addTo(map);
+
+            // add link text to zoom to uploaded file
+            $("#zoom_to_geojson").css("display","block");
+            $("#zoom_to_geojson").click(function(){
+                map.fitBounds(geojson.getBounds(), {padding: [100, 100]});
+                $("#zoom_to_geojson").css("display","none");
+            });
         };
         r.readAsText(f);
     }
