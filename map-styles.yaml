@@ -4312,10 +4312,11 @@ layers:
                 pier:
                     filter: { kind: [pier,bridge,breakwater,groyne,dike,cutline], $zoom: { min: 10 } }
                     draw:
-                        terrain:
+                        polygons:
                             visible: global.landuse_visible_pier
+                            style: global.landuse_style
                             color: global.background
-                            visible: true
+                            order: 205
             camp_site:
                 filter: { kind: camp_site }
                 draw:
