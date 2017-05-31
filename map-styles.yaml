@@ -2702,7 +2702,7 @@ layers:
                         buffer: 3px
                         font:
                             family: global.text_font_family
-                            wiight: normal
+                            weight: normal
                             size: [[8,26px],[10,28px],[12,32px]]
                             fill: global.text_fill
                 text-blend-order:

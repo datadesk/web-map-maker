@@ -463,50 +463,6 @@ setTimeout(
 
 };
 
-// function showPrint() {
-//     // swap to print color
-//     scene.config.global.road_color = '#98a5ac';
-
-//     // bump up size of major roads
-//     scene.config.layers.roads.major_road.draw.lines.width[3][1] = '1.5px';
-//     scene.config.layers.roads.major_road.draw.lines.width[4][1] = '2.5px';
-//     scene.config.layers.roads.major_road.draw.lines.width[5][1] = '3.5px';
-//     scene.config.layers.roads.major_road.draw.lines.width[6][1] = '10m';
-
-//     // bump up size of minor roads
-//     scene.config.layers.roads.minor_road.draw.lines.width[1][1] = '0.5px';
-//     scene.config.layers.roads.minor_road.draw.lines.width[2][1] = '0.5px';
-
-//     // make water darker
-//     scene.config.global.water_color = '#a6bcd3';
-
-//     // turn off labels
-//     labelsVisible = true;
-//     showLabels();
-
-//     scene.updateConfig(); // update config
-
-//     // update buttons
-//     $("#print_btn").addClass("active");
-//     $("#web_btn").removeClass("active");
-
-//     // hide attribution
-//     $(".leaflet-control-attribution").hide();
-
-// }
-
-// function showWeb() {
-//     scene.load('map-styles.yaml');
-//     buildingsVisible = false;
-//     // update buttons
-//     $("#print_btn").removeClass("active");
-//     $("#web_btn").addClass("active");
-//     $("#auto_labels_btn").addClass("active");
-//     labelsVisible = true;
-
-//     // bring back attribution
-//     $(".leaflet-control-attribution").show();
-// }
 
 // Apple's Magic Mouse is a little finicky--prevent scroll when mouse is down on map
 $("#map").mousedown(function() {
@@ -749,6 +705,21 @@ function showCheckboxes() {
 
 }
 
+// close the layers palette when clicking somewhere else
+$('#checkboxes').on('click', function(e) {
+    e.stopPropagation();
+});
+$('.selectBox').on('click', function(e) {
+    e.stopPropagation();
+});
+$(document).on('click', function (e) {
+    checkboxes.style.display = "none";
+    expanded = false;
+    // toggle layer focus style
+    $(".overSelect").css("border","2px solid #b5b5b5");
+    $(".selectBox select").css("color","#acacac");
+
+});
 
 // function to check on parent checkboxes
 function parentChecks() {
