@@ -225,7 +225,7 @@ global:
     water_visible_inland_water:         true # ∆
     water_visible_swimming_pools:       false # ∆
     #water Color
-    water:                              '#B2DBF6' # ∆
+    water:                              '#B4DDF4' # ∆
 
     #landuse
     landuse_style:                      polygons # ∆
