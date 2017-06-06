@@ -1076,3 +1076,24 @@ $('body').on('mousedown', '.rotate_handle', function(e) {
 
 
 
+
+// vector download
+function downloadVector() {
+    // create options object
+    var mapOptions = {
+        apikey: 'mapzen-uxhmqQc',
+        startLat: map.getBounds()._northEast.lat,
+        startLon: map.getBounds()._northEast.lng,
+        endLat: map.getBounds()._southWest.lat,
+        endLon: map.getBounds()._southWest.lng,
+        zoomLevel: (Math.round(map.getZoom())+1),
+        layers: {
+        'roads_visible': ['highways','highway_ramps','major','minor','service','ferry_route','taxi_and_runways'],
+        },
+        // roads: 'on',
+        'coord-submit': 'submit' 
+    }
+    console.log(mapOptions);
+}
+
+
