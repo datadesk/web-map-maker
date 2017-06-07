@@ -1087,13 +1087,23 @@ function downloadVector() {
         endLat: map.getBounds()._southWest.lat,
         endLon: map.getBounds()._southWest.lng,
         zoomLevel: (Math.round(map.getZoom())+1),
-        layers: {
-        'roads_visible': ['highways','highway_ramps','major','minor','service','ferry_route','taxi_and_runways'],
-        },
+        layers_visible: [],
+        custom_labels : [],
         // roads: 'on',
         'coord-submit': 'submit' 
     }
+
+    // loop through visible layers
+    $("#checkboxes input").each(function(){
+        // if checked and also not labels and also not half transparent
+        if ($(this)[0].checked == true && $(this)[0].id.indexOf('labels') == -1 && !$(this).parent().hasClass('unavailable')) {
+            layers_visible.push($(this)[0].id);
+        }
+    });
+
+
     console.log(mapOptions);
+
 }
 
 
