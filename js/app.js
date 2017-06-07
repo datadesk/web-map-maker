@@ -1132,11 +1132,11 @@ function downloadVector() {
         startLon: map.getBounds()._northEast.lng,
         endLat: map.getBounds()._southWest.lat,
         endLon: map.getBounds()._southWest.lng,
-        zoomLevel: (Math.round(map.getZoom())+1),
+        zoomLevel: Math.round(map.getZoom()+1),
         layers_visible: [],
-        custom_labels : [],
-        // roads: 'on',
-        'coord-submit': 'submit' 
+        custom_labels: [],
+        backgroundImg: '',
+        'coord-submit': 'submit'
     }
 
     // loop through visible layers
@@ -1149,7 +1149,7 @@ function downloadVector() {
 
 
     console.log(mapOptions);
-
+    console.log(JSON.stringify(mapOptions));
 }
 
 
