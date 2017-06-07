@@ -281,7 +281,6 @@ global:
     #road/transit colors
     road_color:                         '#a6a6a6' # ∆
     minor_road:                         '#cccecf' # ∆
-    service_road_color:                 '#eaedf3'     #not sure if this is used 
     road_text:                          '#000' # ∆
     road_text_minor:                    '#666' # ∆
     rail_line:                          '#cccecf' # ∆
@@ -309,7 +308,7 @@ global:
     labels_visible_service_road:        true # ∆ this should be added to  UI list as Paths, service roads
     labels_visible_water:               true # ∆
     labels_visible_neighborhoods:       true # ∆
-    labels_visible_points_of_interest:  true # ∆
+    labels_visible_points_of_interest:  false # ∆
     labels_visible_landuse:             true
     labels_visible_building:            false # ∆ saved for possible future inclusion
     labels_visible_address:             false # ∆ saved for possible future inclusion

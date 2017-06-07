@@ -169,17 +169,24 @@ map.on('zoom', function() {
     }
 
     // highway shields
-    if (zoomRounded <= 7) {
+    if (zoomRounded <= 6) {
         $("#labels_visible_highway_shields").parent().addClass("unavailable");
     } else {
         $("#labels_visible_highway_shields").parent().removeClass("unavailable");
     }
 
     // major road labels
-    if (zoomRounded < 14) {
+    if (zoomRounded < 12) {
         $("#labels_visible_major_roads").parent().addClass("unavailable");
     } else {
         $("#labels_visible_major_roads").parent().removeClass("unavailable"); 
+    }
+
+    // major road labels
+    if (zoomRounded < 13) {
+        $("#labels_visible_minor_roads").parent().addClass("unavailable");
+    } else {
+        $("#labels_visible_minor_roads").parent().removeClass("unavailable"); 
     }
 
     // highways
@@ -213,12 +220,11 @@ map.on('zoom', function() {
     }
 
     // airport roads
-    if (zoomRounded < 11) { 
+    if (zoomRounded < 9) { 
         $("#roads_visible_taxi_and_runways").parent().addClass("unavailable"); 
     } else {
         $("#roads_visible_taxi_and_runways").parent().removeClass("unavailable"); 
     }
-
 
     // swimming pools
     if (zoomRounded < 16) {
@@ -234,6 +240,12 @@ map.on('zoom', function() {
         $("#borders_visible_counties").parent().removeClass("unavailable"); 
     }
 
+    // ferry routes
+    if (zoomRounded < 8) {
+        $("#roads_visible_ferry_route").parent().addClass("unavailable"); 
+    } else {
+        $("#roads_visible_ferry_route").parent().removeClass("unavailable"); 
+    }
 
 });
 
@@ -614,7 +626,7 @@ var layers = {
     'labels_visible': ['countries','states','cities','neighborhoods','highway_shields','major_roads','minor_roads','points_of_interest','water'],
     'roads_visible': ['highways','highway_ramps','major','minor','service','ferry_route','taxi_and_runways'],
     'borders_visible': ['countries','disputed','states','counties'],
-    'landuse_visible': ['airports','beach','cemetery','college','forest','hospital','military','park','pier','prison','resort','school','stadium','wetland'],
+    'landuse_visible': ['airports','beach','cemetery','college','forest','hospital','military','park','prison','resort','school','stadium','wetland'],
     'water_visible': ['ocean','inland_water','swimming_pools']
 }
 
@@ -673,13 +685,15 @@ if (initZoom > 9 || initZoom < 2) { $("#labels_visible_countries").parent().addC
 
 if (initZoom < 12) { $("#roads_visible_minor").parent().addClass("unavailable"); }
 
-if (initZoom < 15) { $("#roads_visible_service").parent().addClass("unavailable"); }
+if (initZoom < 16) { $("#roads_visible_service").parent().addClass("unavailable"); }
 
 if (initZoom < 16) { $("#water_visible_swimming_pools").parent().addClass("unavailable"); }
 
 if (initZoom < 10) { $("#borders_visible_counties").parent().addClass("unavailable"); }
 
-if (initZoom < 14) { $("#labels_visible_major_roads").parent().addClass("unavailable"); }
+if (initZoom < 12) { $("#labels_visible_major_roads").parent().addClass("unavailable"); }
+
+if (initZoom < 13) { $("#labels_visible_minor_roads").parent().addClass("unavailable"); }
 
 var expanded = false;
 
@@ -1077,6 +1091,38 @@ $('body').on('mousedown', '.rotate_handle', function(e) {
 
 
 
+// kill tooltip on scroll
+$( window ).scroll(function() {
+    $("#tooltip").css({"opacity":"0","height":"auto","width":"0px"}); // hide
+    // $("#council_name").html("");
+});
+$( 'body' ).on('click',function() {
+    $("#tooltip").css({"opacity":"0","height":"auto","width":"0px"}); // hide
+    // $("#council_name").html("");
+});
+$("#download_vector").mouseover(function () {
+    // var name = $(this).attr("title");
+    // $(this).css('cursor','pointer');
+    // message if auto labels are checked
+    if ($("#labels_visible").prop('indeterminate') == true || $("#labels_visible").prop('checked') == true) {
+        $("#tooltip").css({"opacity":"1","height":"auto","width":"200px"});
+        $("#tooltip").html('<p>Automatic labels cannot be exported to vector.</p>');
+    }
+});
+$("#download_vector").mouseout(function () {
+    $("#tooltip").css({"opacity":"0","height":"auto","width":"0px"}); // hide
+});
+// Move the tooltip with the mouse
+$(window).mousemove( function(e) {
+    if (windowWidth > 400) {
+        var tooltipHeight = $("#tooltip").height();
+        mouseY = e.pageY;
+        mouseX = e.pageX;
+        $("#tooltip").css({"top":(mouseY+20)+"px","left":(mouseX+10)+"px"});
+    }
+});
+
+
 // vector download
 function downloadVector() {
     // create options object
@@ -1097,7 +1143,7 @@ function downloadVector() {
     $("#checkboxes input").each(function(){
         // if checked and also not labels and also not half transparent
         if ($(this)[0].checked == true && $(this)[0].id.indexOf('labels') == -1 && !$(this).parent().hasClass('unavailable')) {
-            layers_visible.push($(this)[0].id);
+            mapOptions['layers_visible'].push($(this)[0].id);
         }
     });
 
