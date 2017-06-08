@@ -624,7 +624,7 @@ var layers = {
     'buildings_visible': [],
     'transit_visible': [],
     'labels_visible': ['countries','states','cities','neighborhoods','highway_shields','major_roads','minor_roads','points_of_interest','water'],
-    'roads_visible': ['highways','highway_ramps','major','minor','service','ferry_route','taxi_and_runways'],
+    'roads_visible': ['highways','highway_ramps','major','minor','service','ferry_route','taxi_and_runways','paths'],
     'borders_visible': ['countries','disputed','states','counties'],
     'landuse_visible': ['airports','beach','cemetery','college','forest','hospital','military','park','prison','resort','school','stadium','wetland'],
     'water_visible': ['ocean','inland_water','swimming_pools']
@@ -1142,7 +1142,7 @@ function downloadVector() {
     // loop through visible layers
     $("#checkboxes input").each(function(){
         // if checked and also not labels and also not half transparent
-        if ($(this)[0].checked == true && $(this)[0].id.indexOf('labels') == -1 && !$(this).parent().hasClass('unavailable')) {
+        if (($(this)[0].checked == true || $(this).prop('indeterminate') == true) && $(this)[0].id.indexOf('labels') == -1 && !$(this).parent().hasClass('unavailable')) {
             mapOptions['layers_visible'].push($(this)[0].id);
         }
     });

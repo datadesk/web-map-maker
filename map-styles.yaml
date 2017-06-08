@@ -277,6 +277,7 @@ global:
     roads_visible_service:              true # ∆
     roads_visible_taxi_and_runways:     true # ∆
     roads_visible_ferry_route:          true  # add to layer selector
+    roads_visible_paths:                 true
     transit_visible:                    false   # ∆
     #road/transit colors
     road_color:                         '#a6a6a6' # ∆
@@ -2134,7 +2135,7 @@ layers:
                     color: global.rail_line
                     width: [[15, 1.8px], [17, 3px], [19, 2m]]
                     style: dashed-lines
-                    visible: false
+                    visible: global.roads_visible_paths
                     
         track:
             filter:
