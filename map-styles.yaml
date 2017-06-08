@@ -4300,6 +4300,15 @@ layers:
                         style: global.landuse_style
                         color: global.landuse_stadium
                         order: 1
+            prison:
+                filter:
+                    kind: prison
+                draw:
+                    polygons:
+                        visible: global.landuse_visible_prison
+                        style: global.landuse_style
+                        color: global.landuse_military
+                        order: 1
             man-made:
                 filter: { kind: [pier,wastewater_plant,works,bridge,tower,breakwater,water_works,groyne,dike,cutline] }
                 draw:
