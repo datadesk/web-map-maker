@@ -620,6 +620,7 @@ scene.subscribe({
 /* LAYERS DROPDOWN */
 // list of layers to show/hide
 var layers = {
+    'sources' : [],
     'terrain_visible': [],
     'buildings_visible': [],
     'transit_visible': [],
@@ -643,6 +644,7 @@ Object.keys(layers).forEach(function(key) {
     }
                               
 });
+
 
 // check what layers are available on init
 scene.subscribe({
@@ -672,6 +674,11 @@ scene.subscribe({
 
     }
 });
+
+// set sources to be checked
+$("#sources").attr("checked",true);
+
+
 
 
 // set what layers are visible based on zoom
@@ -807,6 +814,12 @@ $("#checkboxes label input").click(function(){
             scene.config.global.landuse_style = 'polygons';
             scene.config.layers.earth.draw.polygons.visible = true;
             scene.config.layers.earth.draw.terrain.visible = false;
+        }
+    } else if (thisID == 'sources') {
+        if ($("#"+thisID).prop("checked")) {
+            $(".leaflet-control-attribution").css("display","block");
+        } else {
+            $(".leaflet-control-attribution").css("display","none");
         }
     } else if (Array.isArray(layers[thisID]) && layers[thisID].length > 0) {
     // if any parent layer
