@@ -277,7 +277,7 @@ global:
     roads_visible_service:              true # ∆
     roads_visible_taxi_and_runways:     true # ∆
     roads_visible_ferry_route:          true  # add to layer selector
-    roads_visible_paths:                 true
+    roads_visible_paths:                false
     transit_visible:                    false   # ∆
     #road/transit colors
     road_color:                         '#a6a6a6' # ∆
