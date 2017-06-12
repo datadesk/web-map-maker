@@ -1140,7 +1140,6 @@ $(window).mousemove( function(e) {
 function downloadVector() {
     // create options object
     var mapOptions = {
-        apikey: 'mapzen-uxhmqQc',
         startLat: map.getBounds()._northEast.lat,
         startLon: map.getBounds()._northEast.lng,
         endLat: map.getBounds()._southWest.lat,
