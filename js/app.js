@@ -488,9 +488,9 @@ $("#map").mouseup(function() {
 
 
 // styles for geojson pulled from v1.0
-var lineStyle = {'color':'#cd7139','weight': 4,'opacity': 1, 'lineJoin':'round'};
-var polyStyle = {'color': '#cd7139','weight': 4,'opacity': 1,'fillOpacity': 0, 'lineJoin':'round'};
-var pointStyle = { radius: 10.5, fillColor: '#cd7139',color: '#fff',weight: 1,opacity: 0.3,fillOpacity: 0.8};
+var lineStyle = {'color':'#cd7139','weight': 4,'opacity': 1, 'lineJoin':'round', 'className':'line-feature'};
+var polyStyle = {'color': '#cd7139','weight': 4,'opacity': 1,'fillOpacity': 0, 'lineJoin':'round', 'className':'polygon-feature'};
+var pointStyle = { radius: 10.5, fillColor: '#cd7139',color: '#fff',weight: 1,opacity: 0.3,fillOpacity: 0.8, className: 'point-feature'};
 
 function addStyle(feature){
     switch (feature.geometry.type) {
@@ -1147,6 +1147,9 @@ function downloadVector() {
         zoomLevel: Math.round(map.getZoom()+1),
         layers_visible: [],
         custom_labels: [],
+        lineFeatures: [],
+        pointFeatures: [],
+        polygonFeatures: [],
         backgroundImg: '',
         'coord-submit': 'submit'
     }
@@ -1157,6 +1160,18 @@ function downloadVector() {
         if (($(this)[0].checked == true || $(this).prop('indeterminate') == true) && $(this)[0].id.indexOf('labels') == -1 && !$(this).parent().hasClass('unavailable')) {
             mapOptions['layers_visible'].push($(this)[0].id);
         }
+    });
+
+    // add custom labels
+
+
+    // add any uploaded geojson/svg elements
+    $("svg path").each(function(){
+        var thisClass = $(this).attr('class');
+        if (thisClass.indexOf('polygon-feature') != -1) { mapOptions['polygonFeatures'].push($(this).attr('d')); }
+        else if (thisClass.indexOf('line-feature') != -1) { mapOptions['lineFeatures'].push($(this).attr('d')); }
+        else if (thisClass.indexOf('point-feature') != -1) { mapOptions['pointFeatures'].push($(this).attr('d')); }
+        // mapOptions['geojson'].push($(this));
     });
 
 
