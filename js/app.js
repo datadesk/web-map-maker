@@ -604,7 +604,7 @@ var mapLoadAction = true;
 // show that map is still loading
 function mapLoading() {
     if (scene.tile_manager.isLoadingVisibleTiles()) {
-        $("#download_img").html('Map loading...<img src="images/preloader.gif" alt="Preloader" id="map_loader" />');
+        $("#download_img").html('Map loading...<img src="images/preloader.gif" alt="Preloader" class="map_loader" />');
         $("#download_img").addClass("gray");
         mapLoadAction = true;
     }
@@ -1173,6 +1173,10 @@ function getDatetime() {
 function downloadVector() {
     console.log('downloadVector()');
 
+    // show map loading
+    $("#download_vector").html('Vector loading...<img src="images/preloader.gif" alt="Preloader" class="map_loader" />');
+    $("#download_vector").addClass("gray");
+
     // create options object
     var mapOptions = {
         startLat: map.getBounds()._northEast.lat,
@@ -1218,9 +1222,6 @@ function downloadVector() {
         url: 'https://kerd0xd1c6.execute-api.us-west-2.amazonaws.com/prod/svg-map-maker',
         type: "POST",
         timeout: 100000,
-        beforeSend: function(request) {
-            request.setRequestHeader("x-api-key", '0fzeDyUR5fuqVdCzd');
-        },
         headers: {
             'x-api-key':'0fzeDyUR5fuqVdCzd',
             'Content-Type':'application/json'
@@ -1241,12 +1242,19 @@ function downloadVector() {
 
             document.body.removeChild(element);
 
+            $("#download_vector").html('Download vector');
+            $("#download_vector").removeClass("gray");
+
         },
         error: function (xhr, ajaxOptions, thrownError) {
             console.log(xhr);
+            alert('Problem downloading file');
+
+            $("#download_vector").html('Download vector');
+            $("#download_vector").removeClass("gray");
+
         }
     }); 
-
 
 }
 

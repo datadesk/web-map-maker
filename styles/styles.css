@@ -407,7 +407,7 @@ label {font:18px/27px Georgia, serif;}
     border-bottom: 1px solid #4591B8;
 }
 
-#map_loader {
+.map_loader {
     width: 20px;
     margin: 0 0 0 10px;
 }
