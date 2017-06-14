@@ -486,6 +486,10 @@ $("#map").mouseup(function() {
     }
 });
 
+// collect features
+var pointFeatures = [],
+    lineFeatures = [],
+    polygonFeatures = [];
 
 // styles for geojson pulled from v1.0
 var lineStyle = {'color':'#cd7139','weight': 4,'opacity': 1, 'lineJoin':'round', 'className':'line-feature'};
@@ -517,7 +521,18 @@ function handleFileSelect(evt) {
 
             // add GeoJSON to map
             var geojson = L.geoJson(parsedJSON, {
-                style: function(feature) {return addStyle(feature);},
+                style: function(feature) {
+                // add element to array for later vector export
+                    if (feature.geometry.type === 'Polygon' || feature.geometry.type === 'MultiPolygon') {
+                        polygonFeatures.push(feature);
+                    } else if (feature.geometry.type === 'LineString') {
+                        lineFeatures.push(feature);
+                    } else if (feature.geometry.type === 'Point') {
+                        pointFeatures.push(feature);
+                    }
+                    console.log(feature);
+                    return addStyle(feature);
+                },
                 pointToLayer: function (feature, latlng) {
                     return L.circleMarker(latlng, pointStyle);
                 }
@@ -1136,21 +1151,42 @@ $(window).mousemove( function(e) {
 });
 
 
+function getDatetime() {
+    // get current datetime
+    var currentdate = new Date();
+
+    var hours = (currentdate.getHours() > 12) ? currentdate.getHours() + 12 : currentdate.getHours();
+    hours = (hours.toString().length == 1) ? '0' + hours : hours;
+
+    var datetime =  ("0" + (currentdate.getMonth() + 1)).slice(-2) + "-" +
+        ("0" + currentdate.getDate()).slice(-2) + "-" +
+        currentdate.getFullYear() + "-"
+        + hours + "-" +
+        + currentdate.getMinutes() + "-" +
+        currentdate.getSeconds();
+
+    return datetime;
+}
+
+
 // vector download
 function downloadVector() {
+    console.log('downloadVector()');
+
     // create options object
     var mapOptions = {
         startLat: map.getBounds()._northEast.lat,
         startLon: map.getBounds()._northEast.lng,
         endLat: map.getBounds()._southWest.lat,
         endLon: map.getBounds()._southWest.lng,
-        zoomLevel: Math.round(map.getZoom()+1),
+        zoomLevel: Math.floor(map.getZoom()),
         layers_visible: [],
         custom_labels: [],
-        lineFeatures: [],
-        pointFeatures: [],
-        polygonFeatures: [],
+        lineFeatures: lineFeatures,
+        pointFeatures: pointFeatures,
+        polygonFeatures: polygonFeatures,
         backgroundImg: '',
+        apikey:configOptions['mapzen-api'],
         'coord-submit': 'submit'
     }
 
@@ -1165,18 +1201,53 @@ function downloadVector() {
     // add custom labels
 
 
-    // add any uploaded geojson/svg elements
-    $("svg path").each(function(){
-        var thisClass = $(this).attr('class');
-        if (thisClass.indexOf('polygon-feature') != -1) { mapOptions['polygonFeatures'].push($(this).attr('d')); }
-        else if (thisClass.indexOf('line-feature') != -1) { mapOptions['lineFeatures'].push($(this).attr('d')); }
-        else if (thisClass.indexOf('point-feature') != -1) { mapOptions['pointFeatures'].push($(this).attr('d')); }
-        // mapOptions['geojson'].push($(this));
-    });
+    // $("svg path").each(function(){
+    //     var thisClass = $(this).attr('class');
+    //     if (thisClass.indexOf('polygon-feature') != -1) { mapOptions['polygonFeatures'].push($(this).attr('d')); }
+    //     else if (thisClass.indexOf('line-feature') != -1) { mapOptions['lineFeatures'].push($(this).attr('d')); }
+    //     else if (thisClass.indexOf('point-feature') != -1) { mapOptions['pointFeatures'].push($(this).attr('d')); }
+    //     // mapOptions['geojson'].push($(this));
+    // });
 
 
     console.log(mapOptions);
     console.log(JSON.stringify(mapOptions));
+
+
+    $.ajax({
+        url: 'https://kerd0xd1c6.execute-api.us-west-2.amazonaws.com/prod/svg-map-maker',
+        type: "POST",
+        timeout: 100000,
+        beforeSend: function(request) {
+            request.setRequestHeader("x-api-key", '0fzeDyUR5fuqVdCzd');
+        },
+        headers: {
+            'x-api-key':'0fzeDyUR5fuqVdCzd',
+            'Content-Type':'application/json'
+        },
+        dataType: "text",
+        data: JSON.stringify(mapOptions),
+        success: function (result) {
+
+
+            var element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(result));
+            element.setAttribute('download', 'map-' + getDatetime() + '.svg');
+
+            element.style.display = 'none';
+            document.body.appendChild(element);
+
+            element.click();
+
+            document.body.removeChild(element);
+
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            console.log(xhr);
+        }
+    }); 
+
+
 }
 
 
