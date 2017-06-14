@@ -58,8 +58,8 @@
 
     <!-- CONTENT GOES HERE -->
     <div class="container" id="container">
-        <h1>Map Maker</h1>
-        <p class="description">This tool is for aproximate location only. Geocoders can mislocate addresses, so be sure to double-check that it's accurate. Map data is provided by Mapzen's API using OpenStreetMap. Source should read: "Mapzen, OpenStreetMap" <a href="http://www.openstreetmap.org/" target="_blank">Improve the map!</a></p>
+        <h1>Web Map Maker</h1>
+        <p class="description">This tool uses Microsoft’s geocoder to approximate an address’s location. It also uses data provided by OpenStreetMap (which you can <a href="http://www.openstreetmap.org/" target="_blank">edit here</a>) and Mapzen. Questions? Contact <a href="mailto:jon@latimes.com">jon@latimes.com</a> or <a href="https://github.com/datadesk/web-map-maker/issues" target="_blank">submit a bug</a> in GitHub.</p>
         <div id="popupContainer">
             <input id="popupText" type="text" placeholder="Pointer text" maxlength="40"><div id="geocodifier"></div>
         </div>
@@ -113,8 +113,8 @@
                 </div>
 
                 <div class="map_option">
-                    <button class='btn gray' onclick='downloadIMG();' id='download_img'>Map loading...<img src="images/preloader.gif" alt="Preloader" id="map_loader" /></button>
-                    <button class='btn gray' onclick='downloadVector();' id='download_vector'>Download vector</button>
+                    <button class='btn gray' onclick='downloadIMG();' id='download_img'>Map loading...<img src="images/preloader.gif" alt="Preloader" class="map_loader" /></button>
+                    <button class='btn' onclick='downloadVector();' id='download_vector'>Download vector</button>
                 </div>
 
 
@@ -167,6 +167,9 @@
             </div>
         </div>
     </footer>
+    
+    <div id="tooltip">
+    </div>
 
     <!-- load all the JS -->
     <script type="text/javascript" src="js/app.js"></script>

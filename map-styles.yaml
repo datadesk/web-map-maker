@@ -10,11 +10,12 @@
 # Read more: https://github.com/tangrams/walkabout-style
 #
 
-global:
-    # Sign up for a Mapzen API key to enjoy higher rate limits
-    # https://mapzen.com/documentation/overview/#developer-accounts-and-api-keys
-    sdk_mapzen_api_key: 'mapzen-uxhmqQc'     # set this value to your Mapzen API key
+# put your mapzen api key in this file
+# Sign up for a Mapzen API key to enjoy higher rate limits
+# https://mapzen.com/documentation/overview/#developer-accounts-and-api-keys
+import: config.yaml
 
+global:
     #ux/ui
     ux_language: en             # l10n language code, trusting OSM in v0.10 tiles, fixed in v1.0 tiles
     ux_language_fallback: false    # l10n language code, trusting OSM in v0.10 tiles, fixed in v1.0 tiles
@@ -225,7 +226,7 @@ global:
     water_visible_inland_water:         true # ∆
     water_visible_swimming_pools:       false # ∆
     #water Color
-    water:                              '#B2DBF6' # ∆
+    water:                              '#B4DDF4' # ∆
 
     #landuse
     landuse_style:                      polygons # ∆
@@ -276,12 +277,12 @@ global:
     roads_visible_minor:                true # ∆
     roads_visible_service:              true # ∆
     roads_visible_taxi_and_runways:     true # ∆
-    roads_visible_ferry_route:          true  # add to layer selector
+    roads_visible_ferry_route:          false # ∆
+    roads_visible_paths:                false
     transit_visible:                    false   # ∆
     #road/transit colors
     road_color:                         '#a6a6a6' # ∆
     minor_road:                         '#cccecf' # ∆
-    service_road_color:                 '#eaedf3'     #not sure if this is used 
     road_text:                          '#000' # ∆
     road_text_minor:                    '#666' # ∆
     rail_line:                          '#cccecf' # ∆
@@ -309,7 +310,7 @@ global:
     labels_visible_service_road:        true # ∆ this should be added to  UI list as Paths, service roads
     labels_visible_water:               true # ∆
     labels_visible_neighborhoods:       true # ∆
-    labels_visible_points_of_interest:  true # ∆
+    labels_visible_points_of_interest:  false # ∆
     labels_visible_landuse:             true
     labels_visible_building:            false # ∆ saved for possible future inclusion
     labels_visible_address:             false # ∆ saved for possible future inclusion
@@ -2135,7 +2136,7 @@ layers:
                     color: global.rail_line
                     width: [[15, 1.8px], [17, 3px], [19, 2m]]
                     style: dashed-lines
-                    visible: false
+                    visible: global.roads_visible_paths
                     
         track:
             filter:
@@ -2702,7 +2703,7 @@ layers:
                         buffer: 3px
                         font:
                             family: global.text_font_family
-                            wiight: normal
+                            weight: normal
                             size: [[8,26px],[10,28px],[12,32px]]
                             fill: global.text_fill
                 text-blend-order:
@@ -4301,6 +4302,15 @@ layers:
                         style: global.landuse_style
                         color: global.landuse_stadium
                         order: 1
+            prison:
+                filter:
+                    kind: prison
+                draw:
+                    polygons:
+                        visible: global.landuse_visible_prison
+                        style: global.landuse_style
+                        color: global.landuse_military
+                        order: 1
             man-made:
                 filter: { kind: [pier,wastewater_plant,works,bridge,tower,breakwater,water_works,groyne,dike,cutline] }
                 draw:
@@ -4312,10 +4322,11 @@ layers:
                 pier:
                     filter: { kind: [pier,bridge,breakwater,groyne,dike,cutline], $zoom: { min: 10 } }
                     draw:
-                        terrain:
+                        polygons:
                             visible: global.landuse_visible_pier
+                            style: global.landuse_style
                             color: global.background
-                            visible: true
+                            order: 205
             camp_site:
                 filter: { kind: camp_site }
                 draw:

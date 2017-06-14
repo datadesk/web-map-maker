@@ -169,17 +169,24 @@ map.on('zoom', function() {
     }
 
     // highway shields
-    if (zoomRounded <= 7) {
+    if (zoomRounded <= 6) {
         $("#labels_visible_highway_shields").parent().addClass("unavailable");
     } else {
         $("#labels_visible_highway_shields").parent().removeClass("unavailable");
     }
 
     // major road labels
-    if (zoomRounded < 14) {
+    if (zoomRounded < 12) {
         $("#labels_visible_major_roads").parent().addClass("unavailable");
     } else {
         $("#labels_visible_major_roads").parent().removeClass("unavailable"); 
+    }
+
+    // major road labels
+    if (zoomRounded < 13) {
+        $("#labels_visible_minor_roads").parent().addClass("unavailable");
+    } else {
+        $("#labels_visible_minor_roads").parent().removeClass("unavailable"); 
     }
 
     // highways
@@ -213,12 +220,11 @@ map.on('zoom', function() {
     }
 
     // airport roads
-    if (zoomRounded < 11) { 
+    if (zoomRounded < 9) { 
         $("#roads_visible_taxi_and_runways").parent().addClass("unavailable"); 
     } else {
         $("#roads_visible_taxi_and_runways").parent().removeClass("unavailable"); 
     }
-
 
     // swimming pools
     if (zoomRounded < 16) {
@@ -234,6 +240,12 @@ map.on('zoom', function() {
         $("#borders_visible_counties").parent().removeClass("unavailable"); 
     }
 
+    // ferry routes
+    if (zoomRounded < 8) {
+        $("#roads_visible_ferry_route").parent().addClass("unavailable"); 
+    } else {
+        $("#roads_visible_ferry_route").parent().removeClass("unavailable"); 
+    }
 
 });
 
@@ -463,50 +475,6 @@ setTimeout(
 
 };
 
-// function showPrint() {
-//     // swap to print color
-//     scene.config.global.road_color = '#98a5ac';
-
-//     // bump up size of major roads
-//     scene.config.layers.roads.major_road.draw.lines.width[3][1] = '1.5px';
-//     scene.config.layers.roads.major_road.draw.lines.width[4][1] = '2.5px';
-//     scene.config.layers.roads.major_road.draw.lines.width[5][1] = '3.5px';
-//     scene.config.layers.roads.major_road.draw.lines.width[6][1] = '10m';
-
-//     // bump up size of minor roads
-//     scene.config.layers.roads.minor_road.draw.lines.width[1][1] = '0.5px';
-//     scene.config.layers.roads.minor_road.draw.lines.width[2][1] = '0.5px';
-
-//     // make water darker
-//     scene.config.global.water_color = '#a6bcd3';
-
-//     // turn off labels
-//     labelsVisible = true;
-//     showLabels();
-
-//     scene.updateConfig(); // update config
-
-//     // update buttons
-//     $("#print_btn").addClass("active");
-//     $("#web_btn").removeClass("active");
-
-//     // hide attribution
-//     $(".leaflet-control-attribution").hide();
-
-// }
-
-// function showWeb() {
-//     scene.load('map-styles.yaml');
-//     buildingsVisible = false;
-//     // update buttons
-//     $("#print_btn").removeClass("active");
-//     $("#web_btn").addClass("active");
-//     $("#auto_labels_btn").addClass("active");
-//     labelsVisible = true;
-
-//     // bring back attribution
-//     $(".leaflet-control-attribution").show();
-// }
 
 // Apple's Magic Mouse is a little finicky--prevent scroll when mouse is down on map
 $("#map").mousedown(function() {
@@ -518,11 +486,15 @@ $("#map").mouseup(function() {
     }
 });
 
+// collect features
+var pointFeatures = [],
+    lineFeatures = [],
+    polygonFeatures = [];
 
 // styles for geojson pulled from v1.0
-var lineStyle = {'color':'#cd7139','weight': 4,'opacity': 1, 'lineJoin':'round'};
-var polyStyle = {'color': '#cd7139','weight': 4,'opacity': 1,'fillOpacity': 0, 'lineJoin':'round'};
-var pointStyle = { radius: 10.5, fillColor: '#cd7139',color: '#fff',weight: 1,opacity: 0.3,fillOpacity: 0.8};
+var lineStyle = {'color':'#cd7139','weight': 4,'opacity': 1, 'lineJoin':'round', 'className':'line-feature'};
+var polyStyle = {'color': '#cd7139','weight': 4,'opacity': 1,'fillOpacity': 0, 'lineJoin':'round', 'className':'polygon-feature'};
+var pointStyle = { radius: 10.5, fillColor: '#cd7139',color: '#fff',weight: 1,opacity: 0.3,fillOpacity: 0.8, className: 'point-feature'};
 
 function addStyle(feature){
     switch (feature.geometry.type) {
@@ -549,7 +521,18 @@ function handleFileSelect(evt) {
 
             // add GeoJSON to map
             var geojson = L.geoJson(parsedJSON, {
-                style: function(feature) {return addStyle(feature);},
+                style: function(feature) {
+                // add element to array for later vector export
+                    if (feature.geometry.type === 'Polygon' || feature.geometry.type === 'MultiPolygon') {
+                        polygonFeatures.push(feature);
+                    } else if (feature.geometry.type === 'LineString') {
+                        lineFeatures.push(feature);
+                    } else if (feature.geometry.type === 'Point') {
+                        pointFeatures.push(feature);
+                    }
+                    console.log(feature);
+                    return addStyle(feature);
+                },
                 pointToLayer: function (feature, latlng) {
                     return L.circleMarker(latlng, pointStyle);
                 }
@@ -621,7 +604,7 @@ var mapLoadAction = true;
 // show that map is still loading
 function mapLoading() {
     if (scene.tile_manager.isLoadingVisibleTiles()) {
-        $("#download_img").html('Map loading...<img src="images/preloader.gif" alt="Preloader" id="map_loader" />');
+        $("#download_img").html('Map loading...<img src="images/preloader.gif" alt="Preloader" class="map_loader" />');
         $("#download_img").addClass("gray");
         mapLoadAction = true;
     }
@@ -652,13 +635,14 @@ scene.subscribe({
 /* LAYERS DROPDOWN */
 // list of layers to show/hide
 var layers = {
+    'sources' : [],
     'terrain_visible': [],
     'buildings_visible': [],
     'transit_visible': [],
     'labels_visible': ['countries','states','cities','neighborhoods','highway_shields','major_roads','minor_roads','points_of_interest','water'],
-    'roads_visible': ['highways','highway_ramps','major','minor','service','ferry_route','taxi_and_runways'],
+    'roads_visible': ['highways','highway_ramps','major','minor','service','ferry_route','taxi_and_runways','paths'],
     'borders_visible': ['countries','disputed','states','counties'],
-    'landuse_visible': ['airports','beach','cemetery','college','forest','hospital','military','park','pier','prison','resort','school','stadium','wetland'],
+    'landuse_visible': ['airports','beach','cemetery','college','forest','hospital','military','park','prison','resort','school','stadium','wetland'],
     'water_visible': ['ocean','inland_water','swimming_pools']
 }
 
@@ -675,6 +659,7 @@ Object.keys(layers).forEach(function(key) {
     }
                               
 });
+
 
 // check what layers are available on init
 scene.subscribe({
@@ -705,6 +690,11 @@ scene.subscribe({
     }
 });
 
+// set sources to be checked
+$("#sources").attr("checked",true);
+
+
+
 
 // set what layers are visible based on zoom
 if (initZoom < 14) { $("#buildings_visible").parent().addClass("unavailable"); }
@@ -717,13 +707,15 @@ if (initZoom > 9 || initZoom < 2) { $("#labels_visible_countries").parent().addC
 
 if (initZoom < 12) { $("#roads_visible_minor").parent().addClass("unavailable"); }
 
-if (initZoom < 15) { $("#roads_visible_service").parent().addClass("unavailable"); }
+if (initZoom < 16) { $("#roads_visible_service").parent().addClass("unavailable"); }
 
 if (initZoom < 16) { $("#water_visible_swimming_pools").parent().addClass("unavailable"); }
 
 if (initZoom < 10) { $("#borders_visible_counties").parent().addClass("unavailable"); }
 
-if (initZoom < 14) { $("#labels_visible_major_roads").parent().addClass("unavailable"); }
+if (initZoom < 12) { $("#labels_visible_major_roads").parent().addClass("unavailable"); }
+
+if (initZoom < 13) { $("#labels_visible_minor_roads").parent().addClass("unavailable"); }
 
 var expanded = false;
 
@@ -749,6 +741,21 @@ function showCheckboxes() {
 
 }
 
+// close the layers palette when clicking somewhere else
+$('#checkboxes').on('click', function(e) {
+    e.stopPropagation();
+});
+$('.selectBox').on('click', function(e) {
+    e.stopPropagation();
+});
+$(document).on('click', function (e) {
+    checkboxes.style.display = "none";
+    expanded = false;
+    // toggle layer focus style
+    $(".overSelect").css("border","2px solid #b5b5b5");
+    $(".selectBox select").css("color","#acacac");
+
+});
 
 // function to check on parent checkboxes
 function parentChecks() {
@@ -822,6 +829,12 @@ $("#checkboxes label input").click(function(){
             scene.config.global.landuse_style = 'polygons';
             scene.config.layers.earth.draw.polygons.visible = true;
             scene.config.layers.earth.draw.terrain.visible = false;
+        }
+    } else if (thisID == 'sources') {
+        if ($("#"+thisID).prop("checked")) {
+            $(".leaflet-control-attribution").css("display","block");
+        } else {
+            $(".leaflet-control-attribution").css("display","none");
         }
     } else if (Array.isArray(layers[thisID]) && layers[thisID].length > 0) {
     // if any parent layer
@@ -1103,5 +1116,146 @@ $('body').on('mousedown', '.rotate_handle', function(e) {
     });
 });
 
+
+
+
+// kill tooltip on scroll
+$( window ).scroll(function() {
+    $("#tooltip").css({"opacity":"0","height":"auto","width":"0px"}); // hide
+    // $("#council_name").html("");
+});
+$( 'body' ).on('click',function() {
+    $("#tooltip").css({"opacity":"0","height":"auto","width":"0px"}); // hide
+    // $("#council_name").html("");
+});
+$("#download_vector").mouseover(function () {
+    // var name = $(this).attr("title");
+    // $(this).css('cursor','pointer');
+    // message if auto labels are checked
+    if ($("#labels_visible").prop('indeterminate') == true || $("#labels_visible").prop('checked') == true) {
+        $("#tooltip").css({"opacity":"1","height":"auto","width":"200px"});
+        $("#tooltip").html('<p>Automatic labels cannot be exported to vector.</p>');
+    }
+});
+$("#download_vector").mouseout(function () {
+    $("#tooltip").css({"opacity":"0","height":"auto","width":"0px"}); // hide
+});
+// Move the tooltip with the mouse
+$(window).mousemove( function(e) {
+    if (windowWidth > 400) {
+        var tooltipHeight = $("#tooltip").height();
+        mouseY = e.pageY;
+        mouseX = e.pageX;
+        $("#tooltip").css({"top":(mouseY+20)+"px","left":(mouseX+10)+"px"});
+    }
+});
+
+
+function getDatetime() {
+    // get current datetime
+    var currentdate = new Date();
+
+    var hours = (currentdate.getHours() > 12) ? currentdate.getHours() + 12 : currentdate.getHours();
+    hours = (hours.toString().length == 1) ? '0' + hours : hours;
+
+    var datetime =  ("0" + (currentdate.getMonth() + 1)).slice(-2) + "-" +
+        ("0" + currentdate.getDate()).slice(-2) + "-" +
+        currentdate.getFullYear() + "-"
+        + hours + "-" +
+        + currentdate.getMinutes() + "-" +
+        currentdate.getSeconds();
+
+    return datetime;
+}
+
+
+// vector download
+function downloadVector() {
+    console.log('downloadVector()');
+
+    // show map loading
+    $("#download_vector").html('Vector loading...<img src="images/preloader.gif" alt="Preloader" class="map_loader" />');
+    $("#download_vector").addClass("gray");
+
+    // create options object
+    var mapOptions = {
+        startLat: map.getBounds()._northEast.lat,
+        startLon: map.getBounds()._northEast.lng,
+        endLat: map.getBounds()._southWest.lat,
+        endLon: map.getBounds()._southWest.lng,
+        zoomLevel: Math.floor(map.getZoom()),
+        layers_visible: [],
+        custom_labels: [],
+        lineFeatures: lineFeatures,
+        pointFeatures: pointFeatures,
+        polygonFeatures: polygonFeatures,
+        backgroundImg: '',
+        apikey:configOptions['mapzen-api'],
+        'coord-submit': 'submit'
+    }
+
+    // loop through visible layers
+    $("#checkboxes input").each(function(){
+        // if checked and also not labels and also not half transparent
+        if (($(this)[0].checked == true || $(this).prop('indeterminate') == true) && $(this)[0].id.indexOf('labels') == -1 && !$(this).parent().hasClass('unavailable')) {
+            mapOptions['layers_visible'].push($(this)[0].id);
+        }
+    });
+
+    // add custom labels
+
+
+    // $("svg path").each(function(){
+    //     var thisClass = $(this).attr('class');
+    //     if (thisClass.indexOf('polygon-feature') != -1) { mapOptions['polygonFeatures'].push($(this).attr('d')); }
+    //     else if (thisClass.indexOf('line-feature') != -1) { mapOptions['lineFeatures'].push($(this).attr('d')); }
+    //     else if (thisClass.indexOf('point-feature') != -1) { mapOptions['pointFeatures'].push($(this).attr('d')); }
+    //     // mapOptions['geojson'].push($(this));
+    // });
+
+
+    console.log(mapOptions);
+    console.log(JSON.stringify(mapOptions));
+
+
+    $.ajax({
+        url: 'https://kerd0xd1c6.execute-api.us-west-2.amazonaws.com/prod/svg-map-maker',
+        type: "POST",
+        timeout: 100000,
+        headers: {
+            'x-api-key':'0fzeDyUR5fuqVdCzd',
+            'Content-Type':'application/json'
+        },
+        dataType: "text",
+        data: JSON.stringify(mapOptions),
+        success: function (result) {
+
+
+            var element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(result));
+            element.setAttribute('download', 'map-' + getDatetime() + '.svg');
+
+            element.style.display = 'none';
+            document.body.appendChild(element);
+
+            element.click();
+
+            document.body.removeChild(element);
+
+            $("#download_vector").html('Download vector');
+            $("#download_vector").removeClass("gray");
+
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            console.log(xhr);
+            alert('Problem downloading file');
+
+            $("#download_vector").html('Download vector');
+            $("#download_vector").removeClass("gray");
+
+        }
+    }); 
+
+}
 
 
