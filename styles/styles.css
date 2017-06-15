@@ -175,18 +175,17 @@ body { cyber
 
 
 /* print column grid */
-.grid330, .printCol {
-    border: 1px solid rgba(0,0,0,0);
-    margin: -50px 0 0 25px;
+.printCol {
+    border-right: 1px solid #4affff;
+    border-bottom: none;
+    border-left: none;
+    border-top: none;
+    position: relative;
+    float: left;
+    margin: 0;
 }
 
-.grid330 div, .printCol div {
-    border-color: #4affff;
-    border-bottom: 1px solid rgba(0,0,0,0);
-    border-top: 1px solid rgba(0,0,0,0);
-}
-
-.grid330 div:nth-child(odd), .printCol div:nth-child(odd) {
+.grid330 div:nth-child(odd), #grid_holder div.printCol:nth-child(odd) {
     background: rgba(0,0,0,0.05);
 }
 

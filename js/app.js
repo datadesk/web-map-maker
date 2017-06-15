@@ -40,11 +40,38 @@ function createGrid(size) {
         }
     }
 }
+printGrid();
 
 // build print grid
 function printGrid() {
-    var printCol = "<div class='grid printCol' style='width: 329px; height: 1600px;'></div>";
-    $("#grid_holder").append(text);
+    // var parent = $('<div />', {
+    //     class: 'grid',
+    //     width: ratioW  * size,
+    //     height: ratioH  * size
+    // }).addClass('grid' + ' grid'+size).appendTo('#grid_holder');
+
+    // 1 col
+    var printCol = "<div class='grid printCol' style='width: 329px; height: 1600px; margin: 0 0 0 25px;'></div>";
+    $("#grid_holder").append(printCol);
+
+    // other columns
+    for (var i = 0; i < 6; i++) {
+        var printCol = "<div class='grid printCol' style='width: 365px; height: 1600px;'></div>";
+        $("#grid_holder").append(printCol);    
+    }
+
+    // column ruler
+    var text = "<span class='px_measure'>0 col</span>";
+    $("#col_ruler").append(text);
+
+    var text = "<span class='px_measure'>1 col</span>";
+    $("#col_ruler").append(text);
+
+    // other columns
+    for (var i = 0; i < 4; i++) {
+        var text = "<span class='px_measure' style='margin: 0 0 0 40px;'>"+(i+2)+" col</span>";
+        $("#col_ruler").append(text);
+    }
 }
 
 
@@ -55,43 +82,10 @@ for (var i = 0; i < 1500; i++) {
         $("#pixel_ruler").append(text);
     }
 
-    // print column sizes
-    if (i === colwidth || i === 0) {
-        var text = "<span class='px_measure'>"+i/colwidth+" col</span>";
-        $("#col_ruler").append(text);
-    } else if (i === (colwidth*2)+colgutter) {
-        // 2 col
-        var text = "<span class='px_measure' style='margin: 0 0 0 30px'>2 col</span>";
-        $("#col_ruler").append(text);
-    } else if (i === (colwidth*3)+colgutter*2) {
-        // 3 col
-        var text = "<span class='px_measure' style='margin: 0 0 0 30px'>3 col</span>";
-        $("#col_ruler").append(text);
-    }
-    // if (i % 330 === 0) {
-    //     var text = "<span class='px_measure'>"+i/330+" col</span>";
-    //     $("#col_ruler").append(text);
-    // }
-
 }
-
-
-// // set up top ruler width
-// // magic number: why 1500 here? What does that mean?
-// for (var i = 0; i < 1500; i+=10) {
-//     // checks if fits for print or web columns
-//     if (i % 330 === 0) {
-//         var text = "<span class='px_measure'>"+i/330+" col</span>";
-//         $("#col_ruler").append(text);
-//     } else if (i % 100 === 0 && i <= 1400) {
-//         var text = "<span class='px_measure'>"+(i-100)+"px</span>";
-//         $("#pixel_ruler").append(text);
-//     }
-// }
 
 createGrid(50);
 createGrid(100);
-createGrid(330);
 
 /* add commas to numbers*/
 function commafy(num) {
