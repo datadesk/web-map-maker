@@ -1218,20 +1218,10 @@ function downloadVector() {
     console.log(JSON.stringify(mapOptions));
 
 
-    $.ajax({
-        url: 'https://kerd0xd1c6.execute-api.us-west-2.amazonaws.com/prod/svg-map-maker',
-        type: "POST",
-        timeout: 100000,
-        headers: {
-            'x-api-key':'0fzeDyUR5fuqVdCzd',
-            'Content-Type':'application/json'
-        },
-        dataType: "text",
-        data: JSON.stringify(mapOptions),
-        success: function (result) {
-
-
-            var element = document.createElement('a');
+    
+    createVector(JSON.stringify(mapOptions))
+    .then((result) => {
+        var element = document.createElement('a');
             element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(result));
             element.setAttribute('download', 'map-' + getDatetime() + '.svg');
 
@@ -1244,17 +1234,14 @@ function downloadVector() {
 
             $("#download_vector").html('Download vector');
             $("#download_vector").removeClass("gray");
+    }).catch((err) => {
+        console.log(err);
+        alert('Problem downloading file');
 
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-            console.log(xhr);
-            alert('Problem downloading file');
+        $("#download_vector").html('Download vector');
+        $("#download_vector").removeClass("gray");
 
-            $("#download_vector").html('Download vector');
-            $("#download_vector").removeClass("gray");
-
-        }
-    }); 
+    });
 
 }
 
