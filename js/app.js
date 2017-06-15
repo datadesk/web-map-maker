@@ -55,7 +55,7 @@ function printGrid() {
     $("#grid_holder").append(printCol);
 
     // other columns
-    for (var i = 0; i < 6; i++) {
+    for (var i = 0; i < 3; i++) {
         var printCol = "<div class='grid printCol' style='width: 365px; height: 1600px;'></div>";
         $("#grid_holder").append(printCol);    
     }
@@ -68,7 +68,7 @@ function printGrid() {
     $("#col_ruler").append(text);
 
     // other columns
-    for (var i = 0; i < 4; i++) {
+    for (var i = 0; i < 3; i++) {
         var text = "<span class='px_measure' style='margin: 0 0 0 40px;'>"+(i+2)+" col</span>";
         $("#col_ruler").append(text);
     }
@@ -76,7 +76,7 @@ function printGrid() {
 
 
 // set up top pixel ruler
-for (var i = 0; i < 1500; i++) {
+for (var i = 0; i < 1600; i++) {
     if (i % 100 === 0 && i > 0) {
         var text = "<span class='px_measure'>"+(i-100)+"px</span>";
         $("#pixel_ruler").append(text);
@@ -477,13 +477,13 @@ if (option.value == 'video') {
     $("#map_holder").width(340);
     $("#map_holder").height(700);
 } else if (option.value == 'col2') {
-    $("#map_holder").width(710);
+    $("#map_holder").width(706);
     $("#map_holder").height(700);
 } else if (option.value == 'col3') {
-    $("#map_holder").width(1070);
+    $("#map_holder").width(1072);
     $("#map_holder").height(700);
 } else if (option.value == 'col4') {
-    $("#map_holder").width(1450);
+    $("#map_holder").width(1438);
     $("#map_holder").height(700);
 } else if (option.value == 'twitter') {
     $("#map_holder").width(810);
