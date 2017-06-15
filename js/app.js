@@ -15,6 +15,10 @@ var windowHeight = document.documentElement.clientHeight;
 var userOptions = {};
 var mapSlug = "la-mapmaker-";
 
+// print sizes
+var colwidth = 330,
+    colgutter = 26;
+
 // build the map's ruler
 function createGrid(size) {
     // magic number: why 1600?
@@ -30,24 +34,60 @@ function createGrid(size) {
     for (var i = 0; i < ratioH; i++) {
         for(var p = 0; p < ratioW; p++){
             $('<div />', {
-                width: size - 1,
+                width: size - 1, // 1 is the width of the border line (or gridline)
                 height: size - 1
             }).appendTo(parent);
         }
     }
 }
 
-// magic number: why 1500 here? What does that mean?
-for (var i = 0; i < 1500; i+=10) {
-    // checks if fits for print or web columns
-    if (i % 330 === 0) {
-        var text = "<span class='px_measure'>"+i/330+" col</span>";
-        $("#col_ruler").append(text);
-    } else if (i % 100 === 0 && i <= 1400) {
+// build print grid
+function printGrid() {
+    var printCol = "<div class='grid printCol' style='width: 329px; height: 1600px;'></div>";
+    $("#grid_holder").append(text);
+}
+
+
+// set up top pixel ruler
+for (var i = 0; i < 1500; i++) {
+    if (i % 100 === 0 && i > 0) {
         var text = "<span class='px_measure'>"+(i-100)+"px</span>";
         $("#pixel_ruler").append(text);
     }
+
+    // print column sizes
+    if (i === colwidth || i === 0) {
+        var text = "<span class='px_measure'>"+i/colwidth+" col</span>";
+        $("#col_ruler").append(text);
+    } else if (i === (colwidth*2)+colgutter) {
+        // 2 col
+        var text = "<span class='px_measure' style='margin: 0 0 0 30px'>2 col</span>";
+        $("#col_ruler").append(text);
+    } else if (i === (colwidth*3)+colgutter*2) {
+        // 3 col
+        var text = "<span class='px_measure' style='margin: 0 0 0 30px'>3 col</span>";
+        $("#col_ruler").append(text);
+    }
+    // if (i % 330 === 0) {
+    //     var text = "<span class='px_measure'>"+i/330+" col</span>";
+    //     $("#col_ruler").append(text);
+    // }
+
 }
+
+
+// // set up top ruler width
+// // magic number: why 1500 here? What does that mean?
+// for (var i = 0; i < 1500; i+=10) {
+//     // checks if fits for print or web columns
+//     if (i % 330 === 0) {
+//         var text = "<span class='px_measure'>"+i/330+" col</span>";
+//         $("#col_ruler").append(text);
+//     } else if (i % 100 === 0 && i <= 1400) {
+//         var text = "<span class='px_measure'>"+(i-100)+"px</span>";
+//         $("#pixel_ruler").append(text);
+//     }
+// }
 
 createGrid(50);
 createGrid(100);
