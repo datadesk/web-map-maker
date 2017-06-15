@@ -4,4 +4,6 @@
 var configOptions = {
     'bingAPI': 'YOUR_API_KEY_HERE',
     'attribution': 'YOUR_ATTRIBUTION_STRING_HERE'
+    'initCoords': [34.0425, -118.24], // Los Angeles
+    'mapzen-api': 'MAPZEN API KEY'
 }
