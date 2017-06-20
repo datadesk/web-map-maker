@@ -3166,8 +3166,9 @@ layers:
                     buffer: 80px
                     text_wrap: 11
                     max_lines: 5
+                    collide: false
+                    move_into_tile: false
                     font:
-                        collide: false
                         family: global.text_font_family
                         fill: global.text_fill_gray
                         weight: normal
