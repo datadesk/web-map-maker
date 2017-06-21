@@ -707,7 +707,7 @@ sources:
         max_zoom: 15
     us_counties:
         type: GeoJSON
-        url: data/counties.json
+        url: data/us_counties.json
     la_hoods:
         type: GeoJSON
         url: data/la_hoods.json
@@ -754,6 +754,9 @@ styles:
         base: lines
         dash: [5, 3]
         #dash_background_color: red
+    long-dash:
+        base: lines
+        dash: [10,1]
     terrain:
         base: polygons
         lighting: false
@@ -2401,19 +2404,25 @@ layers:
                 draw:
                     lines:
                         visible: false
-            labels-z9-up:
-                filter: { name: true, $zoom: { min: 9 }, not: { maritime_boundary: true } }
-                draw:
-                    text-blend-order:
-                        priority: 2
-                        visible: global.labels_visible_countries
-                        text_source: global.ux_language_text_source_boundary_lines
-                        text_wrap: 100
-                        font:
-                            family: global.text_font_family
-                            size: 9px
-                            fill: [0.00,0.00,0.00]
-                            transform: uppercase
+            # labels-z9-up:
+            #     filter: { name: true, $zoom: { min: 9 }, not: { maritime_boundary: true }, kind: [country] }
+            #     draw:
+            #         text-blend-order:
+            #             collide: false
+            #             priority: 1
+            #             visible: global.labels_visible_countries
+            #             text_source:
+            #                 left: 'name:left'
+            #                 right: 'name:right'
+            #             # offset: [0px,0px]
+            #             # text_wrap: 100
+            #             # buffer: 2px
+            #             font:
+            #                 height: 0px
+            #                 family: global.text_font_family
+            #                 size: 17px
+            #                 fill: [0.00,0.00,0.00]
+            #                 transform: uppercase
 
         other_country_boundary_disputed_etc:
             filter: { kind: [disputed, indefinite, indeterminate, lease_limit, line_of_control, overlay_limit] }
@@ -2462,14 +2471,21 @@ layers:
                 filter: { name: true, $zoom: { min: 9 }, not: { maritime_boundary: true } }
                 draw:
                     text-blend-order:
+                        # repeat_distance: 100px
                         priority: 3
+                        # order: 1000
                         visible: global.labels_visible_states
-                        text_source: global.ux_language_text_source_boundary_lines
-                        text_wrap: 100
-                        anchor: top
+                        text_source:
+                            left: 'name:left'
+                            right: 'name:right'
+                        # text_wrap: 100
+                        # offset: [0px,2px]
+                        collide: false
+                        align: left
                         font:
                             family: global.text_font_family
-                            size: 9px
+                            size: 22px
+                            # height: 20px
                             fill: [0.35,0.35,0.35]
                             transform: uppercase
         city_walls:
@@ -2486,13 +2502,17 @@ layers:
                     width: [[14, 0.5px], [15, 1.0px], [16, 1.5px], [17, 2.0px], [19, 1.5m]]
 
     counties:
-        data: { source: counties }
+        data: { source: us_counties }
+        filter:
+            $zoom: { min: 6 }
         counties:
             draw:
-                lines:
-                    color: '#000'
-                    width: [[1, 0.5px], [2, 0.75px], [3, 1px], [5, 1.5px], [9, 3.5px], [14, 5.5px], [16, 6.5px], [17, 16m]]
-                    order: 400
+                long-dash:
+                    visible: global.borders_visible_counties
+                    order: 101
+                    color: global.county_boundary
+                    width: [[6,1px],[8,1.5px]]
+
             water:
                 filter: { maritime_boundary: true }
                 draw:
@@ -2639,17 +2659,21 @@ layers:
             region-z4:
                 filter:
                     $zoom: [4]
-                    not: { name: [Western Cape,Eastern Cape,Northern Cape,North West,Limpopo,KwaZulu-Natal,Hamburg,Freie und Hansestadt Hamburg,Neuchâtel,Nordrhein-Westfalen,Haute-Normandie,Baden-Württemberg,Bayern,Sachsen-Anhalt,Berlin,Mecklenburg-Vorpommern,Schleswig-Holstein,Brandenburg,Niedersachsen,Saarland,Thüringen,Hessen,Sachsen] }
+                    not: { name: [Western Cape,Eastern Cape,Northern Cape,North West,Limpopo,KwaZulu-Natal,Hamburg,Freie und Hansestadt Hamburg,Neuchâtel,Nordrhein-Westfalen,Haute-Normandie,Baden-Württemberg,Bayern,Sachsen-Anhalt,Berlin,Mecklenburg-Vorpommern,Schleswig-Holstein,Brandenburg,Niedersachsen,Saarland,Thüringen,Hessen,Sachsen,Mississippi,West Virginia,Tennessee,Maryland,Delaware,Connecticut,Rhode Island,New Hampshire,Vermont,Indiana,New Jersey] }
                 draw:
                     text-blend-order:
+                        move_into_tile: false
+                        collide: false
                         visible: global.labels_visible_states
                         text_source: global.ux_language_text_source_short
             region-z5:
                 filter:
                     $zoom: [5]
-                    not: { name: [Western Cape,Eastern Cape,Northern Cape,North West,Limpopo,KwaZulu-Natal,Hamburg,Freie und Hansestadt Hamburg,Neuchâtel,Nordrhein-Westfalen,Haute-Normandie,Baden-Württemberg,Bayern,Sachsen-Anhalt,Berlin,Mecklenburg-Vorpommern,Schleswig-Holstein,Brandenburg,Niedersachsen,Saarland,Thüringen,Hessen,Sachsen] }
+                    not: { name: [Western Cape,Eastern Cape,Northern Cape,North West,Limpopo,KwaZulu-Natal,Hamburg,Freie und Hansestadt Hamburg,Neuchâtel,Nordrhein-Westfalen,Haute-Normandie,Baden-Württemberg,Bayern,Sachsen-Anhalt,Berlin,Mecklenburg-Vorpommern,Schleswig-Holstein,Brandenburg,Niedersachsen,Saarland,Thüringen,Hessen,Sachsen,Connecticut, Rhode Island, Delaware] }
                 draw:
                     text-blend-order:
+                        move_into_tile: false
+                        collide: false
                         visible: global.labels_visible_states
                         text_source: global.ux_language_text_source_short
             region-z6:
@@ -2660,10 +2684,6 @@ layers:
                     text-blend-order:
                         visible: global.labels_visible_states
                         text_source: global.ux_language_text_source_short
-                        font:
-                            size: 21px
-                            weight: 200
-                            transform: uppercase
 
             region-z7-z8:
                 filter: { $zoom: [7,8] }
@@ -3163,10 +3183,10 @@ layers:
                     text_source: 
                     visible: global.labels_visible_neighborhoods
                     priority: 19
-                    buffer: 80px
+                    # buffer: 80px
                     text_wrap: 11
-                    max_lines: 5
-                    collide: false
+                    # max_lines: 5
+                    collide: true
                     move_into_tile: false
                     font:
                         family: global.text_font_family
