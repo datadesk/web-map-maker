@@ -264,7 +264,7 @@ global:
     borders_visible_countries:          true # ∆
     borders_visible_disputed:           true # ∆
     borders_visible_states:             true # ∆
-    borders_visible_counties:           true #??????
+    borders_visible_counties:           false # ∆
     #border colors:
     nation_boundary:                    '#a7a8ab' # ∆
     state_boundary:                     '#827676' # ∆

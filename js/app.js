@@ -267,13 +267,6 @@ map.on('zoom', function() {
         $("#water_visible_swimming_pools").parent().removeClass("unavailable"); 
     }
 
-    // country borders
-    if (zoomRounded < 10) {
-        $("#borders_visible_counties").parent().addClass("unavailable"); 
-    } else {
-        $("#borders_visible_counties").parent().removeClass("unavailable"); 
-    }
-
     // ferry routes
     if (zoomRounded < 8) {
         $("#roads_visible_ferry_route").parent().addClass("unavailable"); 
@@ -744,8 +737,6 @@ if (initZoom < 12) { $("#roads_visible_minor").parent().addClass("unavailable");
 if (initZoom < 16) { $("#roads_visible_service").parent().addClass("unavailable"); }
 
 if (initZoom < 16) { $("#water_visible_swimming_pools").parent().addClass("unavailable"); }
-
-if (initZoom < 10) { $("#borders_visible_counties").parent().addClass("unavailable"); }
 
 if (initZoom < 12) { $("#labels_visible_major_roads").parent().addClass("unavailable"); }
 

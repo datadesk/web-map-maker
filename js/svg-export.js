@@ -12,10 +12,10 @@ window.addEventListener('rejectionhandled', event => {
     console.log('REJECTIONHANDLED');
 });
 
-    // console.log(event)
-var mapOptions = {"startLat":34.10358171718193,"startLon":-117.85247005502258,"endLat":33.64712395818743,"endLon":-118.83153898373561,"zoomLevel":7,"layers_visible":["sources","roads_visible","roads_visible_highways","roads_visible_highway_ramps","roads_visible_major","roads_visible_ferry_route","roads_visible_taxi_and_runways","borders_visible","borders_visible_countries","borders_visible_disputed","borders_visible_states","borders_visible_counties","landuse_visible","landuse_visible_airports","landuse_visible_beach","landuse_visible_cemetery","landuse_visible_college","landuse_visible_forest","landuse_visible_hospital","landuse_visible_military","landuse_visible_park","landuse_visible_prison","landuse_visible_resort","landuse_visible_school","landuse_visible_stadium","landuse_visible_wetland","water_visible","water_visible_ocean","water_visible_inland_water"],"custom_labels":[],"backgroundImg":"","coord-submit":"submit","apikey":"mapzen-uxhmqQc"};
+//     // console.log(event)
+// var mapOptions = {"startLat":34.10358171718193,"startLon":-117.85247005502258,"endLat":33.64712395818743,"endLon":-118.83153898373561,"zoomLevel":7,"layers_visible":["sources","roads_visible","roads_visible_highways","roads_visible_highway_ramps","roads_visible_major","roads_visible_ferry_route","roads_visible_taxi_and_runways","borders_visible","borders_visible_countries","borders_visible_disputed","borders_visible_states","borders_visible_counties","landuse_visible","landuse_visible_airports","landuse_visible_beach","landuse_visible_cemetery","landuse_visible_college","landuse_visible_forest","landuse_visible_hospital","landuse_visible_military","landuse_visible_park","landuse_visible_prison","landuse_visible_resort","landuse_visible_school","landuse_visible_stadium","landuse_visible_wetland","water_visible","water_visible_ocean","water_visible_inland_water"],"custom_labels":[],"backgroundImg":"","coord-submit":"submit","apikey":"mapzen-uxhmqQc"};
 
-    console.log(mapOptions);
+//     console.log(mapOptions);
 
 
 
@@ -261,7 +261,7 @@ function parseJSON(req) {
 
 
         newMap.jsonArray = [];
-        console.log(newMap)
+        // console.log(newMap)
         resolve(newMap);
     });
 }
@@ -272,78 +272,334 @@ function getURL(mapObject) {
     if (mapObject.xCount < 0) xc = 0;
     if (mapObject.yCount < 0) yc = 0;
 
+    // console.log (mapObject.tilesToFetch[xc][yc].lon);
+    // console.log (mapObject.tilesToFetch[xc][yc].lat);
     return "https://tile.mapzen.com/mapzen/vector/v1/all/"+mapObject.zoom+"/"+mapObject.tilesToFetch[xc][yc].lon + "/" + mapObject.tilesToFetch[xc][yc].lat + ".json?api_key="+mapObject.key;
 }
 
+
+
 function makeSVGCall(newMap) {
     console.info("makeSVGCall()")
+    // console.log(newMap);
+
     return new Promise((resolve, reject) => {
         var tilesLoaded = false;
         var tiles = [];
-        var tileInterval = setInterval(function(){
-            if(tilesLoaded === false){
-                tiles.push(new Promise((resolve,reject) => {
+        var tileURLs = [];
 
-                    console.log("making tile call")
-                    var request = new XMLHttpRequest();
-                    var url = getURL(newMap);
-                    request.open('GET', url, true);
+        // create list of tile URLs
+        for (var i = 0; i < newMap.tilesToFetch.length; i++) {
+            for (var j = 0; j < newMap.tilesToFetch[i].length; j++) {
+                var tileURL = "https://tile.mapzen.com/mapzen/vector/v1/all/"+newMap.zoom+"/"+newMap.tilesToFetch[i][j].lon + "/" + newMap.tilesToFetch[i][j].lat + ".json?api_key="+newMap.key;
 
-                    request.onload = function(e) {
-                        console.log('request status: ' + request.status)
-                        if (request.status >= 200 && request.status < 400) {
-                            // Success!
-                            var data = JSON.parse(request.responseText);
-
-                            if (newMap.xCount > 0) {
-                                if (newMap.yCount > 0) {
-                                    newMap.yCount--;
-                                } else {
-                                    newMap.xCount--;
-                                    newMap.yCount = newMap.originalYCount;
-                                }
-                                // setTimeout(makeSVGCall(newMap), newMap.delayTime);
-                            } else {
-                                if (newMap.xCount === 0) {
-                                    if (newMap.yCount > 0) {
-                                        newMap.yCount--;
-                                        // setTimeout(makeSVGCall(newMap), newMap.delayTime);
-                                    } else {
-                                        console.log('done fetching tiles')
-                                        tilesLoaded = true;
-                                    }
-                                }
-                            }
-                            resolve(data);
-                        } else {
-                            console.log('We reached our target server, but it returned an error')
-                            console.log(e);
-                            // makeSVGCall(newMap); // try again if error
-                        }
-                    };
-
-                    request.onerror = function() {
-                        console.log('There was a connection error of some sort');
-                        // There was a connection error of some sort
-                    };
-                    request.send();
-                }));
-
-            } else{
-            clearInterval(tileInterval)
-            Promise.all(tiles)
-            .then(values => {
-                console.log(values)
-                for(var x = 0; x < values.length; x++){
-                    newMap.jsonArray.push(values[x]);
-                }
-                resolve(newMap)
-            })
+                tileURLs.push(tileURL);
             }
-        },newMap.delayTime);
-});
+        }
 
-}
+        console.log('tileURLs.length: ' + tileURLs.length);
+
+
+        // get the tiles!
+        var i = 0; // start value
+        function tileLoop() {
+            setTimeout(function() {
+                var tileData;
+                $.get(tileURLs[i], function(data) {
+                    console.log(data);
+                    tileData = data;
+                })
+                .done(function() {
+                    tiles.push(tileData);
+
+
+                    if (i < tileURLs.length-1) {
+                        i++;
+                        tileLoop();
+                    } else {
+
+                    // when length of tiles meets tilesURLs
+                    // if (tiles.length === tileURLs.length) {
+                        console.log('tiles are done!');
+                        console.log('tiles.length: ' + tiles.length);
+                        console.log(tiles);
+                    }
+
+                });
+
+
+
+            }, newMap.delayTime);
+        }
+        tileLoop();
+
+        // function myLoop () {
+        //         if(!tilesLoaded){
+        //             tiles.push(new Promise((resolve,reject) => {
+
+        //                 setTimeout(function () {
+        //                     console.log("making tile call")
+        //                     var request = new XMLHttpRequest();
+        //                     var url = getURL(newMap);
+        //                     request.open('GET', url, true);
+
+        //                     request.onload = function(e) {
+        //                         console.log('request status: ' + request.status)
+        //                         if (request.status >= 200 && request.status < 400) {
+        //                             // Success!
+        //                             var data = JSON.parse(request.responseText);
+
+        //                             if (newMap.xCount > 0) {
+        //                                 if (newMap.yCount > 0) {
+        //                                     newMap.yCount--;
+        //                                 } else {
+        //                                     newMap.xCount--;
+        //                                     newMap.yCount = newMap.originalYCount;
+        //                                 }
+        //                                 // setTimeout(makeSVGCall(newMap), newMap.delayTime);
+        //                             } else {
+        //                                 if (newMap.xCount === 0) {
+        //                                     if (newMap.yCount > 0) {
+        //                                         newMap.yCount--;
+        //                                         // setTimeout(makeSVGCall(newMap), newMap.delayTime);
+        //                                     } else {
+        //                                         console.log('done fetching tiles')
+        //                                         tilesLoaded = true;
+        //                                     }
+        //                                 }
+        //                             }
+        //                             resolve(data);
+        //                         } else {
+        //                             console.log('We reached our target server, but it returned an error')
+        //                             console.log(e);
+        //                             // makeSVGCall(newMap); // try again if error
+        //                         }
+        //                     };
+
+        //                     request.onerror = function() {
+        //                         console.log('There was a connection error of some sort');
+        //                         // There was a connection error of some sort
+        //                     };
+        //                     request.send();
+
+        //                 }, newMap.delayTime);
+
+
+        //             }));
+        //             myLoop();
+
+        //         } else {
+        //             Promise.all(tiles)
+        //             .then(values => {
+        //                 console.log(values)
+        //                 for(var x = 0; x < values.length; x++){
+        //                     newMap.jsonArray.push(values[x]);
+        //                 }
+        //                 resolve(newMap)
+        //             })
+        //         }
+
+
+        //         // if (!tilesLoaded) {
+        //         //     console.log('still loopin')
+        //         // } else {
+        //         //     // return tiles;
+        //         //     // end looping
+        //         // }
+        // }
+        // myLoop();
+
+    });
+
+} // makeSVGCall()
+
+
+// function makeSVGCall(newMap) {
+//     console.info("makeSVGCall()")
+//     console.log(newMap);
+
+//     return new Promise((resolve, reject) => {
+
+//         var tiles = [];
+
+//         var i = 0;
+
+//         function myLoop () {
+//             setTimeout(function () {
+//                 // loop through inner array
+//                 for (var j = 0; j < newMap.tilesToFetch[i].length; j++) {
+//                     // set up tile url
+//                     var tileURL = "https://tile.mapzen.com/mapzen/vector/v1/all/"+newMap.zoom+"/"+newMap.tilesToFetch[i][j].lon + "/" + newMap.tilesToFetch[i][j].lat + ".json?api_key="+newMap.key;
+
+//                     var jqxhr = $.get( tileURL, function(data) {
+//                         console.log(data);
+//                         tiles.push(data);
+//                         // var data = jQuery.parseJSON(data);
+//                         console.log( "success" );
+//                         resolve(data);
+
+//                     })
+//                     .done(function() {
+//                         // console.log( "second success" );
+//                     })
+//                     .fail(function() {
+//                         alert( "error" );
+//                     })
+//                     .always(function() {
+//                         // console.log( "finished" );
+//                     });
+
+//                 }
+//                 console.log(i);
+//                 i++;
+//                 if (i < newMap.tilesToFetch.length) {
+//                     myLoop();
+//                     console.log('still loopin')
+
+//                 } else if (i === newMap.tilesToFetch.length) {
+
+//                     console.log('returned!')
+//                     return Promise.all(tiles)
+//                     .then(values => {
+//                         console.log(values)
+//                         for(var x = 0; x < values.length; x++){
+//                             newMap.jsonArray.push(values[x]);
+//                         }
+//                         resolve(newMap)
+//                     })
+
+//                     // return tiles;
+//                     // end looping
+//                 }
+//             }, newMap.delayTime)
+//         }
+
+//         myLoop();
+
+//     });
+//     // // loop through tiles
+//     // for (var i = 0; i < newMap.tilesToFetch.length; i++) {
+//     //     // loop through sub array
+//     //     for (var j = 0; j < newMap.tilesToFetch[i].length; j++) {
+
+//     //         // set up tile url
+//     //         var tileURL = "https://tile.mapzen.com/mapzen/vector/v1/all/"+newMap.zoom+"/"+newMap.tilesToFetch[i][j].lon + "/" + newMap.tilesToFetch[i][j].lat + ".json?api_key="+newMap.key;
+
+
+
+
+
+//     //     }
+//     // }
+
+//     // return new Promise((resolve, reject) => {
+//     //     var tilesLoaded = false;
+//     //     var tiles = [];
+//     //     var tileInterval = setInterval(function(){
+//     //         console.log('tiles length is ' + tiles.length)
+//     //         if(tilesLoaded === false){
+//     //             tiles.push(new Promise((resolve,reject) => {
+
+//     //                 console.log('making tile jquery get call');
+//     //                 var url = getURL(newMap);
+
+//     //                 var jqxhr = $.get( url, function(data) {
+//     //                     // var data = jQuery.parseJSON(data);
+//     //                     console.log( "success" );
+//     //                     if (newMap.xCount > 0) {
+//     //                         if (newMap.yCount > 0) {
+//     //                             newMap.yCount--;
+//     //                         } else {
+//     //                             newMap.xCount--;
+//     //                             newMap.yCount = newMap.originalYCount;
+//     //                         }
+//     //                         // setTimeout(makeSVGCall(newMap), newMap.delayTime);
+//     //                     } else {
+//     //                         if (newMap.xCount === 0) {
+//     //                             if (newMap.yCount > 0) {
+//     //                                 newMap.yCount--;
+//     //                                 // setTimeout(makeSVGCall(newMap), newMap.delayTime);
+//     //                             } else {
+//     //                                 console.log('done fetching tiles')
+//     //                                 tilesLoaded = true;
+//     //                             }
+//     //                         }
+//     //                     }
+//     //                     resolve(data);
+
+//     //                 })
+//     //                 .done(function() {
+//     //                     console.log( "second success" );
+//     //                 })
+//     //                 .fail(function() {
+//     //                     console.log( "error" );
+//     //                 })
+//     //                 .always(function() {
+//     //                     console.log( "finished" );
+//     //                 });
+
+
+
+//     //                 // console.log("making tile call");
+//     //                 // var request = new XMLHttpRequest();
+//     //                 // var url = getURL(newMap);
+//     //                 // request.open('GET', url, true);
+
+//     //                 // request.onload = function(e) {
+//     //                 //     console.log('request status: ' + request.status)
+//     //                 //     if (request.status >= 200 && request.status < 400) {
+//     //                 //         // Success!
+//     //                 //         var data = JSON.parse(request.responseText);
+
+//     //                 //         if (newMap.xCount > 0) {
+//     //                 //             if (newMap.yCount > 0) {
+//     //                 //                 newMap.yCount--;
+//     //                 //             } else {
+//     //                 //                 newMap.xCount--;
+//     //                 //                 newMap.yCount = newMap.originalYCount;
+//     //                 //             }
+//     //                 //             // setTimeout(makeSVGCall(newMap), newMap.delayTime);
+//     //                 //         } else {
+//     //                 //             if (newMap.xCount === 0) {
+//     //                 //                 if (newMap.yCount > 0) {
+//     //                 //                     newMap.yCount--;
+//     //                 //                     // setTimeout(makeSVGCall(newMap), newMap.delayTime);
+//     //                 //                 } else {
+//     //                 //                     console.log('done fetching tiles')
+//     //                 //                     tilesLoaded = true;
+//     //                 //                 }
+//     //                 //             }
+//     //                 //         }
+//     //                 //         resolve(data);
+//     //                 //     } else {
+//     //                 //         console.log('We reached our target server, but it returned an error')
+//     //                 //         console.log(e);
+//     //                 //         // makeSVGCall(newMap); // try again if error
+//     //                 //     }
+//     //                 // };
+
+//     //                 // request.onerror = function() {
+//     //                 //     console.log('There was a connection error of some sort');
+//     //                 //     // There was a connection error of some sort
+//     //                 // };
+//     //                 // request.send();
+//     //             }));
+
+//     //         } else {
+//     //             clearInterval(tileInterval)
+//     //             Promise.all(tiles)
+//     //             .then(values => {
+//     //                 console.log(values)
+//     //                 for(var x = 0; x < values.length; x++){
+//     //                     newMap.jsonArray.push(values[x]);
+//     //                 }
+//     //                 resolve(newMap)
+//     //             })
+//     //         }
+//     //     },newMap.delayTime);
+//     // });
+
+// }
 
 
 function bakeJson(mapObject) {
@@ -486,10 +742,10 @@ function writeSVGFile(mapObject) {
                 }
 
                 // // combine all earth tiles
-                var earthTiles = "";
-                d3.selectAll("#earth path").each(function(){
-                    earthTiles += d3.select(this).attr("d");
-                });
+                // var earthTiles = "";
+                // d3.selectAll("#earth path").each(function(){
+                //     earthTiles += d3.select(this).attr("d");
+                // });
                 // d3.selectAll("#earth").append("path").attr("d",earthTiles);
 
                 // // combine all riverbank tiles
@@ -692,13 +948,13 @@ function writeSVGFile(mapObject) {
                 //     console.log('yess svg is there')
                 // })
 
-                resolve(d3.select('#export-container').html())
+                resolve(d3.select('#export-container').html());
 
     //         //jsdom done function done
     //         }
     //     })
     })
-}
+} // writeSVG()
 
 function createVector(options){
     return new Promise((resolve, reject) => {
@@ -713,7 +969,7 @@ function createVector(options){
 }
     
 
-        // here all maps spells are!
+// here all maps spells are!
 // convert lat/lon to mercator style number or reverse.
 function long2tile(lon,zoom) {
     return (Math.floor((lon+180)/360*Math.pow(2,zoom)));
