@@ -281,7 +281,6 @@ function getURL(mapObject) {
 
 function makeSVGCall(newMap) {
     console.info("makeSVGCall()")
-    // console.log(newMap);
 
     return new Promise((resolve, reject) => {
         var tilesLoaded = false;
@@ -312,17 +311,25 @@ function makeSVGCall(newMap) {
                 .done(function() {
                     tiles.push(tileData);
 
-
+                    // check if done or not
                     if (i < tileURLs.length-1) {
                         i++;
                         tileLoop();
                     } else {
-
-                    // when length of tiles meets tilesURLs
-                    // if (tiles.length === tileURLs.length) {
                         console.log('tiles are done!');
                         console.log('tiles.length: ' + tiles.length);
                         console.log(tiles);
+
+
+                        return Promise.all(tiles)
+                        .then(values => {
+                            console.log(values)
+                            for(var x = 0; x < values.length; x++){
+                                newMap.jsonArray.push(values[x]);
+                            }
+                            resolve(newMap)
+                        })
+
                     }
 
                 });
@@ -696,6 +703,8 @@ function writeSVGFile(mapObject) {
         var reformedJson = mapObject.reformedJson;
         console.log(reformedJson)
 
+        // remove any old svgs
+        d3.select("#export-container").remove();
                 // window.d3 = d3.select(window.document);
 
                 var svg = d3.select('body')
@@ -767,12 +776,12 @@ function writeSVGFile(mapObject) {
 
                 console.log('collecting #highwaylink path')
                 d3.selectAll('#highwaylink path')
-                    .attr('stroke','#BCBEC0 device-cmyk(0, 0, 0, 0.30)')
+                    .attr('stroke','#BCBEC0')
                     .attr('stroke-width','1px');
 
                 console.log('collecting #majorroad path')
                 d3.selectAll('#majorroad path')
-                    .attr('stroke','#BCBEC0 device-cmyk(0, 0, 0, 0.30)')
+                    .attr('stroke','#BCBEC0')
                     .attr('stroke-width','1px');
 
                 console.log('collecting #minorroad path')
@@ -957,6 +966,8 @@ function writeSVGFile(mapObject) {
 } // writeSVG()
 
 function createVector(options){
+    console.log("NEW");
+    console.log(options);
     return new Promise((resolve, reject) => {
         parseJSON(options)
         .then(makeSVGCall)
