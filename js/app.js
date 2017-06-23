@@ -1247,19 +1247,8 @@ function downloadVector() {
     createVector(JSON.stringify(mapOptions))
     .then((result) => {
 
-        // var element = document.createElement('a');
-        //     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(result));
-        //     element.setAttribute('download', 'map-' + getDatetime() + '.svg');
-
-        //     element.style.display = 'none';
-        //     document.body.appendChild(element);
-
-        //     element.click();
-
-        //     document.body.removeChild(element);
-
-        //     $("#download_vector").html('Download vector');
-        //     $("#download_vector").removeClass("gray");
+            $("#download_vector").html('Download vector');
+            $("#download_vector").removeClass("gray");
     }).catch((err) => {
         alert('Problem downloading file');
         console.log(err);

@@ -12,11 +12,6 @@ window.addEventListener('rejectionhandled', event => {
     console.log('REJECTIONHANDLED');
 });
 
-//     // console.log(event)
-// var mapOptions = {"startLat":34.10358171718193,"startLon":-117.85247005502258,"endLat":33.64712395818743,"endLon":-118.83153898373561,"zoomLevel":7,"layers_visible":["sources","roads_visible","roads_visible_highways","roads_visible_highway_ramps","roads_visible_major","roads_visible_ferry_route","roads_visible_taxi_and_runways","borders_visible","borders_visible_countries","borders_visible_disputed","borders_visible_states","borders_visible_counties","landuse_visible","landuse_visible_airports","landuse_visible_beach","landuse_visible_cemetery","landuse_visible_college","landuse_visible_forest","landuse_visible_hospital","landuse_visible_military","landuse_visible_park","landuse_visible_prison","landuse_visible_resort","landuse_visible_school","landuse_visible_stadium","landuse_visible_wetland","water_visible","water_visible_ocean","water_visible_inland_water"],"custom_labels":[],"backgroundImg":"","coord-submit":"submit","apikey":"mapzen-uxhmqQc"};
-
-//     console.log(mapOptions);
-
 
 
     // set up land use groups for LAT
@@ -177,28 +172,28 @@ window.addEventListener('rejectionhandled', event => {
 
         } // roads
 
-        // // check for uploaded features
-        // if (mapOptions['polygonFeatures'].length > 0) {
-        //     formattedJson['polygonFeatures'] = {
-        //         polygonFeatures: {
-        //             features: mapOptions['polygonFeatures']
-        //         }
-        //     }
-        // }
-        // if (mapOptions['lineFeatures'].length > 0) {
-        //     formattedJson['lineFeatures'] = {
-        //         lineFeatures: {
-        //             features: mapOptions['lineFeatures']
-        //         }
-        //     }
-        // }
-        // if (mapOptions['pointFeatures'].length > 0) {
-        //     formattedJson['pointFeatures'] = {
-        //         pointFeatures: {
-        //             features: mapOptions['pointFeatures']
-        //         }
-        //     }
-        // }
+        // check for uploaded features
+        if (mapObject.options['polygonFeatures'].length > 0) {
+            formattedJson['polygonFeatures'] = {
+                polygonFeatures: {
+                    features: mapObject.options['polygonFeatures']
+                }
+            }
+        }
+        if (mapObject.options['lineFeatures'].length > 0) {
+            formattedJson['lineFeatures'] = {
+                lineFeatures: {
+                    features: mapObject.options['lineFeatures']
+                }
+            }
+        }
+        if (mapObject.options['pointFeatures'].length > 0) {
+            formattedJson['pointFeatures'] = {
+                pointFeatures: {
+                    features: mapObject.options['pointFeatures']
+                }
+            }
+        }
 
 
         return formattedJson;
