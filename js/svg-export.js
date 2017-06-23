@@ -195,6 +195,29 @@ window.addEventListener('rejectionhandled', event => {
             }
         }
 
+        // clipping path with view of map
+        formattedJson['clippingpath'] = {
+            clippingpath: {
+                features: [
+                    {
+                        "type": "Feature",
+                        "properties": {"name":"clippingpath"},
+                        "geometry": {
+                            "type": "Polygon",
+                            "coordinates": [
+                                [
+                                    [mapObject.options.endLon, mapObject.options.endLat], // southwest
+                                    [mapObject.options.endLon, mapObject.options.startLat], // northwest
+                                    [mapObject.options.startLon, mapObject.options.startLat], // northeast
+                                    [mapObject.options.startLon, mapObject.options.endLat], // southeast
+                                    [mapObject.options.endLon, mapObject.options.endLat] // southwest
+                                ]
+                            ]
+                        }
+                    }
+                ]
+            }
+        }
 
         return formattedJson;
     } // setupJson()
@@ -260,7 +283,7 @@ function parseJSON(req) {
         if (newMap.options.layers_visible.indexOf('water_visible') != -1) newMap.dKinds.push('water');
         if (newMap.options.layers_visible.indexOf('roads_visible') != -1) newMap.dKinds.push('roads');
         if (newMap.options.layers_visible.indexOf('buildings_visible') != -1) newMap.dKinds.push('buildings');
-
+        newMap.dKinds.push('clipping');
 
         newMap.tilesToFetch = getTilesToFetch(newMap.startLat, newMap.endLat, newMap.startLon, newMap.endLon);
 
@@ -727,7 +750,7 @@ function writeSVGFile(mapObject) {
 var saveData = (function () {
     var a = document.createElement("a");
     document.body.appendChild(a);
-    a.style = "display: none";
+    // a.style = "display: none";
     return function (data, fileName) {
         var blob = new Blob([data], {type: "octet/stream"}),
             url = window.URL.createObjectURL(blob);
@@ -748,8 +771,10 @@ function createVector(options){
         .then(writeSVGFile)
         .then((svgString) => {
 
-        saveData(svgString, 'map-' + getDatetime() + '.svg');
-        
+            saveData(svgString, 'map-' + getDatetime() + '.svg');
+            $("#download_vector").html('Download vector');
+            $("#download_vector").removeClass("gray");
+
         });
     });
 }

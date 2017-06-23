@@ -1247,8 +1247,8 @@ function downloadVector() {
     createVector(JSON.stringify(mapOptions))
     .then((result) => {
 
-            $("#download_vector").html('Download vector');
-            $("#download_vector").removeClass("gray");
+            // $("#download_vector").html('Download vector');
+            // $("#download_vector").removeClass("gray");
     }).catch((err) => {
         alert('Problem downloading file');
         console.log(err);
