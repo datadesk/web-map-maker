@@ -37,7 +37,7 @@ window.addEventListener('rejectionhandled', event => {
         // ocean
         if (mapObject.options.layers_visible.indexOf('water_visible_ocean') != -1) {
             formattedJson['ocean'] = {
-                ocean: {
+                oceanwater: {
                     features: []
                 }
             }
@@ -45,7 +45,7 @@ window.addEventListener('rejectionhandled', event => {
 
         // earth
         formattedJson['earth'] = {
-            earth: {
+            earthland: {
                 features: []
             }
         }
@@ -131,7 +131,7 @@ window.addEventListener('rejectionhandled', event => {
             }
 
             // need etc to grab other water
-            formattedJson['water']['etc'] = { features: [] }
+            formattedJson['water']['wateretc'] = { features: [] }
         }
 
         // buildings
@@ -173,22 +173,27 @@ window.addEventListener('rejectionhandled', event => {
         } // roads
 
         // check for uploaded features
+        // put into one parent of jsonupload
+        if (mapObject.options['polygonFeatures'].length > 0 || mapObject.options['lineFeatures'].length > 0 || mapObject.options['pointFeatures'].length > 0) {
+            formattedJson['jsonupload'] = {};
+        }
+
         if (mapObject.options['polygonFeatures'].length > 0) {
-            formattedJson['polygonFeatures'] = {
+            formattedJson['jsonupload'] = {
                 polygonFeatures: {
                     features: mapObject.options['polygonFeatures']
                 }
             }
         }
         if (mapObject.options['lineFeatures'].length > 0) {
-            formattedJson['lineFeatures'] = {
+            formattedJson['jsonupload'] = {
                 lineFeatures: {
                     features: mapObject.options['lineFeatures']
                 }
             }
         }
         if (mapObject.options['pointFeatures'].length > 0) {
-            formattedJson['pointFeatures'] = {
+            formattedJson['jsonupload'] = {
                 pointFeatures: {
                     features: mapObject.options['pointFeatures']
                 }
@@ -449,9 +454,9 @@ function bakeJson(mapObject) {
                         if (geojsonToReform[response].hasOwnProperty(dataKindTitle)) {
                             geojsonToReform[response][dataKindTitle].features.push(feature);
                         } else if (feature.properties.kind == 'ocean') {
-                            geojsonToReform['ocean']['ocean'].features.push(feature);
-                        } else if (geojsonToReform[response].hasOwnProperty('etc')) {
-                            geojsonToReform[response]['etc'].features.push(feature)
+                            geojsonToReform['ocean']['oceanwater'].features.push(feature);
+                        } else if (geojsonToReform[response].hasOwnProperty('etc') && response == 'water') {
+                            geojsonToReform['water']['wateretc'].features.push(feature)
                         }
                         // else {
                         //     geojsonToReform[response]['etc'].features.push(feature)
@@ -533,6 +538,30 @@ function writeSVGFile(mapObject) {
                 //     d3.select(this).remove();
                 // });
                 // d3.selectAll("#riverbank").append("path").attr("d",riverbankPaths);
+
+
+
+                // clip based on view
+                var viewClip = d3.select("#clippingpath path").attr("d");
+                // remove the clipping path
+                d3.select("#clippingpath").remove();
+                svg.append('defs').append('clipPath').attr('id','view-clip');
+                window.d3.select('#view-clip').append('path').attr('d',viewClip);
+
+                // make a copy and put them in a new clipping group
+                svg.append('g')
+                    .attr('id','layergroup')
+                    .attr('style','fill: none; clip-path: url(#view-clip);');
+
+                // move parent layers into clip group
+                $('#layergroup').append($("svg g#earth"));
+                $('#layergroup').append($("svg g#ocean"));
+                $('#layergroup').append($("svg g#boundaries"));
+                $('#layergroup').append($("svg g#landuse"));
+                $('#layergroup').append($("svg g#water"));
+                $('#layergroup').append($("svg g#roads"));
+                $('#layergroup').append($("svg g#buildings"));
+
 
 
                 /* restyle anything in groups */
@@ -699,8 +728,8 @@ function writeSVGFile(mapObject) {
                     .attr('stroke-width','0.35px');
 
                 // earth
-                console.log('collecting #earth #earth path')
-                d3.selectAll('#earth #earth path')
+                console.log('collecting #earth #earthland path')
+                d3.selectAll('#earth #earthland path')
                     .attr('fill','#fff')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
