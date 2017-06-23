@@ -200,7 +200,7 @@ window.addEventListener('rejectionhandled', event => {
         //     }
         // }
 
-        
+
         return formattedJson;
     } // setupJson()
 
@@ -720,7 +720,7 @@ function writeSVGFile(mapObject) {
                 //     console.log('yess svg is there')
                 // })
 
-                resolve(d3.select('#export-container').html());
+                // resolve(d3.select('#export-container').html());
 
     //         //jsdom done function done
     //         }
@@ -737,7 +737,42 @@ function createVector(options){
         .then(bakeJson)
         .then(writeSVGFile)
         .then((svgString) => {
-            resolve(svgString);
+
+
+
+
+// var textFile = null,
+  // makeTextFile = function (text) {
+    var data = new Blob(encodeURIComponent(svgString), {type: 'text/plain'});
+
+    // If we are replacing a previously generated file we need to
+    // manually revoke the object URL to avoid memory leaks.
+    if (textFile !== null) {
+      window.URL.revokeObjectURL(textFile);
+    }
+
+    console.log('hello')
+    textFile = window.URL.createObjectURL(data);
+
+    // return textFile;
+  // };
+
+
+//             var element = document.createElement('a');
+//             element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(svgString));
+//             element.setAttribute('download', filename);
+
+//             element.style.display = 'none';
+//             document.body.appendChild(element);
+
+//             element.click();
+
+//             document.body.removeChild(element);
+
+
+// jQuery('body').prepend(jQuery('<a/>').attr('href','data:text/octet-stream;base64,SGVsbG8gV29ybGQh').text('Click to download'))
+
+        
         });
     });
 }
