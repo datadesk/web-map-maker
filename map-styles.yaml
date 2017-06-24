@@ -705,6 +705,9 @@ sources:
         url_params:
             api_key: global.sdk_mapzen_api_key
         max_zoom: 15
+    mexican_states:
+        type: GeoJSON
+        url: data/us_states.json
     us_counties:
         type: GeoJSON
         url: data/us_counties.json
