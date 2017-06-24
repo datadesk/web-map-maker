@@ -309,7 +309,7 @@ global:
     labels_visible_minor_roads:         true # ∆
     labels_visible_service_road:        true # ∆ this should be added to  UI list as Paths, service roads
     labels_visible_water:               true # ∆
-    labels_visible_neighborhoods:       true # ∆
+    labels_visible_neighborhoods:       false # ∆
     labels_visible_points_of_interest:  false # ∆
     labels_visible_landuse:             true
     labels_visible_building:            false # ∆ saved for possible future inclusion

@@ -456,7 +456,11 @@ function bakeJson(mapObject) {
                         } else if (feature.properties.kind == 'ocean') {
                             geojsonToReform['ocean']['oceanwater'].features.push(feature);
                         } else if (geojsonToReform[response].hasOwnProperty('etc') && response == 'water') {
-                            geojsonToReform['water']['wateretc'].features.push(feature)
+                            geojsonToReform['water']['wateretc'].features.push(feature);
+                        } else if (response == 'water') {
+                            geojsonToReform['water']['wateretc'].features.push(feature);
+                        } else if (response == 'earth') {
+                            geojsonToReform['earth']['earthland'].features.push(feature);
                         }
                         // else {
                         //     geojsonToReform[response]['etc'].features.push(feature)
@@ -531,6 +535,22 @@ function writeSVGFile(mapObject) {
                 // });
                 // d3.selectAll("#earth").append("path").attr("d",earthTiles);
 
+                // remove all non-closing riverbank tiles
+                $("#riverbank path").each(function(){
+                    var pathD = $(this).attr("d");
+                    if (pathD.substr(pathD.length - 1) != 'Z') {
+                        $(this).remove();
+                    }
+                });
+
+                // remove all non-closing wateretc tiles
+                $("#wateretc path").each(function(){
+                    var pathD = $(this).attr("d");
+                    if (pathD.substr(pathD.length - 1) != 'Z') {
+                        $(this).remove();
+                    }
+                });
+
                 // // combine all riverbank tiles
                 // var riverbankPaths = "";
                 // d3.selectAll("#riverbank path").each(function(){
@@ -554,8 +574,8 @@ function writeSVGFile(mapObject) {
                     .attr('style','fill: none; clip-path: url(#view-clip);');
 
                 // move parent layers into clip group
-                $('#layergroup').append($("svg g#earth"));
                 $('#layergroup').append($("svg g#ocean"));
+                $('#layergroup').append($("svg g#earth"));
                 $('#layergroup').append($("svg g#boundaries"));
                 $('#layergroup').append($("svg g#landuse"));
                 $('#layergroup').append($("svg g#water"));
@@ -713,9 +733,9 @@ function writeSVGFile(mapObject) {
                     .attr('stroke-width','0px');                    
                     console.log('collecting #riverbank path')
                 d3.selectAll('#riverbank path')
-                    .attr('fill','none')
-                    .attr('stroke','#A9D7F4')
-                    .attr('stroke-width','0.5px');
+                    .attr('fill','#A9D7F4')
+                    .attr('stroke','#fff')
+                    .attr('stroke-width','0px');
                     console.log('collecting #river path')
                 d3.selectAll('#river path')
                     .attr('fill','none')
