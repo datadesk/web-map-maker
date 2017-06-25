@@ -775,6 +775,13 @@ function writeSVGFile(mapObject) {
                     .attr('stroke','#cd7139')
                     .attr('stroke-width','1px');
 
+
+                // boundaries
+                window.d3.selectAll("#boundaries path")
+                    .attr('fill','none')
+                    .attr('stroke','#827676')
+                    .attr('stroke-width','0.5px');
+
                 // mask landuse with another earth
                 // svg.append('defs').append('clipPath').attr('id','earth-clip');
                 // d3.select('#earth-clip').append('path').attr('d',earthTiles);

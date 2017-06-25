@@ -268,7 +268,7 @@ global:
     #border colors:
     nation_boundary:                    '#a7a8ab' # ∆
     state_boundary:                     '#827676' # ∆
-    county_boundary:                    '#a39a96'  #??????
+    county_boundary:                    '#a39a96' # ∆
 
     #roads/transit
     roads_visible_highways:             true  # ∆
