@@ -707,7 +707,7 @@ sources:
         max_zoom: 15
     mexican_states:
         type: GeoJSON
-        url: data/mexican_states.json
+        url: data/mexican_states2.json
     us_counties:
         type: GeoJSON
         url: data/us_counties.json
