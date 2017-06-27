@@ -552,6 +552,7 @@ function writeSVGFile(mapObject) {
                     }
                 });
 
+
                 // // combine all riverbank tiles
                 // var riverbankPaths = "";
                 // d3.selectAll("#riverbank path").each(function(){
