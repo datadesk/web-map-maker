@@ -576,8 +576,26 @@ function writeSVGFile(mapObject) {
 
 
 
+
                 // clip based on view
                 var viewClip = d3.select("#clippingpath path").attr("d");
+
+                // figure out widths and viewport based on clipping path
+                var svgX = parseFloat(viewClip.split(',')[0].substring(1,20)).toFixed(3);
+                var svgY = parseFloat(viewClip.split(',')[2].split('L')[0]).toFixed(3);
+                var svgWidth = parseFloat(viewClip.split(',')[2].split('L')[1] - svgX).toFixed(3);
+                var svgHeight = parseFloat(viewClip.split(',')[1].split('L')[0] - svgY).toFixed(3);
+
+                // // set 'em
+                // svg.attr('width',svgWidth+'px');
+                // svg.attr('height',svgHeight+'px');
+                // svg.attr('viewBox',svgX + ' ' + svgY + ' ' + svgWidth + ' ' + svgHeight);
+                // svg.attr('enable-background','new ' + svgX + ' ' + svgY + ' ' + svgWidth + ' ' + svgHeight);
+                // svg.attr('xml:space','preserve');
+                // svg.attr('x','0px');
+                // svg.attr('y','0px');
+                // svg.attr('version','1.1');
+
                 // remove the clipping path
                 d3.select("#clippingpath").remove();
                 svg.append('defs')
