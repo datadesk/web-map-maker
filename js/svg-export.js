@@ -516,14 +516,27 @@ function writeSVGFile(mapObject) {
                         subG.attr('id',subKinds.replace('_',''))
                         for(let f in tempSubK.features) {
                             let geoFeature = tempSubK.features[f]
-                            let previewFeature = previewPath(geoFeature);
+                            // check if point upload
+                            if (dataK === 'jsonupload' && geoFeature.geometry.type === "Point" ) {
+                                subG.append("circle")
+                                    .attr("r",5)
+                                    .attr("transform",function(d){
+                                        return "translate(" + previewProjection([
+                                            geoFeature.geometry.coordinates[0],
+                                            geoFeature.geometry.coordinates[1]
+                                            ]) + ")";
+                                    });
+                            } else {
+                                // otherwise if path
+                                let previewFeature = previewPath(geoFeature);
 
-                            if(previewFeature && previewFeature.indexOf('a') > 0) ;
-                            else {
-                                subG.append('path')
-                                .attr('d', previewFeature)
-                                .attr('fill','none')
-                                .attr('stroke','black')
+                                if(previewFeature && previewFeature.indexOf('a') > 0) ;
+                                else {
+                                    subG.append('path')
+                                    .attr('d', previewFeature)
+                                    .attr('fill','none')
+                                    .attr('stroke','black')
+                                }
                             }
                         }
                     }
@@ -778,6 +791,11 @@ function writeSVGFile(mapObject) {
                     .attr('stroke','#cd7139')
                     .attr('stroke-width','1px');
 
+                // uploaded geojson points
+                window.d3.selectAll('#pointFeatures circle')
+                    .attr('fill','#cd7139')
+                    .attr('stroke','#ffffff')
+                    .attr('stroke-width','1px');
 
                 // boundaries
                 window.d3.selectAll("#boundaries path")
