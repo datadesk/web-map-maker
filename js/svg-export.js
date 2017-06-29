@@ -586,11 +586,25 @@ function writeSVGFile(mapObject) {
                 var svgWidth = parseFloat(viewClip.split(',')[2].split('L')[1] - svgX).toFixed(3);
                 var svgHeight = parseFloat(viewClip.split(',')[1].split('L')[0] - svgY).toFixed(3);
 
+                var origSVGWidth = svgWidth,
+                    origSVGHeight = svgHeight;
+
+                console.log(svgWidth);
+                console.log(svgHeight);
+                console.log(svgX);
+                console.log(svgY);
+                // update size if columb based
+                if (svgWidth == 80.352) {
+                    // 1 col
+
+                    svgHeight = parseFloat((110.45 / svgWidth)*svgHeight).toFixed(3);
+                    svgWidth = 110.45;
+                }
+
                 // set 'em
                 svg.attr('width',svgWidth+'px');
                 svg.attr('height',svgHeight+'px');
-                svg.attr('viewBox',svgX + ' ' + svgY + ' ' + svgWidth + ' ' + svgHeight);
-                svg.attr('enable-background','new ' + svgX + ' ' + svgY + ' ' + svgWidth + ' ' + svgHeight);
+                svg.attr('viewBox',svgX + ' ' + svgY + ' ' + origSVGWidth + ' ' + origSVGHeight);
                 svg.attr('xml:space','preserve');
                 svg.attr('x','0px');
                 svg.attr('y','0px');
