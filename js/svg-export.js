@@ -620,7 +620,7 @@ function writeSVGFile(mapObject) {
                 svg.append('g')
                     .attr('id','layergroup')
                     .attr('style','fill: none; clip-path: url(#view-clip);')
-                    .attr('transform','translate(' + -svgX + ' ' + -svgY + ')'); // translate over by x and y
+                    .attr('transform','translate(' + -svgX*(origSVGWidth/svgWidth) + ' ' + -svgY*(origSVGWidth/svgWidth) + ')'); // translate over by x and y
 
                 // move parent layers into clip group
                 $('#layergroup').append($("svg g#ocean"));
