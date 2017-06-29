@@ -4030,25 +4030,6 @@ layers:
                 visible: false
 
         tier1:
-            # filter:
-            #     any:
-            #         # limit show smaller landuse areas to higher zooms
-            #         - { $zoom: { min: 3 },  area: { min: 300000000 } }
-            #         - { $zoom: { min: 4 },  area: { min: 300000000 } }
-            #         - { $zoom: { min: 5 },  area: { min: 150000000 } }
-            #         - { $zoom: { min: 6 },  area: { min: 150000000 } }
-            #         - { $zoom: { min: 7 },  area: { min: 100000000 } }
-            #         - { $zoom: { min: 8 },  area: { min: 10000000 } }
-            #         - { $zoom: { min: 9 },  area: { min: 5000000 } }
-            #         - { $zoom: { min: 10 }, area: { min: 1000000 } }
-            #         - { $zoom: { min: 11 }, area: { min: 500000 } }
-            #         - { $zoom: { min: 12 }, area: { min: 500000 } }
-            #         - { $zoom: { min: 13 }, area: { min: 100000 } }
-            #         - { $zoom: { min: 14 }, area: { min: 50000 } }
-            #         - { $zoom: { min: 15 }, area: { min: 20000 } }
-            #         - { $zoom: { min: 15 }, area: { min: 2000 } }
-            #         - { $zoom: { min: 16 } }
-
             national_park:
                 filter:
                     all:
@@ -4074,28 +4055,6 @@ layers:
                                 style: global.landuse_style
                                 color: '#dfe5c3'
                                 order: 2
-
-
-        tier2:
-            # filter:
-            #     any:
-            #         # limit show smaller landuse areas to higher zooms
-            #         - { $zoom: { min: 4 },  area: { min: 1000000000 } }
-            #         - { $zoom: { min: 5 },  area: { min: 1000000000 } }
-            #         - { $zoom: { min: 6 },  area: { min: 150000000 } }
-            #         - { $zoom: { min: 7 },  area: { min: 100000000 } }
-            #         - { $zoom: { min: 8 },  area: { min: 10000000 } }
-            #         - { $zoom: { min: 9 },  area: { min: 5000000 } }
-            #         - { $zoom: { min: 10 }, area: { min: 1000000 } }
-            #         - { $zoom: { min: 11 }, area: { min: 500000 } }
-            #         - { $zoom: { min: 12 }, area: { min: 250000 } }
-            #         - { $zoom: { min: 13 }, area: { min: 100000 } }
-            #         - { $zoom: { min: 14 }, area: { min: 50000 } }
-            #         - { $zoom: { min: 15 }, area: { min: 20000 } }
-            #         - { $zoom: { min: 15 }, area: { min: 2000 } }
-            #         - { $zoom: { min: 16 } }
-
-            # effectively wilderness
             conservation:
                 filter:
                     all:
@@ -4170,47 +4129,6 @@ layers:
                         style: global.landuse_style
                         color: global.landuse_park
                         order: 1
-
-            # nature_reserve:
-            #     filter: { kind: nature_reserve, $zoom: { min: 7 } }
-            #     draw:
-            #         terrain-grid:
-            #             order: function() { return feature.sort_rank; }
-            #     wilderness-areas:
-            #         filter: function() { return feature.name && feature.name.indexOf("Wilderness") > -1 }
-            #         draw:
-            #             terrain:
-            #                 color: [0.890,0.973,0.886]
-            #             # outline:
-            #             #     style: lines
-            #             #     color: red
-            #             #     width: [[9,1px],[10,2px],[12,4px]]
-
-            # parks-and-national-forests-not-national-park:
-            #     filter: { $zoom: { min: 4 }, kind: [park, national_park, "park or protected land", battlefield], not: { operator: [ "United States National Park Service", "US National Park Service" ] } }
-            #     # default for national forests and more?
-            #     draw:
-            #         terrain:
-            #             color: [0.880,1.000,0.950]
-            #             # color: [0.850,1.000,0.938]
-            #             # color: [0.860,0.993,1.000]
-            #             # color: [0.915,0.995,0.995]
-            #             visible: true
-
-        tier3:
-            # filter:
-            #     any:
-            #         # limit show smaller landuse areas to higher zooms
-            #         - { $zoom: { min: 8 },  area: { min: 10000000 } }
-            #         - { $zoom: { min: 9 },  area: { min: 5000000 } }
-            #         - { $zoom: { min: 10 }, area: { min: 1000000 } }
-            #         - { $zoom: { min: 11 }, area: { min: 500000 } }
-            #         - { $zoom: { min: 12 }, area: { min: 500000 } }
-            #         - { $zoom: { min: 13 }, area: { min: 100000 } }
-            #         - { $zoom: { min: 14 }, area: { min: 50000 } }
-            #         - { $zoom: { min: 15 }, area: { min: 20000 } }
-            #         - { $zoom: { min: 15 }, area: { min: 2000 } }
-            #         - { $zoom: { min: 16 } }
             airport:
                 filter:
                     kind: aerodrome
@@ -4247,18 +4165,6 @@ layers:
                         style: global.landuse_style
                         color: global.landuse_school
                         order: 1
-        tier4:
-            # filter:
-            #     any:
-            #         # limit show smaller landuse areas to higher zooms
-            #         - { $zoom: { min: 10 }, area: { min: 1000000 } }
-            #         - { $zoom: { min: 11 }, area: { min: 500000 } }
-            #         - { $zoom: { min: 12 }, area: { min: 500000 } }
-            #         - { $zoom: { min: 13 }, area: { min: 100000 } }
-            #         - { $zoom: { min: 14 }, area: { min: 50000 } }
-            #         - { $zoom: { min: 15 }, area: { min: 20000 } }
-            #         - { $zoom: { min: 15 }, area: { min: 2000 } }
-            #         - { $zoom: { min: 16 } }
             cemetery:
                 filter:
                     kind: cemetery
@@ -4337,27 +4243,6 @@ layers:
                         style: global.landuse_style
                         color: global.landuse_park
                         order: 2
-
-        tier5:
-            # filter:
-            #     any:
-            #         # limit show smaller landuse areas to higher zooms
-            #         - { $zoom: { min: 10 }, area: { min: 1000000 } }
-            #         - { $zoom: { min: 11 }, area: { min: 400000 } }
-            #         - { $zoom: { min: 12 }, area: { min: 200000 } }
-            #         - { $zoom: { min: 13 }, area: { min: 50000 } }
-            #         - { $zoom: { min: 14 }, area: { min: 20000 } }
-            #         - { $zoom: { min: 15 }, area: { min: 10000 } }
-            #         - { $zoom: { min: 15 }, area: { min: 2000 } }
-            #         - { $zoom: { min: 16 } }
-            #     all:
-            #         - kind:
-            #             - theme_park
-            #             - resort
-            #             - aquarium
-            #             - winery
-            #             - maze
-            #             - beach
             tourism-related:
                 filter:
                     kind:
@@ -4381,16 +4266,6 @@ layers:
                         style: global.landuse_style
                         color: global.landuse_beach
                         order: 3
-        tier6:
-            # filter:
-            #     any:
-            #         # limit show smaller landuse areas to higher zooms
-            #         - { $zoom: { min: 12 }, area: { min: 500000 } }
-            #         - { $zoom: { min: 13 }, area: { min: 100000 } }
-            #         - { $zoom: { min: 14 }, area: { min: 50000 } }
-            #         - { $zoom: { min: 15 }, area: { min: 20000 } }
-            #         - { $zoom: { min: 15 }, area: { min: 2000 } }
-            #         - { $zoom: { min: 16 } }
             garden:
                 filter:
                     kind: [garden, allotments]
@@ -4399,7 +4274,7 @@ layers:
                         visible: global.landuse_visible_park
                         style: global.landuse_style
                         color: global.landuse_park
-                        order: 1
+                        order: 3
 
         minor_green_stuff:
             filter:
