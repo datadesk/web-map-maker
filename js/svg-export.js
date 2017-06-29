@@ -567,8 +567,9 @@ function writeSVGFile(mapObject) {
                 var viewClip = d3.select("#clippingpath path").attr("d");
                 // remove the clipping path
                 d3.select("#clippingpath").remove();
-                svg.append('defs').append('clipPath').attr('id','view-clip');
-                window.d3.select('#view-clip').append('path').attr('d',viewClip);
+                svg.append('defs')
+                    .append('clipPath').attr('id','view-clip')
+                    .append('path').attr('d',viewClip);
 
                 // make a copy and put them in a new clipping group
                 svg.append('g')
@@ -583,6 +584,7 @@ function writeSVGFile(mapObject) {
                 $('#layergroup').append($("svg g#water"));
                 $('#layergroup').append($("svg g#roads"));
                 $('#layergroup').append($("svg g#buildings"));
+                $('#layergroup').append($("svg g#jsonupload"));
 
 
 
