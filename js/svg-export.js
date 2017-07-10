@@ -604,7 +604,6 @@ function writeSVGFile(mapObject) {
                 // set 'em
                 svg.attr('width',svgWidth+'px');
                 svg.attr('height',svgHeight+'px');
-                svg.attr('viewBox',svgX + ' ' + svgY + ' ' + origSVGWidth + ' ' + origSVGHeight);
                 svg.attr('xml:space','preserve');
                 svg.attr('x','0px');
                 svg.attr('y','0px');
