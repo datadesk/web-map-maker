@@ -589,16 +589,19 @@ function writeSVGFile(mapObject) {
                 var origSVGWidth = svgWidth,
                     origSVGHeight = svgHeight;
 
-                console.log(svgWidth);
-                console.log(svgHeight);
-                console.log(svgX);
-                console.log(svgY);
+                // console.log(svgWidth);
+                // console.log(svgHeight);
+                // console.log(svgX);
+                // console.log(svgY);
                 // update size if columb based
-                if (svgWidth == 80.352) {
+                console.log(mapObject);
+                if (mapObject.options.width == 330) {
                     // 1 col
+                    console.log('1 COLUMN MAP YEA');
 
                     svgHeight = parseFloat((110.45 / svgWidth)*svgHeight).toFixed(3);
                     svgWidth = 110.45;
+                    svg.attr('viewBox','0 0 '+svgWidth+' '+svgHeight);
                 }
 
                 // set 'em
