@@ -594,20 +594,13 @@ function writeSVGFile(mapObject) {
                     origSVGHeight = svgHeight;
 
                 // update size if columb based
-                console.log(mapObject);
                 if (mapObject.options.sizeDesc.indexOf('col') === 0) {
-                    // column size
-
-                    // figure out many
+                    // figure out many columns
                     var columnCount = mapObject.options.sizeDesc[mapObject.options.sizeDesc.length -1];
 
-                    console.log(columnCount + ' columns');
-                    var svgWidth = (columnCount == 1) ? 110.45 :
-                                   (columnCount == 2) ? 232.9 :
-                                   (columnCount == 3) ? 355.35 :
-                                   (columnCount == 4) ? 477.8 :
-                                   (columnCount == 5) ? 600.25 :
-                                   (columnCount == 6) ? 722.7 : svgWidth;
+                    // be sure to set a "columnWidth" and "gutterWidth" in your config.js file
+                    // set new width based on those columns (Los Angeles Times column sizes for six-column page)
+                    var svgWidth = (configOptions.columnWidth * columnCount) + ((columnCount-1) * configOptions.gutterWidth);
 
                     // set new sizes
                     svgHeight = parseFloat((svgWidth / origSVGWidth)*svgHeight).toFixed(3);
