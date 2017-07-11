@@ -593,26 +593,28 @@ function writeSVGFile(mapObject) {
                 var origSVGWidth = svgWidth,
                     origSVGHeight = svgHeight;
 
-                // console.log(svgWidth);
-                // console.log(svgHeight);
-                // console.log(svgX);
-                // console.log(svgY);
                 // update size if columb based
                 console.log(mapObject);
-                if (mapObject.options.sizeDesc === 'col1') {
-                    // 1 col
-                    console.log('1 COLUMN MAP YEA');
-                    console.log('origSVGWidth: '+origSVGWidth);
+                if (mapObject.options.sizeDesc.indexOf('col') === 0) {
+                    // column size
 
-                    svgHeight = parseFloat((110.45 / svgWidth)*svgHeight).toFixed(3);
-                    svgWidth = 110.45;
+                    // figure out many
+                    var columnCount = mapObject.options.sizeDesc[mapObject.options.sizeDesc.length -1];
+
+                    console.log(columnCount + ' columns');
+                    var svgWidth = (columnCount == 1) ? 110.45 :
+                                   (columnCount == 2) ? 232.9 :
+                                   (columnCount == 3) ? 355.35 :
+                                   (columnCount == 4) ? 477.8 :
+                                   (columnCount == 5) ? 600.25 :
+                                   (columnCount == 6) ? 722.7 : svgWidth;
+
+                    // set new sizes
+                    svgHeight = parseFloat((svgWidth / origSVGWidth)*svgHeight).toFixed(3);
                     svg.attr('viewBox',svgX+ ' ' + svgY + ' '+origSVGWidth+' '+origSVGHeight);
 
                     fileWidth = svgWidth;
                     fileHeight = svgHeight;
-
-                    console.log('svgX ' + svgX);
-                    console.log('svgY ' + svgY);
                 }
 
                 // set 'em
