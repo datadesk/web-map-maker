@@ -40,40 +40,6 @@ function createGrid(size) {
         }
     }
 }
-printGrid();
-
-// build print grid
-function printGrid() {
-    // var parent = $('<div />', {
-    //     class: 'grid',
-    //     width: ratioW  * size,
-    //     height: ratioH  * size
-    // }).addClass('grid' + ' grid'+size).appendTo('#grid_holder');
-
-    // 1 col
-    var printCol = "<div class='grid printCol' style='width: 329px; height: 1600px; margin: 0 0 0 25px;'></div>";
-    $("#grid_holder").append(printCol);
-
-    // other columns
-    for (var i = 0; i < 3; i++) {
-        var printCol = "<div class='grid printCol' style='width: 365px; height: 1600px;'></div>";
-        $("#grid_holder").append(printCol);    
-    }
-
-    // column ruler
-    var text = "<span class='px_measure'>0 col</span>";
-    $("#col_ruler").append(text);
-
-    var text = "<span class='px_measure'>1 col</span>";
-    $("#col_ruler").append(text);
-
-    // other columns
-    for (var i = 0; i < 3; i++) {
-        var text = "<span class='px_measure' style='margin: 0 0 0 40px;'>"+(i+2)+" col</span>";
-        $("#col_ruler").append(text);
-    }
-}
-
 
 // set up top pixel ruler
 for (var i = 0; i < 1600; i++) {
