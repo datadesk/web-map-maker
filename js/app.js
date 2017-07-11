@@ -258,8 +258,6 @@ $("#map_holder").resize(function(){
         document.getElementById('preset_sizes').value = 'web_large';
     } else if (mapWidth + 'x' + mapHeight == '400x450') {
         document.getElementById('preset_sizes').value = 'web_small';
-    } else if (mapWidth % 330 === 0) {
-        document.getElementById('preset_sizes').value = 'col' + $("#map").width()/330;
     } else {
         document.getElementById('preset_sizes').value = 'custom';
     }
