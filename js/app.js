@@ -1174,6 +1174,7 @@ function downloadVector() {
         endLon: map.getBounds()._southWest.lng,
         width: $("#map").width(),
         height: $("#map").height(),
+        sizeDesc: $("#preset_sizes").val(),
         zoomLevel: Math.floor(map.getZoom()),
         layers_visible: [],
         custom_labels: [],

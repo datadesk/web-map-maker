@@ -586,6 +586,10 @@ function writeSVGFile(mapObject) {
                 var svgWidth = parseFloat(viewClip.split(',')[2].split('L')[1] - svgX).toFixed(3);
                 var svgHeight = parseFloat(viewClip.split(',')[1].split('L')[0] - svgY).toFixed(3);
 
+                // these are pulled from the mapmaker pixels if not a column selected from dropdown
+                var fileWidth = mapObject.options.width;
+                var fileHeight = mapObject.options.height;
+
                 var origSVGWidth = svgWidth,
                     origSVGHeight = svgHeight;
 
@@ -595,22 +599,32 @@ function writeSVGFile(mapObject) {
                 // console.log(svgY);
                 // update size if columb based
                 console.log(mapObject);
-                if (mapObject.options.width == 330) {
+                if (mapObject.options.sizeDesc === 'col1') {
                     // 1 col
                     console.log('1 COLUMN MAP YEA');
+                    console.log('origSVGWidth: '+origSVGWidth);
 
                     svgHeight = parseFloat((110.45 / svgWidth)*svgHeight).toFixed(3);
                     svgWidth = 110.45;
-                    svg.attr('viewBox','0 0 '+svgWidth+' '+svgHeight);
+                    svg.attr('viewBox',svgX+ ' ' + svgY + ' '+origSVGWidth+' '+origSVGHeight);
+
+                    fileWidth = svgWidth;
+                    fileHeight = svgHeight;
+
+                    console.log('svgX ' + svgX);
+                    console.log('svgY ' + svgY);
                 }
 
                 // set 'em
-                svg.attr('width',svgWidth+'px');
-                svg.attr('height',svgHeight+'px');
+                // svg.attr('width',svgWidth+'px');
+                svg.attr('width',fileWidth+'px');
+                // svg.attr('height',svgHeight+'px');
+                svg.attr('height',fileHeight+'px');
                 svg.attr('xml:space','preserve');
                 svg.attr('x','0px');
                 svg.attr('y','0px');
                 svg.attr('version','1.1');
+                svg.attr('viewBox',svgX+ ' ' + svgY + ' '+origSVGWidth+' '+origSVGHeight);
 
                 // remove the clipping path
                 d3.select("#clippingpath").remove();
@@ -621,8 +635,8 @@ function writeSVGFile(mapObject) {
                 // make a copy and put them in a new clipping group
                 svg.append('g')
                     .attr('id','layergroup')
-                    .attr('style','fill: none; clip-path: url(#view-clip);')
-                    .attr('transform','translate(' + -svgX*(origSVGWidth/svgWidth) + ' ' + -svgY*(origSVGWidth/svgWidth) + ')'); // translate over by x and y
+                    .attr('style','fill: none; clip-path: url(#view-clip);');
+                    // .attr('transform','translate(' + -svgX*(origSVGWidth/svgWidth) + ' ' + -svgY*(origSVGWidth/svgWidth) + ')'); // translate over by x and y
 
                 // move parent layers into clip group
                 $('#layergroup').append($("svg g#ocean"));
