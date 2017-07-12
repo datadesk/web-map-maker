@@ -1,5 +1,8 @@
+# import a config.yaml file
+import: config.yaml
+
 global:
-    mapzen_api_key: mapzen-dFUP7Q3
+    mapzen_api_key: global.sdk_mapzen_api_key # from imported config.yaml
     road_color: '#c8c8c1'
     water_color: '#c3d5dd'
     labels_visible: true
