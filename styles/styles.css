@@ -258,7 +258,7 @@ body { cyber
 
 /* hide canvas */
 #canvas {
-    visibility: hidden;
+    /*visibility: hidden;*/
 }
 
 .ui-icon-gripsmall-diagonal-se {background-position: -81px -224px; right: 10px;}

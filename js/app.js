@@ -353,6 +353,13 @@ function downloadIMG() {
                         $(".rotate_handle").show();
                         $(".remove_label").show();
 
+                        // swap out negative left with a margin-left for a moment
+                        // this breaks html2canvas
+                        var popupLeft = $(".large-popup").css("left");
+                        $(".large-popup").css("margin-left",popupLeft);
+                        $(".large-popup").css("left","");
+                        $(".large-popup").css("bottom","");
+
                         // create an off-screen anchor tag
                         var lnk = document.createElement('a'),
                             e;
@@ -386,6 +393,10 @@ function downloadIMG() {
                                              false, 0, null);
 
                             lnk.dispatchEvent(e);
+
+                            // return popup's left property
+                            // $(".large-popup").css("margin-left","0px");
+                            // $(".large-popup").css("left",popupLeft);
 
                         } else if (lnk.fireEvent) {
                             lnk.fireEvent("onclick");
@@ -562,7 +573,7 @@ if (typeof configOptions !== 'undefined') {
                 popupMarker = L.circleMarker(item.geocodePoints[0].coordinates,{
                     'fillOpacity': 0,
                     'opacity': 0
-                }).bindPopup(userPopupText).addTo(map).openPopup();
+                }).bindPopup(userPopupText,{offset:[0,0], 'className':'large-popup'}).addTo(map).openPopup();
             }
         }
     });
