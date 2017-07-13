@@ -2,7 +2,6 @@
 import: config.yaml
 
 global:
-    mapzen_api_key: global.sdk_mapzen_api_key # from imported config.yaml
     road_color: '#c8c8c1'
     water_color: '#c3d5dd'
     labels_visible: true
@@ -61,14 +60,14 @@ sources:
         type: TopoJSON
         url: https://tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.topojson
         url_params:
-            api_key: global.mapzen_api_key
+            api_key: global.sdk_mapzen_api_key
         rasters: [normals]
     normals:
         type: Raster
         url: https://tile.mapzen.com/mapzen/terrain/v1/normal/{z}/{x}/{y}.png
         max_zoom: 15
         url_params:
-            api_key: global.mapzen_api_key
+            api_key: global.sdk_mapzen_api_key
 
 textures:
     shields:
