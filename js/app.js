@@ -343,22 +343,33 @@ function downloadIMG() {
                     img.src = url;
                 }
 
+                // swap out negative left with a margin-left for a moment
+                // this breaks html2canvas
+                var popupLeft = +$(".large-popup").css("left").slice(0,$(".large-popup").css("left").length-2);
+                var popupBottom = +$(".large-popup").css("bottom").slice(0,$(".large-popup").css("bottom").length-2);
+
+                var popupTranslate = $(".large-popup").css("transform");
+                var transNumStart = popupTranslate.indexOf("("),
+                    transNumEnd = popupTranslate.indexOf(")");
+                var transNums = popupTranslate.substring(transNumStart+1,transNumEnd).split(",");
+                var transleft = +transNums[4];
+                var transRight = +transNums[5];
+
+                // update values because translate3d causes problems with Tangram
+                $(".large-popup").css("transform","");
+                $(".large-popup").css("left",popupLeft+transleft+"px"); // translate left
+                $(".large-popup").css("bottom",popupBottom-transRight+"px"); // translate right
+
                 // any popup text layers and other html like the source and ruler
                 html2canvas($("#map"), {
 
                     onrendered: function(canvas) {
 
+
                         ctx.drawImage(canvas,0,0, mapSize[0], mapSize[1]);
                         $("#map").css("background","#ddd"); // bring back map's background
                         $(".rotate_handle").show();
                         $(".remove_label").show();
-
-                        // swap out negative left with a margin-left for a moment
-                        // this breaks html2canvas
-                        var popupLeft = $(".large-popup").css("left");
-                        $(".large-popup").css("margin-left",popupLeft);
-                        $(".large-popup").css("left","");
-                        $(".large-popup").css("bottom","");
 
                         // create an off-screen anchor tag
                         var lnk = document.createElement('a'),
