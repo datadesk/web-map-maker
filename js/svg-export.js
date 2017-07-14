@@ -179,24 +179,18 @@ window.addEventListener('rejectionhandled', event => {
         }
 
         if (mapObject.options['polygonFeatures'].length > 0) {
-            formattedJson['jsonupload'] = {
-                polygonFeatures: {
-                    features: mapObject.options['polygonFeatures']
-                }
+            formattedJson['jsonupload']['polygonFeatures'] = {
+                features: mapObject.options['polygonFeatures']
             }
         }
         if (mapObject.options['lineFeatures'].length > 0) {
-            formattedJson['jsonupload'] = {
-                lineFeatures: {
-                    features: mapObject.options['lineFeatures']
-                }
+            formattedJson['jsonupload']['lineFeatures'] = {
+                features: mapObject.options['lineFeatures']
             }
         }
         if (mapObject.options['pointFeatures'].length > 0) {
-            formattedJson['jsonupload'] = {
-                pointFeatures: {
-                    features: mapObject.options['pointFeatures']
-                }
+            formattedJson['jsonupload']['pointFeatures'] = {
+                features: mapObject.options['pointFeatures']
             }
         }
 
