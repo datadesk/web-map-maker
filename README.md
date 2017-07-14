@@ -15,8 +15,6 @@ We make a lot of maps at the Los Angeles Times. So we made this tool to help us 
 
 This tool is still very much a work in progress, so please [give us feedback](https://github.com/datadesk/web-map-maker/issues) if you find something amiss. 
 
-[Live demo](http://datadesk.github.io/web-map-maker/).
-
 ## Getting started
 
 You don't need much to get up and running. Download this repo and make a config.js file (we provided a template [here](https://github.com/datadesk/web-map-maker/tree/master/js/config.js-TEMPLATE)), then put it in the "js" directory. You'll also need to create a config.yaml file and leave it in the main directory.
