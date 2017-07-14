@@ -343,22 +343,26 @@ function downloadIMG() {
                     img.src = url;
                 }
 
-                // swap out negative left with a margin-left for a moment
-                // this breaks html2canvas
-                var popupLeft = +$(".large-popup").css("left").slice(0,$(".large-popup").css("left").length-2);
-                var popupBottom = +$(".large-popup").css("bottom").slice(0,$(".large-popup").css("bottom").length-2);
 
-                var popupTranslate = $(".large-popup").css("transform");
-                var transNumStart = popupTranslate.indexOf("("),
-                    transNumEnd = popupTranslate.indexOf(")");
-                var transNums = popupTranslate.substring(transNumStart+1,transNumEnd).split(",");
-                var transleft = +transNums[4];
-                var transRight = +transNums[5];
 
-                // update values because translate3d causes problems with Tangram
-                $(".large-popup").css("transform","");
-                $(".large-popup").css("left",popupLeft+transleft+"px"); // translate left
-                $(".large-popup").css("bottom",popupBottom-transRight+"px"); // translate right
+                // if there's a popup
+                if ($(".large-popup").length > 0) {
+                    // swap out negative left with a margin-left for a moment
+                    // this breaks html2canvas
+                    var popupLeft = +$(".large-popup").css("left").slice(0,$(".large-popup").css("left").length-2);
+                    var popupBottom = +$(".large-popup").css("bottom").slice(0,$(".large-popup").css("bottom").length-2);
+
+                    var popupTranslate = $(".large-popup").css("transform");
+                    var transNumStart = popupTranslate.indexOf("("),
+                        transNumEnd = popupTranslate.indexOf(")");
+                    var transNums = popupTranslate.substring(transNumStart+1,transNumEnd).split(",");
+                    var transleft = +transNums[4];
+                    var transRight = +transNums[5];
+                    // update values because translate3d causes problems with Tangram
+                    $(".large-popup").css("transform","");
+                    $(".large-popup").css("left",popupLeft+transleft+"px"); // translate left
+                    $(".large-popup").css("bottom",popupBottom-transRight+"px"); // translate right
+                }
 
                 // any popup text layers and other html like the source and ruler
                 html2canvas($("#map"), {
@@ -404,10 +408,6 @@ function downloadIMG() {
                                              false, 0, null);
 
                             lnk.dispatchEvent(e);
-
-                            // return popup's left property
-                            // $(".large-popup").css("margin-left","0px");
-                            // $(".large-popup").css("left",popupLeft);
 
                         } else if (lnk.fireEvent) {
                             lnk.fireEvent("onclick");
@@ -584,7 +584,7 @@ if (typeof configOptions !== 'undefined') {
                 popupMarker = L.circleMarker(item.geocodePoints[0].coordinates,{
                     'fillOpacity': 0,
                     'opacity': 0
-                }).bindPopup(userPopupText,{offset:[0,0], 'className':'large-popup'}).addTo(map).openPopup();
+                }).bindPopup(userPopupText,{'className':'large-popup'}).addTo(map).openPopup();
             }
         }
     });
