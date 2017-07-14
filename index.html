@@ -11,6 +11,8 @@
     <link rel="stylesheet" type="text/css" href="http://d1qqc1e9kvmdh8.cloudfront.net/css/ngux-tophat-responsive-0.4.5.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geocoder-mapzen/1.4.1/leaflet-geocoder-mapzen.css">
 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+
     <link rel="stylesheet" href="styles/leaflet.css">
     <!-- <link rel="stylesheet" href="http://latimes-graphics-media.s3.amazonaws.com/styles/leaflet-extra.css" /> -->
     <link rel="stylesheet" href="styles/jquery-ui.css">
@@ -24,8 +26,7 @@
 
     <script src="http://d1qqc1e9kvmdh8.cloudfront.net/js/underscore-1.8.3-min.js"></script>
     <script src="js/leaflet.js"></script>
-    <script src="js/tangram.min.js"></script>
-
+    <script src="js/tangram-0.13.0.min.js"></script>
 
     <script src="js/html2canvas0.5.js"></script>
 
@@ -57,10 +58,10 @@
 
     <!-- CONTENT GOES HERE -->
     <div class="container" id="container">
-        <h1>Map Maker</h1>
-        <p class="description">This tool is for aproximate location only. Geocoders can mislocate addresses, so be sure to double-check that it's accurate. Map data is provided by Mapzen's API using OpenStreetMap. Source should read: "Mapzen, OpenStreetMap" <a href="http://www.openstreetmap.org/" target="_blank">Improve the map!</a></p>
+        <h1>Web Map Maker</h1>
+        <p class="description">This tool uses Microsoft’s geocoder to approximate an address’s location. It also uses data provided by OpenStreetMap (which you can <a href="http://www.openstreetmap.org/" target="_blank">edit here</a>) and Mapzen. Questions? Contact <a href="mailto:jon@latimes.com">jon@latimes.com</a> or <a href="https://github.com/datadesk/web-map-maker/issues" target="_blank">submit a bug</a> in GitHub.</p>
         <div id="popupContainer">
-            <input id="popupText" type="text" placeholder="Popup text" maxlength="40"><div id="geocodifier"></div>
+            <input id="popupText" type="text" placeholder="Pointer text" maxlength="40"><div id="geocodifier"></div>
         </div>
 
         <div id="web_blank">
@@ -88,24 +89,43 @@
                 </div>
 
                 <div class="map_option">
-                    <div class="btn-group">
-                        <button class="btn gray active" onclick="showWeb();" id='web_btn'>Web</button>
-                        <button class="btn gray" onclick="showPrint();" id='print_btn'>Print</button>
-                    </div>
-
-                    <button class="btn gray" onclick="showTerrain()" id='terrain_btn'>Terrain</button>
-                    <button class="btn gray" onclick="showTransit()" id='transit_btn'>Transit</button>
-                    <button class="btn gray" onclick="showBuildings()" id='buildings_btn'>Buildings</button>
-                    <button class="btn gray" onclick="zoomFreeze()" id='zoom_lock'>Lock zoom</button>
-                    <button class="btn gray" onclick="panFreeze()" id='pan_lock'>Lock pan</button>
-                    <button class="btn gray active" onclick="showLabels()" id='auto_labels_btn'>Auto labels</button>
                     <input type="file" id="geo_files" name="files[]" accept=".geojson,.json" multiple>
                     <label for="geo_files" class="btn gray">Upload GeoJSON</label>
+                    <a id="zoom_to_geojson">Zoom to file</a>
+                </div>
+                <div class="map_option">
+                    <form>
+                      <div class="multiselect">
+                        <div class="selectBox" onclick="showCheckboxes()">
+                          <select>
+                            <option>Layers</option>
+                          </select>
+                          <div class="overSelect"></div>
+                        </div>
+                        <div id="checkboxes"></div>
+                      </div>
+                    </form>
+                </div>
+
+                <div class="map_option">
+                    <button class='btn gray' onclick='addCustomLabel("small");'>+small label</button>
+                    <button class='btn gray' onclick='addCustomLabel("medium");'>+medium label</button>
+                </div>
+
+                <div class="map_option">
+                    <button class='btn gray' onclick='downloadIMG();' id='download_img'>Map loading...<img src="images/preloader.gif" alt="Preloader" class="map_loader" /></button>
+                    <button class='btn' onclick='downloadVector();' id='download_vector'>Download vector</button>
                 </div>
 
 
 
-                <p class='map-info'>Zoom: <span id="zoom_level"></span> <span id="warning_msg"></span></p>
+
+
+                <p class='map-info'>Zoom: <span id="zoom_level"></span> <i class="fa fa-unlock-alt" id="zoom_lock" onclick="zoomFreeze();" aria-hidden="true"></i> <span id="warning_msg"></span></p>
+
+                <input type="range" step="0.001" id="zoom-slider" class="graphic-slider" min="2" max="19" value="10"> 
+
+
 
             </div>
             <div id="map_area">
@@ -119,7 +139,6 @@
 
                     <div id="map"></div>
 
-                    <button class='btn gray' onclick='downloadIMG();' id='download_img'>Image loading...<img src="images/preloader.gif" alt="Preloader" id="map_loader" /></button>
                     <div id="map_size"></div>
                 </div>
             </div>
@@ -148,9 +167,15 @@
             </div>
         </div>
     </footer>
+    
+    <div id="tooltip">
+    </div>
 
     <!-- load all the JS -->
+    <script type="text/javascript" src="js/d3.min.js"></script>
+    <script type="text/javascript" src="js/svg-export.js"></script>
     <script type="text/javascript" src="js/app.js"></script>
+
 
 
 </body>

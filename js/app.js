@@ -15,6 +15,10 @@ var windowHeight = document.documentElement.clientHeight;
 var userOptions = {};
 var mapSlug = "la-mapmaker-";
 
+// print sizes
+var colwidth = 330,
+    colgutter = 26;
+
 // build the map's ruler
 function createGrid(size) {
     // magic number: why 1600?
@@ -30,28 +34,24 @@ function createGrid(size) {
     for (var i = 0; i < ratioH; i++) {
         for(var p = 0; p < ratioW; p++){
             $('<div />', {
-                width: size - 1,
+                width: size - 1, // 1 is the width of the border line (or gridline)
                 height: size - 1
             }).appendTo(parent);
         }
     }
 }
 
-// magic number: why 1500 here? What does that mean?
-for (var i = 0; i < 1500; i+=10) {
-    // checks if fits for print or web columns
-    if (i % 330 === 0) {
-        var text = "<span class='px_measure'>"+i/330+" col</span>";
-        $("#col_ruler").append(text);
-    } else if (i % 100 === 0 && i <= 1400) {
+// set up top pixel ruler
+for (var i = 0; i < 1600; i++) {
+    if (i % 100 === 0 && i > 0) {
         var text = "<span class='px_measure'>"+(i-100)+"px</span>";
         $("#pixel_ruler").append(text);
     }
+
 }
 
 createGrid(50);
 createGrid(100);
-createGrid(330);
 
 /* add commas to numbers*/
 function commafy(num) {
@@ -78,9 +78,10 @@ var map = L.map('map', {
     center: initCoords,
     zoom: 10,
     detectRetina: true,
-    minZoom: 1.5,
+    minZoom: 2,
     maxZoom: 19,
-    closePopupOnClick: false
+    closePopupOnClick: false,
+    zoomControl: false
 });
 
 
@@ -126,7 +127,7 @@ var zoomRounded = Math.floor(map.getZoom()*10) / 10;
 $("#zoom_level").text(zoomRounded.toFixed(1));
 
 // and update it!
-map.on('zoomend', function() {
+map.on('zoom', function() {
 
     zoomRounded = Math.floor(map.getZoom()*10) / 10;
 
@@ -139,32 +140,105 @@ map.on('zoomend', function() {
 
     $("#zoom_level").text(zoomRounded.toFixed(1));
 
-    // buildings out under 14 zoom
-    if (zoomRounded < 13) {
-        $("#buildings_btn").removeClass("active"); // no buildings at zoom
-        $("#buildings_btn").css("opacity","0.5"); // update btn opacity
-    } else if (buildingsVisible) {
-        $("#buildings_btn").addClass("active"); // no buildings at zoom
+    // buildings out under 13 zoom
+    if (zoomRounded < 14) {
+        $("#buildings_visible").parent().addClass("unavailable"); // update btn opacity
+    } else {
+        $("#buildings_visible").parent().removeClass("unavailable"); // update btn opacity
     }
 
-    if (zoomRounded >= 13) {
-        $("#buildings_btn").css("opacity","1"); // update btn opacity
-    }
-
-
-
-    // transit wont show outside 11 zoom
+    // transit unavailable less than 11 zoom
     if (zoomRounded < 11) {
-        $("#transit_btn").removeClass("active"); // update button
-        $("#transit_btn").css("opacity","0.5"); // update btn opacity
-    } else if (transitVisible) {
-        $("#transit_btn").addClass("active"); // update button
+        $("#transit_visible").parent().addClass("unavailable"); // update btn opacity
+    } else {
+        $("#transit_visible").parent().removeClass("unavailable"); // update btn opacity
     }
 
-    if (zoomRounded >= 11) {
-        $("#transit_btn").css("opacity","1"); // update btn opacity
+    // countries 
+    if (zoomRounded > 9 || zoomRounded < 2) {
+        $("#labels_visible_countries").parent().addClass("unavailable"); // update btn opacity
+    } else {
+        $("#labels_visible_countries").parent().removeClass("unavailable"); // update btn opacity
     }
 
+    // states and regions
+    if (zoomRounded > 9 || zoomRounded <= 5) {
+        $("#labels_visible_states").parent().addClass("unavailable"); // update btn opacity
+    } else {
+        $("#labels_visible_states").parent().removeClass("unavailable"); // update btn opacity
+    }
+
+    // highway shields
+    if (zoomRounded <= 6) {
+        $("#labels_visible_highway_shields").parent().addClass("unavailable");
+    } else {
+        $("#labels_visible_highway_shields").parent().removeClass("unavailable");
+    }
+
+    // major road labels
+    if (zoomRounded < 12) {
+        $("#labels_visible_major_roads").parent().addClass("unavailable");
+    } else {
+        $("#labels_visible_major_roads").parent().removeClass("unavailable"); 
+    }
+
+    // major road labels
+    if (zoomRounded < 13) {
+        $("#labels_visible_minor_roads").parent().addClass("unavailable");
+    } else {
+        $("#labels_visible_minor_roads").parent().removeClass("unavailable"); 
+    }
+
+    // highways
+    if (zoomRounded < 6) {
+        $("#roads_visible_highways").parent().addClass("unavailable");
+    } else {
+        $("#roads_visible_highways").parent().removeClass("unavailable"); 
+    }
+
+    // major roads
+    if (zoomRounded < 8) {
+        $("#roads_visible_major").parent().addClass("unavailable");
+        $("#roads_visible_highway_ramps").parent().addClass("unavailable");
+    } else {
+        $("#roads_visible_major").parent().removeClass("unavailable"); 
+        $("#roads_visible_highway_ramps").parent().removeClass("unavailable");
+    }
+
+    // minor roads
+    if (zoomRounded < 13) { 
+        $("#roads_visible_minor").parent().addClass("unavailable"); 
+    } else {
+        $("#roads_visible_minor").parent().removeClass("unavailable"); 
+    }
+
+    // service roads
+    if (zoomRounded < 16) { 
+        $("#roads_visible_service").parent().addClass("unavailable"); 
+    } else {
+        $("#roads_visible_service").parent().removeClass("unavailable"); 
+    }
+
+    // airport roads
+    if (zoomRounded < 9) { 
+        $("#roads_visible_taxi_and_runways").parent().addClass("unavailable"); 
+    } else {
+        $("#roads_visible_taxi_and_runways").parent().removeClass("unavailable"); 
+    }
+
+    // swimming pools
+    if (zoomRounded < 16) {
+        $("#water_visible_swimming_pools").parent().addClass("unavailable"); 
+    } else {
+        $("#water_visible_swimming_pools").parent().removeClass("unavailable"); 
+    }
+
+    // ferry routes
+    if (zoomRounded < 8) {
+        $("#roads_visible_ferry_route").parent().addClass("unavailable"); 
+    } else {
+        $("#roads_visible_ferry_route").parent().removeClass("unavailable"); 
+    }
 
 });
 
@@ -184,8 +258,6 @@ $("#map_holder").resize(function(){
         document.getElementById('preset_sizes').value = 'web_large';
     } else if (mapWidth + 'x' + mapHeight == '400x450') {
         document.getElementById('preset_sizes').value = 'web_small';
-    } else if (mapWidth % 330 === 0) {
-        document.getElementById('preset_sizes').value = 'col' + $("#map").width()/330;
     } else {
         document.getElementById('preset_sizes').value = 'custom';
     }
@@ -198,38 +270,6 @@ $("#map_holder").resize(function(){
         }, 400
     );
 });
-
-scene.container.onmousemove = handleMouseMove;
-
-function handleMouseMove(event) {
-    var dot, eventDoc, doc, body, pageX, pageY;
-
-    event = event || window.event; // IE-ism
-
-    var pixel = {
-        x: event.clientX - $map.offset().left,
-        y: event.clientY - $map.offset().top + $(window).scrollTop()
-    };
-    scene.getFeatureAt(pixel).then(function(selection) {
-        // console.log(pixel);
-        if (!selection) {
-            return;
-        }
-        var feature = selection.feature;
-        if (feature !== null) {
-            if (feature.properties !== null) {
-                // console.log(feature);
-
-                if (feature.properties.kind == 'highway'){
-                    // console.log(feature.properties.ref);
-                } else {
-                    // console.log(feature.properties.name);
-                }
-            }
-        }
-    });
-}
-
 
 function slugify(v){
     var slug = v.toLowerCase();
@@ -259,7 +299,8 @@ function downloadIMG() {
 
         // hide map controls buttons
         $("#map").css("background","none");
-        $(".leaflet-control-zoom").hide();
+        $(".rotate_handle").hide();
+        $(".remove_label").hide();
 
         // basemap
         scene.screenshot().then(function(screenshot) {
@@ -281,8 +322,8 @@ function downloadIMG() {
                     // This is here to patch a bug where a small pan of the map will result in
                     // geojson/svg objects being cut off in the downloaded image
                     // Someday we might have a real solution to the problem but until then ¯\_(ツ)_/¯
-                    map.setZoom(map.getZoom() - 0.5);
-                    map.setZoom(map.getZoom() + 0.5);
+                    map.setZoom(map.getZoom() - 0.5, {'animate': false});
+                    map.setZoom(map.getZoom() + 0.5, {'animate': false});
 
                     var svgString = new XMLSerializer().serializeToString(document.querySelector('svg'));
                     var DOMURL = self.URL || self.webkitURL || self;
@@ -302,14 +343,37 @@ function downloadIMG() {
                     img.src = url;
                 }
 
+
+
+                // if there's a popup
+                if ($(".large-popup").length > 0) {
+                    // swap out negative left with a margin-left for a moment
+                    // this breaks html2canvas
+                    var popupLeft = +$(".large-popup").css("left").slice(0,$(".large-popup").css("left").length-2);
+                    var popupBottom = +$(".large-popup").css("bottom").slice(0,$(".large-popup").css("bottom").length-2);
+
+                    var popupTranslate = $(".large-popup").css("transform");
+                    var transNumStart = popupTranslate.indexOf("("),
+                        transNumEnd = popupTranslate.indexOf(")");
+                    var transNums = popupTranslate.substring(transNumStart+1,transNumEnd).split(",");
+                    var transleft = +transNums[4];
+                    var transRight = +transNums[5];
+                    // update values because translate3d causes problems with Tangram
+                    $(".large-popup").css("transform","");
+                    $(".large-popup").css("left",popupLeft+transleft+"px"); // translate left
+                    $(".large-popup").css("bottom",popupBottom-transRight+"px"); // translate right
+                }
+
                 // any popup text layers and other html like the source and ruler
                 html2canvas($("#map"), {
 
                     onrendered: function(canvas) {
 
+
                         ctx.drawImage(canvas,0,0, mapSize[0], mapSize[1]);
-                        $(".leaflet-control-zoom").show(); // show zoom again
                         $("#map").css("background","#ddd"); // bring back map's background
+                        $(".rotate_handle").show();
+                        $(".remove_label").show();
 
                         // create an off-screen anchor tag
                         var lnk = document.createElement('a'),
@@ -334,19 +398,8 @@ function downloadIMG() {
                         var canvas = document.getElementById("canvas");
                         var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
 
-                        // fire if sendToS3 exists
-                        if (typeof sendToS3 !== "undefined") { 
-                            sendToS3(mapSlug + datetime + ".png", image)
-                                .then(sendToP2P(mapSlug + datetime))
-                                .then(function() {
-                                    console.log("great success!");
-                                }).catch(function() {
-                                    console.log("womp womp");
-                                });
-                        }
-
                         lnk.href = image;
-                        // window.location.href=image;
+
                         if (document.createEvent) {
 
                             e = document.createEvent("MouseEvents");
@@ -376,158 +429,17 @@ function downloadIMG() {
 
 var frozenZoom = false;
 
-function zoomFreeze() {
-if ($("#zoom_lock").hasClass('active')) {
-    $('.leaflet-control-zoom').css('display','block');
-    map.touchZoom.enable();
-    map.doubleClickZoom.enable();
-    map.scrollWheelZoom.enable();
-    map.boxZoom.enable();
-    map.keyboard.enable();
-    $("#zoom_lock").removeClass('active');
-    frozenZoom = false;
-} else {
-    $('.leaflet-control-zoom').css('display','none');
-    map.touchZoom.disable();
-    map.doubleClickZoom.disable();
-    map.scrollWheelZoom.disable();
-    map.boxZoom.disable();
-    map.keyboard.disable();
-    $("#zoom_lock").addClass('active');
-    frozenZoom = true;
-}
-
-}
-
-function panFreeze() {
-if ($("#pan_lock").hasClass('active')) {
-    map.dragging.enable();
-    map.options.scrollWheelZoom = '';
-    $("#pan_lock").removeClass('active');
-} else {
-    map.dragging.disable();
-    map.options.scrollWheelZoom = 'center';
-    $("#pan_lock").addClass('active');
-}
-}
-
 function findFirstDescendant(parent, tagname) {
-parent = document.getElementById(parent);
-var descendants = parent.getElementsByTagName(tagname);
-if ( descendants.length )
-  return descendants[0];
-return null;
+    parent = document.getElementById(parent);
+    var descendants = parent.getElementsByTagName(tagname);
+    if ( descendants.length )
+        return descendants[0];
+    return null;
 }
 
 var transitVisible = false;
 var labelsVisible = true;
 var terrainVisible = false;
-
-
-function showTerrain() {
-// store landuse parent
-var landuse = scene.config.layers.landuse;
-mapLoading();
-if (terrainVisible) {
-
-    // change earth to terrain
-    scene.config.layers.earth.draw.polygons.visible = true;
-    scene.config.layers.earth.draw.terrain.visible = false;
-
-
-    // update base landuse
-    scene.config.global.landuse_style = 'polygons';
-
-    scene.updateConfig(); // update config
-    $("#terrain_btn").removeClass("active"); // update button
-
-    terrainVisible = false;
-} else {
-
-    // change earth to terrain
-    scene.config.layers.earth.draw.polygons.visible = false;
-    scene.config.layers.earth.draw.terrain.visible = true;
-
-    // update base landuse
-
-    scene.config.global.landuse_style = 'terrain';
-
-    scene.updateConfig(); // update config
-    terrainVisible = true;
-    $("#terrain_btn").addClass("active"); // update button
-}
-}
-
-function showTransit() {
-// check zoom
-if (map.getZoom() >= 11) {
-    if (transitVisible) {
-        // remove transit
-        scene.config.layers.transit.visible = false;
-        scene.config.layers['transit-overlay-station-labels'].visible = false;
-        scene.updateConfig(); // update config
-        $("#transit_btn").removeClass("active"); // update button
-        transitVisible = false;
-    } else {
-        // add transit layer
-        scene.config.layers.transit.visible = true;
-        scene.config.layers['transit-overlay-station-labels'].visible = true;
-        scene.updateConfig(); // update config
-        $("#transit_btn").addClass("active"); // update button
-        transitVisible = true;
-    }
-}
-}
-
-// auto labels
-function showLabels() {
-
-// check current status
-if (labelsVisible) {
-    // turn all these label layers hidden
-    scene.config.global.labels_visible = false;
-
-    labelsVisible = false;
-
-    scene.updateConfig(); // update config
-    $("#auto_labels_btn").removeClass("active"); // update button
-} else {
-    // turn all these label layers visible
-    scene.config.global.labels_visible = true;
-
-    scene.updateConfig(); // update config
-    $("#auto_labels_btn").addClass("active"); // update button
-
-    labelsVisible = true;
-}
-
-
-}
-
-// shows and hides buildings and swimming pools
-function showBuildings() {
-// check zoom
-if (map.getZoom() >= 13) {
-    if (buildingsVisible) {
-        // remove buildings
-        scene.config.layers.buildings.draw.lines.visible = false;
-        scene.config.layers.buildings.draw.polygons.visible = false;
-        scene.config.layers["swimming-pools"].draw.polygons.visible = false; // pools
-        scene.updateConfig(); // update config
-        $("#buildings_btn").removeClass("active"); // update button
-        buildingsVisible = false;
-    } else {
-        mapLoading();
-        // add buildings
-        scene.config.layers.buildings.draw.lines.visible = true;
-        scene.config.layers.buildings.draw.polygons.visible = true;
-        scene.config.layers["swimming-pools"].draw.polygons.visible = true; // pools
-        scene.updateConfig(); // update config
-        $("#buildings_btn").addClass("active"); // update button
-        buildingsVisible = true;
-    }
-}
-} // showBuildings()
 
 // watching for anytime the size preset dropdown fires
 var sizeChange = function(option) {
@@ -544,16 +456,16 @@ if (option.value == 'video') {
     $("#map_holder").width(340);
     $("#map_holder").height(700);
 } else if (option.value == 'col2') {
-    $("#map_holder").width(670);
+    $("#map_holder").width(706);
     $("#map_holder").height(700);
 } else if (option.value == 'col3') {
-    $("#map_holder").width(1000);
+    $("#map_holder").width(1072);
     $("#map_holder").height(700);
 } else if (option.value == 'col4') {
-    $("#map_holder").width(1330);
+    $("#map_holder").width(1438);
     $("#map_holder").height(700);
 } else if (option.value == 'twitter') {
-    $("#map_holder").width(800);
+    $("#map_holder").width(810);
     $("#map_holder").height(400);
 }
 
@@ -576,52 +488,6 @@ setTimeout(
 
 };
 
-function showPrint() {
-    // swap to print color
-    scene.config.global.road_color = '#98a5ac';
-
-    // bump up size of major roads
-    scene.config.layers.roads.major_road.draw.lines.width[3][1] = '1.5px';
-    scene.config.layers.roads.major_road.draw.lines.width[4][1] = '2.5px';
-    scene.config.layers.roads.major_road.draw.lines.width[5][1] = '3.5px';
-    scene.config.layers.roads.major_road.draw.lines.width[6][1] = '10m';
-
-    // bump up size of minor roads
-    scene.config.layers.roads.minor_road.draw.lines.width[1][1] = '0.5px';
-    scene.config.layers.roads.minor_road.draw.lines.width[2][1] = '0.5px';
-
-    // make water darker
-    scene.config.global.water_color = '#a6bcd3';
-
-    // turn off labels
-    labelsVisible = true;
-    showLabels();
-
-    scene.updateConfig(); // update config
-
-    // update buttons
-    $("#print_btn").addClass("active");
-    $("#web_btn").removeClass("active");
-
-    // hide attribution
-    $(".leaflet-control-attribution").hide();
-
-}
-
-function showWeb() {
-    scene.load('map-styles.yaml');
-    buildingsVisible = false;
-    // update buttons
-    $("#print_btn").removeClass("active");
-    $("#web_btn").addClass("active");
-    $("#auto_labels_btn").addClass("active");
-    labelsVisible = true;
-
-    // bring back attribution
-    $(".leaflet-control-attribution").show();
-
-
-}
 
 // Apple's Magic Mouse is a little finicky--prevent scroll when mouse is down on map
 $("#map").mousedown(function() {
@@ -633,11 +499,15 @@ $("#map").mouseup(function() {
     }
 });
 
+// collect features
+var pointFeatures = [],
+    lineFeatures = [],
+    polygonFeatures = [];
 
 // styles for geojson pulled from v1.0
-var lineStyle = {'color':'#cd7139','weight': 4,'opacity': 1, 'lineJoin':'round'};
-var polyStyle = {'color': '#000','weight': 2,'opacity': 0.65,'fillOpacity': 0, 'lineJoin':'round'};
-var pointStyle = { radius: 10.5, fillColor: '#cd7139',color: '#fff',weight: 1,opacity: 0.3,fillOpacity: 0.8};
+var lineStyle = {'color':'#cd7139','weight': 4,'opacity': 1, 'lineJoin':'round', 'className':'line-feature'};
+var polyStyle = {'color': '#cd7139','weight': 4,'opacity': 1,'fillOpacity': 0, 'lineJoin':'round', 'className':'polygon-feature'};
+var pointStyle = { radius: 10.5, fillColor: '#cd7139',color: '#fff',weight: 1,opacity: 0.3,fillOpacity: 0.8, className: 'point-feature'};
 
 function addStyle(feature){
     switch (feature.geometry.type) {
@@ -663,12 +533,31 @@ function handleFileSelect(evt) {
             var parsedJSON = jQuery.parseJSON(contents);
 
             // add GeoJSON to map
-            L.geoJson(parsedJSON, {
-                style: function(feature) {return addStyle(feature);},
+            var geojson = L.geoJson(parsedJSON, {
+                style: function(feature) {
+                // add element to array for later vector export
+                    if (feature.geometry.type === 'Polygon' || feature.geometry.type === 'MultiPolygon') {
+                        polygonFeatures.push(feature);
+                    } else if (feature.geometry.type === 'LineString') {
+                        lineFeatures.push(feature);
+                    } else if (feature.geometry.type === 'Point') {
+                        pointFeatures.push(feature);
+                    }
+                    console.log(feature);
+                    return addStyle(feature);
+                },
                 pointToLayer: function (feature, latlng) {
                     return L.circleMarker(latlng, pointStyle);
                 }
-            }).addTo(map);
+            });
+            geojson.addTo(map);
+
+            // add link text to zoom to uploaded file
+            $("#zoom_to_geojson").css("display","block");
+            $("#zoom_to_geojson").click(function(){
+                map.fitBounds(geojson.getBounds(), {padding: [100, 100]});
+                $("#zoom_to_geojson").css("display","none");
+            });
         };
         r.readAsText(f);
     }
@@ -685,7 +574,7 @@ if (typeof configOptions !== 'undefined') {
     var geocoder = new BingGeocodifier('geocodifier', {
         key: configOptions.bingAPI,
         onClick: function(item, coords) {
-            console.log(item);
+            // console.log(item);
             map.panTo(item.geocodePoints[0].coordinates);
 
             // check for popup text
@@ -695,7 +584,7 @@ if (typeof configOptions !== 'undefined') {
                 popupMarker = L.circleMarker(item.geocodePoints[0].coordinates,{
                     'fillOpacity': 0,
                     'opacity': 0
-                }).bindPopup(userPopupText).addTo(map).openPopup();
+                }).bindPopup(userPopupText,{'className':'large-popup'}).addTo(map).openPopup();
             }
         }
     });
@@ -728,7 +617,7 @@ var mapLoadAction = true;
 // show that map is still loading
 function mapLoading() {
     if (scene.tile_manager.isLoadingVisibleTiles()) {
-        $("#download_img").html('Image loading...<img src="images/preloader.gif" alt="Preloader" id="map_loader" />');
+        $("#download_img").html('Map loading...<img src="images/preloader.gif" alt="Preloader" class="map_loader" />');
         $("#download_img").addClass("gray");
         mapLoadAction = true;
     }
@@ -755,3 +644,609 @@ scene.subscribe({
         console.log('scene warning:', e);
     }
 });
+
+/* LAYERS DROPDOWN */
+// list of layers to show/hide
+var layers = {
+    'sources' : [],
+    'terrain_visible': [],
+    'buildings_visible': [],
+    'transit_visible': [],
+    'labels_visible': ['countries','states','cities','neighborhoods','highway_shields','major_roads','minor_roads','points_of_interest','water'],
+    'roads_visible': ['highways','highway_ramps','major','minor','service','ferry_route','taxi_and_runways','paths'],
+    'borders_visible': ['countries','disputed','states','counties'],
+    'landuse_visible': ['airports','beach','cemetery','college','forest','hospital','military','park','prison','resort','school','stadium','wetland'],
+    'water_visible': ['ocean','inland_water','swimming_pools']
+}
+
+// add list to html
+Object.keys(layers).forEach(function(key) {
+    // looping by key
+    var keyName = key.replace('_visible','');
+    $("#checkboxes").append('<label for="'+key+'"><input type="checkbox" id="'+key+'" name="layers" />'+keyName+'</label>');
+
+    // loop through any sublayers
+    for (var i = 0; i < layers[key].length; i++) {
+        var layerName = layers[key][i].replace(/_/g, ' ');
+        $("#checkboxes").append('<label for="'+key+"_"+layers[key][i]+'" class="inset"><input type="checkbox" id="'+key+"_"+layers[key][i]+'" name="layers" />'+layerName+'</label>');
+    }
+                              
+});
+
+
+// check what layers are available on init
+scene.subscribe({
+    load: function (e) {
+
+
+        // console.log(scene.config);
+
+
+        // loop through layers list
+        Object.keys(layers).forEach(function(key) {
+            // console.log(key);
+            // $("#"+key).attr("checked",scene.config.global[key]);
+
+            // loop through the sublayers
+            for (var i = 0; i < layers[key].length; i++) {
+                var sublayer = key + "_" + layers[key][i];
+                $("#"+sublayer).attr("checked",scene.config.global[sublayer]);
+
+                // console.log("  " + layers[key][i]);
+            }
+                                      
+            // console.log(key, layers[key]);
+
+        });
+        parentChecks(); // check which parents need selecting
+
+    }
+});
+
+// set sources to be checked
+$("#sources").attr("checked",true);
+
+
+
+
+// set what layers are visible based on zoom
+if (initZoom < 14) { $("#buildings_visible").parent().addClass("unavailable"); }
+
+if (initZoom < 11) { $("#transit_visible").parent().addClass("unavailable"); }
+
+if (initZoom > 9 || initZoom < 5) { $("#labels_visible_states").parent().addClass("unavailable"); }
+
+if (initZoom > 9 || initZoom < 2) { $("#labels_visible_countries").parent().addClass("unavailable"); }
+
+if (initZoom < 12) { $("#roads_visible_minor").parent().addClass("unavailable"); }
+
+if (initZoom < 16) { $("#roads_visible_service").parent().addClass("unavailable"); }
+
+if (initZoom < 16) { $("#water_visible_swimming_pools").parent().addClass("unavailable"); }
+
+if (initZoom < 12) { $("#labels_visible_major_roads").parent().addClass("unavailable"); }
+
+if (initZoom < 13) { $("#labels_visible_minor_roads").parent().addClass("unavailable"); }
+
+var expanded = false;
+
+function showCheckboxes() {
+
+    var checkboxes = document.getElementById("checkboxes");
+
+    if (!expanded) {
+        checkboxes.style.display = "block";
+        expanded = true;
+        // toggle layer focus style
+        $(".overSelect").css("border","2px solid #797979");
+        $(".selectBox select").css("color","#797979");
+
+    } else {
+        checkboxes.style.display = "none";
+        expanded = false;
+        // toggle layer focus style
+        $(".overSelect").css("border","2px solid #b5b5b5");
+        $(".selectBox select").css("color","#acacac");
+
+    }
+
+}
+
+// close the layers palette when clicking somewhere else
+$('#checkboxes').on('click', function(e) {
+    e.stopPropagation();
+});
+$('.selectBox').on('click', function(e) {
+    e.stopPropagation();
+});
+$(document).on('click', function (e) {
+    checkboxes.style.display = "none";
+    expanded = false;
+    // toggle layer focus style
+    $(".overSelect").css("border","2px solid #b5b5b5");
+    $(".selectBox select").css("color","#acacac");
+
+});
+
+// function to check on parent checkboxes
+function parentChecks() {
+    var checkedBoxes = document.querySelectorAll('input[name=layers]:checked');
+    var visibleLayers = [];
+    for (var i = 0; i < checkedBoxes.length; i++) {
+        visibleLayers.push(checkedBoxes[i].id);
+    }
+
+
+
+
+    // check labels
+    containsCount('labels_visible');
+
+    // check roads
+    containsCount('roads_visible');
+
+    // check borders
+    containsCount('borders_visible');
+
+    // check water
+    containsCount('water_visible');
+
+    // check landuse
+    containsCount('landuse_visible');
+
+    // figure out how strong a match count of layers
+    function containsCount(id){
+        var needles = layers[id];
+        var matchCount = 0;
+        for (var i = 0 , len = needles.length; i < len; i++){
+            if($.inArray(id+"_"+needles[i], visibleLayers) != -1) matchCount++;
+        }
+        if (matchCount === needles.length) {
+            $("#"+id).prop('indeterminate',false);
+            $("#"+id).prop('checked',true);
+        } else if (matchCount > 0) {
+            $("#"+id).prop('checked',false);
+            $("#"+id).prop('indeterminate',true);
+        } else {
+            $("#"+id).prop('checked',false);
+            $("#"+id).prop('indeterminate',false);
+        }
+
+    }
+
+
+    // if ("labels_")
+    // console.log(visibleLayers);
+}
+
+// listen for checkbox click
+$("#checkboxes label input").click(function(){
+
+    var thisID = $(this).attr("id");
+
+    // checkbox status
+    var status = ($("#"+thisID).prop('indeterminate')) ? 'indeterminate' :
+                 ($("#"+thisID).prop('checked')) ? 'checked' : 'unchecked';
+
+
+
+    // if terrain
+    if (thisID == 'terrain_visible') {
+        if ($("#"+thisID).prop("checked")) {
+            scene.config.global.landuse_style = 'terrain';
+            scene.config.layers.earth.draw.polygons.visible = false;
+            scene.config.layers.earth.draw.terrain.visible = true;
+        } else {
+            scene.config.global.landuse_style = 'polygons';
+            scene.config.layers.earth.draw.polygons.visible = true;
+            scene.config.layers.earth.draw.terrain.visible = false;
+        }
+    } else if (thisID == 'sources') {
+        if ($("#"+thisID).prop("checked")) {
+            $(".leaflet-control-attribution").css("display","block");
+        } else {
+            $(".leaflet-control-attribution").css("display","none");
+        }
+    } else if (Array.isArray(layers[thisID]) && layers[thisID].length > 0) {
+    // if any parent layer
+        for (var i = 0; i < layers[thisID].length; i++) {
+            var sublayer = thisID + '_' + layers[thisID][i];
+            if (status == 'checked') {
+                scene.config.global[sublayer] = true;
+                $("#"+sublayer).prop('checked',true);
+            } else if (status == 'unchecked') {
+                $("#"+sublayer).prop('checked',false);
+                scene.config.global[sublayer] = false;
+            }
+        }
+    } else {
+        switchLayer(thisID);
+        parentChecks();
+    }
+
+
+
+
+
+
+
+    // grab all checked layers
+    // var visibleLayers = [];
+    // for (var i = 0; i < checkedBoxes.length; i++) {
+    //     visibleLayers.push(checkedBoxes[i].id);
+    // }
+
+    // console.log(visibleLayers);
+    // // loop through layers to show/hide
+    // if (visibleLayers.indexOf('labels_visible') != -1) {
+    //     scene.config.global['labels_visible'] = true;
+    // } else {
+    //     scene.config.global['labels_visible'] = false;
+    //     // turn off child labels
+    // }
+
+    // // country labels
+    // if (visibleLayers.indexOf('countries') != -1) {
+    //     scene.config.global.countries_visible = scene.config.global['labels_visible'];
+    // } else {
+    //     scene.config.global.countries_visible = false;
+    //     // turn off child labels
+    // }
+
+    // if (visibleLayers.indexOf('terrain_visible') != -1) {
+    //     scene.config.global.landuse_style = 'terrain';
+    //     scene.config.layers.earth.draw.polygons.visible = false;
+    //     scene.config.layers.earth.draw.terrain.visible = true;
+    // } else {
+    //     scene.config.global.landuse_style = 'polygons';
+    //     scene.config.layers.earth.draw.polygons.visible = true;
+    //     scene.config.layers.earth.draw.terrain.visible = false;
+    // }
+
+    // if (visibleLayers.indexOf('buildings_visible') != -1) {
+    //     scene.config.global['buildings_visible'] = true;
+    // } else {
+    //     scene.config.global['buildings_visible'] = false;
+    // }
+
+    // if (visibleLayers.indexOf(thisID) != -1) {
+    // }
+
+
+    scene.updateConfig(); // update config
+
+
+    // $("#states").prop("indeterminate", true);
+});
+
+// a function to switch global variables to show/hide layers
+function switchLayer(layer) {
+    if (scene.config.global[layer]) {
+        scene.config.global[layer] = false;
+    } else {
+        scene.config.global[layer] = true;
+    }
+}
+
+// this updates live while user is moving slider
+document.getElementById('zoom-slider').addEventListener("input", function() {
+    if (!frozenZoom) {
+        var zoomValue = parseFloat($(this).val());
+
+        // update zoom value
+        // using flyTo instead of setZoom because it is smoother
+        map.flyTo(map.getCenter(),zoomValue,{animate:true,duration:0.1});
+    }
+});
+
+// when zoom is done
+map.on('zoomend',function(){
+    var zoomRounded = Math.floor(map.getZoom()*10) / 10;
+    $("#zoom_level").text(zoomRounded.toFixed(1));
+
+    // update slider position
+    document.getElementById("zoom-slider").value = map.getZoom();
+});
+
+// freeze zoom
+
+function zoomFreeze() {
+    if ($("#zoom_lock").hasClass('fa-lock')) {
+        // enable zooming
+        $("#zoom_lock")
+            .removeClass('fa-lock')
+            .addClass('fa-unlock-alt');
+        map.touchZoom.enable();
+        map.doubleClickZoom.enable();
+        map.scrollWheelZoom.enable();
+        map.boxZoom.enable();
+        map.keyboard.enable();
+        frozenZoom = false;
+        document.getElementById("zoom-slider").disabled = false;
+        $("#zoom-slider").css("opacity","1");
+    } else {
+        // disable zooming
+        $("#zoom_lock")
+            .removeClass('fa-unlock-alt')
+            .addClass('fa-lock');
+        map.touchZoom.disable();
+        map.doubleClickZoom.disable();
+        map.scrollWheelZoom.disable();
+        map.boxZoom.disable();
+        map.keyboard.disable();
+        frozenZoom = true;
+        document.getElementById("zoom-slider").disabled = true;
+        $("#zoom-slider").css("opacity","0.5");
+    }
+}
+
+// count elements in obj
+function countProperties(obj) {
+    var count = 0;
+
+    for (var prop in obj) {
+        if(obj.hasOwnProperty(prop))
+            ++count;
+    }
+
+    return count;
+}
+
+function lastId(array) {
+    var lastId = 0;
+
+    for (var i = 0; i < array.length; i++) {
+        if (+array[i].options.icon.options.id.substr(12,3) > lastId) {
+            lastId = +array[i].options.icon.options.id.substr(12,3);
+        }
+    }
+
+    return lastId;
+}
+
+// setup object to hold all custom labels
+var customLabels = [];
+
+function addCustomLabel(size) {
+
+    var thisID = lastId(customLabels) + 1;
+
+    // text marker test
+    var customLabel = L.marker(map.getCenter(), {draggable: true, icon: L.divIcon ({
+        iconSize: [0, 0],
+        iconAnchor: [0, 0],
+        html: '<div class="custom_label '+size+'_label" id="custom_label'+thisID+'"><span class="display_text">Here\'s your label</span><textarea class="text_input" maxlength="100"></textarea><i class="fa fa-repeat rotate_handle" aria-hidden="true"></i> <i class="fa fa-times remove_label" aria-hidden="true"></i></div>',
+        className: 'text-label ui-resizable',
+        id: 'custom_label'+thisID
+        })});
+
+    // add label to the array of all labels
+    customLabels.push(customLabel);
+
+    // add label to map
+    customLabel.addTo(map);
+}
+
+// edit text to swap in input and out
+$('body').on('click', '.display_text', function() {
+    console.log($(this));
+
+    // hide display text
+    $(this).hide();
+    var parentID = $(this).parent()[0].id; 
+    $("#"+parentID+" .text_input").val($(this).html().replace(/<br\s*[\/]?>/gi, "\n"));
+    $("#"+parentID+" .text_input").show();
+    $("#"+parentID+" .text_input").focus();
+});
+
+// on blur
+$('body').on('blur', '.text_input', function() {
+    $(this).hide();
+    var parentID = $(this).parent()[0].id; 
+
+    $("#"+parentID+" .display_text").html($("#"+parentID+" .text_input").val().replace(/\n\r?/g, '<br />'));
+    $("#"+parentID+" .display_text").css("display","block");
+});
+
+// delete label
+$('body').on('click', '.remove_label', function() {
+    var parentID = $(this).parent()[0].id; 
+
+    // loop through label list to find match
+    for (var i = 0; i < customLabels.length; i++) {
+        if (customLabels[i].options.icon.options.id == parentID) {
+            map.removeLayer(customLabels[i]); // remove from map
+            customLabels.splice(i, 1); // remove from list
+        }
+    }
+});
+
+$('body').on('mousedown', '.rotate_handle', function(e) {
+    console.log('rotate-try');
+    console.log($(this).parent()[0].id);
+
+    // get the right custom label from object
+    for (var i = 0; i < customLabels.length; i++) {
+        if (customLabels[i].options.icon.options.id == $(this).parent()[0].id) {
+            var customLabel = customLabels[i]
+        }
+    }
+    // var customLabel = customLabels[$(this).parent()[0].id];
+
+    // temporarily freeze dragging
+    customLabel.dragging.disable();
+    map.dragging.disable();
+
+    var target = $(this).parent(),
+        originX = target.offset().left + target.width() / 2,
+        originY = target.offset().top + target.height() / 2,
+        dragging = true,
+        startingDegrees = (typeof target[0].style.transform == 'undefined') ? 0 : target[0].style.transform.substr(7,target[0].style.transform.indexOf('deg')-7),
+        lastDegrees = 0,
+        currentDegrees = 0;
+
+
+        mouseX = e.pageX;
+        mouseY = e.pageY;
+        radians = Math.atan2(mouseY - originY, mouseX - originX),
+        startingDegrees = radians * (180 / Math.PI);
+
+
+    $(document).mousemove(function(e) {
+        var mouseX, mouseY, radians, degrees;
+        
+        if (!dragging) {
+            return;
+        }
+        
+        mouseX = e.pageX;
+        mouseY = e.pageY;
+        radians = Math.atan2(mouseY - originY, mouseX - originX),
+        degrees = radians * (180 / Math.PI) - startingDegrees + lastDegrees;
+        
+        currentDegrees = degrees;
+        
+        // update to lock onto 0, 90, 270 if it rounds to it
+        if (degrees <= 5 && degrees >= -5) { 
+            degrees = 0; 
+        } else if (degrees >= -275 && degrees <= -265) {
+            degrees = -270;
+        }
+
+        target.css('-webkit-transform', 'rotate(' + degrees + 'deg)');
+        target.css('-ms-transform', 'rotate(' + degrees + 'deg)');
+        target.css('transform', 'rotate(' + degrees + 'deg)');
+    }).mouseup(function() {
+        lastDegrees = currentDegrees;
+        dragging = false;
+
+        // unfreeze dragging
+        customLabel.dragging.enable();
+        map.dragging.enable();
+
+    });
+});
+
+
+
+
+// kill tooltip on scroll
+$( window ).scroll(function() {
+    $("#tooltip").css({"opacity":"0","height":"auto","width":"0px"}); // hide
+    // $("#council_name").html("");
+});
+$( 'body' ).on('click',function() {
+    $("#tooltip").css({"opacity":"0","height":"auto","width":"0px"}); // hide
+    // $("#council_name").html("");
+});
+$("#download_vector").mouseover(function () {
+    // var name = $(this).attr("title");
+    // $(this).css('cursor','pointer');
+    // message if auto labels are checked
+    if ($("#labels_visible").prop('indeterminate') == true || $("#labels_visible").prop('checked') == true) {
+        $("#tooltip").css({"opacity":"1","height":"auto","width":"200px"});
+        $("#tooltip").html('<p>Automatic labels cannot be exported to vector.</p>');
+    }
+});
+$("#download_vector").mouseout(function () {
+    $("#tooltip").css({"opacity":"0","height":"auto","width":"0px"}); // hide
+});
+// Move the tooltip with the mouse
+$(window).mousemove( function(e) {
+    if (windowWidth > 400) {
+        var tooltipHeight = $("#tooltip").height();
+        mouseY = e.pageY;
+        mouseX = e.pageX;
+        $("#tooltip").css({"top":(mouseY+20)+"px","left":(mouseX+10)+"px"});
+    }
+});
+
+
+function getDatetime() {
+    // get current datetime
+    var currentdate = new Date();
+
+    var hours = (currentdate.getHours() > 12) ? currentdate.getHours() + 12 : currentdate.getHours();
+    hours = (hours.toString().length == 1) ? '0' + hours : hours;
+
+    var datetime =  ("0" + (currentdate.getMonth() + 1)).slice(-2) + "-" +
+        ("0" + currentdate.getDate()).slice(-2) + "-" +
+        currentdate.getFullYear() + "-"
+        + hours + "-" +
+        + currentdate.getMinutes() + "-" +
+        currentdate.getSeconds();
+
+    return datetime;
+}
+
+
+// vector download
+function downloadVector() {
+    console.log('downloadVector()');
+
+    // show map loading
+    $("#download_vector").html('Vector loading...<img src="images/preloader.gif" alt="Preloader" class="map_loader" />');
+    $("#download_vector").addClass("gray");
+
+    // create options object
+    var mapOptions = {
+        startLat: map.getBounds()._northEast.lat,
+        startLon: map.getBounds()._northEast.lng,
+        endLat: map.getBounds()._southWest.lat,
+        endLon: map.getBounds()._southWest.lng,
+        width: $("#map").width(),
+        height: $("#map").height(),
+        sizeDesc: $("#preset_sizes").val(),
+        zoomLevel: Math.floor(map.getZoom()),
+        layers_visible: [],
+        custom_labels: [],
+        lineFeatures: lineFeatures,
+        pointFeatures: pointFeatures,
+        polygonFeatures: polygonFeatures,
+        backgroundImg: '',
+        apikey:configOptions['mapzen-api'],
+        'coord-submit': 'submit'
+    }
+
+    // loop through visible layers
+    $("#checkboxes input").each(function(){
+        // if checked and also not labels and also not half transparent
+        if (($(this)[0].checked == true || $(this).prop('indeterminate') == true) && $(this)[0].id.indexOf('labels') == -1 && !$(this).parent().hasClass('unavailable')) {
+            mapOptions['layers_visible'].push($(this)[0].id);
+        }
+    });
+
+    // add custom labels
+
+
+    // $("svg path").each(function(){
+    //     var thisClass = $(this).attr('class');
+    //     if (thisClass.indexOf('polygon-feature') != -1) { mapOptions['polygonFeatures'].push($(this).attr('d')); }
+    //     else if (thisClass.indexOf('line-feature') != -1) { mapOptions['lineFeatures'].push($(this).attr('d')); }
+    //     else if (thisClass.indexOf('point-feature') != -1) { mapOptions['pointFeatures'].push($(this).attr('d')); }
+    //     // mapOptions['geojson'].push($(this));
+    // });
+
+
+    console.log(mapOptions);
+    console.log(JSON.stringify(mapOptions));
+
+
+    
+    createVector(JSON.stringify(mapOptions))
+    .then((result) => {
+
+            // $("#download_vector").html('Download vector');
+            // $("#download_vector").removeClass("gray");
+    }).catch((err) => {
+        alert('Problem downloading file');
+        console.log(err);
+
+        $("#download_vector").html('Download vector');
+        $("#download_vector").removeClass("gray");
+
+    });
+
+}
+
+

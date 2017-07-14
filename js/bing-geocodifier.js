@@ -1,22 +1,3 @@
-// var BingGeocoder = require('tribune-bing-geocoder').BingGeocoder;
-// var debounce = require('debounce');
-
-// function debounce(delay, callback) {
-//     var timeout = null;
-//     return function () {
-//         // if a timeout has been registered before then
-//         // cancel it so that we can setup a fresh timeout
-//         if (timeout) {
-//             clearTimeout(timeout);
-//         }
-//         var args = arguments;
-//         timeout = setTimeout(function () {
-//             callback.apply(null, args);
-//             timeout = null;
-//         }, delay);
-//     };
-// }
-
 var jsonp = {
     callbackCounter: 0,
     head: document.getElementsByTagName('head')[0],
@@ -42,6 +23,7 @@ var jsonp = {
 
 var BingGeocodifier = function(el, params) {
     this.el = document.getElementById(el);
+    this.bingApiUrl = 'https://dev.virtualearth.net/REST/v1/Locations/';
     this.bingApiKey = params.key || null;
     // this.geocoder = new BingGeocoder(params.key);
     this.results = null;
@@ -60,15 +42,20 @@ var BingGeocodifier = function(el, params) {
     if (params.defaultText) {
         this.textInput.setAttribute("placeholder", params.defaultText);
     } else {
-        this.textInput.setAttribute("placeholder", "Search for a location");
+        this.textInput.setAttribute("placeholder", "Search for an address");
     }
 
     this.dropdown = document.createElement("div");
     this.dropdown.className = "geocodify-dropdown hidden";
     this.id = "bing-geocodifier-dropdown";
 
+    this.statusMessage = document.createElement("div");
+    this.statusMessage.className = "geocodify-status hidden";
+    this.statusMessage.id = "bing-geocodifier-status";
+
     this.lookupForm.appendChild(this.textInput);
     this.lookupForm.appendChild(this.dropdown);
+    this.lookupForm.appendChild(this.statusMessage);
     this.el.appendChild(this.lookupForm);
 
     if (params.onClick) {
@@ -79,31 +66,35 @@ var BingGeocodifier = function(el, params) {
 
     this.lookupForm.addEventListener('keyup', this.onKeyUp.bind(this));
     this.lookupForm.addEventListener('click', this.onClick.bind(this));
+    this.lookupForm.onsubmit = function(){ return false};
 };
 
-BingGeocodifier.prototype.bingApiUrl = 'https://dev.virtualearth.net/REST/v1/Locations/';
 
 BingGeocodifier.prototype.onItemClick = function(item) {
 
 };
 
+
 BingGeocodifier.prototype.onClick = function(e) {
-    var target = e.target;
+    // make sure there are results before allowing this event
+    if(this.dropdown.className.indexOf('no-results') == -1){
 
-    if (target.tagName.toLowerCase() === 'li') {
-        var siblings = target.parentNode.children,
-            item, coords;
+        var target = e.target;
 
-        for (var i = 0; i < siblings.length; i += 1) {
-            if (target.parentNode.children[i] === e.target) {
-                item = this.results[i];
+        if (target.tagName.toLowerCase() === 'li') {
+            var siblings = target.parentNode.children,
+                item, coords;
 
-                coords = item.geocodePoints[0].coordinates;
+            for (var i = 0; i < siblings.length; i += 1) {
+                if (target.parentNode.children[i] === e.target) {
+                    item = this.results[i];
+                    coords = item.geocodePoints[0].coordinates;
 
-                this.fillTextInput(item);
+                    this.fillTextInput(item);
+                }
             }
-        }
 
+        }
     }
 };
 
@@ -117,8 +108,8 @@ BingGeocodifier.prototype.fillTextInput = function(item) {
     }
 };
 
-BingGeocodifier.prototype.onKeyUp = function(e) {
 
+BingGeocodifier.prototype.onKeyUp = function(e) {
     switch(e.keyCode) {
         // escape, exit search drop down
         case 27:
@@ -136,7 +127,7 @@ BingGeocodifier.prototype.onKeyUp = function(e) {
         // (If that exists)
         case 39:
             if (this.textInput.selectionStart === this.textInput.value.length) {
-               // this.triggerKeySelect();
+               this.triggerKeySelect();
             }
             break;
         // Up arrow
@@ -171,9 +162,15 @@ BingGeocodifier.prototype.onKeyUp = function(e) {
             break;
         // Any other keypress
         default:
-            this.getGeocodeData();
+            // don't try to search when the box is empty
+            if(this.textInput.value.length === 0){
+                this.hideSearchDropDown();
+            } else {
+                this.getGeocodeData();
+            }
     }
 };
+
 
 BingGeocodifier.prototype.triggerKeySelect = function() {
     if (this.results && this.results.length > -1) {
@@ -186,13 +183,22 @@ BingGeocodifier.prototype.triggerKeySelect = function() {
 };
 
 
-
 BingGeocodifier.prototype.filterResults = function(bingdata) {
     var results = bingdata.resourceSets[0].resources,
         self = this;
 
     function filterResults (result) {
-        return result.address[filter] === self.filters[filter];
+        // check if filter is single string or array of strings
+        if(Object.prototype.toString.call( self.filters[filter] ) === '[object Array]'){
+            for(var i = 0; i < self.filters[filter].length; i++){
+                if (result.address[filter] === self.filters[filter][i]){
+                    return true;
+                }
+            }
+            return false
+        } else {
+            return result.address[filter] === self.filters[filter];
+        }
     }
 
     for (var filter in this.filters) {
@@ -224,10 +230,18 @@ BingGeocodifier.prototype.buildAutofillList = function() {
         }
 
         this.dropdown.appendChild(searchDropdownList);
+        this.dropdown.classList.remove("no-results");
         this.dropdown.classList.remove("hidden");
+
+        this.statusMessage.classList.add("hidden");
     } else {
-        // hide if nothing is selected
+        // add a message if there are no results
+        this.statusMessage.textContent = "No results";
+        this.statusMessage.classList.remove("hidden");
+
+        this.dropdown.classList.add("no-results");
         this.dropdown.classList.add("hidden");
+
     }
 };
 
@@ -235,52 +249,25 @@ BingGeocodifier.prototype.buildAutofillList = function() {
 BingGeocodifier.prototype.getGeocodeData = function(e) {
     var self = this;
 
-
     if (this.textInput.value.trim() !== '') {
-        var userVal = $("#bing-geocodifier-form input").val();
+        var toGeocode = this.textInput.value,
+            url = this.bingApiUrl + "?q=" + encodeURIComponent(toGeocode) + '&key=' + this.bingApiKey + "&maxResults=10&jsonp=JSONPCallback";
 
-        // if coordinates
-        if (userVal.indexOf(",") != -1 || userVal.indexOf(", ") != -1 ) {
-            var coords = userVal.replace(' ','').split(',');
-
-            if (coords.length == 2 && !isNaN(coords[0]) && !isNaN(coords[1]) && coords[0].length > 0 && coords[1].length > 0) {
-                // move the map
-                map.panTo(coords);
-                $(".geocodify-dropdown").addClass("hidden");
-
-                // add popup text if it exists
-                // check for popup text
-                var userPopupText = $("#popupText").val();
-
-                if (userPopupText.length > 0) {
-                    popupMarker = L.circleMarker(coords,{
-                        'fillOpacity': 0,
-                        'opacity': 0
-                    }).bindPopup(userPopupText).addTo(map).openPopup();
-                }
-
-            } else {
-                // if not coordiantes
-                var toGeocode = this.textInput.value,
-                    url = this.bingApiUrl + "?q=" + encodeURIComponent(toGeocode) + '&key=' + this.bingApiKey + "&maxResults=10&jsonp=JSONPCallback";
-
-
-                jsonp.fetch(url, function(data) {
-                    self.results = self.filterResults(data);
-                    self.buildAutofillList();
-                });
-
-            }
-
-            // self.buildAutofillList();
-        }
-
+        this.statusMessage.textContent = "Searching ...";
+        this.statusMessage.classList.remove("hidden");
+        // this.dropdown.classList.add("hidden");
+        jsonp.fetch(url, function(data) {
+            self.results = self.filterResults(data);
+            self.buildAutofillList();
+        });
     }
 };
+
 
 BingGeocodifier.prototype.hideSearchDropDown = function() {
     this.dropdown.innerHTML = "";
     this.dropdown.classList.add("hidden");
+    this.statusMessage.classList.add("hidden");
     this.textInput.value = '';
 };
 
