@@ -582,8 +582,8 @@ if (typeof configOptions !== 'undefined') {
 
             if (userPopupText.length > 0) {
                 popupMarker = L.circleMarker(item.geocodePoints[0].coordinates,{
-                    'fillOpacity': 0,
-                    'opacity': 0
+                    fillOpacity: 0,
+                    opacity: 0
                 }).bindPopup(userPopupText,{'className':'large-popup'}).addTo(map).openPopup();
             }
         }

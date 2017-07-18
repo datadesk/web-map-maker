@@ -2676,7 +2676,7 @@ layers:
                 draw:
                     text-blend-order:
                         move_into_tile: false
-                        collide: false
+                        collide: true
                         visible: global.labels_visible_states
                         text_source: global.ux_language_text_source_short
             region-z6:
@@ -2725,10 +2725,6 @@ layers:
                             any:
                                 - population: false
                                 - population: { max: 1000000 }
-                        draw:
-                            text-blend-order:
-                                font:
-                                    size: 16px
         populated-places:
             filter:
                 kind: locality
@@ -2740,7 +2736,6 @@ layers:
                     sprite: townspot-xs
                     buffer: 8px
                     priority: 30
-                    
                     text:
                         visible: global.labels_visible_cities
                         buffer: 3px
@@ -2830,8 +2825,8 @@ layers:
             population-10m-up:
                 filter:
                     population: { min: 10000000 }
+                    zoom: { min: 4 }
                 draw:
-                    
                     icons:
                         size: [[4,12px],[8,15px],[9,0px]]
                         sprite: townspot-m
@@ -2844,7 +2839,6 @@ layers:
                         priority: 6
                         font:
                             size: [[8,30px],[10,32px],[12,36px]]
-                            
                 capital:
                     filter: { country_capital: true, $zoom: { min: 5 } }
                     draw:
@@ -2857,6 +2851,7 @@ layers:
             population-5m-10m:
                 filter:
                     population: { min: 5000000, max: 10000000 }
+                    zoom: { min: 6 }
                 draw:
                     icons:
                         size: [[4,10px],[8,14px],[9,0px]]
@@ -2882,6 +2877,7 @@ layers:
             population-1m-5m:
                 filter:
                     population: { min: 1000000, max: 5000000 }
+                    zoom: { min: 6 }
                 draw:
                     icons:
                         size: [[4,8px],[8,12px],[9,0px]]
@@ -2907,6 +2903,7 @@ layers:
             population-500k-1m:
                 filter:
                     population: { min: 500000, max: 1000000 }
+                    zoom: { min: 6 }
                 draw:
                     icons:
                         size: [[8,6px],[9,0px]]
@@ -2933,6 +2930,7 @@ layers:
             population-200k-500k:
                 filter:
                     population: { min: 200000, max: 500000 }
+                    zoom: { min: 6 }
                 draw:
                     icons:
                         size: [[8,6px],[9,6px],[10,6px],[11,0px]]
@@ -2959,6 +2957,7 @@ layers:
             population-100k-200k:
                 filter:
                     population: { min: 100000, max: 200000 }
+                    zoom: { min: 6 }
                 draw:
                     icons:
                         size: [[8,6px],[9,6px],[10,6px],[11,0px]]
@@ -2985,6 +2984,7 @@ layers:
             population-50k-100k:
                 filter:
                     population: { min: 50000, max: 100000 }
+                    zoom: { min: 6 }
                 draw:
                     icons:
                         size: [[8,5px],[9,5px],[10,6px],[11,0px]]
@@ -3011,6 +3011,7 @@ layers:
             population-20k-50k:
                 filter:
                     population: { min: 20000, max: 50000 }
+                    zoom: { min: 6 }
                 draw:
                     icons:
                         size: [[8,5px],[9,5px],[10,5px],[11,0px]]
@@ -3037,6 +3038,7 @@ layers:
             population-10k-20k:
                 filter:
                     population: { min: 10000, max: 20000 }
+                    zoom: { min: 6 }
                 draw:
                     icons:
                         size: [[8,4px],[9,4px],[10,4px],[11,0px]]
@@ -3065,6 +3067,7 @@ layers:
             population-5k-10k:
                 filter:
                     population: { min: 5000, max: 10000 }
+                    zoom: { min: 6 }
                 draw:
                     icons:
                         size: [[8,4px],[9,4px],[10,4px],[11,0px]]
@@ -3093,6 +3096,7 @@ layers:
             population-2k-5k:
                 filter:
                     population: { min: 2000, max: 5000 }
+                    zoom: { min: 6 }
                 draw:
                     icons:
                         size: [[8,4px],[9,4px],[10,4px],[11,0px]]
@@ -3121,6 +3125,7 @@ layers:
             population-1k-2k:
                 filter:
                     population: { min: 1000, max: 2000 }
+                    zoom: { min: 6 }
                 draw:
                     icons:
                         size: [[8,4px],[9,4px],[10,4px],[11,0px]]
@@ -3149,6 +3154,7 @@ layers:
             population-200-1k:
                 filter:
                     population: { min: 200, max: 1000 }
+                    zoom: { min: 6 }
                 draw:
                     icons:
                         size: [[8,4px],[9,4px],[10,4px],[11,0px]]
