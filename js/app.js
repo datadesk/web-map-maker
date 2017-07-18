@@ -574,7 +574,6 @@ if (typeof configOptions !== 'undefined') {
     var geocoder = new BingGeocodifier('geocodifier', {
         key: configOptions.bingAPI,
         onClick: function(item, coords) {
-            // console.log(item);
             map.panTo(item.geocodePoints[0].coordinates);
 
             // check for popup text
@@ -670,7 +669,6 @@ Object.keys(layers).forEach(function(key) {
         var layerName = layers[key][i].replace(/_/g, ' ');
         $("#checkboxes").append('<label for="'+key+"_"+layers[key][i]+'" class="inset"><input type="checkbox" id="'+key+"_"+layers[key][i]+'" name="layers" />'+layerName+'</label>');
     }
-                              
 });
 
 
@@ -678,25 +676,13 @@ Object.keys(layers).forEach(function(key) {
 scene.subscribe({
     load: function (e) {
 
-
-        // console.log(scene.config);
-
-
         // loop through layers list
         Object.keys(layers).forEach(function(key) {
-            // console.log(key);
-            // $("#"+key).attr("checked",scene.config.global[key]);
-
             // loop through the sublayers
             for (var i = 0; i < layers[key].length; i++) {
                 var sublayer = key + "_" + layers[key][i];
                 $("#"+sublayer).attr("checked",scene.config.global[sublayer]);
-
-                // console.log("  " + layers[key][i]);
             }
-                                      
-            // console.log(key, layers[key]);
-
         });
         parentChecks(); // check which parents need selecting
 
@@ -813,10 +799,6 @@ function parentChecks() {
         }
 
     }
-
-
-    // if ("labels_")
-    // console.log(visibleLayers);
 }
 
 // listen for checkbox click
@@ -827,8 +809,6 @@ $("#checkboxes label input").click(function(){
     // checkbox status
     var status = ($("#"+thisID).prop('indeterminate')) ? 'indeterminate' :
                  ($("#"+thisID).prop('checked')) ? 'checked' : 'unchecked';
-
-
 
     // if terrain
     if (thisID == 'terrain_visible') {
@@ -864,59 +844,8 @@ $("#checkboxes label input").click(function(){
         parentChecks();
     }
 
-
-
-
-
-
-
-    // grab all checked layers
-    // var visibleLayers = [];
-    // for (var i = 0; i < checkedBoxes.length; i++) {
-    //     visibleLayers.push(checkedBoxes[i].id);
-    // }
-
-    // console.log(visibleLayers);
-    // // loop through layers to show/hide
-    // if (visibleLayers.indexOf('labels_visible') != -1) {
-    //     scene.config.global['labels_visible'] = true;
-    // } else {
-    //     scene.config.global['labels_visible'] = false;
-    //     // turn off child labels
-    // }
-
-    // // country labels
-    // if (visibleLayers.indexOf('countries') != -1) {
-    //     scene.config.global.countries_visible = scene.config.global['labels_visible'];
-    // } else {
-    //     scene.config.global.countries_visible = false;
-    //     // turn off child labels
-    // }
-
-    // if (visibleLayers.indexOf('terrain_visible') != -1) {
-    //     scene.config.global.landuse_style = 'terrain';
-    //     scene.config.layers.earth.draw.polygons.visible = false;
-    //     scene.config.layers.earth.draw.terrain.visible = true;
-    // } else {
-    //     scene.config.global.landuse_style = 'polygons';
-    //     scene.config.layers.earth.draw.polygons.visible = true;
-    //     scene.config.layers.earth.draw.terrain.visible = false;
-    // }
-
-    // if (visibleLayers.indexOf('buildings_visible') != -1) {
-    //     scene.config.global['buildings_visible'] = true;
-    // } else {
-    //     scene.config.global['buildings_visible'] = false;
-    // }
-
-    // if (visibleLayers.indexOf(thisID) != -1) {
-    // }
-
-
     scene.updateConfig(); // update config
 
-
-    // $("#states").prop("indeterminate", true);
 });
 
 // a function to switch global variables to show/hide layers
@@ -1029,8 +958,6 @@ function addCustomLabel(size) {
 
 // edit text to swap in input and out
 $('body').on('click', '.display_text', function() {
-    console.log($(this));
-
     // hide display text
     $(this).hide();
     var parentID = $(this).parent()[0].id; 
@@ -1062,16 +989,12 @@ $('body').on('click', '.remove_label', function() {
 });
 
 $('body').on('mousedown', '.rotate_handle', function(e) {
-    console.log('rotate-try');
-    console.log($(this).parent()[0].id);
-
     // get the right custom label from object
     for (var i = 0; i < customLabels.length; i++) {
         if (customLabels[i].options.icon.options.id == $(this).parent()[0].id) {
             var customLabel = customLabels[i]
         }
     }
-    // var customLabel = customLabels[$(this).parent()[0].id];
 
     // temporarily freeze dragging
     customLabel.dragging.disable();
@@ -1228,7 +1151,6 @@ function downloadVector() {
     // });
 
 
-    console.log(mapOptions);
     console.log(JSON.stringify(mapOptions));
 
 
