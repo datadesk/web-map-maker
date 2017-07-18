@@ -32,7 +32,7 @@ var configOptions = {
     'attribution': 'Your name, ',
     'initCoords': [34.0425, -118.24],
     'initZoom': 14,
-    'mapzen-api': 'mapzen-uxhmqQc',
+    'mapzen-api': 'mapzen-KEYHERE',
     'columnWidth': 110.45,
     'gutterWidth': 12
 }
