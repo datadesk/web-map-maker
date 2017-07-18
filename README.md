@@ -29,7 +29,7 @@ Your config.js file should look like this:
 ```js
 var configOptions = {
     'bingAPI': 'Your API here',
-    'attribution': '@latimesgraphics, ',
+    'attribution': 'Your name, ',
     'initCoords': [34.0425, -118.24],
     'initZoom': 14,
     'mapzen-api': 'mapzen-uxhmqQc',
