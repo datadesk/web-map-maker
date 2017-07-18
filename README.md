@@ -58,7 +58,7 @@ The app will be hosted at `localhost:8000` by default.
 
 Because we've developed this as an internal tool for use at the Los Angeles Times, it's  geared toward our use as far as styles and workflow. But it should be customizable and we're open to suggestions that would help make it better for others to use, too.
 
-Chrome, Firefox and Safari are supported.
+Chrome and Firefox are supported.
 
 ## Vector files for print
 Because we make maps for web and print, if you select a column size from the drop-down you'll get a map with the column-equivelant for our six-column layout. The vector paths exported from "download vector" can then be converted to CMYK.
