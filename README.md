@@ -63,6 +63,8 @@ Chrome and Firefox are supported.
 ## Vector files for print
 Because we make maps for web and print, if you select a column size from the drop-down you'll get a map with the column-equivelant for our six-column layout. The vector paths exported from "download vector" can then be converted to CMYK.
 
+You can then run the `vector-map-restyle.jsx` script in Adobe Illustrator to convert all the layers to values of CMYK. Watch a [tutorial here](http://latimes-graphics-media.s3.amazonaws.com/assets/video/map-maker-script-explainer.mp4).
+
 ## Make this better
 
 Have any ideas? File an issue, fork this repo or contact jon@latimes.com with thoughts, concerns or questions.
