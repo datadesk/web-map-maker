@@ -251,17 +251,23 @@ $("#map_holder").resize(function(){
     // update map's size
     $("#map_size").text(mapWidth + 'x' + mapHeight);
 
-    // change size to custom
-    if (mapWidth + 'x' + mapHeight == '1920x1080') {
-        document.getElementById('preset_sizes').value = 'video';
-    } else if (mapWidth + 'x' + mapHeight == '1300x730') {
-        document.getElementById('preset_sizes').value = 'web_large';
-    } else if (mapWidth + 'x' + mapHeight == '400x450') {
-        document.getElementById('preset_sizes').value = 'web_small';
-    } else {
-        document.getElementById('preset_sizes').value = 'custom';
-    }
+    // get dropdown size value
+    var selectedSize = document.getElementById('preset_sizes').value;
 
+    console.log(selectedSize);
+
+    // change size to custom unless already print
+    if (selectedSize.substr(0,3) != "col") {
+        if (mapWidth + 'x' + mapHeight == '1920x1080') {
+            document.getElementById('preset_sizes').value = 'video';
+        } else if (mapWidth + 'x' + mapHeight == '1300x730') {
+            document.getElementById('preset_sizes').value = 'web_large';
+        } else if (mapWidth + 'x' + mapHeight == '400x450') {
+            document.getElementById('preset_sizes').value = 'web_small';
+        } else {
+            document.getElementById('preset_sizes').value = 'custom';
+        }
+    }
 
     setTimeout(
         function(){
