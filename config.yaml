@@ -1,0 +1,4 @@
+global:
+    # Sign up for a Mapzen API key to enjoy higher rate limits
+    # https://mapzen.com/documentation/overview/#developer-accounts-and-api-keys
+    sdk_mapzen_api_key: 'mapzen-neQLYXF'
