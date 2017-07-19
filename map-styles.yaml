@@ -10,12 +10,14 @@
 # Read more: https://github.com/tangrams/walkabout-style
 #
 
-# put your mapzen api key in this file
 # Sign up for a Mapzen API key to enjoy higher rate limits
 # https://mapzen.com/documentation/overview/#developer-accounts-and-api-keys
-import: config.yaml
 
 global:
+    # Sign up for a Mapzen API key to enjoy higher rate limits
+    # https://mapzen.com/documentation/overview/#developer-accounts-and-api-keys
+    sdk_mapzen_api_key: 'mapzen-neQLYXF'
+
     #ux/ui
     ux_language: en             # l10n language code, trusting OSM in v0.10 tiles, fixed in v1.0 tiles
     ux_language_fallback: false    # l10n language code, trusting OSM in v0.10 tiles, fixed in v1.0 tiles
