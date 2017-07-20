@@ -2729,6 +2729,7 @@ layers:
             filter:
                 kind: locality
                 $zoom: { min: 6 }
+                not: { kind_detail: ['hamlet'] }
             draw:
                 icons:
                     visible: global.labels_visible_cities
