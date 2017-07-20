@@ -3,8 +3,9 @@ Adobe Illustrator Map Maker conversion script version 1.1
 
 UPDATES: 
 Faster: conversion takes one third of the time of the original script
-Fixes problems with Json upload colors
+Fixes problems with JSON upload colors
 Adds document colors to swatches palette
+
 
 
 Once a Map Maker SVG is opened in Illustrator, go to File > Scripts > Other Scripts and select this file. Data types are grouped by layer.
@@ -19,10 +20,9 @@ The script also generates other items that can be customized based on your specs
 • Text layer with some of our predefined map styles
 • A second artboard in 16x9 ratio that we use for web maps
 
-CAVEATS
 • It's still a little slow. Illustrator is not the greatest renderer of javascript. The larger the file, the longer it takes.
 • Memory errors seem to be gone but occasionally seeing new errors that are not consistent. Please report any errors you get https://github.com/datadesk/web-map-maker/issues.
-• This is my first Illutrator script. Illustrator employs a bastardized version of javascript with it's own document object model. In fact, I've employed some really wierd hacks, including writing an Illustrater Action to your desktop, running it and then deleting it. If you have fixes, pass them on.
+• This is my first Illustrator script. Illustrator employs a bastardized version of javascript with it's own document object model. In fact, I've employed some really weird hacks, including writing an Illustrator Action to your desktop, running it and then deleting it. If you have fixes, pass them on.
 • It's incomplete. Given the problems with Illustrator we're probably going to switch to an Apache Batik conversion. We'll share the Batik solution when we get it working.
 
 @lendegroot
