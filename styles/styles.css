@@ -122,6 +122,13 @@ body { cyber
     padding: 0 0 30px;
 }
 
+#mapmakerVersion {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    color: #4591B8;
+}
+
 .leaflet-control-scale-line {
     -moz-box-sizing: content-box;
     box-sizing: content-box;

@@ -109,14 +109,6 @@ quietLAlayer.on("load",function(){
 var mapSize = $("#map").width() + 'x' + $("#map").height();
 $("#map_size").text(mapSize);
 
-// var geocoder = L.control.geocoder('search-JvsyzTW', {
-//     placeholder: 'Search for a location',
-//     panToPoint: false,
-//     markers: false,
-//     expanded: false,
-//     position: 'topleft',
-//     attribution: ''
-// }).addTo(map);
 
 // show and hide variables
 var buildingsVisible;
@@ -585,11 +577,18 @@ if (typeof configOptions !== 'undefined') {
             // check for popup text
             var userPopupText = $("#popupText").val();
 
+            // remove any old markers and popups
+            $(".popupMarker").remove();
+            $(".large-popup").remove();
+
+            // add a hidden marker
+            popupMarker = L.circleMarker(item.geocodePoints[0].coordinates,{
+                fillOpacity: 0,
+                opacity: 0,
+                className: 'popupMarker'
+            }).bindPopup(userPopupText,{'className':'large-popup'}).addTo(map);
             if (userPopupText.length > 0) {
-                popupMarker = L.circleMarker(item.geocodePoints[0].coordinates,{
-                    fillOpacity: 0,
-                    opacity: 0
-                }).bindPopup(userPopupText,{'className':'large-popup'}).addTo(map).openPopup();
+                popupMarker.openPopup();
             }
         }
     });
@@ -603,6 +602,7 @@ if (typeof configOptions !== 'undefined') {
         if (popupMarker !== undefined && userPopupText.length <= 40) {
             // update popup
             popupMarker._popup.setContent(userPopupText);
+            popupMarker.openPopup();
         }
 
     };
