@@ -93,6 +93,7 @@ window.addEventListener('rejectionhandled', event => {
             if (mapObject.options.layers_visible.indexOf('landuse_visible_wetland') != -1) {
                 formattedJson['landuse']['wetland'] = { features: [] }
             }
+            formattedJson['landuse']['pier'] = { features: [] }            
         } // landuse
 
         // borders
@@ -169,6 +170,11 @@ window.addEventListener('rejectionhandled', event => {
             if (mapObject.options.layers_visible.indexOf('roads_visible_highways') != -1) {
                 formattedJson['roads']['highway'] = { features: [] }
             }
+            if (mapObject.options.layers_visible.indexOf('roads_visible_paths') != -1) {
+                formattedJson['roads']['path'] = { features: [] }
+                formattedJson['roads']['track'] = { features: [] }
+            }
+            formattedJson['roads']['pier'] = { features: [] }
 
         } // roads
 
@@ -442,6 +448,10 @@ function bakeJson(mapObject) {
                             var dataKindTitle = 'resort';
                         } else if (landuseBeach.indexOf(feature.properties.kind) !== -1 ) {
                             var dataKindTitle = 'beach';
+                        } else if (feature.properties.kind_detail === "pier") {
+                            var dataKindTitle = 'pier';
+                        } else if (feature.properties.kind_detail === "track") {
+                            var dataKindTitle = 'track';
                         } else {
                             var dataKindTitle = feature.properties.kind;
                         }
@@ -649,134 +659,113 @@ function writeSVGFile(mapObject) {
                 /* restyle anything in groups */
 
                 // roads
-                console.log('collecting #highway path')
                 d3.selectAll('#highway path')
                     .attr('stroke','#A6A6A6')
                     .attr('stroke-width','2px');
-
-                console.log('collecting #highwaylink path')
                 d3.selectAll('#highwaylink path')
                     .attr('stroke','#BCBEC0')
                     .attr('stroke-width','1px');
-
-                console.log('collecting #majorroad path')
                 d3.selectAll('#majorroad path')
                     .attr('stroke','#BCBEC0')
                     .attr('stroke-width','1px');
-
-                console.log('collecting #minorroad path')
                 d3.selectAll('#minorroad path')
                     .attr('stroke','#CDCFD0')
                     .attr('stroke-width','0.65px');
-
-                console.log('collecting #service path')
                 d3.selectAll('#service path')
                     .attr('stroke','#CDCFD0')
                     .attr('stroke-width','0.65px');
 
-                console.log('collecting #path path')
                 d3.selectAll('#path path')
-                    .attr('stroke','none')
-                    .attr('stroke-width','0');
+                    .attr('stroke','#CDCFD0')
+                    .attr('stroke-width','0.65px')
+                    .attr('stroke-dasharray','1,1');
 
-                console.log('collecting #rail path')
                 d3.selectAll('#rail path')
                     .attr('stroke','#CDCFD0')
                     .attr('stroke-width','0.65px');
 
-                console.log('collecting #aerialway path')
                 d3.selectAll('#aerialway path')
                     .attr('stroke','#CDCFD0')
                     .attr('stroke-width','0.65px');
 
-                console.log('collecting #ferry path')
                 d3.selectAll('#ferry path')
                     .attr('stroke','#8AB1CD')
                     .attr('stroke-width','0.5px')
                     .attr('stroke-dasharray','1,1');
 
-                console.log('collecting #etc path')
                 d3.selectAll('#etc path')
                     .attr('stroke','#CDCFD0')
                     .attr('stroke-width','0.65px');
 
-                console.log('collecting #runway path')
                 d3.selectAll('#runway path')
                     .attr('stroke','#CDCFD0')
                     .attr('stroke-width','2px');
 
-                console.log('collecting #taxiway path')
                 d3.selectAll('#taxiway path')
                     .attr('stroke','#CDCFD0')
                     .attr('stroke-width','0.65px');
 
+                d3.selectAll('#roads #pier path')
+                    .attr('stroke','#fff')
+                    .attr('stroke-width','1px');
+
                 // landuse styles
-                console.log('collecting #university path')
                 d3.selectAll('#university path')
                     .attr('fill','#F2F0E7')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
-                    console.log('collecting #stadium path')
                 d3.selectAll('#stadium path')
                     .attr('fill','#F9F3D6')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
-                    console.log('collecting #school path')
                 d3.selectAll('#school path')
                     .attr('fill','#F2F0E7')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
-                    console.log('collecting #resort path')
                 d3.selectAll('#resort path')
                     .attr('fill','#F9F3D6')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
-                    console.log('collecting #park path')
                 d3.selectAll('#park path')
                     .attr('fill','#E7F1CA')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
-                    console.log('collecting #wetland path')
                 d3.selectAll('#wetland path')
                     .attr('fill','#e1e9db')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');                        
-                    console.log('collecting #military path')
                 d3.selectAll('#military path')
                     .attr('fill','#eff0ef')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
-                    console.log('collecting #prison path')
                 d3.selectAll('#prison path')
                     .attr('fill','#eff0ef')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');                        
-                    console.log('collecting #hospital path')
                 d3.selectAll('#hospital path')
                     .attr('fill','#E2EDEF')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
-                    console.log('collecting #forest path')
                 d3.selectAll('#forest path')
                     .attr('fill','#E7F1CA')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
-                    console.log('collecting #cemetery path')
                 d3.selectAll('#cemetery path')
                     .attr('fill','#E4E4D5')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
-                    console.log('collecting #beach path')
                 d3.selectAll('#beach path')
                     .attr('fill','#F8F4E1')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
-                    console.log('collecting #airport path')
                 d3.selectAll('#airport path')
                     .attr('fill','#eff0ef')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
-                    console.log('collecting #etc path')
+                d3.selectAll('#landuse #pier path')
+                    .attr('fill','#fff')
+                    .attr('stroke','#fff')
+                    .attr('stroke-width','0px');
                 d3.selectAll('#etc path')
                     .attr('fill','none')
                     .attr('stroke','#fff')
