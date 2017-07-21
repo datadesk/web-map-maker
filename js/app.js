@@ -142,8 +142,10 @@ map.on('zoom', function() {
     // transit unavailable less than 11 zoom
     if (zoomRounded < 11) {
         $("#transit_visible").parent().addClass("unavailable"); // update btn opacity
+        $("#rail_visible").parent().addClass("unavailable"); // update btn opacity
     } else {
         $("#transit_visible").parent().removeClass("unavailable"); // update btn opacity
+        $("#rail_visible").parent().removeClass("unavailable"); // update btn opacity
     }
 
     // countries 
@@ -657,6 +659,7 @@ var layers = {
     'terrain_visible': [],
     'buildings_visible': [],
     'transit_visible': [],
+    'rail_visible': [],
     'labels_visible': ['countries','states','cities','neighborhoods','highway_shields','major_roads','minor_roads','points_of_interest','water'],
     'roads_visible': ['highways','highway_ramps','major','minor','service','ferry_route','taxi_and_runways','paths'],
     'borders_visible': ['countries','disputed','states','counties'],
@@ -704,7 +707,10 @@ $("#sources").attr("checked",true);
 // set what layers are visible based on zoom
 if (initZoom < 14) { $("#buildings_visible").parent().addClass("unavailable"); }
 
-if (initZoom < 11) { $("#transit_visible").parent().addClass("unavailable"); }
+if (initZoom < 11) { 
+    $("#transit_visible").parent().addClass("unavailable"); 
+    $("#rail_visible").parent().addClass("unavailable"); 
+}
 
 if (initZoom > 9 || initZoom < 5) { $("#labels_visible_states").parent().addClass("unavailable"); }
 

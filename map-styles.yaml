@@ -280,6 +280,7 @@ global:
     roads_visible_ferry_route:          false # ∆
     roads_visible_paths:                false
     transit_visible:                    false   # ∆
+    rail_visible:                       true   # ∆
     #road/transit colors
     road_color:                         '#a6a6a6' # ∆
     minor_road:                         '#cccecf' # ∆
@@ -1240,7 +1241,6 @@ layers:
 
 #Jon's transit styles
     transit:
-        visible: global.transit_visible
         data: { source: mapzen , layer: transit }
         filter: {not:{ kind: [platform]}, $zoom: { min: 11 }}
         draw:
@@ -1248,6 +1248,7 @@ layers:
                 # interactive: true
                 order: function() { return feature.sort_rank || 275; }
         railway:
+            visible: global.rail_visible
             filter: { kind: [railway, train]}
             draw:
                 fat-thin-dash:
@@ -1258,6 +1259,7 @@ layers:
                     color: global.rail_line
                     width: [[15,2px],[16,3px]]
         light_rail:
+            visible: global.transit_visible
             filter: { kind: [light_rail,tram, subway], $zoom: { min: 11 }}
             draw:
                 lines:
