@@ -430,10 +430,6 @@ function bakeJson(mapObject) {
                             }
                         }
 
-                        if (feature.properties.kind == "train") {
-                            console.log(feature.properties);
-                        }
-
                         // segment off motorway_link
                         if (feature.properties.kind_detail == "motorway_link") {
                             var dataKindTitle = 'highway_link';
