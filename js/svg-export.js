@@ -144,6 +144,21 @@ window.addEventListener('rejectionhandled', event => {
             }
         }
 
+        // transit
+        if (mapObject.options.layers_visible.indexOf('transit_visible') != -1 ||
+            mapObject.options.layers_visible.indexOf('rail_visible') != -1) {
+            formattedJson['transit'] = {}
+
+            if (mapObject.options.layers_visible.indexOf('transit_visible') != -1) {
+                formattedJson['transit']['light_rail'] = { features: [] }
+                formattedJson['transit']['subway'] = { features: [] }
+                formattedJson['transit']['station'] = { features: [] }
+            }
+            if (mapObject.options.layers_visible.indexOf('rail_visible') != -1) {
+                formattedJson['transit']['rail'] = { features: [] }
+            }
+        }
+
         // roads
         if (mapObject.options.layers_visible.indexOf('roads_visible') != -1) {
             formattedJson['roads'] = {}
@@ -287,6 +302,7 @@ function parseJSON(req) {
         if (newMap.options.layers_visible.indexOf('borders_visible') != -1) newMap.dKinds.push('boundaries');
         if (newMap.options.layers_visible.indexOf('landuse_visible') != -1) newMap.dKinds.push('landuse');
         if (newMap.options.layers_visible.indexOf('water_visible') != -1) newMap.dKinds.push('water');
+        if (newMap.options.layers_visible.indexOf('transit_visible') != -1 || newMap.options.layers_visible.indexOf('rail_visible') != -1 ) newMap.dKinds.push('transit');
         if (newMap.options.layers_visible.indexOf('roads_visible') != -1) newMap.dKinds.push('roads');
         if (newMap.options.layers_visible.indexOf('buildings_visible') != -1) newMap.dKinds.push('buildings');
         newMap.dKinds.push('clipping');
@@ -414,12 +430,18 @@ function bakeJson(mapObject) {
                             }
                         }
 
+                        if (feature.properties.kind == "train") {
+                            console.log(feature.properties);
+                        }
+
                         // segment off motorway_link
                         if (feature.properties.kind_detail == "motorway_link") {
                             var dataKindTitle = 'highway_link';
                         } else if (feature.properties.kind_detail == "service") {
                         // segment off service roads
                             var dataKindTitle = 'service';
+                        } else if (feature.properties.kind == "train") {
+                            var dataKindTitle = 'rail';
                         } else if (feature.properties.kind_detail == "runway") {
                         // aeroway roads
                             var dataKindTitle = 'runway';
@@ -488,8 +510,6 @@ function writeSVGFile(mapObject) {
 
         // remove any old svgs
         d3.select("#export-container").remove();
-                // window.d3 = d3.select(window.document);
-
                 var svg = d3.select('body')
                             .append('div').attr('id','export-container') //make a container div to ease the saving process
                             .append('svg')
@@ -536,22 +556,20 @@ function writeSVGFile(mapObject) {
 
                                 if(previewFeature && previewFeature.indexOf('a') > 0) ;
                                 else {
+                                    // pull stroke if subway or light rail
+                                    var strokeColor = "#000000";
+                                    if (geoFeature.properties.kind === "light_rail" || geoFeature.properties.kind === "subway") {
+                                        strokeColor = geoFeature.properties.colour;
+                                    }
                                     subG.append('path')
                                     .attr('d', previewFeature)
                                     .attr('fill','none')
-                                    .attr('stroke','black')
+                                    .attr('stroke',strokeColor);
                                 }
                             }
                         }
                     }
                 }
-
-                // // combine all earth tiles
-                // var earthTiles = "";
-                // d3.selectAll("#earth path").each(function(){
-                //     earthTiles += d3.select(this).attr("d");
-                // });
-                // d3.selectAll("#earth").append("path").attr("d",earthTiles);
 
                 // remove all non-closing riverbank tiles
                 $("#riverbank path").each(function(){
@@ -576,17 +594,6 @@ function writeSVGFile(mapObject) {
                         $(this).remove();
                     }
                 });
-
-                // // combine all riverbank tiles
-                // var riverbankPaths = "";
-                // d3.selectAll("#riverbank path").each(function(){
-                //     riverbankPaths += d3.select(this).attr("d");
-                //     d3.select(this).remove();
-                // });
-                // d3.selectAll("#riverbank").append("path").attr("d",riverbankPaths);
-
-
-
 
                 // clip based on view
                 var viewClip = d3.select("#clippingpath path").attr("d");
@@ -650,6 +657,7 @@ function writeSVGFile(mapObject) {
                 $('#layergroup').append($("svg g#boundaries"));
                 $('#layergroup').append($("svg g#landuse"));
                 $('#layergroup').append($("svg g#water"));
+                $('#layergroup').append($("svg g#transit"));
                 $('#layergroup').append($("svg g#roads"));
                 $('#layergroup').append($("svg g#buildings"));
                 $('#layergroup').append($("svg g#jsonupload"));
