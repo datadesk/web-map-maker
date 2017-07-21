@@ -700,6 +700,8 @@ scene.subscribe({
 
 // set sources to be checked
 $("#sources").attr("checked",true);
+// rail too
+$("#rail_visible").attr("checked",true);
 
 
 

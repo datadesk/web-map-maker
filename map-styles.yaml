@@ -1163,15 +1163,12 @@ layers:
             draw:
                 polygons:
                     color: global.water 
-                    
-
         inland-water:
             filter: {not: { kind: ocean} }
             draw:
                 polygons:
                     color: global.water
                     visible: global.water_visible_inland_water
-        
         other-water-areas:
             filter: { not: { kind: [ocean, lake, water, reservoir, playa] }, $zoom: { min: 11 }, area: { min: 100 } }
             draw:
@@ -1179,7 +1176,7 @@ layers:
                     color: global.water
         river:
             #river center lines, not boundaries for polygons
-            filter: { kind: [river,canal,stream,dam,ditch,drain], $zoom: { min: 11 }, not: { is_tunnel: true } }
+            filter: { kind: [river], $zoom: { min: 11 }, not: { is_tunnel: true } }
             draw:
                 lines:
                     order: function() { return feature.sort_rank; }
@@ -1188,19 +1185,16 @@ layers:
                     cap: round
                     outline:
                         width: [[9,0px],[11,0px],[12,0px],[13,0.5px],[14,0.75px],[15,0.75px],[16,0.75px],[17,1px]]
-            not-river-early:
-                filter: { $zoom: [11,12], not: { kind: river } }
-                draw:
-                    lines:
-                        width: [[11,0px], [12,1px]]
-            intermittent:
-                filter:
-                    any:
-                        - intermittent: true
-                        - kind: drain
-                draw:
-                    lines:
-                        visible: false
+        streams:
+            filter: { kind: [canal,stream,dam,ditch,drain], $zoom: { min: 11 }, not: { intermittent: true } }
+            draw:
+                lines:
+                    order: function() { return feature.sort_rank; }
+                    color: global.water
+                    width: [[10,0px],[11,1px],[12,1.5px],[13,1.75px],[14,2.25px],[15,3px],[16,4px],[17,5m]]
+                    cap: round
+                    outline:
+                        width: [[9,0px],[11,0px],[12,0px],[13,0.5px],[14,0.75px],[15,0.75px],[16,0.75px],[17,1px]]
     swimming-pools:
         data: { source: mapzen, layer: water }
         filter: { kind:[swimming_pool], $zoom: { min: 16 } }
