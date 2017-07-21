@@ -248,8 +248,6 @@ $("#map_holder").resize(function(){
     // get dropdown size value
     var selectedSize = document.getElementById('preset_sizes').value;
 
-    console.log(selectedSize);
-
     // change size to custom unless already print
     if (selectedSize.substr(0,3) != "col") {
         if (mapWidth + 'x' + mapHeight == '1920x1080') {
@@ -543,7 +541,6 @@ function handleFileSelect(evt) {
                     } else if (feature.geometry.type === 'Point') {
                         pointFeatures.push(feature);
                     }
-                    console.log(feature);
                     return addStyle(feature);
                 },
                 pointToLayer: function (feature, latlng) {
