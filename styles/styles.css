@@ -306,7 +306,7 @@ label {font:18px/27px Georgia, serif;}
 }
 .leaflet-popup-content-wrapper{background-color:#000;}
 .leaflet-popup-content{
-    font:bold 34px/36px 'Benton Gothic Bold', Arial, sans-serif; 
+    font:bold 34px/40px 'Benton Gothic Bold', Arial, sans-serif; 
     color: white;
     -webkit-font-smoothing: antialiased;
 }

@@ -480,8 +480,8 @@ function bakeJson(mapObject) {
                             geojsonToReform['ocean']['oceanwater'].features.push(feature);
                         } else if (geojsonToReform[response].hasOwnProperty('etc') && response == 'water') {
                             geojsonToReform['water']['wateretc'].features.push(feature);
-                        } else if (response == 'water') {
-                            geojsonToReform['water']['wateretc'].features.push(feature);
+                        } else if (response == 'swimming_pool') {
+                            geojsonToReform['water']['swimming_pool'].features.push(feature);
                         } else if (response == 'earth') {
                             geojsonToReform['earth']['earthland'].features.push(feature);
                         }
