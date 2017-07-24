@@ -21,9 +21,9 @@ var colwidth = 330,
 
 // build the map's ruler
 function createGrid(size) {
-    // magic number: why 1600?
-    var ratioW = 1600/size,
-        ratioH = 1600/size;
+    // set the maximum width of these grid areas
+    var ratioW = 1700/size,
+        ratioH = 1700/size;
 
     var parent = $('<div />', {
         class: 'grid',

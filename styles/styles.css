@@ -412,7 +412,9 @@ label {font:18px/27px Georgia, serif;}
     box-shadow: none;
     border-bottom: 1px solid #4591B8;
 }
-
+#export-container {
+    display: none;
+}
 .map_loader {
     width: 20px;
     margin: 0 0 0 10px;
