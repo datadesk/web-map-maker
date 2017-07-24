@@ -477,16 +477,13 @@ function bakeJson(mapObject) {
                             var dataKindTitle = feature.properties.kind;
                         }
 
-
                         if (geojsonToReform[response].hasOwnProperty(dataKindTitle)) {
                             geojsonToReform[response][dataKindTitle].features.push(feature);
                         } else if (feature.properties.kind == 'ocean') {
                             geojsonToReform['ocean']['oceanwater'].features.push(feature);
                         } else if (geojsonToReform[response].hasOwnProperty('etc') && response == 'water') {
                             geojsonToReform['water']['wateretc'].features.push(feature);
-                        } else if (response == 'swimming_pool') {
-                            geojsonToReform['water']['swimming_pool'].features.push(feature);
-                        } else if (response == 'water') {
+                        } else if (response == 'water' && feature.properties.kind != 'swimming_pool') {
                             geojsonToReform['water']['wateretc'].features.push(feature);
                         } else if (response == 'earth') {
                             geojsonToReform['earth']['earthland'].features.push(feature);
