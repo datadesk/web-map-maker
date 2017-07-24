@@ -445,10 +445,7 @@ function bakeJson(mapObject) {
                             var dataKindTitle = 'pier';
                         } else if (feature.properties.kind_detail === "track") {
                             var dataKindTitle = 'track';
-                        }
-
-                        // kind if looker
-                        if (feature.properties.kind == "train") {
+                        } else if (feature.properties.kind == "train") {
                             var dataKindTitle = 'rail';
                         } else if (landusePark.indexOf(feature.properties.kind) !== -1 ) {
                         // land uses
