@@ -436,13 +436,20 @@ function bakeJson(mapObject) {
                         } else if (feature.properties.kind_detail == "service") {
                         // segment off service roads
                             var dataKindTitle = 'service';
-                        } else if (feature.properties.kind == "train") {
-                            var dataKindTitle = 'rail';
                         } else if (feature.properties.kind_detail == "runway") {
-                        // aeroway roads
+                            // aeroway roads
                             var dataKindTitle = 'runway';
                         } else if (feature.properties.kind_detail == "taxiway") {
                             var dataKindTitle = 'taxiway';
+                        } else if (feature.properties.kind_detail === "pier") {
+                            var dataKindTitle = 'pier';
+                        } else if (feature.properties.kind_detail === "track") {
+                            var dataKindTitle = 'track';
+                        }
+
+                        // kind if looker
+                        if (feature.properties.kind == "train") {
+                            var dataKindTitle = 'rail';
                         } else if (landusePark.indexOf(feature.properties.kind) !== -1 ) {
                         // land uses
                             var dataKindTitle = 'park';
@@ -466,13 +473,10 @@ function bakeJson(mapObject) {
                             var dataKindTitle = 'resort';
                         } else if (landuseBeach.indexOf(feature.properties.kind) !== -1 ) {
                             var dataKindTitle = 'beach';
-                        } else if (feature.properties.kind_detail === "pier") {
-                            var dataKindTitle = 'pier';
-                        } else if (feature.properties.kind_detail === "track") {
-                            var dataKindTitle = 'track';
                         } else {
                             var dataKindTitle = feature.properties.kind;
                         }
+
 
                         if (geojsonToReform[response].hasOwnProperty(dataKindTitle)) {
                             geojsonToReform[response][dataKindTitle].features.push(feature);
@@ -482,6 +486,8 @@ function bakeJson(mapObject) {
                             geojsonToReform['water']['wateretc'].features.push(feature);
                         } else if (response == 'swimming_pool') {
                             geojsonToReform['water']['swimming_pool'].features.push(feature);
+                        } else if (response == 'water') {
+                            geojsonToReform['water']['wateretc'].features.push(feature);
                         } else if (response == 'earth') {
                             geojsonToReform['earth']['earthland'].features.push(feature);
                         }
