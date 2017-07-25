@@ -661,20 +661,27 @@ function writeSVGFile(mapObject) {
 
 
                 /* restyle anything in groups */
+                // pulling from scene.config
+                var highwayWidth = getLineWidth(scene.config.layers.roads.highway),
+                    highwayLinkWidth = getLineWidth(scene.config.layers.roads.highway.link),
+                    majorRoadWidth = getLineWidth(scene.config.layers.roads.major_road),
+                    minorRoadWidth = getLineWidth(scene.config.layers.roads.minor_road),
+                    riverWidth = getLineWidth(scene.config.layers.water.river);
+
 
                 // roads
                 d3.selectAll('#highway path')
-                    .attr('stroke','#A6A6A6')
-                    .attr('stroke-width','2px');
+                    .attr('stroke',scene.config.layers.roads.highway.draw.lines.color)
+                    .attr('stroke-width',highwayWidth);
                 d3.selectAll('#highwaylink path')
-                    .attr('stroke','#BCBEC0')
-                    .attr('stroke-width','1px');
+                    .attr('stroke',scene.config.layers.roads.highway.link.draw.lines.color)
+                    .attr('stroke-width',highwayLinkWidth);
                 d3.selectAll('#majorroad path')
-                    .attr('stroke','#BCBEC0')
-                    .attr('stroke-width','1px');
+                    .attr('stroke',scene.config.layers.roads.major_road.draw.lines.color)
+                    .attr('stroke-width',majorRoadWidth);
                 d3.selectAll('#minorroad path')
-                    .attr('stroke','#CDCFD0')
-                    .attr('stroke-width','0.65px');
+                    .attr('stroke',scene.config.layers.roads.minor_road.draw.lines.color)
+                    .attr('stroke-width',minorRoadWidth);
                 d3.selectAll('#service path')
                     .attr('stroke','#CDCFD0')
                     .attr('stroke-width','0.65px');
@@ -795,7 +802,7 @@ function writeSVGFile(mapObject) {
                 d3.selectAll('#river path')
                     .attr('fill','none')
                     .attr('stroke','#A9D7F4')
-                    .attr('stroke-width','0.5px');
+                    .attr('stroke-width',riverWidth);
                     console.log('collecting #stream path')
                 d3.selectAll('#stream path')
                     .attr('fill','none')
@@ -915,4 +922,42 @@ function tile2Lat(tileLat, zoom) {
 
 function slugify(str) {
     return str.replace(/[\s]|[,\s]+/g, '-').replace(/[^a-zA-Z-]/g, '').toLowerCase();
+}
+
+function getClosest(array, target) {
+    console.log('getClosest');
+    var tuples = _.map(array, function(val) {
+        return [val, Math.abs(val - target)];
+    });
+    return _.reduce(tuples, function(memo, val) {
+        return (memo[1] < val[1]) ? memo : val;
+    }, [-1, 999])[0];
+}
+
+// digs through the yaml scene config for width info
+// has to be feature.draw.lines.width (so no dashed lines)
+function getLineWidth(feature) {
+    console.log(feature);
+    var widthArray = [];
+    for (var i = 0; i < feature.draw.lines.width.length; i++) {
+        console.log(i);
+
+        // push in zoom number
+        widthArray.push(feature.draw.lines.width[i][0]);
+    }
+    var closestWidth = getClosest(widthArray,map.getZoom());
+
+    // return width
+    var lineWidth = '2px';
+    for (var i = 0; i < feature.draw.lines.width.length; i++) {
+        // if closeWidth match and not meters
+        console.log(closestWidth + " closestWidth");
+        console.log()
+        if (feature.draw.lines.width[i][0] === closestWidth && feature.draw.lines.width[i][1].indexOf('px') != -1) {
+            lineWidth = feature.draw.lines.width[i][1];
+        }
+    }
+
+    return lineWidth;
+
 }
