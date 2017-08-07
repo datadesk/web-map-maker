@@ -662,26 +662,25 @@ function writeSVGFile(mapObject) {
 
                 /* restyle anything in groups */
                 // pulling from scene.config
-                var highwayWidth = getLineWidth(scene.config.layers.roads.highway),
-                    highwayLinkWidth = getLineWidth(scene.config.layers.roads.highway.link),
-                    majorRoadWidth = getLineWidth(scene.config.layers.roads.major_road),
-                    minorRoadWidth = getLineWidth(scene.config.layers.roads.minor_road),
-                    riverWidth = getLineWidth(scene.config.layers.water.river);
+
+                var highwayWidth = getLineWidth(scene.config.layers.roads.highway);
 
 
                 // roads
                 d3.selectAll('#highway path')
-                    .attr('stroke',scene.config.layers.roads.highway.draw.lines.color)
-                    .attr('stroke-width',highwayWidth);
+                    .attr('stroke','#A6A6A6')
+                    .attr('stroke-width','2px');
+
+
                 d3.selectAll('#highwaylink path')
-                    .attr('stroke',scene.config.layers.roads.highway.link.draw.lines.color)
-                    .attr('stroke-width',highwayLinkWidth);
+                    .attr('stroke','#BCBEC0')
+                    .attr('stroke-width','1px');
                 d3.selectAll('#majorroad path')
-                    .attr('stroke',scene.config.layers.roads.major_road.draw.lines.color)
-                    .attr('stroke-width',majorRoadWidth);
+                    .attr('stroke','#BCBEC0')
+                    .attr('stroke-width','1px');
                 d3.selectAll('#minorroad path')
-                    .attr('stroke',scene.config.layers.roads.minor_road.draw.lines.color)
-                    .attr('stroke-width',minorRoadWidth);
+                    .attr('stroke','#CDCFD0')
+                    .attr('stroke-width','0.65px');
                 d3.selectAll('#service path')
                     .attr('stroke','#CDCFD0')
                     .attr('stroke-width','0.65px');
@@ -802,7 +801,7 @@ function writeSVGFile(mapObject) {
                 d3.selectAll('#river path')
                     .attr('fill','none')
                     .attr('stroke','#A9D7F4')
-                    .attr('stroke-width',riverWidth);
+                    .attr('stroke-width','0.5px');
                     console.log('collecting #stream path')
                 d3.selectAll('#stream path')
                     .attr('fill','none')
@@ -957,7 +956,5 @@ function getLineWidth(feature) {
             lineWidth = feature.draw.lines.width[i][1];
         }
     }
-
-    return lineWidth;
 
 }
