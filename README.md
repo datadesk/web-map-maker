@@ -2,24 +2,27 @@
  _     _  _______  _______    __   __  _______  _______    __   __  _______  ___   _  _______  ______   
 | | _ | ||       ||  _    |  |  |_|  ||   _   ||       |  |  |_|  ||   _   ||   | | ||       ||    _ |  
 | || || ||    ___|| |_|   |  |       ||  |_|  ||    _  |  |       ||  |_|  ||   |_| ||    ___||   | ||  
-|       ||   |___ |       |  |       ||       ||   |_| |  |       ||       ||      _||   |___ |   |_||_ 
+|       ||   |___ |       |  |       ||       ||   |_| |  |       ||       ||      _||   |___ |   |_||_
 |       ||    ___||  _   |   |       ||       ||    ___|  |       ||       ||     |_ |    ___||    __  |
 |   _   ||   |___ | |_|   |  | ||_|| ||   _   ||   |      | ||_|| ||   _   ||    _  ||   |___ |   |  | |
 |__| |__||_______||_______|  |_|   |_||__| |__||___|      |_|   |_||__| |__||___| |_||_______||___|  |_|
 ```
 
-![Web map maker screenshot](https://user-images.githubusercontent.com/695934/28221465-33ce3702-6878-11e7-9cc6-978ff58de211.png)
+We make a lot of maps at the Los Angeles Times. So we made this tool to help us make them faster. It uses [Mapzen's Tangram mapping engine](https://mapzen.com/products/tangram/) to render OpenStreetMap and Mapzen data as an image or vector file.
 
+![Fire interrupts Blue and Expo lines](http://www.trbimg.com/img-5979f222/turbine/la-1501164063-xsuwa8dl0a-snap-image/1000)
 
-We make a lot of maps at the Los Angeles Times. So we made this tool to help us make them faster. It uses [Mapzen's Tangram mapping engine](https://mapzen.com/products/tangram/) to render OpenStreetMap data as vector tiles. It then bakes out your map into a static image or an SVG.
+This tool is still very much a work in progress, so please [give us feedback](https://github.com/datadesk/web-map-maker/issues) if you find something amiss.
 
-This tool is still very much a work in progress, so please [give us feedback](https://github.com/datadesk/web-map-maker/issues) if you find something amiss. 
+## Live preview
+
+[Check that out here.](http://datadesk.github.io/web-map-maker/)
 
 ## Getting started
 
 You don't need much to get up and running. Download this repo and make a config.js file (we provided a template [here](https://github.com/datadesk/web-map-maker/tree/master/js/config.js-TEMPLATE)), then put it in the "js" directory. You'll also need to create a config.yaml file and leave it in the main directory.
 
-A Bing API key isn't necessary to use the map maker; only for geocoding and location search. You can also define initial coordinates or zoom so you can start the map in your preferred location each time. 
+A Bing API key isn't necessary to use the map maker; only for geocoding and location search. You can also define initial coordinates or zoom so you can start the map in your preferred location each time.
 
 The gutter and columnWidth are the pixel equivelants for the Times' print 6-column layout.
 
@@ -68,4 +71,3 @@ You can then run the `vector-map-restyle.jsx` script in Adobe Illustrator to con
 ## Make this better
 
 Have any ideas? File an issue, fork this repo or contact jon@latimes.com with thoughts, concerns or questions.
-

@@ -15,6 +15,8 @@ var windowHeight = document.documentElement.clientHeight;
 var userOptions = {};
 var mapSlug = "la-mapmaker-";
 
+
+
 // print sizes
 var colwidth = 330,
     colgutter = 26;
@@ -595,6 +597,12 @@ if (typeof configOptions !== 'undefined') {
             }
         }
     });
+
+    // replace placeholder text if no bing api
+    if (typeof configOptions.bingAPI == 'undefined') {
+        console.log('hello')
+        $("#bing-geocodifier-form input").attr('placeholder','34.052, -118.245');
+    }
 
     document.getElementById('popupText').onkeyup=function() {
 
