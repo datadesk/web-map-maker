@@ -135,8 +135,10 @@ map.on('zoom', function() {
     // buildings out under 13 zoom
     if (zoomRounded < 14) {
         $("#buildings_visible").parent().addClass("unavailable"); // update btn opacity
+        $("#buildings_border_visible").parent().addClass("unavailable"); // update btn opacity
     } else {
         $("#buildings_visible").parent().removeClass("unavailable"); // update btn opacity
+        $("#buildings_border_visible").parent().removeClass("unavailable"); // update btn opacity
     }
 
     // transit unavailable less than 11 zoom
@@ -148,7 +150,7 @@ map.on('zoom', function() {
         $("#rail_visible").parent().removeClass("unavailable"); // update btn opacity
     }
 
-    // countries 
+    // countries
     if (zoomRounded > 9 || zoomRounded < 2) {
         $("#labels_visible_countries").parent().addClass("unavailable"); // update btn opacity
     } else {
@@ -173,21 +175,21 @@ map.on('zoom', function() {
     if (zoomRounded < 12) {
         $("#labels_visible_major_roads").parent().addClass("unavailable");
     } else {
-        $("#labels_visible_major_roads").parent().removeClass("unavailable"); 
+        $("#labels_visible_major_roads").parent().removeClass("unavailable");
     }
 
     // major road labels
     if (zoomRounded < 13) {
         $("#labels_visible_minor_roads").parent().addClass("unavailable");
     } else {
-        $("#labels_visible_minor_roads").parent().removeClass("unavailable"); 
+        $("#labels_visible_minor_roads").parent().removeClass("unavailable");
     }
 
     // highways
     if (zoomRounded < 6) {
         $("#roads_visible_highways").parent().addClass("unavailable");
     } else {
-        $("#roads_visible_highways").parent().removeClass("unavailable"); 
+        $("#roads_visible_highways").parent().removeClass("unavailable");
     }
 
     // major roads
@@ -195,43 +197,43 @@ map.on('zoom', function() {
         $("#roads_visible_major").parent().addClass("unavailable");
         $("#roads_visible_highway_ramps").parent().addClass("unavailable");
     } else {
-        $("#roads_visible_major").parent().removeClass("unavailable"); 
+        $("#roads_visible_major").parent().removeClass("unavailable");
         $("#roads_visible_highway_ramps").parent().removeClass("unavailable");
     }
 
     // minor roads
-    if (zoomRounded < 13) { 
-        $("#roads_visible_minor").parent().addClass("unavailable"); 
+    if (zoomRounded < 13) {
+        $("#roads_visible_minor").parent().addClass("unavailable");
     } else {
-        $("#roads_visible_minor").parent().removeClass("unavailable"); 
+        $("#roads_visible_minor").parent().removeClass("unavailable");
     }
 
     // service roads
-    if (zoomRounded < 16) { 
-        $("#roads_visible_service").parent().addClass("unavailable"); 
+    if (zoomRounded < 16) {
+        $("#roads_visible_service").parent().addClass("unavailable");
     } else {
-        $("#roads_visible_service").parent().removeClass("unavailable"); 
+        $("#roads_visible_service").parent().removeClass("unavailable");
     }
 
     // airport roads
-    if (zoomRounded < 9) { 
-        $("#roads_visible_taxi_and_runways").parent().addClass("unavailable"); 
+    if (zoomRounded < 9) {
+        $("#roads_visible_taxi_and_runways").parent().addClass("unavailable");
     } else {
-        $("#roads_visible_taxi_and_runways").parent().removeClass("unavailable"); 
+        $("#roads_visible_taxi_and_runways").parent().removeClass("unavailable");
     }
 
     // swimming pools
     if (zoomRounded < 16) {
-        $("#water_visible_swimming_pools").parent().addClass("unavailable"); 
+        $("#water_visible_swimming_pools").parent().addClass("unavailable");
     } else {
-        $("#water_visible_swimming_pools").parent().removeClass("unavailable"); 
+        $("#water_visible_swimming_pools").parent().removeClass("unavailable");
     }
 
     // ferry routes
     if (zoomRounded < 8) {
-        $("#roads_visible_ferry_route").parent().addClass("unavailable"); 
+        $("#roads_visible_ferry_route").parent().addClass("unavailable");
     } else {
-        $("#roads_visible_ferry_route").parent().removeClass("unavailable"); 
+        $("#roads_visible_ferry_route").parent().removeClass("unavailable");
     }
 
 });
@@ -655,6 +657,7 @@ var layers = {
     'sources' : [],
     'terrain_visible': [],
     'buildings_visible': [],
+    'buildings_border_visible': [],
     'transit_visible': [],
     'rail_visible': [],
     'labels_visible': ['countries','states','cities','neighborhoods','highway_shields','major_roads','minor_roads','points_of_interest','water'],
@@ -667,7 +670,7 @@ var layers = {
 // add list to html
 Object.keys(layers).forEach(function(key) {
     // looping by key
-    var keyName = key.replace('_visible','');
+    var keyName = key.replace('_visible','').replace(/_/g, ' ');
     $("#checkboxes").append('<label for="'+key+'"><input type="checkbox" id="'+key+'" name="layers" />'+keyName+'</label>');
 
     // loop through any sublayers
@@ -705,10 +708,11 @@ $("#rail_visible").attr("checked",true);
 
 // set what layers are visible based on zoom
 if (initZoom < 14) { $("#buildings_visible").parent().addClass("unavailable"); }
+if (initZoom < 14) { $("#buildings_border_visible").parent().addClass("unavailable"); }
 
-if (initZoom < 11) { 
-    $("#transit_visible").parent().addClass("unavailable"); 
-    $("#rail_visible").parent().addClass("unavailable"); 
+if (initZoom < 11) {
+    $("#transit_visible").parent().addClass("unavailable");
+    $("#rail_visible").parent().addClass("unavailable");
 }
 
 if (initZoom > 9 || initZoom < 5) { $("#labels_visible_states").parent().addClass("unavailable"); }
@@ -773,9 +777,6 @@ function parentChecks() {
         visibleLayers.push(checkedBoxes[i].id);
     }
 
-
-
-
     // check labels
     containsCount('labels_visible');
 
@@ -838,6 +839,12 @@ $("#checkboxes label input").click(function(){
         } else {
             $(".leaflet-control-attribution").css("display","none");
         }
+
+    } else if (thisID === 'buildings_border_visible' && status === 'checked' && !$("#buildings_visible").prop('checked')) {
+    // if turning on building borders and buildings aren't already on
+        scene.config.global.buildings_visible = true;
+        scene.config.global.buildings_border_visible = true;
+        $("#buildings_visible").prop('checked',true);
     } else if (Array.isArray(layers[thisID]) && layers[thisID].length > 0) {
     // if any parent layer
         for (var i = 0; i < layers[thisID].length; i++) {
@@ -971,7 +978,7 @@ function addCustomLabel(size) {
 $('body').on('click', '.display_text', function() {
     // hide display text
     $(this).hide();
-    var parentID = $(this).parent()[0].id; 
+    var parentID = $(this).parent()[0].id;
     $("#"+parentID+" .text_input").val($(this).html().replace(/<br\s*[\/]?>/gi, "\n"));
     $("#"+parentID+" .text_input").show();
     $("#"+parentID+" .text_input").focus();
@@ -980,7 +987,7 @@ $('body').on('click', '.display_text', function() {
 // on blur
 $('body').on('blur', '.text_input', function() {
     $(this).hide();
-    var parentID = $(this).parent()[0].id; 
+    var parentID = $(this).parent()[0].id;
 
     $("#"+parentID+" .display_text").html($("#"+parentID+" .text_input").val().replace(/\n\r?/g, '<br />'));
     $("#"+parentID+" .display_text").css("display","block");
@@ -988,7 +995,7 @@ $('body').on('blur', '.text_input', function() {
 
 // delete label
 $('body').on('click', '.remove_label', function() {
-    var parentID = $(this).parent()[0].id; 
+    var parentID = $(this).parent()[0].id;
 
     // loop through label list to find match
     for (var i = 0; i < customLabels.length; i++) {
@@ -1028,21 +1035,21 @@ $('body').on('mousedown', '.rotate_handle', function(e) {
 
     $(document).mousemove(function(e) {
         var mouseX, mouseY, radians, degrees;
-        
+
         if (!dragging) {
             return;
         }
-        
+
         mouseX = e.pageX;
         mouseY = e.pageY;
         radians = Math.atan2(mouseY - originY, mouseX - originX),
         degrees = radians * (180 / Math.PI) - startingDegrees + lastDegrees;
-        
+
         currentDegrees = degrees;
-        
+
         // update to lock onto 0, 90, 270 if it rounds to it
-        if (degrees <= 5 && degrees >= -5) { 
-            degrees = 0; 
+        if (degrees <= 5 && degrees >= -5) {
+            degrees = 0;
         } else if (degrees >= -275 && degrees <= -265) {
             degrees = -270;
         }
@@ -1165,7 +1172,7 @@ function downloadVector() {
     console.log(JSON.stringify(mapOptions));
 
 
-    
+
     createVector(JSON.stringify(mapOptions))
     .then((result) => {
 
@@ -1181,5 +1188,3 @@ function downloadVector() {
     });
 
 }
-
-

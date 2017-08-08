@@ -253,8 +253,8 @@ body { cyber
 }
 
 #map {
-    width: calc(100%-10px); 
-    height:100%; 
+    width: calc(100%-10px);
+    height:100%;
     margin: 0 10px 10px 0;
     box-shadow: 0px 0px 5px rgba(0,0,0,0.4);
 }
@@ -306,15 +306,15 @@ label {font:18px/27px Georgia, serif;}
 }
 .leaflet-popup-content-wrapper{background-color:#000;}
 .leaflet-popup-content{
-    font:bold 34px/40px 'Benton Gothic Bold', Arial, sans-serif; 
+    font:bold 34px/40px 'Benton Gothic Bold', Arial, sans-serif;
     color: white;
     -webkit-font-smoothing: antialiased;
 }
 .leaflet-popup .leaflet-zoom-animated{bottom:0px !important;}
 .leaflet-control-attribution {
     font-size: 22px !important;
-    height:34px; 
-    color:#777; 
+    height:34px;
+    color:#777;
     padding: 4px 9px 0;
 }
 .leaflet-container .leaflet-control-attribution {
@@ -325,7 +325,7 @@ label {font:18px/27px Georgia, serif;}
 .leaflet-control-scale-line{
     font-size: 16px !important;
     height:26px;
-    border: 2px solid #999; 
+    border: 2px solid #999;
     border-color: rgba(0,0,0,.4);
     border-top: 0;
 }
@@ -350,11 +350,11 @@ label {font:18px/27px Georgia, serif;}
     height: 30px;
     margin-left: -9px;
     background: url(../images/popup-tip.png) top left no-repeat;
-     -webkit-transform: rotate(0deg); 
+     -webkit-transform: rotate(0deg);
     -moz-transform: rotate(0deg);
     -ms-transform: rotate(0deg);
     -o-transform: rotate(0deg);
-     transform: rotate(0deg); 
+     transform: rotate(0deg);
 }
 
 .leaflet-popup-content-wrapper {
@@ -531,7 +531,6 @@ p.description {
     font-family: 'Benton Gothic Regular', Arial, sans-serif;
     font-size: 14px;
     line-height: 18px;
-    text-transform: capitalize;
 }
 
 #checkboxes .inset {

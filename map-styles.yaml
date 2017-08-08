@@ -217,7 +217,7 @@ global:
 
     #lights:
     light_settings: { type: directional, direction: [1, 1, -.9], diffuse: 0.5, ambient: 0.85 }
-    
+
 
     background:                         '#fff'
 
@@ -293,6 +293,7 @@ global:
 
     #structures
     buildings_visible:                  false # ∆
+    buildings_border_visible:           false # ∆
     buildings:                          '#f7f9fc'
     building_outline:                   '#888' #
     city_wall:                          [0.682,0.682,0.682] # these need addressing
@@ -317,7 +318,7 @@ global:
     labels_visible_address:             false # ∆ saved for possible future inclusion
     labels_visible_airport_gate:        false # not used but saving for later
     #label colors
-    text_fill:                          '#000'    # ∆ 
+    text_fill:                          '#000'    # ∆
     text_fill_gray:                     '#474747' # ∆
     text_water:                         '#5b7c9a' # ∆
     text_stroke:                        '#fff'    # ∆
@@ -340,7 +341,7 @@ fonts:
          style: italic
          url: https://s3.amazonaws.com/latimes-datadesk-template/fonts/0.5.0/benton-gothic-medium-italic.woff
        - weight: bold
-         url: https://s3.amazonaws.com/latimes-datadesk-template/fonts/0.5.0/benton-gothic-bold.woff 
+         url: https://s3.amazonaws.com/latimes-datadesk-template/fonts/0.5.0/benton-gothic-bold.woff
        - weight: condnensed
          url: https://s3.amazonaws.com/latimes-datadesk-template/fonts/0.5.0/benton-gothic-condensed-regular.woff
 
@@ -353,7 +354,7 @@ scene:
         color: global.background
 
 # need corresponding if you want POI labels show up
-textures:  
+textures:
     pois:
         url: images/walkabout2@2x.png
         #url: https://raw.githubusercontent.com/tangrams/walkabout-style/gh-pages/images/walkabout%402x.png
@@ -1162,7 +1163,7 @@ layers:
                     - { $zoom: { min: 15 } }
             draw:
                 polygons:
-                    color: global.water 
+                    color: global.water
         inland-water:
             filter: {not: { kind: ocean} }
             draw:
@@ -1582,14 +1583,14 @@ layers:
             draw:
                 lines:
                     visible: global.roads_visible_minor
-                    color: global.minor_road 
+                    color: global.minor_road
                     width: [[13, 0.3px], [14, 0.6px], [15, 1.8px], [16, 3m]]
             early:
                 filter: { $zoom: { max: 14 } }
                 draw:
                     lines:
                         order: 350
-                        
+
 
 
             # Is this junk code?
@@ -2145,7 +2146,7 @@ layers:
                     width: [[15, 1.8px], [17, 3px], [19, 2m]]
                     style: dashed-lines
                     visible: global.roads_visible_paths
-                    
+
         track:
             filter:
                 kind: path
@@ -2245,7 +2246,7 @@ layers:
                 draw:
                     lines:
                         color: global.runway
-                        
+
         ferry:
             filter: { kind: ferry }
             draw:
@@ -2258,7 +2259,7 @@ layers:
             filter: { kind: aerialway }
             draw:
                 lines:
-                    
+
                     color: global.aeroway
                     width: [[14, 0.5px], [15, 1.0px], [16, 2m]]
             gondola_cable_car:
@@ -2312,17 +2313,34 @@ layers:
                 visible: global.buildings_visible
                 order: 400
                 color: global.buildings
+    building-small-borders:
+        data: { source: mapzen, layer: buildings }
+        filter: { area: { max: 1000 }, $zoom: { min: 14 }, not: { location: underground, layer: -1 }}
+        draw:
+            lines:
+                visible: global.buildings_border_visible
+                color: [0.702, 0.702, 0.702, 1.00]
+                width: [[14,0],[16,1px],[17,1px],[18,2px]]
+                order: function() { return feature.sort_rank; }
+    building-big-borders:
+        data: { source: mapzen, layer: buildings }
+        filter: { area: { min: 1000 }, $zoom: { min: 14 }, not: { location: underground, layer: -1 }}
+        draw:
+            lines:
+                visible: global.buildings_border_visible
+                color: [0.702, 0.702, 0.702, 1.00]
+                width: [[14,0],[17,2px]]
+                order: function() { return feature.sort_rank; }
 
 
-
-        buildings_over_landuse:   # this is a bug that mapzen is working on
-          draw:
-              lines:
-                  style: lines
-                  order: function() { return feature.sort_rank; }
-                  visible: global.buildings_visible
-                  color: function() { if ((feature.area > 5000 || feature.landuse_kind == 'college' || feature.landuse_kind == 'library' || feature.landuse_kind == 'hospital' || feature.landuse_kind == 'golf_course' || feature.landuse_kind == 'university' || feature.landuse_kind == 'cemetery' || feature.landuse_kind == 'park' || feature.landuse_kind == 'apron' || feature.landuse_kind == 'aerodrome' || feature.landuse_kind == 'school') && (feature.landuse_kind != 'residential') && (feature.landuse_kind != 'commercial') && (feature.landuse_kind != 'parking') && (feature.kind_detail != 'commercial') && (feature.kind_detail != 'retail') && (feature.kind_detail != 'hotel')) { return "#666"; } else { return "#fff"; } }
-                  width: [[15,0],[16,1px]]
+        # buildings_over_landuse:   # this is a bug that mapzen is working on
+        #   draw:
+        #       lines:
+        #           style: lines
+        #           order: function() { return feature.sort_rank; }
+        #           visible: global.buildings_visible
+        #           color: function() { if ((feature.area > 5000 || feature.landuse_kind == 'college' || feature.landuse_kind == 'library' || feature.landuse_kind == 'hospital' || feature.landuse_kind == 'golf_course' || feature.landuse_kind == 'university' || feature.landuse_kind == 'cemetery' || feature.landuse_kind == 'park' || feature.landuse_kind == 'apron' || feature.landuse_kind == 'aerodrome' || feature.landuse_kind == 'school') && (feature.landuse_kind != 'residential') && (feature.landuse_kind != 'commercial') && (feature.landuse_kind != 'parking') && (feature.kind_detail != 'commercial') && (feature.kind_detail != 'retail') && (feature.kind_detail != 'hotel')) { return "#666"; } else { return "#fff"; } }
+        #           width: [[15,0],[16,1px]]
 
         buildings-labels:
             filter:
@@ -2516,7 +2534,7 @@ layers:
                 filter: { maritime_boundary: true }
                 draw:
                     lines:
-                        visible: false            
+                        visible: false
 
     places:
         data: { source: mapzen, layer: places }
@@ -3192,7 +3210,7 @@ layers:
                 filter: { maritime_boundary: true }
                 draw:
                     lines:
-                        visible: false 
+                        visible: false
 
     neighborhoods:
         data: { source: la_hoods }
@@ -3201,7 +3219,7 @@ layers:
                 $zoom: { min: 13 }
             draw:
                 text-blend-order:
-                    text_source: 
+                    text_source:
                     visible: global.labels_visible_neighborhoods
                     priority: 19
                     # buffer: 80px
@@ -3235,7 +3253,7 @@ layers:
                 sprite: function() { return feature.kind; }
                 sprite_default: generic
                 interactive: global.interactive
-                priority: 65 
+                priority: 65
                 repeat_group: abc
                 buffer: 7px
                 text:
@@ -3318,7 +3336,7 @@ layers:
                 draw:
                     icons:
                         priority: 41
-                        
+
             tourism-related:
                 filter:
                     all:
