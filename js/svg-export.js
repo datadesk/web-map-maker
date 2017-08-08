@@ -126,13 +126,14 @@ window.addEventListener('rejectionhandled', event => {
                 formattedJson['water']['river'] = { features: [] }
                 formattedJson['water']['riverbank'] = { features: [] }
                 formattedJson['water']['stream'] = { features: [] }
+                // need etc to grab other water
+                formattedJson['water']['wateretc'] = { features: [] }
             }
             if (mapObject.options.layers_visible.indexOf('water_visible_swimming_pools') != -1) {
                 formattedJson['water']['swimming_pool'] = { features: [] }
             }
 
-            // need etc to grab other water
-            formattedJson['water']['wateretc'] = { features: [] }
+
         }
 
         // buildings
@@ -478,9 +479,9 @@ function bakeJson(mapObject) {
                             geojsonToReform[response][dataKindTitle].features.push(feature);
                         } else if (feature.properties.kind == 'ocean') {
                             geojsonToReform['ocean']['oceanwater'].features.push(feature);
-                        } else if (geojsonToReform[response].hasOwnProperty('etc') && response == 'water') {
+                        } else if (geojsonToReform[response].hasOwnProperty('etc') && response == 'water' && mapObject.options.layers_visible.indexOf('water_visible_inland_water') != -1) {
                             geojsonToReform['water']['wateretc'].features.push(feature);
-                        } else if (response == 'water' && feature.properties.kind != 'swimming_pool') {
+                        } else if (response == 'water' && feature.properties.kind != 'swimming_pool' && mapObject.options.layers_visible.indexOf('water_visible_inland_water') != -1) {
                             geojsonToReform['water']['wateretc'].features.push(feature);
                         } else if (response == 'earth') {
                             geojsonToReform['earth']['earthland'].features.push(feature);
