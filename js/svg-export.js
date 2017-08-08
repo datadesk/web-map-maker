@@ -660,27 +660,28 @@ function writeSVGFile(mapObject) {
 
 
 
-                /* restyle anything in groups */
+                /* restyle anything in groups if size not print/columns */
                 // pulling from scene.config
 
                 var highwayWidth = getLineWidth(scene.config.layers.roads.highway);
 
 
                 // roads
+                // widths based on L.A. Times print styles
                 d3.selectAll('#highway path')
-                    .attr('stroke','#A6A6A6')
+                    .attr('stroke','#a7a9ac')
                     .attr('stroke-width','2px');
                 d3.selectAll('#highwaylink path')
-                    .attr('stroke','#BCBEC0')
+                    .attr('stroke','#bcbec0')
                     .attr('stroke-width','1px');
                 d3.selectAll('#majorroad path')
-                    .attr('stroke','#BCBEC0')
+                    .attr('stroke','#bcbec0')
                     .attr('stroke-width','1px');
                 d3.selectAll('#minorroad path')
-                    .attr('stroke','#CDCFD0')
+                    .attr('stroke','#bcbec0')
                     .attr('stroke-width','0.65px');
                 d3.selectAll('#service path')
-                    .attr('stroke','#CDCFD0')
+                    .attr('stroke','#d1d3d4')
                     .attr('stroke-width','0.65px');
 
                 d3.selectAll('#path path')
@@ -798,8 +799,8 @@ function writeSVGFile(mapObject) {
                     console.log('collecting #river path')
                 d3.selectAll('#river path')
                     .attr('fill','none')
-                    .attr('stroke','#A9D7F4')
-                    .attr('stroke-width','0.5px');
+                    .attr('stroke','#abd7f3')
+                    .attr('stroke-width','1px');
                     console.log('collecting #stream path')
                 d3.selectAll('#stream path')
                     .attr('fill','none')
