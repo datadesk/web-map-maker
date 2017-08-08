@@ -698,8 +698,8 @@ function writeSVGFile(mapObject) {
                     .attr('stroke-width','0.65px');
 
                 d3.selectAll('#ferry path')
-                    .attr('stroke','#8AB1CD')
-                    .attr('stroke-width','0.5px')
+                    .attr('stroke','#8bb1cd')
+                    .attr('stroke-width','0.75px')
                     .attr('stroke-dasharray','1,1');
 
                 d3.selectAll('#etc path')
