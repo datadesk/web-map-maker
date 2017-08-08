@@ -93,7 +93,7 @@ window.addEventListener('rejectionhandled', event => {
             if (mapObject.options.layers_visible.indexOf('landuse_visible_wetland') != -1) {
                 formattedJson['landuse']['wetland'] = { features: [] }
             }
-            formattedJson['landuse']['pier'] = { features: [] }            
+            formattedJson['landuse']['pier'] = { features: [] }
         } // landuse
 
         // borders
@@ -670,8 +670,6 @@ function writeSVGFile(mapObject) {
                 d3.selectAll('#highway path')
                     .attr('stroke','#A6A6A6')
                     .attr('stroke-width','2px');
-
-
                 d3.selectAll('#highwaylink path')
                     .attr('stroke','#BCBEC0')
                     .attr('stroke-width','1px');
@@ -743,7 +741,7 @@ function writeSVGFile(mapObject) {
                 d3.selectAll('#wetland path')
                     .attr('fill','#e1e9db')
                     .attr('stroke','#fff')
-                    .attr('stroke-width','0px');                        
+                    .attr('stroke-width','0px');
                 d3.selectAll('#military path')
                     .attr('fill','#eff0ef')
                     .attr('stroke','#fff')
@@ -751,7 +749,7 @@ function writeSVGFile(mapObject) {
                 d3.selectAll('#prison path')
                     .attr('fill','#eff0ef')
                     .attr('stroke','#fff')
-                    .attr('stroke-width','0px');                        
+                    .attr('stroke-width','0px');
                 d3.selectAll('#hospital path')
                     .attr('fill','#E2EDEF')
                     .attr('stroke','#fff')
@@ -791,7 +789,7 @@ function writeSVGFile(mapObject) {
                 d3.selectAll('#ocean path')
                     .attr('fill','#A9D7F4')
                     .attr('stroke','#fff')
-                    .attr('stroke-width','0px');                    
+                    .attr('stroke-width','0px');
                     console.log('collecting #riverbank path')
                 d3.selectAll('#riverbank path')
                     .attr('fill','#A9D7F4')
@@ -900,7 +898,7 @@ function createVector(options){
         });
     });
 }
-    
+
 
 // here all maps spells are!
 // convert lat/lon to mercator style number or reverse.
