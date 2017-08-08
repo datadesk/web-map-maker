@@ -204,8 +204,10 @@ map.on('zoom', function() {
     // minor roads
     if (zoomRounded < 13) {
         $("#roads_visible_minor").parent().addClass("unavailable");
+        $("#roads_visible_paths").parent().addClass("unavailable");
     } else {
         $("#roads_visible_minor").parent().removeClass("unavailable");
+        $("#roads_visible_paths").parent().removeClass("unavailable");
     }
 
     // service roads
@@ -720,6 +722,8 @@ if (initZoom > 9 || initZoom < 5) { $("#labels_visible_states").parent().addClas
 if (initZoom > 9 || initZoom < 2) { $("#labels_visible_countries").parent().addClass("unavailable"); }
 
 if (initZoom < 12) { $("#roads_visible_minor").parent().addClass("unavailable"); }
+
+if (initZoom < 13) { $("#roads_visible_paths").parent().addClass("unavailable"); }
 
 if (initZoom < 16) { $("#roads_visible_service").parent().addClass("unavailable"); }
 

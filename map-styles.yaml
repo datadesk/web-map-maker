@@ -2136,7 +2136,6 @@ layers:
             filter:
                 all:
                     - kind: [path, portage_way]
-                    - $zoom: { min: 15 }
                 not:
                     - kind_detail: [pier]
             draw:

@@ -689,7 +689,10 @@ function writeSVGFile(mapObject) {
                     .attr('stroke','#CDCFD0')
                     .attr('stroke-width','0.65px')
                     .attr('stroke-dasharray','1,1');
-
+                d3.selectAll('#track path')
+                    .attr('stroke','#CDCFD0')
+                    .attr('stroke-width','1px')
+                    .attr('stroke-dasharray','1,1');
                 d3.selectAll('#rail path')
                     .attr('stroke','#CDCFD0')
                     .attr('stroke-width','0.65px');
