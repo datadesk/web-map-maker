@@ -13,36 +13,39 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
 
-    <link rel="stylesheet" href="styles/leaflet.css">
-    <link rel="stylesheet" href="styles/jquery-ui.css">
-    <link rel="stylesheet" href="styles/bing-geocodifier.css">
+    <link rel="stylesheet" href="http://cookbook.latimes.com/js/leaflet-1.0.0/leaflet.css">
+    <link rel="stylesheet" href="http://cookbook.latimes.com/css/jquery-ui-1.12.0/jquery-ui-1.12.0.css">
+    <link rel="stylesheet" href="http://cookbook.latimes.com/css/bing-geocodify-0.2.3/bing-geocodifier.css">
     <link rel="stylesheet" href="styles/styles.css">
 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="js/bing-geocodifier.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+    <script type="text/javascript" src="http://cookbook.latimes.com/js/bing-geocodify-0.2.3/bing-geocodifier.js"></script>
 
     <script type="text/javascript" src="http://d1qqc1e9kvmdh8.cloudfront.net/bootstrap/2.3.2/js/bootstrap.min.js"></script>
 
-    <script src="http://d1qqc1e9kvmdh8.cloudfront.net/js/underscore-1.8.3-min.js"></script>
-    <script src="js/leaflet.js"></script>
-    <script src="js/tangram-0.13.0.min.js"></script>
+    <script type="text/javascript" src="http://d1qqc1e9kvmdh8.cloudfront.net/js/underscore-1.8.3-min.js"></script>
 
-    <script src="js/html2canvas0.5.js"></script>
+    <script type="text/javascript" src="http://cookbook.latimes.com/js/leaflet-1.0.0/leaflet.js"></script>
 
-    <script src="js/jquery-ui.js"></script>
+    <script type="text/javascript" src="http://cookbook.latimes.com/js/tangram-0.13.0-min.js"></script>
+
+    <script type="text/javascript" src="http://cookbook.latimes.com/js/html2canvas-0.5.js"></script>
+
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
     <script type="text/javascript" src="http://cookbook.latimes.com/js/leaflet-bing-layer-0.0.1.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geocoder-mapzen/1.4.1/leaflet-geocoder-mapzen.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geocoder-mapzen/1.4.1/leaflet-geocoder-mapzen.js"></script>
 
+    <!-- your config file -->
     <script type="text/javascript" src="js/config.js"></script>
 
 </head>
 <body>
     <!-- CONTENT GOES HERE -->
     <div class="container" id="container">
-        <h1>Web Map Maker</h1>
-        <p class="description">This tool uses Microsoft’s geocoder to approximate an address’s location. It also uses data provided by OpenStreetMap (which you can <a href="http://www.openstreetmap.org/" target="_blank">edit here</a>) and Mapzen. Questions? Contact <a href="mailto:jon@latimes.com">jon@latimes.com</a> or <a href="https://github.com/datadesk/web-map-maker/issues" target="_blank">submit a bug</a> in GitHub.</p>
+        <h1>Web Map Maker<a id="mapmakerVersion" href="https://github.com/datadesk/web-map-maker/releases/tag/v2.1.1">v2.1.1</a></h1>
         <div id="popupContainer">
             <input id="popupText" type="text" placeholder="Pointer text" maxlength="40"><div id="geocodifier"></div>
         </div>
@@ -106,7 +109,7 @@
 
                 <p class='map-info'>Zoom: <span id="zoom_level"></span> <i class="fa fa-unlock-alt" id="zoom_lock" onclick="zoomFreeze();" aria-hidden="true"></i> <span id="warning_msg"></span></p>
 
-                <input type="range" step="0.001" id="zoom-slider" class="graphic-slider" min="2" max="19" value="10"> 
+                <input type="range" step="0.001" id="zoom-slider" class="graphic-slider" min="2" max="19" value="10">
 
 
 
@@ -125,20 +128,23 @@
                     <div id="map_size"></div>
                 </div>
             </div>
-
-
         </div>
+
+        <p class="description">This tool uses Microsoft’s geocoder to approximate an address’s location. It also uses data provided by OpenStreetMap (which you can <a href="http://www.openstreetmap.org/" target="_blank">edit here</a>) and Mapzen. Some supervisor, congressional and other GeoJSON boundaries can be found at <a href="http://boundaries.latimes.com/" target="_blank">boundaries.latimes.com</a>. You can draw your own file at <a href="http://geojson.io/" target="_blank">geojson.io</a>. Questions? Contact <a href="mailto:jon@latimes.com">jon@latimes.com</a> or <a href="https://github.com/datadesk/web-map-maker/issues" target="_blank">submit a bug</a> in GitHub.</p>
 
         <canvas id="canvas" width="1300" height="730"></canvas>
 
         <div id="img-out"></div>
+
+
     </div>
+
 
 
     <div id="tooltip"></div>
 
     <!-- load all the JS -->
-    <script type="text/javascript" src="js/d3.min.js"></script>
+    <script type="text/javascript" src="http://cookbook.latimes.com/js/d3-3.5.6/d3.min.js"></script>
     <script type="text/javascript" src="js/svg-export.js"></script>
     <script type="text/javascript" src="js/app.js"></script>
 

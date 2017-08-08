@@ -93,6 +93,7 @@ window.addEventListener('rejectionhandled', event => {
             if (mapObject.options.layers_visible.indexOf('landuse_visible_wetland') != -1) {
                 formattedJson['landuse']['wetland'] = { features: [] }
             }
+            formattedJson['landuse']['pier'] = { features: [] }
         } // landuse
 
         // borders
@@ -125,13 +126,14 @@ window.addEventListener('rejectionhandled', event => {
                 formattedJson['water']['river'] = { features: [] }
                 formattedJson['water']['riverbank'] = { features: [] }
                 formattedJson['water']['stream'] = { features: [] }
+                // need etc to grab other water
+                formattedJson['water']['wateretc'] = { features: [] }
             }
             if (mapObject.options.layers_visible.indexOf('water_visible_swimming_pools') != -1) {
                 formattedJson['water']['swimming_pool'] = { features: [] }
             }
 
-            // need etc to grab other water
-            formattedJson['water']['wateretc'] = { features: [] }
+
         }
 
         // buildings
@@ -140,6 +142,21 @@ window.addEventListener('rejectionhandled', event => {
                 building: {
                     features: []
                 }
+            }
+        }
+
+        // transit
+        if (mapObject.options.layers_visible.indexOf('transit_visible') != -1 ||
+            mapObject.options.layers_visible.indexOf('rail_visible') != -1) {
+            formattedJson['transit'] = {}
+
+            if (mapObject.options.layers_visible.indexOf('transit_visible') != -1) {
+                formattedJson['transit']['light_rail'] = { features: [] }
+                formattedJson['transit']['subway'] = { features: [] }
+                formattedJson['transit']['station'] = { features: [] }
+            }
+            if (mapObject.options.layers_visible.indexOf('rail_visible') != -1) {
+                formattedJson['transit']['rail'] = { features: [] }
             }
         }
 
@@ -169,6 +186,11 @@ window.addEventListener('rejectionhandled', event => {
             if (mapObject.options.layers_visible.indexOf('roads_visible_highways') != -1) {
                 formattedJson['roads']['highway'] = { features: [] }
             }
+            if (mapObject.options.layers_visible.indexOf('roads_visible_paths') != -1) {
+                formattedJson['roads']['path'] = { features: [] }
+                formattedJson['roads']['track'] = { features: [] }
+            }
+            formattedJson['roads']['pier'] = { features: [] }
 
         } // roads
 
@@ -281,6 +303,7 @@ function parseJSON(req) {
         if (newMap.options.layers_visible.indexOf('borders_visible') != -1) newMap.dKinds.push('boundaries');
         if (newMap.options.layers_visible.indexOf('landuse_visible') != -1) newMap.dKinds.push('landuse');
         if (newMap.options.layers_visible.indexOf('water_visible') != -1) newMap.dKinds.push('water');
+        if (newMap.options.layers_visible.indexOf('transit_visible') != -1 || newMap.options.layers_visible.indexOf('rail_visible') != -1 ) newMap.dKinds.push('transit');
         if (newMap.options.layers_visible.indexOf('roads_visible') != -1) newMap.dKinds.push('roads');
         if (newMap.options.layers_visible.indexOf('buildings_visible') != -1) newMap.dKinds.push('buildings');
         newMap.dKinds.push('clipping');
@@ -415,10 +438,16 @@ function bakeJson(mapObject) {
                         // segment off service roads
                             var dataKindTitle = 'service';
                         } else if (feature.properties.kind_detail == "runway") {
-                        // aeroway roads
+                            // aeroway roads
                             var dataKindTitle = 'runway';
                         } else if (feature.properties.kind_detail == "taxiway") {
                             var dataKindTitle = 'taxiway';
+                        } else if (feature.properties.kind_detail === "pier") {
+                            var dataKindTitle = 'pier';
+                        } else if (feature.properties.kind_detail === "track") {
+                            var dataKindTitle = 'track';
+                        } else if (feature.properties.kind == "train") {
+                            var dataKindTitle = 'rail';
                         } else if (landusePark.indexOf(feature.properties.kind) !== -1 ) {
                         // land uses
                             var dataKindTitle = 'park';
@@ -450,9 +479,9 @@ function bakeJson(mapObject) {
                             geojsonToReform[response][dataKindTitle].features.push(feature);
                         } else if (feature.properties.kind == 'ocean') {
                             geojsonToReform['ocean']['oceanwater'].features.push(feature);
-                        } else if (geojsonToReform[response].hasOwnProperty('etc') && response == 'water') {
+                        } else if (geojsonToReform[response].hasOwnProperty('etc') && response == 'water' && mapObject.options.layers_visible.indexOf('water_visible_inland_water') != -1) {
                             geojsonToReform['water']['wateretc'].features.push(feature);
-                        } else if (response == 'water') {
+                        } else if (response == 'water' && feature.properties.kind != 'swimming_pool' && mapObject.options.layers_visible.indexOf('water_visible_inland_water') != -1) {
                             geojsonToReform['water']['wateretc'].features.push(feature);
                         } else if (response == 'earth') {
                             geojsonToReform['earth']['earthland'].features.push(feature);
@@ -478,8 +507,6 @@ function writeSVGFile(mapObject) {
 
         // remove any old svgs
         d3.select("#export-container").remove();
-                // window.d3 = d3.select(window.document);
-
                 var svg = d3.select('body')
                             .append('div').attr('id','export-container') //make a container div to ease the saving process
                             .append('svg')
@@ -526,22 +553,20 @@ function writeSVGFile(mapObject) {
 
                                 if(previewFeature && previewFeature.indexOf('a') > 0) ;
                                 else {
+                                    // pull stroke if subway or light rail
+                                    var strokeColor = "#000000";
+                                    if (geoFeature.properties.kind === "light_rail" || geoFeature.properties.kind === "subway") {
+                                        strokeColor = geoFeature.properties.colour;
+                                    }
                                     subG.append('path')
                                     .attr('d', previewFeature)
                                     .attr('fill','none')
-                                    .attr('stroke','black')
+                                    .attr('stroke',strokeColor);
                                 }
                             }
                         }
                     }
                 }
-
-                // // combine all earth tiles
-                // var earthTiles = "";
-                // d3.selectAll("#earth path").each(function(){
-                //     earthTiles += d3.select(this).attr("d");
-                // });
-                // d3.selectAll("#earth").append("path").attr("d",earthTiles);
 
                 // remove all non-closing riverbank tiles
                 $("#riverbank path").each(function(){
@@ -566,17 +591,6 @@ function writeSVGFile(mapObject) {
                         $(this).remove();
                     }
                 });
-
-                // // combine all riverbank tiles
-                // var riverbankPaths = "";
-                // d3.selectAll("#riverbank path").each(function(){
-                //     riverbankPaths += d3.select(this).attr("d");
-                //     d3.select(this).remove();
-                // });
-                // d3.selectAll("#riverbank").append("path").attr("d",riverbankPaths);
-
-
-
 
                 // clip based on view
                 var viewClip = d3.select("#clippingpath path").attr("d");
@@ -640,143 +654,131 @@ function writeSVGFile(mapObject) {
                 $('#layergroup').append($("svg g#boundaries"));
                 $('#layergroup').append($("svg g#landuse"));
                 $('#layergroup').append($("svg g#water"));
+                $('#layergroup').append($("svg g#transit"));
                 $('#layergroup').append($("svg g#roads"));
                 $('#layergroup').append($("svg g#buildings"));
                 $('#layergroup').append($("svg g#jsonupload"));
 
 
 
-                /* restyle anything in groups */
+                /* restyle anything in groups if size not print/columns */
+                // pulling from scene.config
+
+                var highwayWidth = getLineWidth(scene.config.layers.roads.highway);
+
 
                 // roads
-                console.log('collecting #highway path')
+                // widths based on L.A. Times print styles
                 d3.selectAll('#highway path')
-                    .attr('stroke','#A6A6A6')
+                    .attr('stroke','#a7a9ac')
                     .attr('stroke-width','2px');
-
-                console.log('collecting #highwaylink path')
                 d3.selectAll('#highwaylink path')
-                    .attr('stroke','#BCBEC0')
+                    .attr('stroke','#bcbec0')
                     .attr('stroke-width','1px');
-
-                console.log('collecting #majorroad path')
                 d3.selectAll('#majorroad path')
-                    .attr('stroke','#BCBEC0')
+                    .attr('stroke','#bcbec0')
                     .attr('stroke-width','1px');
-
-                console.log('collecting #minorroad path')
                 d3.selectAll('#minorroad path')
-                    .attr('stroke','#CDCFD0')
+                    .attr('stroke','#bcbec0')
                     .attr('stroke-width','0.65px');
-
-                console.log('collecting #service path')
                 d3.selectAll('#service path')
-                    .attr('stroke','#CDCFD0')
+                    .attr('stroke','#d1d3d4')
                     .attr('stroke-width','0.65px');
 
-                console.log('collecting #path path')
                 d3.selectAll('#path path')
-                    .attr('stroke','none')
-                    .attr('stroke-width','0');
-
-                console.log('collecting #rail path')
+                    .attr('stroke','#CDCFD0')
+                    .attr('stroke-width','0.65px')
+                    .attr('stroke-dasharray','1,1');
+                d3.selectAll('#track path')
+                    .attr('stroke','#CDCFD0')
+                    .attr('stroke-width','1px')
+                    .attr('stroke-dasharray','1,1');
                 d3.selectAll('#rail path')
                     .attr('stroke','#CDCFD0')
                     .attr('stroke-width','0.65px');
 
-                console.log('collecting #aerialway path')
                 d3.selectAll('#aerialway path')
                     .attr('stroke','#CDCFD0')
                     .attr('stroke-width','0.65px');
 
-                console.log('collecting #ferry path')
                 d3.selectAll('#ferry path')
-                    .attr('stroke','#8AB1CD')
-                    .attr('stroke-width','0.5px')
+                    .attr('stroke','#8bb1cd')
+                    .attr('stroke-width','0.75px')
                     .attr('stroke-dasharray','1,1');
 
-                console.log('collecting #etc path')
                 d3.selectAll('#etc path')
                     .attr('stroke','#CDCFD0')
                     .attr('stroke-width','0.65px');
 
-                console.log('collecting #runway path')
                 d3.selectAll('#runway path')
                     .attr('stroke','#CDCFD0')
                     .attr('stroke-width','2px');
 
-                console.log('collecting #taxiway path')
                 d3.selectAll('#taxiway path')
                     .attr('stroke','#CDCFD0')
                     .attr('stroke-width','0.65px');
 
+                d3.selectAll('#roads #pier path')
+                    .attr('stroke','#fff')
+                    .attr('stroke-width','1px');
+
                 // landuse styles
-                console.log('collecting #university path')
                 d3.selectAll('#university path')
                     .attr('fill','#F2F0E7')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
-                    console.log('collecting #stadium path')
                 d3.selectAll('#stadium path')
                     .attr('fill','#F9F3D6')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
-                    console.log('collecting #school path')
                 d3.selectAll('#school path')
                     .attr('fill','#F2F0E7')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
-                    console.log('collecting #resort path')
                 d3.selectAll('#resort path')
                     .attr('fill','#F9F3D6')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
-                    console.log('collecting #park path')
                 d3.selectAll('#park path')
                     .attr('fill','#E7F1CA')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
-                    console.log('collecting #wetland path')
                 d3.selectAll('#wetland path')
                     .attr('fill','#e1e9db')
                     .attr('stroke','#fff')
-                    .attr('stroke-width','0px');                        
-                    console.log('collecting #military path')
+                    .attr('stroke-width','0px');
                 d3.selectAll('#military path')
                     .attr('fill','#eff0ef')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
-                    console.log('collecting #prison path')
                 d3.selectAll('#prison path')
                     .attr('fill','#eff0ef')
                     .attr('stroke','#fff')
-                    .attr('stroke-width','0px');                        
-                    console.log('collecting #hospital path')
+                    .attr('stroke-width','0px');
                 d3.selectAll('#hospital path')
                     .attr('fill','#E2EDEF')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
-                    console.log('collecting #forest path')
                 d3.selectAll('#forest path')
                     .attr('fill','#E7F1CA')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
-                    console.log('collecting #cemetery path')
                 d3.selectAll('#cemetery path')
                     .attr('fill','#E4E4D5')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
-                    console.log('collecting #beach path')
                 d3.selectAll('#beach path')
                     .attr('fill','#F8F4E1')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
-                    console.log('collecting #airport path')
                 d3.selectAll('#airport path')
                     .attr('fill','#eff0ef')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
-                    console.log('collecting #etc path')
+                d3.selectAll('#landuse #pier path')
+                    .attr('fill','#fff')
+                    .attr('stroke','#fff')
+                    .attr('stroke-width','0px');
                 d3.selectAll('#etc path')
                     .attr('fill','none')
                     .attr('stroke','#fff')
@@ -792,7 +794,7 @@ function writeSVGFile(mapObject) {
                 d3.selectAll('#ocean path')
                     .attr('fill','#A9D7F4')
                     .attr('stroke','#fff')
-                    .attr('stroke-width','0px');                    
+                    .attr('stroke-width','0px');
                     console.log('collecting #riverbank path')
                 d3.selectAll('#riverbank path')
                     .attr('fill','#A9D7F4')
@@ -801,8 +803,8 @@ function writeSVGFile(mapObject) {
                     console.log('collecting #river path')
                 d3.selectAll('#river path')
                     .attr('fill','none')
-                    .attr('stroke','#A9D7F4')
-                    .attr('stroke-width','0.5px');
+                    .attr('stroke','#abd7f3')
+                    .attr('stroke-width','1px');
                     console.log('collecting #stream path')
                 d3.selectAll('#stream path')
                     .attr('fill','none')
@@ -901,7 +903,7 @@ function createVector(options){
         });
     });
 }
-    
+
 
 // here all maps spells are!
 // convert lat/lon to mercator style number or reverse.
@@ -922,4 +924,40 @@ function tile2Lat(tileLat, zoom) {
 
 function slugify(str) {
     return str.replace(/[\s]|[,\s]+/g, '-').replace(/[^a-zA-Z-]/g, '').toLowerCase();
+}
+
+function getClosest(array, target) {
+    console.log('getClosest');
+    var tuples = _.map(array, function(val) {
+        return [val, Math.abs(val - target)];
+    });
+    return _.reduce(tuples, function(memo, val) {
+        return (memo[1] < val[1]) ? memo : val;
+    }, [-1, 999])[0];
+}
+
+// digs through the yaml scene config for width info
+// has to be feature.draw.lines.width (so no dashed lines)
+function getLineWidth(feature) {
+    console.log(feature);
+    var widthArray = [];
+    for (var i = 0; i < feature.draw.lines.width.length; i++) {
+        console.log(i);
+
+        // push in zoom number
+        widthArray.push(feature.draw.lines.width[i][0]);
+    }
+    var closestWidth = getClosest(widthArray,map.getZoom());
+
+    // return width
+    var lineWidth = '2px';
+    for (var i = 0; i < feature.draw.lines.width.length; i++) {
+        // if closeWidth match and not meters
+        console.log(closestWidth + " closestWidth");
+        console.log()
+        if (feature.draw.lines.width[i][0] === closestWidth && feature.draw.lines.width[i][1].indexOf('px') != -1) {
+            lineWidth = feature.draw.lines.width[i][1];
+        }
+    }
+
 }
