@@ -16,11 +16,11 @@ This tool is still very much a work in progress, so please [give us feedback](ht
 
 ## Live preview
 
-[Check that out here.](http://datadesk.github.io/web-map-maker/)
+[See that here.](http://datadesk.github.io/web-map-maker/)
 
 ## Getting started
 
-You don't need much to get up and running. Download this repo and make a config.js file (we provided a template [here](https://github.com/datadesk/web-map-maker/tree/master/js/config.js-TEMPLATE)), then put it in the "js" directory. You'll also need to create a config.yaml file and leave it in the main directory.
+You don't need much to get up and running. Download this repo and make a config.js file (we provided a template [here](https://github.com/datadesk/web-map-maker/tree/master/js/config.js-TEMPLATE)). You'll also need to create a config.yaml file and leave it in the main directory.
 
 A Bing API key isn't necessary to use the map maker; only for geocoding and location search. You can also define initial coordinates or zoom so you can start the map in your preferred location each time.
 
