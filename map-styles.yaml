@@ -4080,7 +4080,7 @@ layers:
                     all:
                         - $zoom: { min: 4 }
                         - kind: [protected_area, nature_reserve, national_park]
-                        - not: { protect_class: [2,3,5]}
+                        # - not: { protect_class: [2,3,5]}
                     draw:
                         polygons:
                             visible: global.landuse_visible_park
@@ -4106,9 +4106,9 @@ layers:
                 filter:
                     all:
                         - $zoom: { min: 4 }
-                        - kind: [park, national_park]
+                        - kind: [park, national_park, nature_reserve]
                     any:
-                        - not: { operator: [ "United States National Park Service", "United States Forest Service" ] }
+                        - not: { operator: [ "United States National Park Service" ] }
                         - not: { protect_class: ['2','3','5','6'] }
                 # default for national forests and more?
                 draw:
