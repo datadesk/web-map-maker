@@ -46,6 +46,7 @@ var defaultFont = "BentonGothic-Regular";
 var highwayColor = new CMYKColor(); highwayColor.black = 40; highwayColor.cyan = 0; highwayColor.magenta = 0; highwayColor.yellow = 0;
 var majorRoadColor = new CMYKColor(); majorRoadColor.black = 30; majorRoadColor.cyan = 0; majorRoadColor.magenta = 0; majorRoadColor.yellow = 0;
 var minorRoadColor = new CMYKColor(); minorRoadColor.black = 20; minorRoadColor.cyan = 0; minorRoadColor.magenta = 0; minorRoadColor.yellow = 0;
+var serviceRoadColor = new CMYKColor(); serviceRoadColor.black = 20; serviceRoadColor.cyan = 0; serviceRoadColor.magenta = 0; serviceRoadColor.yellow = 0;
 var pathColor = new CMYKColor(); pathColor.black = 20; pathColor.cyan = 0; pathColor.magenta = 0; pathColor.yellow = 0;
 var trackColor = new CMYKColor(); trackColor.black = 20; trackColor.cyan = 0; trackColor.magenta = 0; trackColor.yellow = 0;
 var railColor = new CMYKColor(); railColor.black = 20; railColor.cyan = 0; railColor.magenta = 0; railColor.yellow = 0;
@@ -153,9 +154,10 @@ function swatchExist(swatchName){
 };
 
 // change swatch colors
-if ( swatchExist("C=37 M=30 Y=31 K=0")){ doc.spots ['C=37 M=30 Y=31 K=0'].color = highwayColor;};
+if ( swatchExist("C=36 M=28 Y=27 K=0")){ doc.spots ['C=36 M=28 Y=27 K=0'].color = highwayColor;};
 if ( swatchExist("C=26 M=20 Y=20 K=0")){ doc.spots ['C=26 M=20 Y=20 K=0'].color = majorRoadColor;};
-if ( swatchExist("C=19 M=13 Y=14 K=0")){ doc.spots ['C=19 M=13 Y=14 K=0'].color = minorRoadColor;}; // includes rail, runway, taxiway
+if ( swatchExist("C=26 M=20 Y=20 K=0")){ doc.spots ['C=26 M=20 Y=20 K=0'].color = minorRoadColor;}; // includes rail, runway, taxiway
+if ( swatchExist("C=17 M=12 Y=12 K=0")){ doc.spots ['C=17 M=12 Y=12 K=0'].color = serviceRoadColor;}; // includes rail, runway, taxiway
 if ( swatchExist("C=46 M=20 Y=10 K=0")){ doc.spots ['C=46 M=20 Y=10 K=0'].color = ferryColor;};
 // if ( swatchExist("C=80 M=82 Y=17 K=4")){ doc.spots ['C=80 M=82 Y=17 K=4'].color = countryBorderColor;};
 if ( swatchExist("C=49 M=49 Y=46 K=11")){ doc.spots ['C=49 M=49 Y=46 K=11'].color = otherBorderColor;};
