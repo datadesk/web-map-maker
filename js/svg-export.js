@@ -584,6 +584,15 @@ function writeSVGFile(mapObject) {
                     }
                 });
 
+                // remove all non-closing lake tiles
+                $("#lake path").each(function(){
+                    var pathD = $(this).attr("d");
+                    if (pathD.substr(pathD.length - 1) != 'Z') {
+                        $(this).remove();
+                    }
+                });
+
+
                 // remove all non-closing ocean tiles
                 $("#oceanwater path").each(function(){
                     var pathD = $(this).attr("d");
