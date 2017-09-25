@@ -16,10 +16,40 @@ var userOptions = {};
 var mapSlug = "la-mapmaker-";
 
 
-
 // print sizes
 var colwidth = 330,
     colgutter = 26;
+
+/* QUERY STRINGS
+
+These are all optional, but can be added at the back end of the URL to express them in MapMaker.
+
+centerLat    center latitude for map's poition
+centerLng    center longitude for map's position
+zoom         zoom level for map; integer
+width        map's width
+height       map's height
+returnImage  will return an image if set to true
+attribution  credit for map
+mapzenapi    mapzen api key
+colWidth     pixel width for print columns
+gutterWidth  pixel width for print gutters
+slugStart    file export slugging convention
+
+*/
+
+// split query string
+function getQueryVariable(variable) {
+    var query = window.location.search.substring(1);
+    var vars = query.split('&');
+    for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+        if (decodeURIComponent(pair[0]) == variable) {
+            return decodeURIComponent(pair[1]);
+        }
+    }
+}
+
 
 // build the map's ruler
 function createGrid(size) {
@@ -61,30 +91,39 @@ function commafy(num) {
     return s;
 }
 
+var initCords, initZoom;
+
 if (typeof configOptions !== 'undefined') {
-    var initCoords = (typeof configOptions.initCoords !== 'undefined') ? configOptions.initCoords : [34.0425, -118.24];
+    initCoords = (typeof configOptions.initCoords !== 'undefined') ? configOptions.initCoords : [34.0425, -118.24];
 
-    var initZoom = (typeof configOptions.initZoom !== 'undefined') ? configOptions.initZoom : 10;
+    initZoom = (typeof configOptions.initZoom !== 'undefined') ? configOptions.initZoom : 10;
 } else {
-    var initCoords = [34.0425, -118.24];
-
-    var initZoom = 10;
+    initCoords = [34.0425, -118.24];
+    initZoom = 10;
 }
 
+// revert to URL if that's there
+if (getQueryVariable('centerLat') && getQueryVariable('centerLng')) {
+    initCoords = [getQueryVariable('centerLat'),getQueryVariable('centerLng')];
+}
 
+if (getQueryVariable('zoom')) {
+    initZoom = getQueryVariable('zoom');
+}
 
 // jQuery map reference
 var $map = $('#map');
 var map = L.map('map', {
     attributionControl: true,
     center: initCoords,
-    zoom: 10,
+    zoom: initZoom,
     detectRetina: true,
     minZoom: 2,
     maxZoom: 19,
     closePopupOnClick: false,
     zoomControl: false
 });
+
 
 
 map.attributionControl.setPrefix(attribution+'Mapzen, OpenStreetMap');
@@ -106,6 +145,14 @@ quietLAlayer.on("load",function(){
         $( "#map_holder" ).resizable({grid:10});
     } );
 });
+
+// resize if in query string
+if (getQueryVariable('width')) {
+    document.getElementById('map_holder').style.width=(+getQueryVariable('width')+10)+'px';
+}
+if (getQueryVariable('height')) {
+    document.getElementById('map_holder').style.height=getQueryVariable('height')+'px';
+}
 
 // add map's size
 var mapSize = $("#map").width() + 'x' + $("#map").height();
