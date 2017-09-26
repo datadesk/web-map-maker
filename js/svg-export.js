@@ -617,6 +617,16 @@ function writeSVGFile(mapObject) {
                 var origSVGWidth = svgWidth,
                     origSVGHeight = svgHeight;
 
+                // if colWidth in the URL string
+                var colWidth;
+                // replace attribution with anything in the url
+                if (getQueryVariable('colWidth')) {
+                    colWidth = getQueryVariable('colWidth');
+                } else {
+                    colWidth = configOptions.columnWidth;
+                }
+
+
                 // update size if columb based
                 if (mapObject.options.sizeDesc.indexOf('col') === 0) {
                     // figure out many columns
@@ -624,7 +634,7 @@ function writeSVGFile(mapObject) {
 
                     // be sure to set a "columnWidth" and "gutterWidth" in your config.js file
                     // set new width based on those columns (Los Angeles Times column sizes for six-column page)
-                    var svgWidth = (configOptions.columnWidth * columnCount) + ((columnCount-1) * configOptions.gutterWidth);
+                    var svgWidth = (colWidth * columnCount) + ((columnCount-1) * configOptions.gutterWidth);
 
                     // set new sizes
                     svgHeight = parseFloat((svgWidth / origSVGWidth)*svgHeight).toFixed(3);
