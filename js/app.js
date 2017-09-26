@@ -1,24 +1,11 @@
 
-// check if config options are done
-if (typeof configOptions !== 'undefined') {
-    var attribution = (typeof configOptions.attribution !== 'undefined') ? configOptions.attribution : '';
-} else {
-    var attribution = '';
-}
+
 
 // Get window width
 var windowWidth = document.documentElement.clientWidth;
 var windowHeight = document.documentElement.clientHeight;
 
-// user map options
-// this stores all the user's map edits so they can be reloaded
-var userOptions = {};
-var mapSlug = "la-mapmaker-";
 
-
-// print sizes
-var colwidth = 330,
-    colgutter = 26;
 
 /* QUERY STRINGS
 
@@ -29,12 +16,12 @@ centerLng    center longitude for map's position
 zoom         zoom level for map; integer
 width        map's width
 height       map's height
-returnImage  will return an image if set to true
 attribution  credit for map
 mapzenapi    mapzen api key
 colWidth     pixel width for print columns
 gutterWidth  pixel width for print gutters
 slugStart    file export slugging convention
+returnImage  will return an image if set to true
 
 */
 
@@ -50,6 +37,29 @@ function getQueryVariable(variable) {
     }
 }
 
+
+// check if config options are done
+var attribution;
+if (typeof configOptions !== 'undefined') {
+    attribution = (typeof configOptions.attribution !== 'undefined') ? configOptions.attribution : '';
+} else {
+    attribution = '';
+}
+
+// replace attribution with anything in the url
+if (getQueryVariable('attribution')) {
+    attribution = getQueryVariable('attribution') + ', ';
+}
+
+// user map options
+// this stores all the user's map edits so they can be reloaded
+var userOptions = {};
+var mapSlug = "la-mapmaker-";
+
+
+// print sizes
+var colwidth = 330,
+    colgutter = 26;
 
 // build the map's ruler
 function createGrid(size) {
