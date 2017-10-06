@@ -55,6 +55,8 @@ if (getQueryVariable('attribution')) {
 var slugStart;
 if (getQueryVariable('slugStart')) {
     slugStart = getQueryVariable('slugStart') + '-';
+} else {
+    slugStart = 'la-';
 }
 
 // user map options
