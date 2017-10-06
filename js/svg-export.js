@@ -884,10 +884,6 @@ function writeSVGFile(mapObject) {
                 // })
 
                 resolve(d3.select('#export-container').html());
-
-    //         //jsdom done function done
-    //         }
-    //     })
     })
 } // writeSVG()
 
@@ -915,7 +911,7 @@ function createVector(options){
         .then(writeSVGFile)
         .then((svgString) => {
 
-            saveData(svgString, 'map-' + getDatetime() + '.svg');
+            saveData(svgString, slugStart + 'mapmaker-' + getDatetime() + '.svg');
             $("#download_vector").html('Download vector');
             $("#download_vector").removeClass("gray");
 
