@@ -51,10 +51,16 @@ if (getQueryVariable('attribution')) {
     attribution = getQueryVariable('attribution') + ', ';
 }
 
+
+var slugStart;
+if (getQueryVariable('slugStart')) {
+    slugStart = getQueryVariable('slugStart') + '-';
+}
+
 // user map options
 // this stores all the user's map edits so they can be reloaded
 var userOptions = {};
-var mapSlug = "la-mapmaker-";
+var mapSlug = slugStart + "mapmaker-";
 
 
 // print sizes
@@ -665,7 +671,7 @@ if (typeof configOptions !== 'undefined') {
 
         // grab popup text
         var userPopupText = $("#popupText").val();
-        mapSlug = "la-mapmaker-" + slugify($("#popupText").val());
+        mapSlug = slugStart + "mapmaker-" + slugify($("#popupText").val());
 
         if (popupMarker !== undefined && userPopupText.length <= 40) {
             // update popup
