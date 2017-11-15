@@ -146,7 +146,7 @@ var map = L.map('map', {
 
 map.attributionControl.setPrefix(attribution+'Mapzen, OpenStreetMap');
 var quietLAlayer = Tangram.leafletLayer({
-    scene: 'map-styles.yaml',
+    scene: 'map-styles-nydailynews.yaml',
     events: {
         // click: function(selection) { console.log('Click!', selection); }
     }
