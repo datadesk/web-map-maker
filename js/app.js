@@ -515,6 +515,9 @@ var sizeChange = function(option) {
 if (option.value == 'video') {
     $("#map_holder").width(1930); // these have to be 10 over to compensate for resizable
     $("#map_holder").height(1080);
+} else if (option.value == 'nydn_large') {
+    $("#map_holder").width(1200);
+    $("#map_holder").height(737);
 } else if (option.value == 'web_large') {
     $("#map_holder").width(1310);
     $("#map_holder").height(730);

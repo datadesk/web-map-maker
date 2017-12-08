@@ -1,3 +1,14 @@
+.leaflet-popup-content-wrapper {
+    box-shadow: none;
+    background: #ef1c1b;
+}
+.leaflet-container a.leaflet-popup-close-button {
+    color: #ef1c1b;
+}
+.leaflet-popup-tip {
+    background: url(../images/popup-tip-dailynews.png) top left no-repeat;
+}
+
 @font-face {
     font-family: 'Open Sans Condensed Light';
     src: url('/fonts/open-sans-condensed/light/OpenSans-CondLight-webfont.woff');

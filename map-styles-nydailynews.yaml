@@ -274,7 +274,7 @@ global:
     roads_visible_highways:             true  # ∆
     roads_visible_highway_ramps:        true # ∆
     roads_visible_major:                true # ∆
-    roads_visible_minor:                false # ∆
+    roads_visible_minor:                true # ∆
     roads_visible_service:              true # ∆
     roads_visible_taxi_and_runways:     true # ∆
     roads_visible_ferry_route:          false # ∆
