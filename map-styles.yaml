@@ -694,6 +694,10 @@ textures:
             zoo: [0, 126, 38, 38]
 
 sources:
+    osm:
+        type: MVT
+        url: http://10.44.137.187:32771/data/v3/{z}/{x}/{y}.pbf
+        max_zoom: 16
     mapzen:
         type: TopoJSON
         url:  https://tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.topojson
@@ -1293,6 +1297,14 @@ layers:
                             order: function() { return feature.sort_rank || 305; }
 
 # roads
+    roads_osm:
+        data: { source: osm, layer: transportation }
+        draw:
+            lines:
+                order: 1000
+                width: 10px;
+                color: '#000000'
+
     roads:
         data: { source: mapzen, layer: roads }
         filter: { not: { kind: rail } }

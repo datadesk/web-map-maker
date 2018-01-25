@@ -1,0 +1,97 @@
+scene:
+    background:
+        color: '#555'
+
+sources:
+    osm:
+        type: MVT
+        url: 'http://10.44.137.187:32774/data/v3/{z}/{x}/{y}.pbf'
+        max_zoom: 18
+
+cameras:
+    cam:
+        type: flat
+
+lights:
+    dir:
+        type: directional
+        direction: [.1, .5, -1]
+        diffuse: .7
+        ambient: .5
+
+layers:
+    water:
+        data:
+            source: osm
+            layer: water
+        draw:
+            water:
+                order: 10
+                color: [0.224, 0.224, 0.224, 1.00]
+    waterway:
+        data:
+            source: osm
+            layer: waterway
+        draw:
+            lines:
+                order: 11
+                color: '#353535'
+                width: 1.3px
+    landuse:
+        data:
+            source: osm
+            layer: landuse
+            filter:
+                class: residential
+        draw:
+            landuse:
+                order: 5
+                color: [0.349, 0.349, 0.349, 1.00]
+    park:
+        data:
+            source: osm
+            layer: park
+        draw:
+            park:
+                order: 5
+                color: [0.290, 0.290, 0.290, 1.00]
+    boundary:
+        data:
+            source: osm
+            layer: boundary
+        draw:
+            lines:
+                order: 30
+                color: [0.388, 0.388, 0.388, 1.00]
+                width: 1.2px
+    transportation:
+        data:
+            source: osm
+            layer: transportation
+        draw:
+            lines:
+                order: 30
+                color: [0.314, 0.314, 0.314, 1.00]
+                width: 1.2px
+        highway:
+            filter: { class: motorway, $zoom: { min: 8 } }
+            draw:
+                lines:
+                    visible: global.roads_visible_highways
+                    color: '#ffffff'
+                    width: [[9, 2px], [10, 3px], [12, 4px],[13, 6.6px],[16, 15px], [17, 20m]]
+                    cap: round
+                    join: round
+
+styles:
+    water:
+        base: polygons
+        mix: filter-grain
+    landuse:
+        base: polygons
+        mix: filter-grain
+    park:
+        base: polygons
+        mix: filter-grain
+    boundary:
+        base: lines
