@@ -15,7 +15,7 @@ window.addEventListener('rejectionhandled', event => {
 
 
     // set up land use groups for LAT
-    var landusePark = ['national_park', 'battlefield', 'protected_area', 'nature_reserve', 'park', 'golf_course', 'recreation_ground', 'camp_site', 'garden', 'allotments', 'pitch', 'meadow', 'village_green', 'farmland', 'playground', 'attraction', 'artwork', 'wilderness_hut', 'hanami'],
+    var landusePark = ['national_park', 'battlefield', 'protected_area', 'nature_reserve', 'park', 'golf_course', 'recreation_ground', 'camp_site', 'garden', 'allotments', 'pitch', 'meadow', 'village_green', 'playground', 'attraction', 'artwork', 'wilderness_hut', 'hanami'],
         landuseForest = ['forest', 'wood', 'natural_wood', 'natural_forest'],
         landuseAirport = ['aerodrome'],
         landuseMilitary = ['military'],
