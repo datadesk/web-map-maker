@@ -70,7 +70,7 @@ layers:
             layer: transportation
         draw:
             lines:
-                order: 30
+                order: function() {console.log(feature); return 30;}
                 color: [0.314, 0.314, 0.314, 1.00]
                 width: 1.2px
         highway:
