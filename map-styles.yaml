@@ -696,7 +696,7 @@ textures:
 sources:
     mapzen:
         type: TopoJSON
-        url: https://{s}.tiles.nextzen.org/mapzen/vector/v1/256/all/{z}/{x}/{y}.topojson
+        url: https://{s}.tiles.nextzen.org/tilezen/vector/v1/512/all/{z}/{x}/{y}.topojson
         # url:  https://tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.topojson
         # url_params:
             # api_key: global.sdk_mapzen_api_key
