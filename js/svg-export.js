@@ -343,7 +343,7 @@ function makeSVGCall(newMap) {
         // create list of tile URLs
         for (var i = 0; i < newMap.tilesToFetch.length; i++) {
             for (var j = 0; j < newMap.tilesToFetch[i].length; j++) {
-                var tileURL = "https://d.tiles.nextzen.org/mapzen/vector/v1/256/all/"+newMap.zoom+"/"+newMap.tilesToFetch[i][j].lon + "/" + newMap.tilesToFetch[i][j].lat + ".json";
+                var tileURL = "https://d.tiles.nextzen.org/tilezen/vector/v1/256/all/"+newMap.zoom+"/"+newMap.tilesToFetch[i][j].lon + "/" + newMap.tilesToFetch[i][j].lat + ".json";
 
                 tileURLs.push(tileURL);
             }
