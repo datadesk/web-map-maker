@@ -695,8 +695,8 @@ textures:
 
 sources:
     mapzen:
-        type: TopoJSON
-        url: https://{s}.tiles.nextzen.org/tilezen/vector/v1/512/all/{z}/{x}/{y}.topojson
+        type: MVT
+        url: https://{s}.tiles.nextzen.org/tilezen/vector/v1/256/all/{z}/{x}/{y}.mvt
         # url:  https://tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.topojson
         # url_params:
             # api_key: global.sdk_mapzen_api_key
@@ -707,8 +707,8 @@ sources:
         type: Raster
         url: https://elevation-tiles-prod.s3.amazonaws.com/normal/{z}/{x}/{y}.png
         # url: https://tile.mapzen.com/mapzen/terrain/v1/normal/{z}/{x}/{y}.png
-        url_params:
-            api_key: global.sdk_mapzen_api_key
+        # url_params:
+        #     api_key: global.sdk_mapzen_api_key
         max_zoom: 15
     mexican_states:
         type: GeoJSON
