@@ -697,6 +697,8 @@ sources:
     mapzen:
         type: MVT
         url: https://{s}.tiles.nextzen.org/tilezen/vector/v1/256/all/{z}/{x}/{y}.mvt
+        url_params:
+            api_key: global.sdk_mapzen_api_key
         url_subdomains: [a,b,c,d]
         rasters: [normals]
         max_zoom: 16
