@@ -130,7 +130,6 @@ if (getQueryVariable('zoom')) {
 }
 
 // jQuery map reference
-var $map = $('#map');
 var map = L.map('map', {
     attributionControl: true,
     center: initCoords,
