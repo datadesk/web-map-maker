@@ -357,7 +357,6 @@ scene:
 textures:
     pois:
         url: images/walkabout2@2x.png
-        #url: https://raw.githubusercontent.com/tangrams/walkabout-style/gh-pages/images/walkabout%402x.png
         filtering: mipmap
         sprites:
             # define sprites: [x origin, y origin, width, height]
