@@ -2646,8 +2646,6 @@ layers:
             country-z7:
                 # South Ossetia and Abkhazia aren't countries (they are disputed areas)
                 filter: { $zoom: { min: 7, max: 9 } }
-                draw:
-                    text-blend-order:
                 small-ones-z7:
                     filter:
                         $zoom: [7]
@@ -2786,9 +2784,8 @@ layers:
             _icons_later:
                 filter: { $zoom: { min: 11 } }
                 draw:
-                    icons:
-                        visible: false
                     text-blend-order:
+                        visible: false
 
             _text_early:
                 filter: { $zoom: { max: 11 } }
