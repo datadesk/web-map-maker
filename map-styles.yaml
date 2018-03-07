@@ -693,7 +693,7 @@ textures:
             zoo: [0, 126, 38, 38]
 
 sources:
-    mapzen:
+    nextzen:
         type: MVT
         url: https://{s}.tiles.nextzen.org/tilezen/vector/v1/256/all/{z}/{x}/{y}.mvt
         url_params:
@@ -1111,7 +1111,7 @@ layers:
 
     # Basemap styling
     earth:
-        data: { source: mapzen}
+        data: { source: nextzen}
         draw:
             terrain:
                 visible: false
@@ -1122,7 +1122,7 @@ layers:
                 order: 0
                 color: global.background
     water:
-        data: { source: mapzen, layer: water }
+        data: { source: nextzen, layer: water }
         filter: { not: { kind: [swimming_pool] } }
         draw:
             polygons:
@@ -1195,7 +1195,7 @@ layers:
                     outline:
                         width: [[9,0px],[11,0px],[12,0px],[13,0.5px],[14,0.75px],[15,0.75px],[16,0.75px],[17,1px]]
     swimming-pools:
-        data: { source: mapzen, layer: water }
+        data: { source: nextzen, layer: water }
         filter: { kind:[swimming_pool], $zoom: { min: 16 } }
         draw:
             polygons:
@@ -1204,7 +1204,7 @@ layers:
                 color: global.water
 
     water-line-labels:
-        data: { source: mapzen, layer: water }
+        data: { source: nextzen, layer: water }
         visible: global.labels_visible_water
         filter:
             all:
@@ -1234,7 +1234,7 @@ layers:
 
 #Jon's transit styles
     transit:
-        data: { source: mapzen , layer: transit }
+        data: { source: nextzen , layer: transit }
         filter: {not:{ kind: [platform]}, $zoom: { min: 11 }}
         draw:
             lines:
@@ -1270,7 +1270,7 @@ layers:
 
     transit-overlay-station-labels:
         visible: global.transit_visible
-        data: { source: mapzen, layer: [pois] }
+        data: { source: nextzen, layer: [pois] }
         station-train-subway:
             filter: { kind: [station, train-station, train_station], $zoom: { min: 11 } }
             stations:
@@ -1300,7 +1300,7 @@ layers:
     #             color: '#000000'
 
     roads:
-        data: { source: mapzen, layer: roads }
+        data: { source: nextzen, layer: roads }
         filter: { not: { kind: rail } }
         draw:
             lines:
@@ -2311,7 +2311,7 @@ layers:
 
 
     buildings:
-        data: { source: mapzen, layer: buildings }
+        data: { source: nextzen, layer: buildings }
         filter: { $zoom: { min: 14 }, not: { location: underground, layer: -1 }}
         draw:
             polygons:
@@ -2319,7 +2319,7 @@ layers:
                 order: 400
                 color: global.buildings
     building-small-borders:
-        data: { source: mapzen, layer: buildings }
+        data: { source: nextzen, layer: buildings }
         filter: { area: { max: 1000 }, $zoom: { min: 14 }, not: { location: underground, layer: -1 }}
         draw:
             lines:
@@ -2328,7 +2328,7 @@ layers:
                 width: [[14,0],[16,1px],[17,1px],[18,2px]]
                 order: function() { return feature.sort_rank; }
     building-big-borders:
-        data: { source: mapzen, layer: buildings }
+        data: { source: nextzen, layer: buildings }
         filter: { area: { min: 1000 }, $zoom: { min: 14 }, not: { location: underground, layer: -1 }}
         draw:
             lines:
@@ -2408,10 +2408,11 @@ layers:
                         text_source: global.ux_language_text_source_building_and_address
 
     boundaries:
-        data: { source: mapzen, layer: boundaries }
+        data: { source: nextzen, layer: boundaries }
         draw:
             lines:
-                order: function() { return (feature.sort_rank + 100); }
+                order: 101
+                # order: function() { return (feature.sort_rank + 100); }
         country:
             filter:
                 - kind: country
@@ -2464,31 +2465,39 @@ layers:
                         order: function() { return (feature.sort_rank + 100); }
                         color: global.nation_boundary
                         width: [[1,0.5px],[9,2.5px],[17,14m]]
-
         region:
             filter:
                 - kind: [region,macroregion]
                 - kind_detail: [3,4]
+                - function() { console.log(feature); }
             draw:
                 lines:
                     visible: global.borders_visible_states
+                    order: 101
                     color: global.state_boundary
+                    # width: 10px
                     width: [[0, 0.5px], [2, 1.0px], [5, 1.25px], [6, 1.5px], [7, 1.75px], [9, 2.0px], [14, 4.0px], [16, 5.0px], [17, 10m]]
-            water:
-                filter: { maritime_boundary: true }
-                draw:
-                    lines:
-                        visible: false
+            # water:
+            #     filter: { maritime_boundary: true }
+            #     draw:
+            #         lines:
+            #             visible: false
             early:
                 filter: { not: { min_zoom: [1,2] }, $zoom: { max: 8 } }
                 draw:
                     lines:
                         visible: false
-                water:
-                    filter: { maritime_boundary: true }
-                    draw:
-                        lines:
-                            visible: false
+
+            # early:
+            #     filter: { not: { min_zoom: [1,2] }, $zoom: { max: 8 } }
+            #     draw:
+            #         lines:
+            #             visible: false
+            #     water:
+            #         filter: { maritime_boundary: true }
+            #         draw:
+            #             lines:
+            #                 visible: false
             labels-z9-up:
                 filter: { name: true, $zoom: { min: 9 }, not: { maritime_boundary: true } }
                 draw:
@@ -2542,7 +2551,7 @@ layers:
                         visible: false
 
     places:
-        data: { source: mapzen, layer: places }
+        data: { source: nextzen, layer: places }
         filter:
             name: true
         draw:
@@ -2742,6 +2751,7 @@ layers:
                             any:
                                 - population: false
                                 - population: { max: 1000000 }
+
         populated-places:
             filter:
                 kind: locality
@@ -3207,7 +3217,8 @@ layers:
                     visible: global.borders_visible_states
                     order: 101
                     color: global.state_boundary
-                    width: [[0, 0.5px], [2, 1.0px], [5, 1.25px], [6, 1.5px], [7, 1.75px], [9, 2.0px], [14, 4.0px], [16, 5.0px], [17, 10m]]
+                    width: 10px
+                    # width: [[0, 0.5px], [2, 1.0px], [5, 1.25px], [6, 1.5px], [7, 1.75px], [9, 2.0px], [14, 4.0px], [16, 5.0px], [17, 10m]]
             water:
                 filter: { maritime_boundary: true }
                 draw:
@@ -3239,7 +3250,7 @@ layers:
 
 
     pois:
-        data: { source: mapzen, layer: pois }
+        data: { source: nextzen, layer: pois }
         filter:
             all:
                 - kind: [park,hospital,cemetery,school,golf_course,university,stadium,college,beach,aerodrome]
@@ -3939,7 +3950,7 @@ layers:
                                 weight: 600
 
     water-area-labels:
-        data: { source: mapzen, layer: [water] }
+        data: { source: nextzen, layer: [water] }
         visible: global.labels_visible_water
         filter:
             all:
@@ -3988,7 +3999,7 @@ layers:
                 text-blend-order: { font: { size: 30px } }
 
     ocean-sea-labels:
-        data: { source: mapzen, layer: water }
+        data: { source: nextzen, layer: water }
         visible: global.labels_visible_water
         filter: { name: true, kind: [sea, ocean] }
         draw:
@@ -4026,7 +4037,7 @@ layers:
                         size: [[4,22px],[6,22px],[8,24px]]
 
     earth-labels:
-        data: { source: mapzen, layer: earth }
+        data: { source: nextzen, layer: earth }
         filter: { name: true }
         draw:
             text-blend-order:
@@ -4046,7 +4057,7 @@ layers:
                         stroke: { color: global.text_stroke, width: 4 }
 
     landuse:
-        data: { source: mapzen, layer: landuse }
+        data: { source: nextzen, layer: landuse }
         draw:
             terrain:
                 order: function() { return feature.sort_rank; }
@@ -4385,7 +4396,7 @@ layers:
                         order: 2
 
     natural-overlay:
-        data: { source: mapzen, layer: earth }
+        data: { source: nextzen, layer: earth }
         filter: { kind: [cliff, arete, ridge, valley] }
         draw:
             lines:

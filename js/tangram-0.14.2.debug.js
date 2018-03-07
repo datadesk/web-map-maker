@@ -33497,10 +33497,6 @@ exports.default = SceneLoader = {
                         // process draw groups for current layer
                         var draws = layer[prop];
                         for (var group in draws) {
-                            console.log(draws[group]);
-                            if (draws[group] === null) {
-                                console.log(draws);
-                            }
 
                             if (draws[group].texture) {
                                 var _tex = draws[group].texture;
