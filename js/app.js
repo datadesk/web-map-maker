@@ -472,7 +472,7 @@ function downloadIMG() {
                             var lnk = document.createElement('a'),
                                 e;
                                 lnk.href = canvas.toDataURL();
-                                lnk.download = mapSlug + datetime + 'test.png';
+                                lnk.download = mapSlug + datetime + '.png';
 
                             if (document.createEvent) {
 
