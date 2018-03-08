@@ -50,6 +50,13 @@ window.addEventListener('rejectionhandled', event => {
             }
         }
 
+        // piers need to be their own thing to sit on top of ocean
+        formattedJson['piers'] = {
+            pierland: {
+                features: []
+            }
+        }
+
         // landuse
         if (mapObject.options.layers_visible.indexOf('landuse_visible') != -1) {
             formattedJson['landuse'] = {}
@@ -303,6 +310,7 @@ function parseJSON(req) {
         if (newMap.options.layers_visible.indexOf('landuse_visible') != -1) newMap.dKinds.push('landuse');
         if (newMap.options.layers_visible.indexOf('water_visible_ocean') != -1) newMap.dKinds.push('ocean');
         if (newMap.options.layers_visible.indexOf('water_visible') != -1) newMap.dKinds.push('water');
+        newMap.dKinds.push('piers');
         if (newMap.options.layers_visible.indexOf('transit_visible') != -1 || newMap.options.layers_visible.indexOf('rail_visible') != -1 ) newMap.dKinds.push('transit');
         if (newMap.options.layers_visible.indexOf('roads_visible') != -1) newMap.dKinds.push('roads');
         if (newMap.options.layers_visible.indexOf('buildings_visible') != -1) newMap.dKinds.push('buildings');
@@ -673,6 +681,7 @@ function writeSVGFile(mapObject) {
                 $('#layergroup').append($("svg g#boundaries"));
                 $('#layergroup').append($("svg g#landuse"));
                 $('#layergroup').append($("svg g#ocean"));
+                $('#layergroup').append($("svg g#piers"));
                 $('#layergroup').append($("svg g#water"));
                 $('#layergroup').append($("svg g#transit"));
                 $('#layergroup').append($("svg g#roads"));
@@ -686,6 +695,15 @@ function writeSVGFile(mapObject) {
 
                 var highwayWidth = getLineWidth(scene.config.layers.roads.highway);
 
+                // move piers
+                $("#landuse #pier path").appendTo("#pierland");
+
+                d3.selectAll('#pierland path')
+                    .attr('fill','#fff')
+                    .attr('stroke','#fff')
+                    .attr('stroke-width','0px');
+
+                $("#landuse #pier").remove();
 
                 // roads
                 // widths based on L.A. Times print styles
@@ -795,10 +813,6 @@ function writeSVGFile(mapObject) {
                     .attr('fill','#eff0ef')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
-                d3.selectAll('#landuse #pier path')
-                    .attr('fill','#fff')
-                    .attr('stroke','#fff')
-                    .attr('stroke-width','0px');
                 d3.selectAll('#etc path')
                     .attr('fill','none')
                     .attr('stroke','#fff')
@@ -810,22 +824,22 @@ function writeSVGFile(mapObject) {
                     .attr('fill','#A9D7F4')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
-                    console.log('collecting #ocean path')
+                console.log('collecting #ocean path')
                 d3.selectAll('#ocean path')
                     .attr('fill','#A9D7F4')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
-                    console.log('collecting #riverbank path')
+                console.log('collecting #riverbank path')
                 d3.selectAll('#riverbank path')
                     .attr('fill','#A9D7F4')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
-                    console.log('collecting #river path')
+                console.log('collecting #river path')
                 d3.selectAll('#river path')
                     .attr('fill','none')
                     .attr('stroke','#abd7f3')
                     .attr('stroke-width','1px');
-                    console.log('collecting #stream path')
+                console.log('collecting #stream path')
                 d3.selectAll('#stream path')
                     .attr('fill','none')
                     .attr('stroke','#A9D7F4')
