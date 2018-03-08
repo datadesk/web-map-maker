@@ -298,10 +298,10 @@ function parseJSON(req) {
         newMap.dKinds = [];
 
         // push parent layers into array
-        if (newMap.options.layers_visible.indexOf('water_visible_ocean') != -1) newMap.dKinds.push('ocean');
         newMap.dKinds.push('earth');
         if (newMap.options.layers_visible.indexOf('borders_visible') != -1) newMap.dKinds.push('boundaries');
         if (newMap.options.layers_visible.indexOf('landuse_visible') != -1) newMap.dKinds.push('landuse');
+        if (newMap.options.layers_visible.indexOf('water_visible_ocean') != -1) newMap.dKinds.push('ocean');
         if (newMap.options.layers_visible.indexOf('water_visible') != -1) newMap.dKinds.push('water');
         if (newMap.options.layers_visible.indexOf('transit_visible') != -1 || newMap.options.layers_visible.indexOf('rail_visible') != -1 ) newMap.dKinds.push('transit');
         if (newMap.options.layers_visible.indexOf('roads_visible') != -1) newMap.dKinds.push('roads');
@@ -668,10 +668,11 @@ function writeSVGFile(mapObject) {
                     // .attr('transform','translate(' + -svgX*(origSVGWidth/svgWidth) + ' ' + -svgY*(origSVGWidth/svgWidth) + ')'); // translate over by x and y
 
                 // move parent layers into clip group
-                $('#layergroup').append($("svg g#ocean"));
+                // this sets the order of layers in the SVG
                 $('#layergroup').append($("svg g#earth"));
                 $('#layergroup').append($("svg g#boundaries"));
                 $('#layergroup').append($("svg g#landuse"));
+                $('#layergroup').append($("svg g#ocean"));
                 $('#layergroup').append($("svg g#water"));
                 $('#layergroup').append($("svg g#transit"));
                 $('#layergroup').append($("svg g#roads"));
