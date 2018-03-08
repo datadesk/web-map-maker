@@ -460,25 +460,32 @@ function downloadIMG() {
                                         + currentdate.getMinutes() + "-" +
                                         currentdate.getSeconds();
 
-                        lnk.download = mapSlug + datetime + '.png';
-
-                        // compress down canvas
                         var canvas = document.getElementById("canvas");
-                        var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
 
-                        lnk.href = image;
+                        if (canvas.msToBlob) { //for IE
+                            var blob = canvas.msToBlob();
+                            window.navigator.msSaveBlob(blob, mapSlug + datetime + '.png');
+                        } else {
+                            //other browsers
 
-                        if (document.createEvent) {
+                            // create an off-screen anchor tag
+                            var lnk = document.createElement('a'),
+                                e;
+                                lnk.href = canvas.toDataURL();
+                                lnk.download = mapSlug + datetime + 'test.png';
 
-                            e = document.createEvent("MouseEvents");
-                            e.initMouseEvent("click", true, true, window,
-                                             0, 0, 0, 0, 0, false, false, false,
-                                             false, 0, null);
+                            if (document.createEvent) {
 
-                            lnk.dispatchEvent(e);
+                                e = document.createEvent("MouseEvents");
+                                e.initMouseEvent("click", true, true, window,
+                                                 0, 0, 0, 0, 0, false, false, false,
+                                                 false, 0, null);
 
-                        } else if (lnk.fireEvent) {
-                            lnk.fireEvent("onclick");
+                                lnk.dispatchEvent(e);
+
+                            } else if (lnk.fireEvent) {
+                                lnk.fireEvent("onclick");
+                            }
                         }
                     }
                 });
