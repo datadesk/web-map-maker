@@ -143,7 +143,7 @@ var map = L.map('map', {
 
 
 
-map.attributionControl.setPrefix(attribution+'Mapzen, OpenStreetMap');
+map.attributionControl.setPrefix(attribution+'Nextzen, OpenStreetMap');
 var quietLAlayer = Tangram.leafletLayer({
     scene: 'map-styles.yaml',
     events: {
