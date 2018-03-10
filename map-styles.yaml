@@ -2469,7 +2469,6 @@ layers:
             filter:
                 - kind: [region,macroregion]
                 - kind_detail: [3,4]
-                - function() { console.log(feature); }
             draw:
                 lines:
                     visible: global.borders_visible_states

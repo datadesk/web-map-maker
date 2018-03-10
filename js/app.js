@@ -671,7 +671,6 @@ if (typeof configOptions !== 'undefined') {
 
     // replace placeholder text if no bing api
     if (typeof configOptions.bingAPI == 'undefined') {
-        console.log('hello')
         $("#bing-geocodifier-form input").attr('placeholder','34.052, -118.245');
     }
 
@@ -1206,8 +1205,6 @@ function getDatetime() {
 
 // vector download
 function downloadVector() {
-    console.log('downloadVector()');
-
     // show map loading
     $("#download_vector").html('Vector loading...<img src="images/preloader.gif" alt="Preloader" class="map_loader" />');
     $("#download_vector").addClass("gray");
@@ -1239,22 +1236,6 @@ function downloadVector() {
             mapOptions['layers_visible'].push($(this)[0].id);
         }
     });
-
-    // add custom labels
-
-
-    // $("svg path").each(function(){
-    //     var thisClass = $(this).attr('class');
-    //     if (thisClass.indexOf('polygon-feature') != -1) { mapOptions['polygonFeatures'].push($(this).attr('d')); }
-    //     else if (thisClass.indexOf('line-feature') != -1) { mapOptions['lineFeatures'].push($(this).attr('d')); }
-    //     else if (thisClass.indexOf('point-feature') != -1) { mapOptions['pointFeatures'].push($(this).attr('d')); }
-    //     // mapOptions['geojson'].push($(this));
-    // });
-
-
-    console.log(JSON.stringify(mapOptions));
-
-
 
     createVector(JSON.stringify(mapOptions))
     .then((result) => {
