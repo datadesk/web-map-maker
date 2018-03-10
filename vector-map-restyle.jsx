@@ -323,7 +323,7 @@ sourceText.textRange.characterAttributes.textFont = app.textFonts.getByName(defa
 sourceText.textRange.characterAttributes.size = 6;
 
 var creditText = doc.textFrames.add();
-creditText.contents = "Los Angeles Times";
+creditText.contents = "YOUR NAME";
 creditText.top = -1;
 creditText.left = 330;
 creditText.textRange.characterAttributes.textFont = app.textFonts.getByName("LAText-Roman");
