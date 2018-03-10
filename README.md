@@ -8,7 +8,7 @@
 |__| |__||_______||_______|  |_|   |_||__| |__||___|      |_|   |_||__| |__||___| |_||_______||___|  |_|
 ```
 
-We make a lot of maps at the Los Angeles Times. So we made this tool to help us make them faster. It uses Tangram, which was developed by Mapzen. They shut down in early 2018, but tiles are now hosted by (Nextzen)[https://www.nextzen.org/]. The map uses Natural Earth and OpenStreetMap data to export an image or a vector file.
+We make a lot of maps at the Los Angeles Times. So we made this tool to help us make them faster. It uses Tangram, which was developed by Mapzen. They shut down in early 2018, but tiles are now hosted by [Nextzen](https://www.nextzen.org/). The map uses Natural Earth and OpenStreetMap data to export an image or a vector file.
 
 ![#NICAR18](https://user-images.githubusercontent.com/695934/37242701-9ad8c81e-2433-11e8-9ad4-ad2d7646c02f.png)
 
