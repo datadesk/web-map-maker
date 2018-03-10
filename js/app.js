@@ -670,7 +670,7 @@ if (typeof configOptions !== 'undefined') {
     });
 
     // replace placeholder text if no bing api
-    if (typeof configOptions.bingAPI == 'undefined') {
+    if (typeof configOptions.bingAPI == 'undefined' || configOptions.bingAPI.length === 0) {
         $("#bing-geocodifier-form input").attr('placeholder','34.052, -118.245');
     }
 
