@@ -1,5 +1,4 @@
 global:
     # Sign up for a Mapzen API key to enjoy higher rate limits
     # https://mapzen.com/documentation/overview/#developer-accounts-and-api-keys
-    sdk_mapzen_api_key: 'k8ZHAQuMQpq9FIMdZGBFnA'
-    lat_tiles: http://{s}.nextzen.datadesk.news/tilezen/vector/v1/512/all/{z}/{x}/{y}.topojson
+    sdk_mapzen_api_key: 'O-JF_PGETeGYMBOx8xd1FA'
