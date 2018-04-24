@@ -2478,11 +2478,12 @@ layers:
                     color: global.state_boundary
                     # width: 10px
                     width: [[0, 0.5px], [2, 1.0px], [5, 1.25px], [6, 1.5px], [7, 1.75px], [9, 2.0px], [14, 4.0px], [16, 5.0px], [17, 10m]]
-            water:
-                filter: { maritime_boundary: true }
-                draw:
-                    lines:
-                        visible: false
+            # Leaving this off because it makes state boundaries invisible < z8
+            # water:
+            #     filter: { maritime_boundary: true }
+            #     draw:
+            #         lines:
+            #             visible: false
             early:
                 filter: { not: { min_zoom: [1,2] }, $zoom: { max: 8 } }
                 draw:
