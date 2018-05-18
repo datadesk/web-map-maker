@@ -502,6 +502,9 @@ function downloadIMG() {
 } // downloadIMG();
 
 
+
+
+
 var frozenZoom = false;
 
 function findFirstDescendant(parent, tagname) {
@@ -716,7 +719,7 @@ scene.subscribe({
     }
 });
 
-// fire when map is down loading
+// fire when map is done loading
 scene.subscribe({
     view_complete: function () {
         $("#download_img").html("Download image");
@@ -1150,41 +1153,6 @@ $('body').on('mousedown', '.rotate_handle', function(e) {
     });
 });
 
-
-
-
-// kill tooltip on scroll
-$( window ).scroll(function() {
-    $("#tooltip").css({"opacity":"0","height":"auto","width":"0px"}); // hide
-    // $("#council_name").html("");
-});
-$( 'body' ).on('click',function() {
-    $("#tooltip").css({"opacity":"0","height":"auto","width":"0px"}); // hide
-    // $("#council_name").html("");
-});
-$("#download_vector").mouseover(function () {
-    // var name = $(this).attr("title");
-    // $(this).css('cursor','pointer');
-    // message if auto labels are checked
-    if ($("#labels_visible").prop('indeterminate') == true || $("#labels_visible").prop('checked') == true) {
-        $("#tooltip").css({"opacity":"1","height":"auto","width":"200px"});
-        $("#tooltip").html('<p>Automatic labels cannot be exported to vector.</p>');
-    }
-});
-$("#download_vector").mouseout(function () {
-    $("#tooltip").css({"opacity":"0","height":"auto","width":"0px"}); // hide
-});
-// Move the tooltip with the mouse
-$(window).mousemove( function(e) {
-    if (windowWidth > 400) {
-        var tooltipHeight = $("#tooltip").height();
-        mouseY = e.pageY;
-        mouseX = e.pageX;
-        $("#tooltip").css({"top":(mouseY+20)+"px","left":(mouseX+10)+"px"});
-    }
-});
-
-
 function getDatetime() {
     // get current datetime
     var currentdate = new Date();
@@ -1237,18 +1205,91 @@ function downloadVector() {
         }
     });
 
-    createVector(JSON.stringify(mapOptions))
-    .then((result) => {
+    // if terrain's visible, grab the blob!
+    console.log(mapOptions);
+    var terrainBlob;
+    if (mapOptions['layers_visible'].indexOf("terrain_visible") > -1) {
+        console.log("you want the terrain!");
 
-            // $("#download_vector").html('Download vector');
-            // $("#download_vector").removeClass("gray");
-    }).catch((err) => {
-        alert('Problem downloading file');
-        console.log(err);
+        // create list of labels to turn back on
+        var onLabels = [];
 
-        $("#download_vector").html('Download vector');
-        $("#download_vector").removeClass("gray");
+        // turn off every layer except terrain
+        // loop through visible layers
+        $("#checkboxes input").each(function(){
+            // if checked and also not labels and also not half transparent
+            if (($(this)[0].checked == true || $(this).prop('indeterminate') == true)) {
+                var idname = $(this)[0].id;
+                onLabels.push(idname); // push into list to reactivate later
+                $(this).attr("checked", false); // uncheck
+                scene.config.global[idname] = false; // turn off
 
-    });
+
+
+            }
+        });
+
+        parentChecks(); // check parent checks
+        scene.updateConfig(); // update scene
+        // map done loading
+
+
+        // wait one second
+        setTimeout(function() {
+            console.log("I waited for you")
+
+            // scene.subscribe({
+            //     view_complete: function () {
+            //         console.log('loading....');
+            // //         // grab the terrain blog
+            //             console.log(scene)
+
+                    scene.screenshot().then(function(screenshot) {
+
+                        terrainBlob = screenshot.url;
+
+                        var baseIMG = new Image();
+                        baseIMG.src = screenshot.url;
+                        $("body").append(baseIMG);
+
+
+                        // goVector();
+                    });
+
+                // },
+                // error: function (e) {
+                //     console.log('scene error:', e);
+                // },
+                // warning: function (e) {
+                //     console.log('scene warning:', e);
+                // }
+            // });
+
+
+        }, 1000);
+
+
+
+    } else {
+        goVector();
+    }
+
+    function goVector() {
+        console.log("goVector");
+        createVector(JSON.stringify(mapOptions),terrainBlob)
+        .then((result) => {
+
+                // $("#download_vector").html('Download vector');
+                // $("#download_vector").removeClass("gray");
+        }).catch((err) => {
+            alert('Problem downloading file');
+            console.log(err);
+
+            $("#download_vector").html('Download vector');
+            $("#download_vector").removeClass("gray");
+
+        });
+    }
+
 
 }
