@@ -7,7 +7,6 @@ window.addEventListener('rejectionhandled', event => {
     console.log('REJECTIONHANDLED');
 });
 
-
     // set up land use groups for LAT
     var landusePark = ['national_park', 'battlefield', 'protected_area', 'nature_reserve', 'park', 'golf_course', 'recreation_ground', 'camp_site', 'garden', 'allotments', 'pitch', 'meadow', 'village_green', 'playground', 'attraction', 'artwork', 'wilderness_hut', 'hanami'],
         landuseForest = ['forest', 'wood', 'natural_wood', 'natural_forest'],
@@ -496,9 +495,6 @@ function bakeJson(mapObject) {
                         } else if (response == 'earth') {
                             geojsonToReform['earth']['earthland'].features.push(feature);
                         }
-                        // else {
-                        //     geojsonToReform[response]['etc'].features.push(feature)
-                        // }
                     }
                 }
             }
@@ -856,16 +852,18 @@ function writeSVGFile(mapObject) {
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
 
-                var terrainImage = $("#terrain-img").attr("src");
-
                 // terrain
-                d3.selectAll("#layergroup #terrain #terrainimg")
-                    .append("svg:image")
-                        .attr("x","13.287")
-                        .attr("y","48.458")
-                        .attr("height","285.277")
-                        .attr("width","508.027")
-                        .attr("xlink:href",terrainImage)
+                console.log("#terrain #terrainimg");
+                var terrainImage = $("#terrain-img").attr("src");
+                if (terrainImage != undefined) {
+                    d3.selectAll("#terrain #terrainimg")
+                        .append("svg:image")
+                            .attr("x",svgX)
+                            .attr("y",svgY)
+                            .attr("height",origSVGHeight)
+                            .attr("width",origSVGWidth)
+                            .attr("xlink:href",terrainImage);
+                }
 
 
                 // buildings

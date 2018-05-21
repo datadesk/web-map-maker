@@ -1211,6 +1211,9 @@ function downloadVector() {
     if (mapOptions['layers_visible'].indexOf("terrain_visible") > -1) {
         console.log("you want the terrain!");
 
+        // remove old terrain
+        $("#terrain-img").remove();
+
         // create list of labels to turn back on
         var onLabels = [];
 
@@ -1255,13 +1258,15 @@ function downloadVector() {
 
                         // reset everything
                         for (var i = 0; i < onLabels.length; i++) {
-                            $("#"+onLabels[i]).attr("checked", true); // check
+                            console.log("onLabels " +onLabels[i])
+                            document.getElementById(onLabels[i]).checked = true;
                             scene.config.global[onLabels[i]] = true; // turn on
                         }
 
                         parentChecks(); // check parent checks
                         scene.updateConfig(); // update scene
 
+                        goVector();
 
                     });
 
@@ -1276,7 +1281,6 @@ function downloadVector() {
 
 
         }, 1000);
-        goVector();
 
 
 
