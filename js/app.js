@@ -1239,52 +1239,33 @@ function downloadVector() {
 
         // wait one second
         setTimeout(function() {
-            console.log("I waited for you")
+            scene.screenshot().then(function(screenshot) {
 
-            // scene.subscribe({
-            //     view_complete: function () {
-            //         console.log('loading....');
-            // //         // grab the terrain blog
-            //             console.log(scene)
+                // capture terrain and strap it to the page
+                terrainBlob = screenshot.url;
+                var baseIMG = new Image();
+                baseIMG.src = screenshot.url;
+                baseIMG.id = "terrain-img";
+                $("body").append(baseIMG);
 
-                    scene.screenshot().then(function(screenshot) {
+                // reset everything
+                for (var i = 0; i < onLabels.length; i++) {
+                    document.getElementById(onLabels[i]).checked = true;
+                    scene.config.global[onLabels[i]] = true; // turn on
+                }
 
-                        terrainBlob = screenshot.url;
+                // do your update
+                parentChecks(); // check parent checks
+                scene.updateConfig(); // update scene
 
-                        var baseIMG = new Image();
-                        baseIMG.src = screenshot.url;
-                        baseIMG.id = "terrain-img";
-                        $("body").append(baseIMG);
+                // slam onto vector file
+                goVector();
 
-                        // reset everything
-                        for (var i = 0; i < onLabels.length; i++) {
-                            console.log("onLabels " +onLabels[i])
-                            document.getElementById(onLabels[i]).checked = true;
-                            scene.config.global[onLabels[i]] = true; // turn on
-                        }
-
-                        parentChecks(); // check parent checks
-                        scene.updateConfig(); // update scene
-
-                        goVector();
-
-                    });
-
-                // },
-                // error: function (e) {
-                //     console.log('scene error:', e);
-                // },
-                // warning: function (e) {
-                //     console.log('scene warning:', e);
-                // }
-            // });
-
-
+            });
         }, 1000);
 
-
-
     } else {
+        // if no terrain selected
         goVector();
     }
 
