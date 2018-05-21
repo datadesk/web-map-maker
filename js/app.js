@@ -1250,10 +1250,19 @@ function downloadVector() {
 
                         var baseIMG = new Image();
                         baseIMG.src = screenshot.url;
+                        baseIMG.id = "terrain-img";
                         $("body").append(baseIMG);
 
+                        // reset everything
+                        for (var i = 0; i < onLabels.length; i++) {
+                            $("#"+onLabels[i]).attr("checked", true); // check
+                            scene.config.global[onLabels[i]] = true; // turn on
+                        }
 
-                        // goVector();
+                        parentChecks(); // check parent checks
+                        scene.updateConfig(); // update scene
+
+
                     });
 
                 // },
@@ -1267,6 +1276,7 @@ function downloadVector() {
 
 
         }, 1000);
+        goVector();
 
 
 
