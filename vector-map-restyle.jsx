@@ -57,7 +57,7 @@ var otherBorderColor = new CMYKColor(); otherBorderColor.black = 30; otherBorder
 
 // define land use colors
 var earthColor = new CMYKColor(); earthColor.black = 0; earthColor.cyan = 0; earthColor.magenta = 0; earthColor.yellow = 0;
-var waterColor = new CMYKColor(); waterColor.black = 0; waterColor.cyan = 30; waterColor.magenta = 0; waterColor.yellow = 5;
+var waterColor = new CMYKColor(); waterColor.black = 0; waterColor.cyan = 30; waterColor.magenta = 5; waterColor.yellow = 0;
 var airportColor = new CMYKColor(); airportColor.black = 6; airportColor.cyan = 5; airportColor.magenta = 0; airportColor.yellow = 0;
 var beachColor = new CMYKColor(); beachColor.black = 0; beachColor.cyan = 0; beachColor.magenta = 0; beachColor.yellow = 13;
 var cemeteryColor = new CMYKColor(); cemeteryColor.black = 0; cemeteryColor.cyan = 7; cemeteryColor.magenta = 5; cemeteryColor.yellow = 9;
