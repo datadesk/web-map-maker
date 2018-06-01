@@ -64,7 +64,7 @@ These instructions help you make this map-builder work for your organization whi
 
 1. Copy the [map-styles.yaml](master/map-styles.yaml) to a new file.
     1. Whatever you name the new file, update your config.js so `'styleFile': 'map-styles.yaml'` points to your new file's name.
-1. If you want a different font, 
+1. If you want a different font for the labels on the map, copy [styles/styles-custom-EXAMPLE.css](master/styles/styles-custom-EXAMPLE.css) to a file named `styles/styles-custom.css` and edit it from there. You may have to add or find the path to your own web font.
 
 ## Vector files for print
 Because we make maps for web and print, if you select a column size from the drop-down you'll get a map with the column-equivelant for our six-column layout. The vector paths exported from "download vector" can then be converted to CMYK.
