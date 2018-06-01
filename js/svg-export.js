@@ -1,8 +1,3 @@
-// var fs = require('fs');
-// var jsdom = require('jsdom');
-
-// var d3 = require('d3');
-// var XMLHttpRequest = require('xhr2')
 window.addEventListener('unhandledrejection', event => {
     // Prevent error output on the console:
     event.preventDefault();
@@ -12,10 +7,8 @@ window.addEventListener('rejectionhandled', event => {
     console.log('REJECTIONHANDLED');
 });
 
-
-
     // set up land use groups for LAT
-    var landusePark = ['national_park', 'battlefield', 'protected_area', 'nature_reserve', 'park', 'golf_course', 'recreation_ground', 'camp_site', 'garden', 'allotments', 'pitch', 'meadow', 'village_green', 'farmland', 'playground', 'attraction', 'artwork', 'wilderness_hut', 'hanami'],
+    var landusePark = ['national_park', 'battlefield', 'protected_area', 'nature_reserve', 'park', 'golf_course', 'recreation_ground', 'camp_site', 'garden', 'allotments', 'pitch', 'meadow', 'village_green', 'playground', 'attraction', 'artwork', 'wilderness_hut', 'hanami'],
         landuseForest = ['forest', 'wood', 'natural_wood', 'natural_forest'],
         landuseAirport = ['aerodrome'],
         landuseMilitary = ['military'],
@@ -46,6 +39,20 @@ window.addEventListener('rejectionhandled', event => {
         // earth
         formattedJson['earth'] = {
             earthland: {
+                features: []
+            }
+        }
+
+        formattedJson['terrain'] = {
+            terrainimg: {
+                features: []
+            }
+        }
+
+
+        // piers need to be their own thing to sit on top of ocean
+        formattedJson['piers'] = {
+            pierland: {
                 features: []
             }
         }
@@ -298,11 +305,13 @@ function parseJSON(req) {
         newMap.dKinds = [];
 
         // push parent layers into array
-        if (newMap.options.layers_visible.indexOf('water_visible_ocean') != -1) newMap.dKinds.push('ocean');
         newMap.dKinds.push('earth');
+        newMap.dKinds.push('terrain');
         if (newMap.options.layers_visible.indexOf('borders_visible') != -1) newMap.dKinds.push('boundaries');
         if (newMap.options.layers_visible.indexOf('landuse_visible') != -1) newMap.dKinds.push('landuse');
+        if (newMap.options.layers_visible.indexOf('water_visible_ocean') != -1) newMap.dKinds.push('ocean');
         if (newMap.options.layers_visible.indexOf('water_visible') != -1) newMap.dKinds.push('water');
+        newMap.dKinds.push('piers');
         if (newMap.options.layers_visible.indexOf('transit_visible') != -1 || newMap.options.layers_visible.indexOf('rail_visible') != -1 ) newMap.dKinds.push('transit');
         if (newMap.options.layers_visible.indexOf('roads_visible') != -1) newMap.dKinds.push('roads');
         if (newMap.options.layers_visible.indexOf('buildings_visible') != -1) newMap.dKinds.push('buildings');
@@ -343,7 +352,7 @@ function makeSVGCall(newMap) {
         // create list of tile URLs
         for (var i = 0; i < newMap.tilesToFetch.length; i++) {
             for (var j = 0; j < newMap.tilesToFetch[i].length; j++) {
-                var tileURL = "https://tile.mapzen.com/mapzen/vector/v1/all/"+newMap.zoom+"/"+newMap.tilesToFetch[i][j].lon + "/" + newMap.tilesToFetch[i][j].lat + ".json?api_key="+newMap.key;
+                var tileURL = "https://d.tiles.nextzen.org/tilezen/vector/v1/256/all/"+newMap.zoom+"/"+newMap.tilesToFetch[i][j].lon + "/" + newMap.tilesToFetch[i][j].lat + ".json?api_key="+newMap.key;
 
                 tileURLs.push(tileURL);
             }
@@ -486,9 +495,6 @@ function bakeJson(mapObject) {
                         } else if (response == 'earth') {
                             geojsonToReform['earth']['earthland'].features.push(feature);
                         }
-                        // else {
-                        //     geojsonToReform[response]['etc'].features.push(feature)
-                        // }
                     }
                 }
             }
@@ -668,10 +674,13 @@ function writeSVGFile(mapObject) {
                     // .attr('transform','translate(' + -svgX*(origSVGWidth/svgWidth) + ' ' + -svgY*(origSVGWidth/svgWidth) + ')'); // translate over by x and y
 
                 // move parent layers into clip group
-                $('#layergroup').append($("svg g#ocean"));
+                // this sets the order of layers in the SVG
                 $('#layergroup').append($("svg g#earth"));
+                $('#layergroup').append($("svg g#terrain"));
                 $('#layergroup').append($("svg g#boundaries"));
                 $('#layergroup').append($("svg g#landuse"));
+                $('#layergroup').append($("svg g#ocean"));
+                $('#layergroup').append($("svg g#piers"));
                 $('#layergroup').append($("svg g#water"));
                 $('#layergroup').append($("svg g#transit"));
                 $('#layergroup').append($("svg g#roads"));
@@ -680,11 +689,21 @@ function writeSVGFile(mapObject) {
 
 
 
+
                 /* restyle anything in groups if size not print/columns */
                 // pulling from scene.config
 
                 var highwayWidth = getLineWidth(scene.config.layers.roads.highway);
 
+                // move piers
+                $("#landuse #pier path").appendTo("#pierland");
+
+                d3.selectAll('#pierland path')
+                    .attr('fill','#fff')
+                    .attr('stroke','#fff')
+                    .attr('stroke-width','0px');
+
+                $("#landuse #pier").remove();
 
                 // roads
                 // widths based on L.A. Times print styles
@@ -794,10 +813,6 @@ function writeSVGFile(mapObject) {
                     .attr('fill','#eff0ef')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
-                d3.selectAll('#landuse #pier path')
-                    .attr('fill','#fff')
-                    .attr('stroke','#fff')
-                    .attr('stroke-width','0px');
                 d3.selectAll('#etc path')
                     .attr('fill','none')
                     .attr('stroke','#fff')
@@ -809,22 +824,22 @@ function writeSVGFile(mapObject) {
                     .attr('fill','#A9D7F4')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
-                    console.log('collecting #ocean path')
+                console.log('collecting #ocean path')
                 d3.selectAll('#ocean path')
                     .attr('fill','#A9D7F4')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
-                    console.log('collecting #riverbank path')
+                console.log('collecting #riverbank path')
                 d3.selectAll('#riverbank path')
                     .attr('fill','#A9D7F4')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
-                    console.log('collecting #river path')
+                console.log('collecting #river path')
                 d3.selectAll('#river path')
                     .attr('fill','none')
                     .attr('stroke','#abd7f3')
                     .attr('stroke-width','1px');
-                    console.log('collecting #stream path')
+                console.log('collecting #stream path')
                 d3.selectAll('#stream path')
                     .attr('fill','none')
                     .attr('stroke','#A9D7F4')
@@ -836,6 +851,19 @@ function writeSVGFile(mapObject) {
                     .attr('fill','#fff')
                     .attr('stroke','#fff')
                     .attr('stroke-width','0px');
+
+                // terrain
+                console.log("#terrain #terrainimg");
+                var terrainImage = $("#terrain-img").attr("src");
+                if (terrainImage != undefined) {
+                    d3.selectAll("#terrain #terrainimg")
+                        .append("svg:image")
+                            .attr("x",svgX)
+                            .attr("y",svgY)
+                            .attr("height",origSVGHeight)
+                            .attr("width",origSVGWidth)
+                            .attr("xlink:href",terrainImage);
+                }
 
 
                 // buildings

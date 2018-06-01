@@ -293,6 +293,10 @@ label {font:18px/27px Georgia, serif;}
     margin: 0 10px 0 0;
 }
 
+#terrain-img {
+    visibility: hidden;
+}
+
 #popupContainer {
     font-family: 'Benton Gothic Regular', Arial, sans-serif;
     font-size: 20px;

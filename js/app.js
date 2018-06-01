@@ -130,7 +130,6 @@ if (getQueryVariable('zoom')) {
 }
 
 // jQuery map reference
-var $map = $('#map');
 var map = L.map('map', {
     attributionControl: true,
     center: initCoords,
@@ -144,7 +143,7 @@ var map = L.map('map', {
 
 
 
-map.attributionControl.setPrefix(attribution+'Mapzen, OpenStreetMap');
+map.attributionControl.setPrefix(attribution+'Nextzen, OpenStreetMap');
 var quietLAlayer = Tangram.leafletLayer({
     scene: 'map-styles-nydailynews.yaml',
     events: {
@@ -461,25 +460,32 @@ function downloadIMG() {
                                         + currentdate.getMinutes() + "-" +
                                         currentdate.getSeconds();
 
-                        lnk.download = mapSlug + datetime + '.png';
-
-                        // compress down canvas
                         var canvas = document.getElementById("canvas");
-                        var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
 
-                        lnk.href = image;
+                        if (canvas.msToBlob) { //for IE
+                            var blob = canvas.msToBlob();
+                            window.navigator.msSaveBlob(blob, mapSlug + datetime + '.png');
+                        } else {
+                            //other browsers
 
-                        if (document.createEvent) {
+                            // create an off-screen anchor tag
+                            var lnk = document.createElement('a'),
+                                e;
+                                lnk.href = canvas.toDataURL();
+                                lnk.download = mapSlug + datetime + '.png';
 
-                            e = document.createEvent("MouseEvents");
-                            e.initMouseEvent("click", true, true, window,
-                                             0, 0, 0, 0, 0, false, false, false,
-                                             false, 0, null);
+                            if (document.createEvent) {
 
-                            lnk.dispatchEvent(e);
+                                e = document.createEvent("MouseEvents");
+                                e.initMouseEvent("click", true, true, window,
+                                                 0, 0, 0, 0, 0, false, false, false,
+                                                 false, 0, null);
 
-                        } else if (lnk.fireEvent) {
-                            lnk.fireEvent("onclick");
+                                lnk.dispatchEvent(e);
+
+                            } else if (lnk.fireEvent) {
+                                lnk.fireEvent("onclick");
+                            }
                         }
                     }
                 });
@@ -494,6 +500,9 @@ function downloadIMG() {
     }
 
 } // downloadIMG();
+
+
+
 
 
 var frozenZoom = false;
@@ -667,8 +676,7 @@ if (typeof configOptions !== 'undefined') {
     });
 
     // replace placeholder text if no bing api
-    if (typeof configOptions.bingAPI == 'undefined') {
-        console.log('hello')
+    if (typeof configOptions.bingAPI == 'undefined' || configOptions.bingAPI.length === 0) {
         $("#bing-geocodifier-form input").attr('placeholder','34.052, -118.245');
     }
 
@@ -714,7 +722,7 @@ scene.subscribe({
     }
 });
 
-// fire when map is down loading
+// fire when map is done loading
 scene.subscribe({
     view_complete: function () {
         $("#download_img").html("Download image");
@@ -1148,41 +1156,6 @@ $('body').on('mousedown', '.rotate_handle', function(e) {
     });
 });
 
-
-
-
-// kill tooltip on scroll
-$( window ).scroll(function() {
-    $("#tooltip").css({"opacity":"0","height":"auto","width":"0px"}); // hide
-    // $("#council_name").html("");
-});
-$( 'body' ).on('click',function() {
-    $("#tooltip").css({"opacity":"0","height":"auto","width":"0px"}); // hide
-    // $("#council_name").html("");
-});
-$("#download_vector").mouseover(function () {
-    // var name = $(this).attr("title");
-    // $(this).css('cursor','pointer');
-    // message if auto labels are checked
-    if ($("#labels_visible").prop('indeterminate') == true || $("#labels_visible").prop('checked') == true) {
-        $("#tooltip").css({"opacity":"1","height":"auto","width":"200px"});
-        $("#tooltip").html('<p>Automatic labels cannot be exported to vector.</p>');
-    }
-});
-$("#download_vector").mouseout(function () {
-    $("#tooltip").css({"opacity":"0","height":"auto","width":"0px"}); // hide
-});
-// Move the tooltip with the mouse
-$(window).mousemove( function(e) {
-    if (windowWidth > 400) {
-        var tooltipHeight = $("#tooltip").height();
-        mouseY = e.pageY;
-        mouseX = e.pageX;
-        $("#tooltip").css({"top":(mouseY+20)+"px","left":(mouseX+10)+"px"});
-    }
-});
-
-
 function getDatetime() {
     // get current datetime
     var currentdate = new Date();
@@ -1203,8 +1176,6 @@ function getDatetime() {
 
 // vector download
 function downloadVector() {
-    console.log('downloadVector()');
-
     // show map loading
     $("#download_vector").html('Vector loading...<img src="images/preloader.gif" alt="Preloader" class="map_loader" />');
     $("#download_vector").addClass("gray");
@@ -1237,34 +1208,86 @@ function downloadVector() {
         }
     });
 
-    // add custom labels
+    // if terrain's visible, grab the blob!
+    console.log(mapOptions);
+    var terrainBlob;
+    if (mapOptions['layers_visible'].indexOf("terrain_visible") > -1) {
+        console.log("you want the terrain!");
+
+        // remove old terrain
+        $("#terrain-img").remove();
+
+        // create list of labels to turn back on
+        var onLabels = [];
+
+        // turn off every layer except terrain
+        // loop through visible layers
+        $("#checkboxes input").each(function(){
+            // if checked and also not labels and also not half transparent
+            if (($(this)[0].checked == true || $(this).prop('indeterminate') == true)) {
+                var idname = $(this)[0].id;
+                onLabels.push(idname); // push into list to reactivate later
+                $(this).attr("checked", false); // uncheck
+                scene.config.global[idname] = false; // turn off
 
 
-    // $("svg path").each(function(){
-    //     var thisClass = $(this).attr('class');
-    //     if (thisClass.indexOf('polygon-feature') != -1) { mapOptions['polygonFeatures'].push($(this).attr('d')); }
-    //     else if (thisClass.indexOf('line-feature') != -1) { mapOptions['lineFeatures'].push($(this).attr('d')); }
-    //     else if (thisClass.indexOf('point-feature') != -1) { mapOptions['pointFeatures'].push($(this).attr('d')); }
-    //     // mapOptions['geojson'].push($(this));
-    // });
+
+            }
+        });
+
+        parentChecks(); // check parent checks
+        scene.updateConfig(); // update scene
+        // map done loading
 
 
-    console.log(JSON.stringify(mapOptions));
+        // wait one second
+        setTimeout(function() {
+            scene.screenshot().then(function(screenshot) {
 
+                // capture terrain and strap it to the page
+                terrainBlob = screenshot.url;
+                var baseIMG = new Image();
+                baseIMG.src = screenshot.url;
+                baseIMG.id = "terrain-img";
+                $("body").append(baseIMG);
 
+                // reset everything
+                for (var i = 0; i < onLabels.length; i++) {
+                    document.getElementById(onLabels[i]).checked = true;
+                    scene.config.global[onLabels[i]] = true; // turn on
+                }
 
-    createVector(JSON.stringify(mapOptions))
-    .then((result) => {
+                // do your update
+                parentChecks(); // check parent checks
+                scene.updateConfig(); // update scene
 
-            // $("#download_vector").html('Download vector');
-            // $("#download_vector").removeClass("gray");
-    }).catch((err) => {
-        alert('Problem downloading file');
-        console.log(err);
+                // slam onto vector file
+                goVector();
 
-        $("#download_vector").html('Download vector');
-        $("#download_vector").removeClass("gray");
+            });
+        }, 1000);
 
-    });
+    } else {
+        // if no terrain selected
+        goVector();
+    }
+
+    function goVector() {
+        console.log("goVector");
+        createVector(JSON.stringify(mapOptions),terrainBlob)
+        .then((result) => {
+
+                // $("#download_vector").html('Download vector');
+                // $("#download_vector").removeClass("gray");
+        }).catch((err) => {
+            alert('Problem downloading file');
+            console.log(err);
+
+            $("#download_vector").html('Download vector');
+            $("#download_vector").removeClass("gray");
+
+        });
+    }
+
 
 }
