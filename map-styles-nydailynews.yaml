@@ -1179,6 +1179,7 @@ layers:
             filter: { kind: [river], $zoom: { min: 11 }, not: { is_tunnel: true } }
             draw:
                 lines:
+                    visible: global.water_visible_inland_water
                     order: function() { return feature.sort_rank; }
                     color: global.water
                     width: [[10,0px],[11,1px],[12,1.5px],[13,1.75px],[14,2.25px],[15,3px],[16,4px],[17,5m]]
@@ -1189,6 +1190,7 @@ layers:
             filter: { kind: [canal,stream,dam,ditch,drain], $zoom: { min: 11 }, not: { intermittent: true } }
             draw:
                 lines:
+                    visible: global.water_visible_inland_water
                     order: function() { return feature.sort_rank; }
                     color: global.water
                     width: [[10,0px],[11,1px],[12,1.5px],[13,1.75px],[14,2.25px],[15,3px],[16,4px],[17,5m]]
@@ -1292,6 +1294,14 @@ layers:
                             order: function() { return feature.sort_rank || 305; }
 
 # roads
+    # roads_osm:
+    #     data: { source: osm, layer: transportation }
+    #     draw:
+    #         lines:
+    #             order: 1000
+    #             width: 10px;
+    #             color: '#000000'
+
     roads:
         data: { source: nextzen, layer: roads }
         filter: { not: { kind: rail } }
@@ -2331,7 +2341,7 @@ layers:
                 order: function() { return feature.sort_rank; }
 
 
-        # buildings_over_landuse:   # this is a bug that nextzen is working on
+        # buildings_over_landuse:   # this is a bug that mapzen is working on
         #   draw:
         #       lines:
         #           style: lines
@@ -2404,7 +2414,8 @@ layers:
         data: { source: nextzen, layer: boundaries }
         draw:
             lines:
-                order: function() { return (feature.sort_rank + 100); }
+                order: 101
+                # order: function() { return (feature.sort_rank + 100); }
         country:
             filter:
                 - kind: country
@@ -2465,23 +2476,32 @@ layers:
             draw:
                 lines:
                     visible: global.borders_visible_states
+                    order: 101
                     color: global.state_boundary
+                    # width: 10px
                     width: [[0, 0.5px], [2, 1.0px], [5, 1.25px], [6, 1.5px], [7, 1.75px], [9, 2.0px], [14, 4.0px], [16, 5.0px], [17, 10m]]
-            water:
-                filter: { maritime_boundary: true }
-                draw:
-                    lines:
-                        visible: false
+            # Leaving this off because it makes state boundaries invisible < z8
+            # water:
+            #     filter: { maritime_boundary: true }
+            #     draw:
+            #         lines:
+            #             visible: false
             early:
                 filter: { not: { min_zoom: [1,2] }, $zoom: { max: 8 } }
                 draw:
                     lines:
                         visible: false
-                water:
-                    filter: { maritime_boundary: true }
-                    draw:
-                        lines:
-                            visible: false
+
+            # early:
+            #     filter: { not: { min_zoom: [1,2] }, $zoom: { max: 8 } }
+            #     draw:
+            #         lines:
+            #             visible: false
+            #     water:
+            #         filter: { maritime_boundary: true }
+            #         draw:
+            #             lines:
+            #                 visible: false
             labels-z9-up:
                 filter: { name: true, $zoom: { min: 9 }, not: { maritime_boundary: true } }
                 draw:
@@ -2639,8 +2659,6 @@ layers:
             country-z7:
                 # South Ossetia and Abkhazia aren't countries (they are disputed areas)
                 filter: { $zoom: { min: 7, max: 9 } }
-                draw:
-                    text-blend-order:
                 small-ones-z7:
                     filter:
                         $zoom: [7]
@@ -2737,6 +2755,7 @@ layers:
                             any:
                                 - population: false
                                 - population: { max: 1000000 }
+
         populated-places:
             filter:
                 kind: locality
@@ -2779,9 +2798,8 @@ layers:
             _icons_later:
                 filter: { $zoom: { min: 11 } }
                 draw:
-                    icons:
-                        visible: false
                     text-blend-order:
+                        visible: false
 
             _text_early:
                 filter: { $zoom: { max: 11 } }
@@ -3195,8 +3213,8 @@ layers:
                             priority: 27
     mx_states:
         data: {source: mexican_states }
-        # filter:
-        #     $zoom: { min: 6 }
+        filter:
+            $zoom: { max: 8 }
         states:
             draw:
                 lines:
