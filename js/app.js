@@ -144,8 +144,10 @@ var map = L.map('map', {
 
 
 map.attributionControl.setPrefix(attribution+'Nextzen, OpenStreetMap');
+var styleFile = 'map-styles.yaml';
+if ( typeof configOptions.styleFile !== 'undefined' ) styleFile = configOptions.styleFile;
 var quietLAlayer = Tangram.leafletLayer({
-    scene: 'map-styles-nydailynews.yaml',
+    scene: configOptions.styleFile,
     events: {
         // click: function(selection) { console.log('Click!', selection); }
     }

@@ -7,5 +7,6 @@ var configOptions = {
     'initCoords': [34.0425, -118.24], // Los Angeles
     'mapzen-api': 'MAPZEN API KEY',
     'columnWidth': 110.45, // L.A. Times width of a print column on six-column page
-    'gutterWidth': 12 // L.A. Times gutter between column
+    'gutterWidth': 12, // L.A. Times gutter between column
+    'styleFile': 'map-styles.yaml' // Change if you're using custom map styles
 }
