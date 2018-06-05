@@ -72,3 +72,10 @@
  .medium_label span, .medium_label textarea {
     font-family: 'Open Sans Condensed Bold', Arial, sans-serif;
  }
+#popupContainer input.geocodify-input, 
+#popupContainer input#popupText
+{
+    border: 1px solid #ccc;
+    border-bottom: 1px solid #aaa;
+    font-family: 'Open Sans', Arial, sans-serif;
+}
