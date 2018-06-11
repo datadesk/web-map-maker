@@ -1,5 +1,5 @@
 // Add your own configuration options to this file
-// and save it as config.js
+// and save it as config.js in the same directory this one is in
 
 var configOptions = {
     'bingAPI': 'YOUR_API_KEY_HERE',

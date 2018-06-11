@@ -39,11 +39,11 @@ function getQueryVariable(variable) {
 
 
 // check if config options are done
-var attribution;
+var attribution = '', description = '';
 if (typeof configOptions !== 'undefined') {
     attribution = (typeof configOptions.attribution !== 'undefined') ? configOptions.attribution : '';
-} else {
-    attribution = '';
+    description = (typeof configOptions.description !== 'undefined') ? configOptions.description : '';
+    document.getElementById('description').innerHTML = description;
 }
 
 // replace attribution with anything in the url
@@ -157,6 +157,11 @@ quietLAlayer.addTo(map);
 // L.control.scale().addTo(map);
 var scene = quietLAlayer.scene;
 
+// Add the description, if it exists.
+// It takes a little time for the style YAML to load, this is what we're waiting for here.
+window.setTimeout(function() {
+    if ( typeof scene.config.global.description !== 'undefined' ) document.getElementById('description').innerHTML = scene.config.global.description;
+}, 1000);
 
 // make map resizable after load
 quietLAlayer.on("load",function(){
