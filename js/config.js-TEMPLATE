@@ -10,3 +10,14 @@ var configOptions = {
     'gutterWidth': 12, // L.A. Times gutter between column
     'styleFile': 'map-styles.yaml' // Change if you're using custom map styles
 }
+var sizeOptions = {
+    'video': [1930, 1080],
+    'nydn_large': [1210, 737],
+    'web_large': [1310, 730],
+    'web_small': [410, 450],
+    'col1': [340, 700],
+    'col2': [706, 700],
+    'col3': [1072, 700],
+    'col4': [1438, 700],
+    'twitter': [810, 400]
+}
