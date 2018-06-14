@@ -526,37 +526,30 @@ var transitVisible = false;
 var labelsVisible = true;
 var terrainVisible = false;
 
+function loadSizePresets() {
+    var parentEl = document.getElementById('preset_sizes');
+    var i = 0;
+    for ( var property in sizeOptions ) {
+        if ( sizeOptions.hasOwnProperty(property) ) {
+            var el = document.createElement('option');
+            // The first item is the default selection.
+            if ( i === 0 ) el.setAttribute('selected', 1);
+            var displayName = property.replace(/_/g, ' ');
+            var innards = document.createTextNode(displayName);
+            el.appendChild(innards);
+            parentEl.appendChild(el);
+            i ++;
+        }
+    }
+}
+loadSizePresets();
+
 // watching for anytime the size preset dropdown fires
 var sizeChange = function(option) {
-if (option.value == 'video') {
-    $("#map_holder").width(1930); // these have to be 10 over to compensate for resizable
-    $("#map_holder").height(1080);
-} else if (option.value == 'nydn_large') {
-    $("#map_holder").width(1210);
-    $("#map_holder").height(737);
-} else if (option.value == 'web_large') {
-    $("#map_holder").width(1310);
-    $("#map_holder").height(730);
-} else if (option.value == 'web_small') {
-    $("#map_holder").width(410);
-    $("#map_holder").height(450);
-} else if (option.value == 'col1') {
-    $("#map_holder").width(340);
-    $("#map_holder").height(700);
-} else if (option.value == 'col2') {
-    $("#map_holder").width(706);
-    $("#map_holder").height(700);
-} else if (option.value == 'col3') {
-    $("#map_holder").width(1072);
-    $("#map_holder").height(700);
-} else if (option.value == 'col4') {
-    $("#map_holder").width(1438);
-    $("#map_holder").height(700);
-} else if (option.value == 'twitter') {
-    $("#map_holder").width(810);
-    $("#map_holder").height(400);
-}
-
+    if ( sizeOptions.keys().indexOf(option.value) !== -1 ) {
+        document.getElementById('map_holder').style.width = sizeOptions[option.value][0];
+        document.getElementById('map_holder').style.height = sizeOptions[option.value][1];
+    }
 
 
 // end resizable
