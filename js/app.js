@@ -529,6 +529,19 @@ var terrainVisible = false;
 function loadSizePresets() {
     var parentEl = document.getElementById('preset_sizes');
     var i = 0;
+    // Backward-compatibility
+    if ( typeof sizeOptions === 'undefined' ) {
+            'nydn_large': [1210, 737],
+            'video': [1930, 1080],
+            'web_large': [1310, 730],
+            'web_small': [410, 450],
+            '1-column': [340, 700],
+            '2-column': [706, 700],
+            '3-column': [1072, 700],
+            '4-column': [1438, 700],
+            'twitter': [810, 400]
+        }
+    }
     for ( var property in sizeOptions ) {
         if ( sizeOptions.hasOwnProperty(property) ) {
             var el = document.createElement('option');
