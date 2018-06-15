@@ -39,7 +39,7 @@ function getQueryVariable(variable) {
 
 
 // check if config options are done
-var attribution = '', description = '';
+var attribution = '', description = 'This tool uses Microsoft’s geocoder to approximate an address’s location. It also uses data provided by OpenStreetMap (which you can <a href="http://www.openstreetmap.org/" target="_blank">edit here</a>) and Nextzen. Some supervisor, congressional and other GeoJSON boundaries can be found at <a href="http://boundaries.latimes.com/" target="_blank">boundaries.latimes.com</a>. You can draw your own file at <a href="http://geojson.io/" target="_blank">geojson.io</a>. Questions? Contact <a href="mailto:jon@latimes.com">jon@latimes.com</a> or <a href="https://github.com/datadesk/web-map-maker/issues" target="_blank">submit a bug</a> in GitHub.';
 if (typeof configOptions !== 'undefined') {
     attribution = (typeof configOptions.attribution !== 'undefined') ? configOptions.attribution : '';
     description = (typeof configOptions.description !== 'undefined') ? configOptions.description : '';
