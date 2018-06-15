@@ -531,10 +531,9 @@ function loadSizePresets() {
     var i = 0;
     // Backward-compatibility
     if ( typeof sizeOptions === 'undefined' ) {
-            'nydn_large': [1210, 737],
-            'video': [1930, 1080],
             'web_large': [1310, 730],
             'web_small': [410, 450],
+            'video': [1930, 1080],
             '1-column': [340, 700],
             '2-column': [706, 700],
             '3-column': [1072, 700],
