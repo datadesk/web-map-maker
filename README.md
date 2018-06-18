@@ -37,7 +37,18 @@ var configOptions = {
     'initZoom': 14,
     'mapzen-api': 'nextzenKEYHERE',
     'columnWidth': 110.45,
-    'gutterWidth': 12
+    'gutterWidth': 12,
+    'styleFile': 'map-styles.yaml'
+}
+var sizeOptions = {
+    'web_large': [1310, 730],
+    'web_small': [410, 450],
+    'video': [1930, 1080],
+    '1-column': [340, 700],
+    '2-column': [706, 700],
+    '3-column': [1072, 700],
+    '4-column': [1438, 700],
+    'twitter': [810, 400]
 }
 ```
 
@@ -47,6 +58,7 @@ global:
     # Sign up for a Mapzen API key to enjoy higher rate limits
     # https://mapzen.com/documentation/overview/#developer-accounts-and-api-keys
     sdk_mapzen_api_key: 'nextzenKEYHERE'
+    description: 'This tool uses Microsoft’s geocoder to approximate an address’s location. It also uses data provided by OpenStreetMap (which you can <a href="http://www.openstreetmap.org/" target="_blank">edit here</a>) and Nextzen. Some supervisor, congressional and other GeoJSON boundaries can be found at <a href="http://boundaries.latimes.com/" target="_blank">boundaries.latimes.com</a>. You can draw your own file at <a href="http://geojson.io/" target="_blank">geojson.io</a>. Questions? Contact <a href="mailto:jon@latimes.com">jon@latimes.com</a> or <a href="https://github.com/datadesk/web-map-maker/issues" target="_blank">submit a bug</a> in GitHub.'
 ```
 
 Then you're ready to run the mapmaker. The easiest way is to fire up a simple python server (obviously you'll need python) with this command:
@@ -56,6 +68,14 @@ python -m SimpleHTTPServer 8000
 ```
 
 The app will be hosted at `localhost:8000`.
+
+### Final steps on how to configure the look and feel of the map tiles for your own organization
+
+These instructions help you make this map-builder work for your organization while still incorporating updates to the codebase.
+
+1. Copy the [map-styles.yaml](map-styles.yaml) to a new file.
+    1. Whatever you name the new file, update your config.js so `'styleFile': 'map-styles.yaml'` points to your new file's name.
+1. If you want a different font for the labels on the map, copy [styles/styles-custom-EXAMPLE.css](styles/styles-custom-EXAMPLE.css) to a file named `styles/styles-custom.css` and edit it from there. You may have to add or find the path to your own web font.
 
 ## Vector files for print
 Because we make maps for web and print, if you select a column size from the drop-down you'll get a map with the column-equivelant for our six-column layout. The vector paths exported from "download vector" can then be converted to CMYK.

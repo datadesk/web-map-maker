@@ -39,11 +39,11 @@ function getQueryVariable(variable) {
 
 
 // check if config options are done
-var attribution;
+var attribution = '', description = 'This tool uses Microsoft’s geocoder to approximate an address’s location. It also uses data provided by OpenStreetMap (which you can <a href="http://www.openstreetmap.org/" target="_blank">edit here</a>) and Nextzen. Some supervisor, congressional and other GeoJSON boundaries can be found at <a href="http://boundaries.latimes.com/" target="_blank">boundaries.latimes.com</a>. You can draw your own file at <a href="http://geojson.io/" target="_blank">geojson.io</a>. Questions? Contact <a href="mailto:jon@latimes.com">jon@latimes.com</a> or <a href="https://github.com/datadesk/web-map-maker/issues" target="_blank">submit a bug</a> in GitHub.';
 if (typeof configOptions !== 'undefined') {
     attribution = (typeof configOptions.attribution !== 'undefined') ? configOptions.attribution : '';
-} else {
-    attribution = '';
+    description = (typeof configOptions.description !== 'undefined') ? configOptions.description : '';
+    document.getElementById('description').innerHTML = description;
 }
 
 // replace attribution with anything in the url
@@ -144,8 +144,10 @@ var map = L.map('map', {
 
 
 map.attributionControl.setPrefix(attribution+'Nextzen, OpenStreetMap');
+var styleFile = 'map-styles.yaml';
+if ( typeof configOptions.styleFile !== 'undefined' ) styleFile = configOptions.styleFile;
 var quietLAlayer = Tangram.leafletLayer({
-    scene: 'map-styles.yaml',
+    scene: configOptions.styleFile,
     events: {
         // click: function(selection) { console.log('Click!', selection); }
     }
@@ -155,6 +157,11 @@ quietLAlayer.addTo(map);
 // L.control.scale().addTo(map);
 var scene = quietLAlayer.scene;
 
+// Add the description, if it exists.
+// It takes a little time for the style YAML to load, this is what we're waiting for here.
+window.setTimeout(function() {
+    if ( typeof scene.config.global.description !== 'undefined' ) document.getElementById('description').innerHTML = scene.config.global.description;
+}, 1000);
 
 // make map resizable after load
 quietLAlayer.on("load",function(){
@@ -519,34 +526,43 @@ var transitVisible = false;
 var labelsVisible = true;
 var terrainVisible = false;
 
+function loadSizePresets() {
+    var parentEl = document.getElementById('preset_sizes');
+    var i = 0;
+    // Backward-compatibility
+    if ( typeof sizeOptions === 'undefined' ) {
+        var sizeOptions = {
+            'web_large': [1310, 730],
+            'web_small': [410, 450],
+            'video': [1930, 1080],
+            '1-column': [340, 700],
+            '2-column': [706, 700],
+            '3-column': [1072, 700],
+            '4-column': [1438, 700],
+            'twitter': [810, 400]
+        };
+    }
+    for ( var property in sizeOptions ) {
+        if ( sizeOptions.hasOwnProperty(property) ) {
+            var el = document.createElement('option');
+            // The first item is the default selection.
+            if ( i === 0 ) el.setAttribute('selected', 1);
+            var displayName = property.replace(/_/g, ' ');
+            var innards = document.createTextNode(displayName);
+            el.appendChild(innards);
+            parentEl.appendChild(el);
+            i ++;
+        }
+    }
+}
+loadSizePresets();
+
 // watching for anytime the size preset dropdown fires
 var sizeChange = function(option) {
-if (option.value == 'video') {
-    $("#map_holder").width(1930); // these have to be 10 over to compensate for resizable
-    $("#map_holder").height(1080);
-} else if (option.value == 'web_large') {
-    $("#map_holder").width(1310);
-    $("#map_holder").height(730);
-} else if (option.value == 'web_small') {
-    $("#map_holder").width(410);
-    $("#map_holder").height(450);
-} else if (option.value == 'col1') {
-    $("#map_holder").width(340);
-    $("#map_holder").height(700);
-} else if (option.value == 'col2') {
-    $("#map_holder").width(706);
-    $("#map_holder").height(700);
-} else if (option.value == 'col3') {
-    $("#map_holder").width(1072);
-    $("#map_holder").height(700);
-} else if (option.value == 'col4') {
-    $("#map_holder").width(1438);
-    $("#map_holder").height(700);
-} else if (option.value == 'twitter') {
-    $("#map_holder").width(810);
-    $("#map_holder").height(400);
-}
-
+    if ( sizeOptions.keys().indexOf(option.value) !== -1 ) {
+        document.getElementById('map_holder').style.width = sizeOptions[option.value][0];
+        document.getElementById('map_holder').style.height = sizeOptions[option.value][1];
+    }
 
 
 // end resizable

@@ -3,19 +3,23 @@
 <head>
     <title>Web map maker</title>
     <meta charset="utf-8" />
-    
-    <link rel="stylesheet" type="text/css" href="styles/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="styles/ngux-tophat-0.4.5.min.css" />
-    <link rel="stylesheet" type="text/css" href="styles/bootstrap-responsive.min.css" />
-    <link rel="stylesheet" type="text/css" href="styles/ngux-tophat-responsive-0.4.5.min.css" />
+    <link rel="stylesheet" href="styles/bootstrap.min.css" />
+    <link rel="stylesheet" href="styles/ngux-tophat-0.4.5.min.css" />
+    <link rel="stylesheet" href="styles/bootstrap-responsive.min.css" />
+    <link rel="stylesheet" href="styles/ngux-tophat-responsive-0.4.5.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geocoder-mapzen/1.4.1/leaflet-geocoder-mapzen.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
 
     <link rel="stylesheet" href="js/leaflet-1.3.1/leaflet.css">
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="styles/jquery-ui-1.12.1.css">
     <link rel="stylesheet" href="styles/bing-geocodifier.css">
     <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="styles/styles-custom.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!--
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    -->
 
     <script type="text/javascript" src="js/bing-geocodifier.js"></script>
 
@@ -25,16 +29,20 @@
 
     <script type="text/javascript" src="js/leaflet-1.3.1/leaflet.js"></script>
 
+    <!--
+    <script src="js/tangram-0.13.0-min.js"></script>
+    -->
     <script type="text/javascript" src="js/tangram-0.15.1.min.js"></script>
 
     <script type="text/javascript" src="js/html2canvas-0.5.js"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="js/leaflet-bing-layer-0.0.1.js"></script>
 
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geocoder-mapzen/1.4.1/leaflet-geocoder-mapzen.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geocoder-mapzen/1.4.1/leaflet-geocoder-mapzen.js"></script>
 
     <!-- your config file -->
-    <script type="text/javascript" src="js/config.js"></script>
+    <script src="js/config.js"></script>
 
 </head>
 <body>
@@ -56,14 +64,6 @@
                         <fieldset>
                             <select onchange="sizeChange(this)" id="preset_sizes">
                                 <option value="custom">Custom size</option>
-                                <option value="video">Video</option>
-                                <option value="web_large" selected>Web large</option>
-                                <option value="web_small">Web small</option>
-                                <option value="twitter">Twitter</option>
-                                <option value="col1">1 column</option>
-                                <option value="col2">2 column</option>
-                                <option value="col3">3 column</option>
-                                <option value="col4">4 column</option>
                             </select>
                         </fieldset>
                     </form>
@@ -125,7 +125,7 @@
             </div>
         </div>
 
-        <p class="description">This tool uses Microsoft’s geocoder to approximate an address’s location. It also uses data provided by OpenStreetMap (which you can <a href="http://www.openstreetmap.org/" target="_blank">edit here</a>) and Nextzen. Some supervisor, congressional and other GeoJSON boundaries can be found at <a href="http://boundaries.latimes.com/" target="_blank">boundaries.latimes.com</a>. You can draw your own file at <a href="http://geojson.io/" target="_blank">geojson.io</a>. Questions? Contact <a href="mailto:jon@latimes.com">jon@latimes.com</a> or <a href="https://github.com/datadesk/web-map-maker/issues" target="_blank">submit a bug</a> in GitHub.</p>
+        <p class="description" id="description"></p>
 
         <canvas id="canvas" width="1300" height="730"></canvas>
 
@@ -136,9 +136,9 @@
     </div>
 
     <!-- load all the JS -->
-    <script type="text/javascript" src="http://cookbook.latimes.com/js/d3-3.5.6/d3.min.js"></script>
-    <script type="text/javascript" src="js/svg-export.js?v=2"></script>
-    <script type="text/javascript" src="js/app.js"></script>
+    <script src="js/d3.v3.5.6.min.js"></script>
+    <script src="js/svg-export.js?v=2"></script>
+    <script src="js/app.js"></script>
 
 
 
