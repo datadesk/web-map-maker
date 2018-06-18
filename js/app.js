@@ -531,6 +531,7 @@ function loadSizePresets() {
     var i = 0;
     // Backward-compatibility
     if ( typeof sizeOptions === 'undefined' ) {
+        var sizeOptions = {
             'web_large': [1310, 730],
             'web_small': [410, 450],
             'video': [1930, 1080],
@@ -539,7 +540,7 @@ function loadSizePresets() {
             '3-column': [1072, 700],
             '4-column': [1438, 700],
             'twitter': [810, 400]
-        }
+        };
     }
     for ( var property in sizeOptions ) {
         if ( sizeOptions.hasOwnProperty(property) ) {
