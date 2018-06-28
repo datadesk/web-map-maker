@@ -2,4 +2,4 @@
 
 
 upload:
-	aws s3 cp ./src s3://mapmaker.latimes.com/ --recursive --acl=public-read
+	aws s3 cp ./src s3://mapmaker.datadesk.news/ --recursive --acl=public-read
