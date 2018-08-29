@@ -62,6 +62,10 @@ Because we make maps for web and print, if you select a column size from the dro
 
 You can then run the `vector-map-restyle.jsx` script in Adobe Illustrator to convert all the layers to values of CMYK. Watch a [tutorial here](http://latimes-graphics-media.s3.amazonaws.com/assets/video/map-maker-script-explainer.mp4).
 
+## Custom styling
+Our fonts are large because our CMS squashes down graphics for the Web. And we've adapted map maker to the Times color pallete. You can customize just about anything. Edit or create your own styles yaml file and use [Tangram Play](https://tangram.city/play/) to live edit a yaml file. 
+
+
 ## What you need to know
 
 Because we've developed this as an internal tool for use at the Los Angeles Times, it's  geared toward our use as far as styles and workflow. But it should be customizable and we're open to suggestions that would help make it better for others to use, too.
