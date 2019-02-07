@@ -431,12 +431,11 @@ function bakeJson(mapObject) {
                 if (dKinds.indexOf(response) > -1) {
                     let responseResult = result[response];
                     for (let feature of responseResult.features) {
-                        // console.log(feature.properties);
 
                         // skip if a water tunnel or water intermittent
                         if (feature.properties.kind == 'stream' || feature.properties.kind == 'river') {
                             if (feature.properties.intermittent == true || feature.properties.is_tunnel == true) {
-                                break;
+                                continue;
                             }
                         }
 
@@ -671,7 +670,6 @@ function writeSVGFile(mapObject) {
                 svg.append('g')
                     .attr('id','layergroup')
                     .attr('style','fill: none; clip-path: url(#view-clip);');
-                    // .attr('transform','translate(' + -svgX*(origSVGWidth/svgWidth) + ' ' + -svgY*(origSVGWidth/svgWidth) + ')'); // translate over by x and y
 
                 // move parent layers into clip group
                 // this sets the order of layers in the SVG
