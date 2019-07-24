@@ -642,40 +642,88 @@ function handleFileSelect(evt) {
 
 }
 
+function itemClickListener() {
+    // listen for item click
+    $('.result-item').click(function(){
+        var address = $(this).text();
+        var lat = $(this).attr('data-lat');
+        var lng = $(this).attr('data-lng');
+
+        // // add display address to input val
+        $('#geocoder').val(address);
+
+        map.panTo([lat,lng]);
+
+        // check for popup text
+        var userPopupText = $("#popupText").val();
+
+        // remove any old markers and popups
+        $(".popupMarker").remove();
+        $(".large-popup").remove();
+
+        // add a hidden marker
+        popupMarker = L.circleMarker([lat,lng],{
+            fillOpacity: 0,
+            opacity: 0,
+            className: 'popupMarker'
+        }).bindPopup(userPopupText,{'className':'large-popup'}).addTo(map);
+        if (userPopupText.length > 0) {
+            popupMarker.openPopup();
+        }
+
+        $("#address-holder").hide();
+
+
+    });
+}
+
+// closes the auto complete search
+$(window).click(function() {
+    $("#address-holder").hide()
+});
+
+$('#address-holder').click(function(event){
+    event.stopPropagation();
+});
+
 // listen for file uploader
 document.getElementById('geo_files').addEventListener('change', handleFileSelect, false);
-// geocode is broken if no Bing API key
-if (typeof configOptions !== 'undefined') {
+// geocode is broken if no Mapbox API key
+if (typeof configOptions !== 'undefined' && typeof configOptions.mapbox != 'undefined') {
     var popupMarker;
-    // Initialize on a div element with an ID of "geocodifier"
-    var geocoder = new BingGeocodifier('geocodifier', {
-        key: configOptions.bingAPI,
-        onClick: function(item, coords) {
-            map.panTo(item.geocodePoints[0].coordinates);
 
-            // check for popup text
-            var userPopupText = $("#popupText").val();
+    $('#geocoder').keyup(function(){
 
-            // remove any old markers and popups
-            $(".popupMarker").remove();
-            $(".large-popup").remove();
+        var userval = $('#geocoder').val();
+        var encodeVal = encodeURIComponent(userval);
 
-            // add a hidden marker
-            popupMarker = L.circleMarker(item.geocodePoints[0].coordinates,{
-                fillOpacity: 0,
-                opacity: 0,
-                className: 'popupMarker'
-            }).bindPopup(userPopupText,{'className':'large-popup'}).addTo(map);
-            if (userPopupText.length > 0) {
-                popupMarker.openPopup();
-            }
-        }
+        setTimeout(function () {
+
+            $.getJSON( "https://api.mapbox.com/geocoding/v5/mapbox.places/"+encodeVal+".json?access_token="+configOptions.mapbox+"&cachebuster=1553285456655&autocomplete=true", function( data ) {
+
+                // empty div
+                $(".geocoder-list").remove();
+
+                var items = [];
+                var results = data.features;
+                for (var i = 0; i < results.length; i++) {
+                    items.push("<li class='result-item' id='"+results[i].id+"' data-lng='"+results[i].center[0]+"' data-lat='"+results[i].center[1]+"'>" + results[i].place_name + "</li>");
+                }
+
+                $( "<ul/>", {
+                    "class": "geocoder-list",
+                    html: items.join( "" )
+                }).appendTo( "#address-holder" );
+                itemClickListener();
+            });
+
+            $(".geocoder-list").show();
+            $("#address-holder").show();
+
+        }, 200);
+
     });
 
-    // replace placeholder text if no bing api
-    if (typeof configOptions.bingAPI == 'undefined' || configOptions.bingAPI.length === 0) {
-        $("#bing-geocodifier-form input").attr('placeholder','34.052, -118.245');
-    }
 
     document.getElementById('popupText').onkeyup=function() {
 
@@ -691,14 +739,14 @@ if (typeof configOptions !== 'undefined') {
 
     };
 
-    // prevent page refresh when hitting enter
-    $("#bing-geocodifier-form").submit(function(e) {
-        e.preventDefault();
-    });
+    // // prevent page refresh when hitting enter
+    // $("#bing-geocodifier-form").submit(function(e) {
+    //     e.preventDefault();
+    // });
 
 } else {
-    alert('Please put your Bing API key into config.js for search to work.');
-    $("#popupContainer").hide();
+        $("#geocoder").attr('placeholder','34.052, -118.245');
+
 }
 
 var mapLoadAction = true;

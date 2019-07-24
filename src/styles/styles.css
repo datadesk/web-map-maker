@@ -300,6 +300,8 @@ label {font:18px/27px Georgia, serif;}
 #popupContainer {
     font-family: 'Benton Gothic Regular', Arial, sans-serif;
     font-size: 20px;
+    float: left;
+    margin: 0 20px 20px 0;
 }
 
 .footnote {font-family:arial; font-size:12px; color:#666;}
@@ -390,7 +392,7 @@ label {font:18px/27px Georgia, serif;}
     margin: 0px;
 }
 
-#popupText {
+#popupText, #geocoder {
     width: 100%;
     display: inline-block;
     max-width: 325px;
@@ -403,12 +405,6 @@ label {font:18px/27px Georgia, serif;}
     margin: 0px 10px 0 0;
     box-shadow: none;
     font-family: "Benton Gothic Regular", Arial, sans-serif;
-}
-
-#geocodifier {
-    display: inline-block;
-    min-width: 300px;
-    margin: 0 0 0 10px;
 }
 
 #popupText:focus {
@@ -719,4 +715,43 @@ input[type=range]:focus::-ms-fill-upper {
 }
 .fa-unlock-alt {
     color: #d1d2d4;
+}
+
+#address-input {
+    float: left;
+}
+
+#address-holder {
+    position: relative;
+    z-index: 1000000;
+}
+
+#address-holder .geocoder-list {
+    position: absolute;
+    max-width: 300px;
+    width: 100%;
+    font-size: 14px;
+    font-family: 'Benton Gothic Regular', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    background: white;
+    border-radius: 5px;
+    border-right: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+
+#address-holder .geocoder-list li {
+    margin: 5px 0;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+#address-holder .geocoder-list li:hover {
+    background: #eee;
+}
+
+#web_blank {
+    clear: both;
 }

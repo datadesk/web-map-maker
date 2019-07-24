@@ -7,21 +7,18 @@
     <link rel="stylesheet" type="text/css" href="styles/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="styles/ngux-tophat-0.4.5.min.css" />
     <link rel="stylesheet" type="text/css" href="styles/bootstrap-responsive.min.css" />
-    <link rel="stylesheet" type="text/css" href="styles/ngux-tophat-responsive-0.4.5.min.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
 
     <link rel="stylesheet" href="js/leaflet-1.3.1/leaflet.css">
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-    <link rel="stylesheet" href="styles/bing-geocodifier.css">
     <link rel="stylesheet" href="styles/styles.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-    <script type="text/javascript" src="js/bing-geocodifier.js"></script>
 
     <script type="text/javascript" src="https://d1qqc1e9kvmdh8.cloudfront.net/bootstrap/2.3.2/js/bootstrap.min.js"></script>
 
-    <script type="text/javascript" src="https://d1qqc1e9kvmdh8.cloudfront.net/js/underscore-1.8.3-min.js"></script>
+    <!-- <script type="text/javascript" src="https://d1qqc1e9kvmdh8.cloudfront.net/js/underscore-1.8.3-min.js"></script> -->
 
     <script type="text/javascript" src="js/leaflet-1.3.1/leaflet.js"></script>
 
@@ -30,8 +27,6 @@
     <script type="text/javascript" src="js/html2canvas-0.5.js"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geocoder-mapzen/1.4.1/leaflet-geocoder-mapzen.js"></script>
 
     <!-- your config file -->
     <script type="text/javascript" src="js/config.js"></script>
@@ -42,15 +37,17 @@
     <div class="container" id="container">
         <h1>Web Map Maker<a id="mapmakerVersion" href="https://github.com/datadesk/web-map-maker/releases/tag/2.1.4">v2.1.4</a></h1>
         <div id="popupContainer">
-            <input id="popupText" type="text" placeholder="Pointer text" maxlength="40"><div id="geocodifier"></div>
+            <input id="popupText" type="text" placeholder="Pointer text" maxlength="40">
+        </div>
+
+        <div id="address-input">
+            <input type="text" name="address" value="" placeholder="Address" id="geocoder" autocomplete="off">
+            <div id='address-holder'></div>
         </div>
 
         <div id="web_blank">
 
             <div id="map_options">
-                <div class="map_option">
-                    <div id="geocoder"></div>
-                </div>
                 <div class="map_option">
                     <form class="standalone-dropdown">
                         <fieldset>
@@ -98,15 +95,9 @@
                     <button class='btn' onclick='downloadVector();' id='download_vector'>Download vector</button>
                 </div>
 
-
-
-
-
                 <p class='map-info'>Zoom: <span id="zoom_level"></span> <i class="fa fa-unlock-alt" id="zoom_lock" onclick="zoomFreeze();" aria-hidden="true"></i> <span id="warning_msg"></span></p>
 
                 <input type="range" step="0.001" id="zoom-slider" class="graphic-slider" min="2" max="19" value="10">
-
-
 
             </div>
             <div id="map_area">
