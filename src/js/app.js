@@ -739,14 +739,44 @@ if (typeof configOptions !== 'undefined' && typeof configOptions.mapbox != 'unde
 
     };
 
-    // // prevent page refresh when hitting enter
-    // $("#bing-geocodifier-form").submit(function(e) {
-    //     e.preventDefault();
-    // });
-
 } else {
-        $("#geocoder").attr('placeholder','34.052, -118.245');
+    // no mapbox geocoder api key
+    $("#geocoder").attr('placeholder','34.052, -118.245');
 
+
+    $('#geocoder').keyup(function(){
+
+        var userval = $('#geocoder').val();
+
+        if (userval.indexOf(',') != -1) {
+
+            var userCoords = userval.split(',');
+
+            if (userCoords[0].length > 0 && userCoords[1].length > 0) {
+                setTimeout(function () {
+
+                    map.panTo(userCoords);
+
+                    // check for popup text
+                    var userPopupText = $("#popupText").val();
+
+                    // remove any old markers and popups
+                    $(".popupMarker").remove();
+                    $(".large-popup").remove();
+
+                    // add a hidden marker
+                    popupMarker = L.circleMarker(userCoords,{
+                        fillOpacity: 0,
+                        opacity: 0,
+                        className: 'popupMarker'
+                    }).bindPopup(userPopupText,{'className':'large-popup'}).addTo(map);
+                    if (userPopupText.length > 0) {
+                        popupMarker.openPopup();
+                    }
+                }, 200);
+            }
+        }
+    });
 }
 
 var mapLoadAction = true;
