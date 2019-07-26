@@ -75,3 +75,11 @@ Chrome and Firefox are supported.
 ## Make this better
 
 Have any ideas? File an issue, fork this repo, send us a pull request or contact jon@latimes.com with thoughts, concerns or questions.
+
+## Thanks
+
+<a href="https://www.browserstack.com/">
+  <img src="https://live.browserstack.com/images/opensource/browserstack-logo.svg" alt="BrowserStack Logo" width="192" height="42">
+</a>
+
+Thanks to [BrowserStack](https://www.browserstack.com/) for providing the infrastructure that allows us to test this project in real browsers.
